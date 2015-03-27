@@ -5,8 +5,10 @@ from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.thumbnails import Thumbnail
 from flask.ext.assets import Environment, Bundle
 
+from attractsdk import Api as attractsdk
+
 # Initialize the Flask all object
-app = Flask(__name__, 
+app = Flask(__name__,
     template_folder='templates',
     static_folder='static')
 
@@ -18,20 +20,20 @@ app.config.from_object(config.Development)
 
 # Initialized the available extensions
 mail = Mail(app)
-db = SQLAlchemy(app)
+attractsdk.Default(
+    endpoint='http://127.0.0.1:5000',
+    username="admin",
+    password="secret"
+)
 thumb = Thumbnail(app)
 assets = Environment(app)
 
 # Import controllers
-from application.modules.nodes import node_types
+from application.modules.node_types import node_types
 from application.modules.nodes import nodes
 from application.modules.main import homepage
-from application.modules.shots import shots
-from application.modules.projects import projects
 
 # Register blueprints for the imported controllers
 app.register_blueprint(filemanager)
-app.register_blueprint(shots, url_prefix='/shots')
-app.register_blueprint(projects, url_prefix='/projects')
 app.register_blueprint(node_types, url_prefix='/node-types')
 app.register_blueprint(nodes, url_prefix='/nodes')

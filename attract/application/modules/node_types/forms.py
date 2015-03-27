@@ -9,8 +9,8 @@ from wtforms import FieldList
 from wtforms import FormField
 from wtforms import Form as BasicForm
 
-from attractsdk import Node
-from attractsdk import NodeType
+from application.modules.attractsdk import Node
+from application.modules.attractsdk import NodeType
 
 #from application.modules.nodes.models import CustomFields
 from wtforms.validators import DataRequired

@@ -5,7 +5,7 @@
   <h2>Edit Node type</h2>
   <div class="row">
     <div class="col-md-6">
-      <form method="POST" action="{{url_for('node_types.edit', node_type_id=node_type.id)}}">
+      <form method="POST" action="{{url_for('node_types.edit', node_type_id=node_type._id)}}">
         {{ form.hidden_tag() }}
         <div class="form-group">
           {{ form.name.label }} 
@@ -25,7 +25,7 @@
         </div>
 
         <div data-toggle="fieldset" id="custom_fields-fieldset">
-          {{ form.custom_fields.label }} <button type="button" data-toggle="fieldset-add-row" data-target="#custom_fields-fieldset">+</button>
+          {{ form.properties.label }} <button type="button" data-toggle="fieldset-add-row" data-target="#custom_fields-fieldset">+</button>
           <table>
             <tr>
               <th>Type</th>
@@ -38,7 +38,7 @@
  
             
 
-            {% for custom_field in form.custom_fields %}
+            {% for custom_field in form.properties %}
             <tr data-toggle="fieldset-entry">
               
               {% for field in custom_field %}

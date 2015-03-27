@@ -14,7 +14,7 @@
         </thead>
         <tbody>
         {% for node in nodes %}
-            <tr id="row_{{node.id}}">
+            <tr id="row_{{node._id}}">
               <td><a href="#">{{node.name}}</a></td>
               <td>
                 {% if node.description %}
@@ -22,7 +22,7 @@
                 {% endif %}
               </td>
               <td>
-                <a class="btn btn-default btn-xs" href="{{url_for('nodes.edit', node_id=node.id)}}"><i class="glyphicon glyphicon-edit"></i> Edit</a>
+                <a class="btn btn-default btn-xs" href="{{url_for('nodes.edit', node_id=node._id)}}"><i class="glyphicon glyphicon-edit"></i> Edit</a>
               </td>
             </tr>
         {% endfor %}
