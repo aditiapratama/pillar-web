@@ -66,7 +66,7 @@
           <div class="col-md-3">
             <div class="list-group">
               {% for name in type_names %}
-              <a href="/nodes/{{name}}" class="list-group-item {% if title == name %}active{% endif %}">{{name}}</a>
+              <a href="/nodes/{{name}}" class="list-group-item {% if title == name %}active{% endif %}">{{name.title()}}</a>
               {% endfor %}
               <!--<a href="{url_for('shots.index')}}" class="list-group-item {% if title == 'shots' %}active{% endif %}">Shots</a>
               <a href="#" class="list-group-item {% if title == 'stats' %}active{% endif %}">Assets</a>-->
