@@ -3,14 +3,17 @@ from wtforms import TextField
 from wtforms import BooleanField
 from wtforms import SelectField
 from wtforms import TextAreaField
-from wtforms import IntegerField
+# from wtforms import IntegerField
 from wtforms import HiddenField
 from wtforms import FieldList
 from wtforms import FormField
 from wtforms import Form as BasicForm
 
-from attractsdk import Node
-from attractsdk import NodeType
+#from attractsdk import Node
+#from attractsdk import NodeType
+import attractsdk
+from flask import session
+from application import SystemUtility
 
 #from application.modules.nodes.models import CustomFields
 from wtforms.validators import DataRequired
@@ -122,11 +125,27 @@ def get_node_form(node_type):
     return ProceduralForm()
 
 
+def session_token():
+    if 'token' in session:
+        return {'token': session['token']}
+    else:
+        return None
+
+def attract_api():
+    api=attractsdk.Api(
+        endpoint = SystemUtility.attract_server_endpoint(),
+        username=None,
+        password=None,
+        token=session_token()
+    )
+    return api
+
 def process_node_form(form, node_id=None):
     """Generic function used to process new nodes, as well as edits
     """
+    api = attract_api()
     if node_id:
-        node = Node.find(node_id)
+        node = attractsdk.Node.find(node_id, api=api)
         node.name = form.name.data
         node.description = form.description.data
         node.thumbnail = form.thumbnail.data
@@ -143,10 +162,10 @@ def process_node_form(form, node_id=None):
         if form.order.data == '':
             form.order.data = 0
         node.properties.order = int(form.order.data)
-        update = node.update()
+        update = node.update(api=api)
         return update
     else:
-        node = Node()
+        node = attractsdk.Node()
         prop = {}
         prop['name'] = form.name.data
         prop['description'] = form.description.data
@@ -167,5 +186,5 @@ def process_node_form(form, node_id=None):
         prop['properties']['order'] = int(form.order.data)
         #
         prop['node_type'] = form.node_type_id.data
-        post = node.post(prop)
+        post = node.post(prop, api=api)
         return post

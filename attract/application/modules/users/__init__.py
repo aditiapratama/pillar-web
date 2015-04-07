@@ -1,4 +1,3 @@
-import os
 from flask import Blueprint
 from flask import render_template
 
@@ -7,22 +6,10 @@ from flask import session
 from flask import redirect
 from application.modules.users.forms import UserLoginForm
 
+from application import SystemUtility
 
 # Name of the Blueprint
 users = Blueprint('users', __name__)
-
-
-class SystemUtility():
-    def __new__(cls, *args, **kwargs):
-        raise TypeError("Base class may not be instantiated")
-
-    @staticmethod
-    def blender_id_endpoint():
-        """Gets the endpoint for the authentication API. If the env variable
-        is defined, it's possible to override the (default) production address.
-        """
-        #return 'http://127.0.0.1:8000'
-        return os.environ.get('BLENDER_ID_ENDPOINT', "https://www.blender.org/id")
 
 
 def authenticate(username, password):
@@ -74,7 +61,7 @@ def login():
         if token:
             session['email'] = form.email.data
             session['token'] = token
-            flash('Welcome! {0}'.format(token))
+            flash('Welcome {0}!'.format(form.email.data))
             return redirect('/')
     return render_template('users/login.html',
                            form=form)
