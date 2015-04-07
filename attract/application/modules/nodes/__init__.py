@@ -47,8 +47,8 @@ def session_token():
         return None
 
 def attract_api():
-    api=attractsdk.Api(
-        endpoint = SystemUtility.attract_server_endpoint(),
+    api = attractsdk.Api(
+        endpoint=SystemUtility.attract_server_endpoint(),
         username=None,
         password=None,
         token=session_token()
