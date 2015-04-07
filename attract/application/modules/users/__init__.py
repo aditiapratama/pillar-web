@@ -21,7 +21,7 @@ class SystemUtility():
         """Gets the endpoint for the authentication API. If the env variable
         is defined, it's possible to override the (default) production address.
         """
-        return 'http://127.0.0.1:8000'
+        #return 'http://127.0.0.1:8000'
         return os.environ.get('BLENDER_ID_ENDPOINT', "https://www.blender.org/id")
 
 
