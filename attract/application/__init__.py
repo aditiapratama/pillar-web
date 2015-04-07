@@ -1,5 +1,6 @@
 import config
-from flask import Flask, Blueprint
+from flask import Flask
+from flask import Blueprint
 from flask.ext.mail import Mail
 # from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.thumbnails import Thumbnail
@@ -22,8 +23,8 @@ app.config.from_object(config.Development)
 mail = Mail(app)
 attractsdk.Default(
     endpoint='http://127.0.0.1:5000',
-    username="admin",
-    password="secret"
+    username=None,
+    password=None
 )
 thumb = Thumbnail(app)
 assets = Environment(app)

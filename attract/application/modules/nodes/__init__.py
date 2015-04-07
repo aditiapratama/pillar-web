@@ -1,17 +1,18 @@
 from flask import abort
 from flask import Blueprint
-from flask import jsonify
+# from flask import jsonify
 from flask import render_template
 from flask import redirect
-from flask import request
+# from flask import request
 from flask import flash
 from flask import url_for
+from flask import session
 
 from attractsdk import Node
 from attractsdk import NodeType
 
-from application.modules.nodes.forms import NodeTypeForm
-from application.modules.nodes.forms import CustomFieldForm
+# from application.modules.nodes.forms import NodeTypeForm
+# from application.modules.nodes.forms import CustomFieldForm
 from application.modules.nodes.forms import get_node_form
 from application.modules.nodes.forms import process_node_form
 
@@ -27,6 +28,11 @@ def type_names():
         type_names.append(str(names['name']))
     return type_names
 
+def session_email():
+    if 'email' in session:
+        return session['email']
+    else:
+        return ""
 
 @nodes.route("/<node_name>", methods=['GET', 'POST'])
 def index(node_name=""):
@@ -41,7 +47,8 @@ def index(node_name=""):
     return render_template(template,
         title=node_name,
         nodes=nodes,
-        type_names=type_names())
+        type_names=type_names(),
+        email=session_email())
 
 @nodes.route("/view/<node_id>")
 def view(node_id):
@@ -49,7 +56,8 @@ def view(node_id):
     if node:
         return render_template('{0}/view.html'.format('shot'),
             node=node,
-            type_names=type_names())
+            type_names=type_names(),
+            email=session_email())
     else:
         abort(404)
 
@@ -69,7 +77,8 @@ def add(node_type):
         node_type=ntype,
         form=form,
         errors=form.errors,
-        type_names=type_names())
+        type_names=type_names(),
+        email=session_email())
 
 
 @nodes.route("/<node_id>/edit", methods=['GET', 'POST'])
@@ -104,7 +113,8 @@ def edit(node_id):
     return render_template('nodes/edit.html',
         node=node,
         form=form,
-        type_names=type_names())
+        type_names=type_names(),
+        email=session_email())
 
 
 @nodes.route("/<node_id>/delete", methods=['GET', 'POST'])

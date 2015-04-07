@@ -42,7 +42,7 @@
         <ul class="nav navbar-nav navbar-right">
 
           <li id="fat-menu" class="dropdown">
-            <a href="#" id="drop3" class="dropdown-toggle" data-toggle="dropdown">User <b class="caret"></b></a>
+          <a href="#" id="drop3" class="dropdown-toggle" data-toggle="dropdown">{{email}} <b class="caret"></b></a>
             <ul class="dropdown-menu" role="menu" aria-labelledby="drop3">
               <li><a role="menuitem" tabindex="-1" href="">Tasks</a></li>
               <li><a role="menuitem" tabindex="-1" href="">Profile</a></li>
@@ -51,7 +51,11 @@
               <li><a role="menuitem" tabindex="-1" href="{{url_for('node_types.index')}}">Node Types</a></li>
               <li><a role="menuitem" tabindex="-1" href="{{url_for('nodes.index', node_name='')}}">All Nodes</a></li>
               <li class="divider"></li>
-              <li><a role="menuitem" tabindex="-1" href="">Log out</a></li>
+              {% if email!="" %}
+              <li><a role="menuitem" tabindex="-1" href="{{url_for('users.logout')}}">Log out</a></li>
+              {% else %}
+              <li><a role="menuitem" tabindex="-1" href="{{url_for('users.login')}}">Log in</a></li>
+              {% endif %}
             </ul>
           </li>
         </ul>
