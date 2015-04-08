@@ -45,7 +45,7 @@ class SystemUtility():
     @staticmethod
     def session_token():
         if 'token' in session:
-            return {'token': session['token']}
+            return session['token']
         else:
             return None
 
