@@ -12,7 +12,6 @@ from wtforms import Form as BasicForm
 #from attractsdk import Node
 #from attractsdk import NodeType
 import attractsdk
-from flask import session
 from application import SystemUtility
 
 #from application.modules.nodes.models import CustomFields
@@ -125,25 +124,10 @@ def get_node_form(node_type):
     return ProceduralForm()
 
 
-def session_token():
-    if 'token' in session:
-        return {'token': session['token']}
-    else:
-        return None
-
-def attract_api():
-    api=attractsdk.Api(
-        endpoint = SystemUtility.attract_server_endpoint(),
-        username=None,
-        password=None,
-        token=session_token()
-    )
-    return api
-
 def process_node_form(form, node_id=None):
     """Generic function used to process new nodes, as well as edits
     """
-    api = attract_api()
+    api = SystemUtility.attract_api()
     if node_id:
         node = attractsdk.Node.find(node_id, api=api)
         node.name = form.name.data

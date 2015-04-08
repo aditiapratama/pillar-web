@@ -1,6 +1,7 @@
 import os
 import config
 from flask import Flask
+from flask import session
 from flask import Blueprint
 from flask.ext.mail import Mail
 # from flask.ext.sqlalchemy import SQLAlchemy
@@ -39,6 +40,23 @@ class SystemUtility():
         """
         return os.environ.get(
             'ATTRACT_SERVER_ENDPOINT', "http://127.0.0.1:5000")
+
+    @staticmethod
+    def session_token():
+        if 'token' in session:
+            return {'token': session['token']}
+        else:
+            return None
+
+    @staticmethod
+    def attract_api():
+        api=attractsdk.Api(
+            endpoint = attract_server_endpoint(),
+            username=None,
+            password=None,
+            token=session_token()
+        )
+        return api
 
 # Initialized the available extensions
 mail = Mail(app)
