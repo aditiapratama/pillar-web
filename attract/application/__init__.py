@@ -50,8 +50,8 @@ class SystemUtility():
 
     @staticmethod
     def attract_api():
-        api=attractsdk.Api(
-            endpoint = attract_server_endpoint(),
+        api = attractsdk.Api(
+            endpoint=attract_server_endpoint(),
             username=None,
             password=None,
             token=session_token()
