@@ -1,5 +1,6 @@
 import os
 import config
+import attractsdk
 from flask import Flask
 from flask import session
 from flask import Blueprint
@@ -51,12 +52,19 @@ class SystemUtility():
     @staticmethod
     def attract_api():
         api = attractsdk.Api(
-            endpoint=attract_server_endpoint(),
+            endpoint=SystemUtility.attract_server_endpoint(),
             username=None,
             password=None,
-            token=session_token()
+            token=SystemUtility.session_token()
         )
         return api
+
+    @staticmethod
+    def session_email():
+        if 'email' in session:
+            return session['email']
+        else:
+            return ""
 
 # Initialized the available extensions
 mail = Mail(app)
