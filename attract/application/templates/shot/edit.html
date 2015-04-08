@@ -27,10 +27,10 @@
           {{ form.notes.label }} 
           {{ form.notes(class='form-control') }}
         </div>
-        <input class="btn btn-default" type="submit" value="Edit Shot">
+        <a class="btn btn-danger" href="{{url_for('shots.delete', shot_id=shot_id)}}">Delete</a>
         <div class="pull-right">
           <a class="btn btn-default" href="{{url_for('shots.index')}}">Cancel</a>
-          <a class="btn btn-danger" href="{{url_for('shots.delete', shot_id=shot_id)}}">Delete</a>
+          <input class="btn btn-default" type="submit" value="Edit Shot">
         </div>
       </form>
     </div>
