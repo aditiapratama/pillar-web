@@ -40,16 +40,21 @@ def index(node_name=""):
     """Generic function to list all nodes
     """
     api = SystemUtility.attract_api()
-
-    nodes = attractsdk.Node.all(api=api)
-    nodes = nodes['_items']
     if node_name=="":
         node_name="shot"
+
+    node_type_list = attractsdk.NodeType.all({'name': 'shot'}, api=api)
+    # Get the 'shot' node type
+    node_type = node_type_list['_items'][0]
+    nodes = attractsdk.Node.all({'node_type': node_type['_id']}, api=api)
+    nodes = nodes['_items']
+
     template = '{0}/index.html'.format(node_name)
 
     return render_template(template,
         title=node_name,
         nodes=nodes,
+        node_type=node_type,
         type_names=type_names(),
         email=SystemUtility.session_email())
 
