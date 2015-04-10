@@ -43,17 +43,25 @@ def index(node_name=""):
     if node_name=="":
         node_name="shot"
 
-    node_type_list = attractsdk.NodeType.all({'name': 'shot'}, api=api)
-    # Get the 'shot' node type
-    node_type = node_type_list['_items'][0]
+    # Get the  node type
+    # TODO the filter is not working
+    # using for as a temporary workaround
+    node_type_list = attractsdk.NodeType.all({'name': node_name}, api=api)
+    for nt in node_type_list['_items']:
+        if nt['name'] == node_name:
+            node_type=nt
     nodes = attractsdk.Node.all({'node_type': node_type['_id']}, api=api)
     nodes = nodes['_items']
+    filtered_nodes = []
+    for n in nodes:
+        if n['node_type'] == node_type['_id']:
+            filtered_nodes.append(n)
 
     template = '{0}/index.html'.format(node_name)
 
     return render_template(template,
         title=node_name,
-        nodes=nodes,
+        nodes=filtered_nodes,
         node_type=node_type,
         type_names=type_names(),
         email=SystemUtility.session_email())
@@ -77,10 +85,11 @@ def add(node_type):
     api = SystemUtility.attract_api()
     ntype = attractsdk.NodeType.find(node_type, api=api)
     form = get_node_form(ntype)
+    email = SystemUtility.session_email()
     if form.validate_on_submit():
-        if process_node_form(form):
+        if process_node_form(form, node_type=ntype, user=email):
             flash('Node correctly added.')
-            return redirect('/')
+            return redirect(url_for('nodes.index', node_name=ntype['name']))
     else:
         print form.errors
     return render_template('nodes/add.html',
@@ -88,7 +97,7 @@ def add(node_type):
         form=form,
         errors=form.errors,
         type_names=type_names(),
-        email=SystemUtility.session_email())
+        email=email)
 
 
 @nodes.route("/<node_id>/edit", methods=['GET', 'POST'])
@@ -101,11 +110,11 @@ def edit(node_id):
     form = get_node_form( node_type )
 
     if form.validate_on_submit():
-        if process_node_form(form, node_id):
+        if process_node_form(form, node_id=node_id, node_type=node_type):
             node = attractsdk.Node.find(node_id, api=api)
             form = get_node_form( node_type )
             flash ("Node correctly edited.")
-            return redirect('/')
+            return redirect(url_for('nodes.index', node_name=node_type['name']))
         else:
             print ("ERROR")
     else:

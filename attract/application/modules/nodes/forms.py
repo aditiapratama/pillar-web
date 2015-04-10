@@ -61,8 +61,10 @@ class ModelFieldList(FieldList):
         # print (obj.get(name))
         super(ModelFieldList, self).populate_obj(obj, name)
 
+
 class ChildInline(Form):
     title = TextField('Title',)
+
 
 class NodeTypeForm(Form):
     name = TextField('Name', validators=[DataRequired()])
@@ -70,18 +72,6 @@ class NodeTypeForm(Form):
     description = TextAreaField('Description', validators=[DataRequired()])
     is_extended = BooleanField('Is extended')
     properties = ModelFieldList(FormField(CustomFieldForm), model=CustomFields)
-
-
-"""
-class IMForm(Form):
-    protocol = SelectField(choices=[('aim', 'AIM'), ('msn', 'MSN')])
-    username = TextField()
-
-class ContactForm(Form):
-    first_name  = TextField()
-    last_name   = TextField()
-    im_accounts = FieldList(BooleanField('Is extended'),)
-"""
 
 
 def get_node_form(node_type):
@@ -103,49 +93,66 @@ def get_node_form(node_type):
         'node_type_id',
         HiddenField(default=node_type._id))
 
-    for prop in node_schema:
-        schema_prop = node_schema[prop]
-        if 'allowed' in schema_prop:
-            select = []
-            for option in schema_prop['allowed']:
-                select.append((str(option), str(option)))
-            setattr(ProceduralForm,
-                    prop,
-                    SelectField(choices=select))
-        elif 'maxlength' in schema_prop and schema_prop['maxlength']>64:
-            setattr(ProceduralForm,
-                    prop,
-                    TextAreaField(prop))
-        else:
-            setattr(ProceduralForm,
-                    prop,
-                    TextField(prop))
+    def build_form(node_schema, prefix=""):
+        for prop in node_schema:
+            schema_prop = node_schema[prop]
+            prop_name = "{0}{1}".format(prefix, prop)
+            if schema_prop['type']=='dict':
+                build_form(schema_prop['schema'], "{0}->".format(prop_name))
+                continue
+            if 'allowed' in schema_prop:
+                select = []
+                for option in schema_prop['allowed']:
+                    select.append((str(option), str(option)))
+                setattr(ProceduralForm,
+                        prop_name,
+                        SelectField(choices=select))
+            elif 'maxlength' in schema_prop and schema_prop['maxlength']>64:
+                setattr(ProceduralForm,
+                        prop_name,
+                        TextAreaField(prop_name))
+            else:
+                setattr(ProceduralForm,
+                        prop_name,
+                        TextField(prop_name))
+
+    build_form(node_schema)
 
     return ProceduralForm()
 
 
-def process_node_form(form, node_id=None):
+def process_node_form(form, node_id=None, node_type=None, user=None):
     """Generic function used to process new nodes, as well as edits
     """
     api = SystemUtility.attract_api()
+    node_schema = node_type['dyn_schema'].to_dict()
     if node_id:
         node = attractsdk.Node.find(node_id, api=api)
         node.name = form.name.data
         node.description = form.description.data
         node.thumbnail = form.thumbnail.data
-        node.properties.status = form.status.data
-        node.properties.url = form.url.data
-        node.properties.notes = form.notes.data
-        if form.cut_in.data == '':
-            form.cut_in.data = 0
-        node.properties.cut_in = int(form.cut_in.data)
-        node.properties.shot_group = form.shot_group.data
-        if form.cut_out.data == '':
-            form.cut_out.data = 0
-        node.properties.cut_out = int(form.cut_out.data)
-        if form.order.data == '':
-            form.order.data = 0
-        node.properties.order = int(form.order.data)
+        def get_data(node_schema, prefix=""):
+            for pr in node_schema:
+                schema_prop = node_schema[pr]
+                prop_name = "{0}{1}".format(prefix, pr)
+                if schema_prop['type']=='dict':
+                    get_data(schema_prop['schema'], "{0}->".format(prop_name))
+                    continue
+                data = form[prop_name].data
+                if schema_prop['type'] == 'integer':
+                    if data == '':
+                        data = 0
+                    else:
+                        data = int(form[prop_name].data)
+                else:
+                    if pr in form:
+                        data = form[prop_name].data
+                path = prop_name.split('->')
+                if len(path)>1:
+                    pass
+                else:
+                    node.properties[prop_name] = data
+        get_data(node_schema)
         update = node.update(api=api)
         return update
     else:
@@ -154,21 +161,28 @@ def process_node_form(form, node_id=None):
         prop['name'] = form.name.data
         prop['description'] = form.description.data
         prop['thumbnail'] = form.thumbnail.data
+        prop['user'] = user
         prop['properties'] = {}
-        prop['properties']['status'] = form.status.data
-        prop['properties']['url'] = form.url.data
-        prop['properties']['notes'] = form.notes.data
-        if form.cut_in.data == '':
-            form.cut_in.data = 0
-        prop['properties']['cut_in'] = int(form.cut_in.data)
-        prop['properties']['shot_group'] = form.shot_group.data
-        if form.cut_out.data == '':
-            form.cut_out.data = 0
-        prop['properties']['cut_out'] = int(form.cut_out.data)
-        if form.order.data == '':
-            form.order.data = 0
-        prop['properties']['order'] = int(form.order.data)
-        #
+
+        def get_data(node_schema, prefix=""):
+            for pr in node_schema:
+                schema_prop = node_schema[pr]
+                prop_name = "{0}{1}".format(prefix, pr)
+                if schema_prop['type']=='dict':
+                    get_data(schema_prop['schema'], "{0}->".format(prop_name))
+                    continue
+                data = form[prop_name].data
+                if schema_prop['type'] == 'integer':
+                    if data == '':
+                        data = 0
+                path = prop_name.split('->')
+                if len(path)>1:
+                    pass
+                else:
+                    prop['properties'][prop_name] = data
+
+        get_data(node_schema)
+
         prop['node_type'] = form.node_type_id.data
         post = node.post(prop, api=api)
         return post

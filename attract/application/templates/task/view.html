@@ -27,9 +27,7 @@
   </div>
   <div class="row">
     <div class="col-md-6">
-        <p>Duration: {% if node['properties']['cut_out'] and node['properties']['cut_in'] %}
-        {{node['properties']['cut_out']-node['properties']['cut_in']}}
-        {% endif %}</p>
+      <p>Duration: {{node['properties']['cut_out']-node['properties']['cut_in']}}</p>
       <p>Cut In: {{node['properties']['cut_in']}}</p>
       <p>Cut Out: {{node['properties']['cut_out']}}</p>
     </div>
