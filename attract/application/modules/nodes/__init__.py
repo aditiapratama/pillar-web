@@ -1,22 +1,13 @@
+import attractsdk
+
 from flask import abort
 from flask import Blueprint
-# from flask import jsonify
-import attractsdk
 from flask import render_template
 from flask import redirect
-# from flask import request
 from flask import flash
 from flask import url_for
 from flask import session
 
-#from attractsdk import Node
-#from attractsdk import NodeType
-
-#from application import attractsdk
-#from attractsdk import Api as AttractSDK
-
-# from application.modules.nodes.forms import NodeTypeForm
-# from application.modules.nodes.forms import CustomFieldForm
 from application.modules.nodes.forms import get_node_form
 from application.modules.nodes.forms import process_node_form
 
