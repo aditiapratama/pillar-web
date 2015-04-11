@@ -31,28 +31,20 @@ def index(node_name=""):
     """Generic function to list all nodes
     """
     api = SystemUtility.attract_api()
-    if node_name=="":
-        node_name="shot"
+    if node_name == "":
+        node_name = "shot"
 
-    # Get the  node type
-    # TODO the filter is not working
-    # using for as a temporary workaround
-    node_type_list = attractsdk.NodeType.all({'name': node_name}, api=api)
-    for nt in node_type_list['_items']:
-        if nt['name'] == node_name:
-            node_type=nt
-    nodes = attractsdk.Node.all({'node_type': node_type['_id']}, api=api)
+    node_type_list = attractsdk.NodeType.all({'where': "name=='{0}'".format(node_name)}, api=api)
+    node_type = node_type_list['_items'][0]
+    nodes = attractsdk.Node.all({
+        'where': "node_type=='{0}'".format(node_type['_id']),
+        'sort' : "order"}, api=api)
     nodes = nodes['_items']
-    filtered_nodes = []
-    for n in nodes:
-        if n['node_type'] == node_type['_id']:
-            filtered_nodes.append(n)
-
     template = '{0}/index.html'.format(node_name)
 
     return render_template(template,
         title=node_name,
-        nodes=filtered_nodes,
+        nodes=nodes,
         node_type=node_type,
         type_names=type_names(),
         email=SystemUtility.session_email())
@@ -98,7 +90,7 @@ def edit(node_id):
     api = SystemUtility.attract_api()
     node = attractsdk.Node.find(node_id, api=api)
     node_type = attractsdk.NodeType.find(node.node_type, api=api)
-    form = get_node_form( node_type )
+    form = get_node_form(node_type)
 
     if form.validate_on_submit():
         if process_node_form(form, node_id=node_id, node_type=node_type):
