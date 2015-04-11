@@ -25,8 +25,6 @@ def authenticate(username, password):
         except requests.exceptions.ConnectionError as e:
             raise e
 
-        print (r.json())
-
         if r.status_code == 200:
             message = r.json()['message']
             if 'token' in r.json():
@@ -42,13 +40,6 @@ def authenticate(username, password):
         return dict(authenticated=authenticated, message=message, token=token)
 
 
-"""def check_blender_id(email, password):
-    if email == 'eibriel@eibriel.com' and password == '1234':
-        return 'ANLGNSIEZJ'
-    else:
-        return False"""
-
-
 @users.route("/login", methods=['GET', 'POST'])
 def login():
     if 'token' in session and 'email' in session:
@@ -57,14 +48,12 @@ def login():
     form = UserLoginForm()
     if form.validate_on_submit():
         token = authenticate(form.email.data, form.password.data)['token']
-        #token = check_blender_id(form.email.data, form.password.data)
         if token:
             session['email'] = form.email.data
             session['token'] = token
             flash('Welcome {0}!'.format(form.email.data))
             return redirect('/')
-    return render_template('users/login.html',
-                           form=form)
+    return render_template('users/login.html', form=form)
 
 
 @users.route("/logout")
