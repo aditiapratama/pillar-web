@@ -38,6 +38,7 @@ def index(node_name=""):
     node_type = node_type_list['_items'][0]
     nodes = attractsdk.Node.all({
         'where': "node_type=='{0}'".format(node_type['_id']),
+        'where': "status!='deleted'",
         'sort' : "order"}, api=api)
     nodes = nodes['_items']
     template = '{0}/index.html'.format(node_name)
