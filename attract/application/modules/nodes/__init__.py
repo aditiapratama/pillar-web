@@ -1,4 +1,5 @@
-import attractsdk
+from attractsdk import Node
+from attractsdk import NodeType
 
 from flask import abort
 from flask import Blueprint
@@ -19,7 +20,7 @@ nodes = Blueprint('nodes', __name__)
 def type_names():
     api = SystemUtility.attract_api()
 
-    types = attractsdk.NodeType.all(api=api)["_items"]
+    types = NodeType.all(api=api)["_items"]
     type_names = []
     for names in types:
         type_names.append(str(names['name']))
@@ -34,9 +35,9 @@ def index(node_name=""):
     if node_name == "":
         node_name = "shot"
 
-    node_type_list = attractsdk.NodeType.all({'where': "name=='{0}'".format(node_name)}, api=api)
+    node_type_list = NodeType.all({'where': "name=='{0}'".format(node_name)}, api=api)
     node_type = node_type_list['_items'][0]
-    nodes = attractsdk.Node.all({
+    nodes = Node.all({
         'where': "node_type=='{0}'".format(node_type['_id']),
         'where': "status!='deleted'",
         'sort' : "order"}, api=api)
@@ -53,7 +54,7 @@ def index(node_name=""):
 @nodes.route("/view/<node_id>")
 def view(node_id):
     api = SystemUtility.attract_api()
-    node = attractsdk.Node.find(node_id, api=api)
+    node = Node.find(node_id, api=api)
     if node:
         return render_template('{0}/view.html'.format('shot'),
             node=node,
@@ -67,7 +68,7 @@ def add(node_type_id):
     """Generic function to add a node of any type
     """
     api = SystemUtility.attract_api()
-    ntype = attractsdk.NodeType.find(node_type_id, api=api)
+    ntype = NodeType.find(node_type_id, api=api)
     form = get_node_form(ntype)
     email = SystemUtility.session_email()
     if form.validate_on_submit():
@@ -89,13 +90,13 @@ def edit(node_id):
     """Generic node editing form
     """
     api = SystemUtility.attract_api()
-    node = attractsdk.Node.find(node_id, api=api)
-    node_type = attractsdk.NodeType.find(node.node_type, api=api)
+    node = Node.find(node_id, api=api)
+    node_type = NodeType.find(node.node_type, api=api)
     form = get_node_form(node_type)
 
     if form.validate_on_submit():
         if process_node_form(form, node_id=node_id, node_type=node_type):
-            node = attractsdk.Node.find(node_id, api=api)
+            node = Node.find(node_id, api=api)
             form = get_node_form( node_type )
             flash ("Node correctly edited.")
             return redirect(url_for('nodes.index', node_name=node_type['name']))
@@ -126,7 +127,7 @@ def delete(node_id):
     """Generic node deletion
     """
     api = SystemUtility.attract_api()
-    node = attractsdk.Node.find(node_id, api=api)
+    node = Node.find(node_id, api=api)
     if node.delete(api=api):
         flash('Node correctly deleted.')
         return redirect('/')
