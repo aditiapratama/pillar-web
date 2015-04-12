@@ -43,28 +43,21 @@ class SystemUtility():
             'ATTRACT_SERVER_ENDPOINT', "http://127.0.0.1:5000")
 
     @staticmethod
-    def session_token():
-        if 'token' in session:
-            return session['token']
-        else:
-            return None
-
-    @staticmethod
     def attract_api():
         api = attractsdk.Api(
             endpoint=SystemUtility.attract_server_endpoint(),
             username=None,
             password=None,
-            token=SystemUtility.session_token()
+            token=SystemUtility.session_item('token')
         )
         return api
 
     @staticmethod
-    def session_email():
-        if 'email' in session:
-            return session['email']
+    def session_item(item):
+        if item in session:
+            return session[item]
         else:
-            return ""
+            return None
 
 # Initialized the available extensions
 mail = Mail(app)

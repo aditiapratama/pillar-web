@@ -87,8 +87,8 @@ def get_node_form(node_type):
         'description',
         TextAreaField('Description'))
     setattr(ProceduralForm,
-        'thumbnail',
-        TextField('Thumbnail'))
+        'picture',
+        TextField('Picture'))
     setattr(ProceduralForm,
         'node_type_id',
         HiddenField(default=node_type._id))
@@ -127,10 +127,10 @@ def process_node_form(form, node_id=None, node_type=None, user=None):
     api = SystemUtility.attract_api()
     node_schema = node_type['dyn_schema'].to_dict()
     if node_id:
+        # Update existing node
         node = attractsdk.Node.find(node_id, api=api)
         node.name = form.name.data
         node.description = form.description.data
-        node.thumbnail = form.thumbnail.data
         def get_data(node_schema, prefix=""):
             for pr in node_schema:
                 schema_prop = node_schema[pr]
@@ -156,11 +156,11 @@ def process_node_form(form, node_id=None, node_type=None, user=None):
         update = node.update(api=api)
         return update
     else:
+        # Create a new node
         node = attractsdk.Node()
         prop = {}
         prop['name'] = form.name.data
         prop['description'] = form.description.data
-        prop['thumbnail'] = form.thumbnail.data
         prop['user'] = user
         prop['properties'] = {}
 
@@ -184,5 +184,8 @@ def process_node_form(form, node_id=None, node_type=None, user=None):
         get_data(node_schema)
 
         prop['node_type'] = form.node_type_id.data
-        post = node.post(prop, api=api)
+        # Pardon the local path, this is for testing purposes and will be removed
+        # files = {'picture': open('/Users/fsiddi/Desktop/1500x500.jpeg', 'rb')}
+        files = None
+        post = node.post(prop, files=files, api=api)
         return post

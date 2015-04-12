@@ -49,7 +49,7 @@ def index(node_name=""):
         nodes=nodes,
         node_type=node_type,
         type_names=type_names(),
-        email=SystemUtility.session_email())
+        email=SystemUtility.session_item('email'))
 
 
 @nodes.route("/<node_id>/view")
@@ -60,7 +60,7 @@ def view(node_id):
         return render_template('{0}/view.html'.format('shot'),
             node=node,
             type_names=type_names(),
-            email=SystemUtility.session_email())
+            email=SystemUtility.session_item('email'))
     else:
         abort(404)
 
@@ -72,9 +72,10 @@ def add(node_type_id):
     api = SystemUtility.attract_api()
     ntype = NodeType.find(node_type_id, api=api)
     form = get_node_form(ntype)
-    email = SystemUtility.session_email()
+    user_id = SystemUtility.session_item('user_id')
+    email = SystemUtility.session_item('email')
     if form.validate_on_submit():
-        if process_node_form(form, node_type=ntype, user=email):
+        if process_node_form(form, node_type=ntype, user=user_id):
             flash('Node correctly added.')
             return redirect(url_for('nodes.index', node_name=ntype['name']))
     else:
@@ -107,7 +108,7 @@ def edit(node_id):
     else:
         form.name.data = node.name
         form.description.data = node.description
-        form.thumbnail.data = node.thumbnail
+        form.picture.data = node.picture
 
         prop_dict = node.properties.to_dict()
         for prop in prop_dict:
@@ -121,7 +122,7 @@ def edit(node_id):
         node=node,
         form=form,
         type_names=type_names(),
-        email=SystemUtility.session_email())
+        email=SystemUtility.session_item('email'))
 
 
 @nodes.route("/<node_id>/delete", methods=['GET', 'POST'])

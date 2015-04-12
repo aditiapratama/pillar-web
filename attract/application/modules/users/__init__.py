@@ -1,3 +1,5 @@
+from attractsdk import utils
+
 from flask import Blueprint
 from flask import render_template
 
@@ -51,6 +53,17 @@ def login():
         if token:
             session['email'] = form.email.data
             session['token'] = token
+            # Set up api for querying about the user's ObjectId
+            api = SystemUtility.attract_api()
+            # We make a request with the token
+            params = {'where': "token=='{0}'".format(token)}
+            url = utils.join_url_params("tokens", params)
+            # Since this is the first query we make with this token,
+            # the id will be created during the same request.
+            token = api.get(url)
+            # Add the user_id to the session
+            session['user_id'] = token['_items'][0]['user']
+
             flash('Welcome {0}!'.format(form.email.data))
             return redirect('/')
     return render_template('users/login.html', form=form)
@@ -60,5 +73,6 @@ def login():
 def logout():
     session.pop('email', None)
     session.pop('token', None)
+    session.pop('user_id', None)
     flash('Bye!')
     return redirect('/')

@@ -95,7 +95,7 @@ def get_node_form(node_type):
         'description',
         TextAreaField('Description'))
     setattr(ProceduralForm,
-        'thumbnail',
+        'picture',
         TextField('Thumbnail'))
     setattr(ProceduralForm,
         'node_type_id',
@@ -129,7 +129,7 @@ def process_node_form(form, node_id=None):
         node = Node.find(node_id)
         node.name = form.name.data
         node.description = form.description.data
-        node.thumbnail = form.thumbnail.data
+        node.picture = form.picture.data
         node.properties.status = form.status.data
         node.properties.url = form.url.data
         node.properties.notes = form.notes.data
@@ -150,7 +150,7 @@ def process_node_form(form, node_id=None):
         prop = {}
         prop['name'] = form.name.data
         prop['description'] = form.description.data
-        prop['thumbnail'] = form.thumbnail.data
+        prop['picture'] = form.picture.data
         prop['properties'] = {}
         prop['properties']['status'] = form.status.data
         prop['properties']['url'] = form.url.data
