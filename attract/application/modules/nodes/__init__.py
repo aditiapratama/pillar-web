@@ -27,7 +27,7 @@ def type_names():
     return type_names
 
 
-@nodes.route("/<node_name>", methods=['GET', 'POST'])
+@nodes.route("/<node_name>")
 def index(node_name=""):
     """Generic function to list all nodes
     """
