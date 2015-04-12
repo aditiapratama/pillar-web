@@ -51,7 +51,8 @@ def index(node_name=""):
         type_names=type_names(),
         email=SystemUtility.session_email())
 
-@nodes.route("/view/<node_id>")
+
+@nodes.route("/<node_id>/view")
 def view(node_id):
     api = SystemUtility.attract_api()
     node = Node.find(node_id, api=api)
@@ -62,6 +63,7 @@ def view(node_id):
             email=SystemUtility.session_email())
     else:
         abort(404)
+
 
 @nodes.route("/<node_type_id>/add", methods=['GET', 'POST'])
 def add(node_type_id):
