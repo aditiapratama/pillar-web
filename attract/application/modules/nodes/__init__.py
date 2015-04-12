@@ -62,12 +62,12 @@ def view(node_id):
     else:
         abort(404)
 
-@nodes.route("/<node_type>/add", methods=['GET', 'POST'])
-def add(node_type):
+@nodes.route("/<node_type_id>/add", methods=['GET', 'POST'])
+def add(node_type_id):
     """Generic function to add a node of any type
     """
     api = SystemUtility.attract_api()
-    ntype = attractsdk.NodeType.find(node_type, api=api)
+    ntype = attractsdk.NodeType.find(node_type_id, api=api)
     form = get_node_form(ntype)
     email = SystemUtility.session_email()
     if form.validate_on_submit():
