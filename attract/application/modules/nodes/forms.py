@@ -168,7 +168,7 @@ def process_node_form(form, node_id=None, node_type=None, user=None):
             for pr in node_schema:
                 schema_prop = node_schema[pr]
                 prop_name = "{0}{1}".format(prefix, pr)
-                if schema_prop['type']=='dict':
+                if schema_prop['type'] == 'dict':
                     get_data(schema_prop['schema'], "{0}->".format(prop_name))
                     continue
                 data = form[prop_name].data
@@ -176,7 +176,7 @@ def process_node_form(form, node_id=None, node_type=None, user=None):
                     if data == '':
                         data = 0
                 path = prop_name.split('->')
-                if len(path)>1:
+                if len(path) > 1:
                     pass
                 else:
                     prop['properties'][prop_name] = data
