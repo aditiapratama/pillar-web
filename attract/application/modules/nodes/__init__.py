@@ -8,12 +8,14 @@ from flask import redirect
 from flask import flash
 from flask import url_for
 from flask import session
+from flask import request
 
 from application.modules.nodes.forms import get_node_form
 from application.modules.nodes.forms import process_node_form
+from application.helpers import Pagination
 
 from application import SystemUtility
-
+    
 # Name of the Blueprint
 nodes = Blueprint('nodes', __name__)
 
@@ -31,6 +33,9 @@ def type_names():
 def index(node_name=""):
     """Generic function to list all nodes
     """
+    # Pagination index
+    page = request.args.get('page', 1)
+
     api = SystemUtility.attract_api()
     if node_name == "":
         node_name = "shot"
@@ -39,10 +44,17 @@ def index(node_name=""):
     node_type = node_type_list['_items'][0]
     nodes = Node.all({
         'where': '{"node_type" : "%s"}' % (node_type['_id']),
-        'max_results' : 100,
+        'max_results': 100,
+        'page': page,
         #'where': "status!='deleted'",
         'sort' : "order"}, api=api)
-    nodes = nodes['_items']
+    #nodes = nodes['_items']
+
+    nodes = nodes.to_dict()
+
+    # Build the pagination object
+    pagination = Pagination(int(page), 1, nodes['_meta']['total'])
+
     template = '{0}/index.html'.format(node_name)
 
     return render_template(template,
@@ -50,6 +62,7 @@ def index(node_name=""):
         nodes=nodes,
         node_type=node_type,
         type_names=type_names(),
+        pagination=pagination,
         email=SystemUtility.session_item('email'))
 
 

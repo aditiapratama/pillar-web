@@ -1,4 +1,5 @@
 {% extends 'layout.html' %}
+{% from '_pagination.html' import render_pagination %}
 
 {% block body %}
 <div class="col-md-9">
@@ -28,7 +29,7 @@
           </tr>
         </thead>
         <tbody>
-        {% for shot in nodes %}
+        {% for shot in nodes['_items'] %}
             <tr id="row_{{shot._id}}">
               <td><a href="{{url_for('nodes.view', node_id=shot._id)}}">{{shot.name}}</a></td>
               <td>
@@ -49,7 +50,6 @@
               </td>
             </tr>
         {% endfor %}
-          
         </tbody>
         <tfoot>
           <tr>
@@ -63,6 +63,12 @@
           </tr>
         </tfoot>
       </table>
+    </div>
+  </div>
+  {{ render_pagination(pagination) }}
+  <div class="row">
+    <div class="col-md-12">
+      
     </div>
   </div>
   <div class="row">

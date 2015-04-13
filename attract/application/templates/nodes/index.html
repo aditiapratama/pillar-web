@@ -1,4 +1,5 @@
 {% extends 'layout.html' %}
+{% from '_pagination.html' import render_pagination %}
 
 {% block body %}
 <div class="col-md-9">
@@ -13,7 +14,7 @@
           </tr>
         </thead>
         <tbody>
-        {% for node in nodes %}
+        {% for node in nodes['_items'] %}
             <tr id="row_{{node._id}}">
               <td><a href="#">{{node.name}}</a></td>
               <td>

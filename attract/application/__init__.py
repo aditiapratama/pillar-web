@@ -69,6 +69,10 @@ from application.modules.node_types import node_types
 from application.modules.nodes import nodes
 from application.modules.users import users
 from application.modules.main import homepage
+from application.helpers import url_for_other_page
+
+
+app.jinja_env.globals['url_for_other_page'] = url_for_other_page
 
 # Register blueprints for the imported controllers
 app.register_blueprint(filemanager)
