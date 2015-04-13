@@ -29,7 +29,7 @@
           </tr>
         </thead>
         <tbody>
-        {% for task in nodes['_items'] %}
+        {% for task in nodes._items %}
             <tr id="row_{{task._id}}">
               <td><a href="{{url_for('nodes.view', node_id=task._id)}}">{{task.name}}</a></td>
               <td>

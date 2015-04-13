@@ -29,7 +29,7 @@
           </tr>
         </thead>
         <tbody>
-        {% for shot in nodes['_items'] %}
+        {% for shot in nodes._items %}
             <tr id="row_{{shot._id}}">
               <td><a href="{{url_for('nodes.view', node_id=shot._id)}}">{{shot.name}}</a></td>
               <td>
@@ -37,7 +37,9 @@
                   {{shot.description|truncate(25)}}
                 {% endif %}
               </td>
-              <td>{% if shot['properties']['cut_out'] and shot['properties']['cut_in'] %}{{shot.properties.cut_out-shot.properties.cut_in}}{% endif %}</td>
+              <td>
+                  {{shot.properties.cut_out - shot.properties.cut_in}}
+              </td>
               <td>{{shot.properties.status}}</td> 
               <td></td>
               <td>

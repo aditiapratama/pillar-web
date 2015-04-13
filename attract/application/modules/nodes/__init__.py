@@ -49,12 +49,9 @@ def index(node_name=""):
         'page': page,
         #'where': "status!='deleted'",
         'sort' : "order"}, api=api)
-    #nodes = nodes['_items']
-
-    nodes = nodes.to_dict()
 
     # Build the pagination object
-    pagination = Pagination(int(page), max_results, nodes['_meta']['total'])
+    pagination = Pagination(int(page), max_results, nodes._meta.total)
 
     template = '{0}/index.html'.format(node_name)
 
