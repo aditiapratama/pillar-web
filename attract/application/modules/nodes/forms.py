@@ -1,13 +1,16 @@
 from flask_wtf import Form
-from wtforms import TextField
-from wtforms import BooleanField
-from wtforms import SelectField
-from wtforms import TextAreaField
-# from wtforms import IntegerField
-from wtforms import HiddenField
 from wtforms import FieldList
 from wtforms import FormField
+from wtforms import TextField
+from wtforms import FileField
+from wtforms import SelectField
+from wtforms import HiddenField
+from wtforms import BooleanField
+from wtforms import TextAreaField
+from wtforms import DateTimeField
 from wtforms import Form as BasicForm
+
+from datetime import datetime
 
 #from attractsdk import Node
 #from attractsdk import NodeType
@@ -27,6 +30,7 @@ class CustomFieldForm(BasicForm):
     name = TextField('Name', validators=[DataRequired()])
     name_url = TextField('Url', validators=[DataRequired()])
     description = TextAreaField('Description')
+    parent = TextField('Parent')
     is_required = BooleanField('Is extended')
     def __init__(self, csrf_enabled=False, *args, **kwargs):
         super(CustomFieldForm, self).__init__(csrf_enabled=False, *args, **kwargs)
@@ -78,27 +82,51 @@ def get_node_form(node_type):
     class ProceduralForm(Form):
         pass
 
+    api = SystemUtility.attract_api()
     node_schema = node_type['dyn_schema'].to_dict()
+    form_prop = node_type['form_schema'].to_dict()
+    parent_prop = node_type['parent'].to_dict()
 
     setattr(ProceduralForm,
         'name',
         TextField('Name', validators=[DataRequired()]))
+    # Parenting
+    if len(parent_prop['node_types']) > 0:
+        # TODO support more than 1 type
+        parent_type = parent_prop['node_types'][0]
+        select = []
+        ntype = attractsdk.NodeType.all(
+            {'where': 'name=="{0}"'.format(parent_type)}, api=api)
+        nodes = attractsdk.Node.all(
+            {'where': 'node_type=="{0}"'.format(
+                ntype['_items'][0]['_id'])}, api=api)
+        for option in nodes['_items']:
+            select.append((str(option['_id']), str(option['name'])))
+        setattr(ProceduralForm,
+                'parent',
+                SelectField('Parent {0}'.format(parent_type), choices=select))
+
     setattr(ProceduralForm,
         'description',
         TextAreaField('Description'))
     setattr(ProceduralForm,
         'picture',
-        TextField('Picture'))
+        FileField('Picture'))
     setattr(ProceduralForm,
         'node_type_id',
         HiddenField(default=node_type._id))
 
-    def build_form(node_schema, prefix=""):
+    def build_form(node_schema, form_schema, prefix=""):
         for prop in node_schema:
             schema_prop = node_schema[prop]
+            form_prop = form_schema[prop]
+            if prop == 'items':
+                continue
+            if 'visible' in form_prop and not form_prop['visible']:
+                continue
             prop_name = "{0}{1}".format(prefix, prop)
             if schema_prop['type']=='dict':
-                build_form(schema_prop['schema'], "{0}->".format(prop_name))
+                build_form(schema_prop['schema'], form_prop['schema'], "{0}->".format(prop_name))
                 continue
             if 'allowed' in schema_prop:
                 select = []
@@ -107,6 +135,11 @@ def get_node_form(node_type):
                 setattr(ProceduralForm,
                         prop_name,
                         SelectField(choices=select))
+            elif schema_prop['type']=='datetime':
+                setattr(ProceduralForm,
+                        prop_name,
+                        DateTimeField(prop_name,
+                                      default=datetime.now()))
             elif 'maxlength' in schema_prop and schema_prop['maxlength']>64:
                 setattr(ProceduralForm,
                         prop_name,
@@ -116,7 +149,7 @@ def get_node_form(node_type):
                         prop_name,
                         TextField(prop_name))
 
-    build_form(node_schema)
+    build_form(node_schema, form_prop)
 
     return ProceduralForm()
 
@@ -126,17 +159,29 @@ def process_node_form(form, node_id=None, node_type=None, user=None):
     """
     api = SystemUtility.attract_api()
     node_schema = node_type['dyn_schema'].to_dict()
+    form_schema = node_type['form_schema'].to_dict()
+
     if node_id:
         # Update existing node
         node = attractsdk.Node.find(node_id, api=api)
         node.name = form.name.data
         node.description = form.description.data
-        def get_data(node_schema, prefix=""):
+        if 'parent' in form:
+            node.parent = form.parent.data
+        def get_data(node_schema, form_schema, prefix=""):
             for pr in node_schema:
                 schema_prop = node_schema[pr]
+                form_prop = form_schema[pr]
+                if pr == 'items':
+                    continue
+                if 'visible' in form_prop and not form_prop['visible']:
+                    continue
                 prop_name = "{0}{1}".format(prefix, pr)
                 if schema_prop['type']=='dict':
-                    get_data(schema_prop['schema'], "{0}->".format(prop_name))
+                    get_data(
+                        schema_prop['schema'],
+                        form_prop['schema'],
+                        "{0}->".format(prop_name))
                     continue
                 data = form[prop_name].data
                 if schema_prop['type'] == 'integer':
@@ -152,7 +197,7 @@ def process_node_form(form, node_id=None, node_type=None, user=None):
                     pass
                 else:
                     node.properties[prop_name] = data
-        get_data(node_schema)
+        get_data(node_schema, form_schema)
         update = node.update(api=api)
         return update
     else:
@@ -162,14 +207,24 @@ def process_node_form(form, node_id=None, node_type=None, user=None):
         prop['name'] = form.name.data
         prop['description'] = form.description.data
         prop['user'] = user
+        if 'parent' in form:
+            prop['parent'] = form.parent.data
         prop['properties'] = {}
 
-        def get_data(node_schema, prefix=""):
+        def get_data(node_schema, form_schema, prefix=""):
             for pr in node_schema:
                 schema_prop = node_schema[pr]
+                form_prop = form_schema[pr]
+                if pr == 'items':
+                    continue
+                if 'visible' in form_prop and not form_prop['visible']:
+                    continue
                 prop_name = "{0}{1}".format(prefix, pr)
                 if schema_prop['type'] == 'dict':
-                    get_data(schema_prop['schema'], "{0}->".format(prop_name))
+                    get_data(
+                        schema_prop['schema'],
+                        form_prop['schema'],
+                        "{0}->".format(prop_name))
                     continue
                 data = form[prop_name].data
                 if schema_prop['type'] == 'integer':
@@ -181,7 +236,7 @@ def process_node_form(form, node_id=None, node_type=None, user=None):
                 else:
                     prop['properties'][prop_name] = data
 
-        get_data(node_schema)
+        get_data(node_schema, form_schema)
 
         prop['node_type'] = form.node_type_id.data
         # Pardon the local path, this is for testing purposes and will be removed

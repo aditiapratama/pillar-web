@@ -35,6 +35,12 @@
     </div>
     <div class="col-md-6">
       <p>Status: {{node['properties']['status']}}</p>
+      <p>Tasks:</p>
+      <ul>
+      {% for child in childs %}
+      <li><a href="{{url_for('nodes.view', node_id=child['_id'])}}">{{ child['name']}}</a></li>
+      {% endfor %}
+      </ul>
     </div>
   </div>
   <div class="row">

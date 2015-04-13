@@ -27,12 +27,12 @@
   </div>
   <div class="row">
     <div class="col-md-6">
-      <p>Duration: {{node['properties']['cut_out']-node['properties']['cut_in']}}</p>
-      <p>Cut In: {{node['properties']['cut_in']}}</p>
-      <p>Cut Out: {{node['properties']['cut_out']}}</p>
+      <p>Status: {{node['properties']['status']}}</p>
+      {% if parent %}
+      <p>Parent: <a href="{{url_for('nodes.view', node_id=parent['_id'])}}">{{parent['name']}}</a></p>
+      {% endif %}
     </div>
     <div class="col-md-6">
-      <p>Status: {{node['properties']['status']}}</p>
     </div>
   </div>
   <div class="row">

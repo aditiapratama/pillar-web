@@ -15,7 +15,7 @@ from application.modules.nodes.forms import process_node_form
 from application.helpers import Pagination
 
 from application import SystemUtility
-    
+
 # Name of the Blueprint
 nodes = Blueprint('nodes', __name__)
 
@@ -71,11 +71,22 @@ def index(node_name=""):
 def view(node_id):
     api = SystemUtility.attract_api()
     node = Node.find(node_id, api=api)
+    node_type = NodeType.find(node['node_type'], api=api)
     if node:
-        return render_template('{0}/view.html'.format('shot'),
-            node=node,
-            type_names=type_names(),
-            email=SystemUtility.session_item('email'))
+        try:
+            parent = Node.find(node['parent'], api=api)
+        except KeyError:
+            parent = None
+        childs = Node.all(
+            {'where': 'parent==ObjectId("%s")' % node['_id']}, api=api)
+
+        childs = childs.to_dict()['_items']
+        return render_template('{0}/view.html'.format(node_type['name']),
+                               node=node,
+                               type_names=type_names(),
+                               parent=parent,
+                               childs=childs,
+                               email=SystemUtility.session_item('email'))
     else:
         abort(404)
 
