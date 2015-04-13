@@ -35,6 +35,7 @@ def index(node_name=""):
     """
     # Pagination index
     page = request.args.get('page', 1)
+    max_results = 100
 
     api = SystemUtility.attract_api()
     if node_name == "":
@@ -44,7 +45,7 @@ def index(node_name=""):
     node_type = node_type_list['_items'][0]
     nodes = Node.all({
         'where': '{"node_type" : "%s"}' % (node_type['_id']),
-        'max_results': 100,
+        'max_results': max_results,
         'page': page,
         #'where': "status!='deleted'",
         'sort' : "order"}, api=api)
@@ -53,7 +54,7 @@ def index(node_name=""):
     nodes = nodes.to_dict()
 
     # Build the pagination object
-    pagination = Pagination(int(page), 1, nodes['_meta']['total'])
+    pagination = Pagination(int(page), max_results, nodes['_meta']['total'])
 
     template = '{0}/index.html'.format(node_name)
 
