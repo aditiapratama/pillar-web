@@ -39,6 +39,7 @@ def index(node_name=""):
     node_type = node_type_list['_items'][0]
     nodes = Node.all({
         'where': '{"node_type" : "%s"}' % (node_type['_id']),
+        'max_results' : 100,
         #'where': "status!='deleted'",
         'sort' : "order"}, api=api)
     nodes = nodes['_items']
