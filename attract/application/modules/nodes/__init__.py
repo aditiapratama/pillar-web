@@ -38,8 +38,8 @@ def index(node_name=""):
     node_type_list = NodeType.all({'where': "name=='{0}'".format(node_name)}, api=api)
     node_type = node_type_list['_items'][0]
     nodes = Node.all({
-        'where': "node_type=='{0}'".format(node_type['_id']),
-        'where': "status!='deleted'",
+        'where': '{"node_type" : "%s"}' % (node_type['_id']),
+        #'where': "status!='deleted'",
         'sort' : "order"}, api=api)
     nodes = nodes['_items']
     template = '{0}/index.html'.format(node_name)
