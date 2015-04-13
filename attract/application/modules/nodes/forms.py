@@ -10,8 +10,6 @@ from wtforms import TextAreaField
 from wtforms import DateTimeField
 from wtforms import Form as BasicForm
 
-from datetime import datetime
-
 #from attractsdk import Node
 #from attractsdk import NodeType
 import attractsdk
@@ -138,8 +136,7 @@ def get_node_form(node_type):
             elif schema_prop['type']=='datetime':
                 setattr(ProceduralForm,
                         prop_name,
-                        DateTimeField(prop_name,
-                                      default=datetime.now()))
+                        DateTimeField(prop_name))
             elif 'maxlength' in schema_prop and schema_prop['maxlength']>64:
                 setattr(ProceduralForm,
                         prop_name,
