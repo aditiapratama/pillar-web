@@ -1,5 +1,6 @@
 {% extends 'layout.html' %}
 {% from '_pagination.html' import render_pagination %}
+{% from 'shot/_macros.html' import render_status_label %}
 
 {% block body %}
 <div class="col-md-9">
@@ -40,7 +41,7 @@
               <td>
                   {{shot.properties.cut_out - shot.properties.cut_in}}
               </td>
-              <td>{{shot.properties.status}}</td> 
+              <td>{{render_status_label(shot.properties.status)}}</td> 
               <td></td>
               <td>
                 {% if shot.properties.notes %}

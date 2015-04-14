@@ -1,0 +1,13 @@
+{% macro render_status_label(status) %}
+  {% if status == 'in_progress' %}
+  <span class="label label-warning">In progress</span>
+  {% elif status == 'todo' %}
+  <span class="label label-info">Todo</span>
+  {% elif status == 'on_hold' %}
+  <span class="label label-default">On hold</span>
+  {% elif status == 'review_required' %}
+  <span class="label label-primary">Review required</span>
+  {% else %}
+  <span class="label label-default">{{status}}</span>
+  {% endif %}
+{% endmacro %}
