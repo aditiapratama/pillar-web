@@ -2,6 +2,22 @@
 
 {% block body %}
 <div class="col-md-9">
+    {% with errors = errors %}
+    {% if errors %}
+        <div>
+        {% for field in errors %}
+        <div class="alert alert-danger" role="alert">
+            <strong>{{field}}</strong>
+            {% for message in errors[field] %}
+                {{message}}|
+            {% endfor %}
+        </div>
+        {% endfor %}
+        </div>
+    {% endif %}
+    {% endwith %}
+</div>
+<div class="col-md-9">
   <h2>Edit {{ node.name }}</h2>
   <div class="row">
     <div class="col-md-6">

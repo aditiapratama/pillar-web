@@ -7,20 +7,18 @@ from wtforms import SelectField
 from wtforms import HiddenField
 from wtforms import BooleanField
 from wtforms import TextAreaField
+import attractsdk
 from wtforms import DateTimeField
 from wtforms import Form as BasicForm
-
-#from attractsdk import Node
-#from attractsdk import NodeType
-import attractsdk
-from application import SystemUtility
-
-#from application.modules.nodes.models import CustomFields
 from wtforms.validators import DataRequired
 
-#from application import db
+from datetime import datetime
 
-#from application.modules.nodes.models import Node, NodeType, NodeProperties
+from application import SystemUtility
+
+
+RFC1123_DATE_FORMAT = '%a, %d %b %Y %H:%M:%S GMT'
+
 
 class CustomFieldForm(BasicForm):
     id = HiddenField()
@@ -136,7 +134,7 @@ def get_node_form(node_type):
             elif schema_prop['type']=='datetime':
                 setattr(ProceduralForm,
                         prop_name,
-                        DateTimeField(prop_name))
+                        DateTimeField(prop_name, default=datetime.now()))
             elif 'maxlength' in schema_prop and schema_prop['maxlength']>64:
                 setattr(ProceduralForm,
                         prop_name,
@@ -151,6 +149,19 @@ def get_node_form(node_type):
     return ProceduralForm()
 
 
+def httpdate(dt):
+    """Return a string representation of a date according to RFC 1123
+    (HTTP/1.1).
+
+    The supplied date must be in UTC.
+
+    """
+    weekday = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"][dt.weekday()]
+    month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep",
+             "Oct", "Nov", "Dec"][dt.month - 1]
+    return "%s, %02d %s %04d %02d:%02d:%02d GMT" % (weekday, dt.day, month,
+        dt.year, dt.hour, dt.minute, dt.second)
+
 def process_node_form(form, node_id=None, node_type=None, user=None):
     """Generic function used to process new nodes, as well as edits
     """
@@ -160,12 +171,14 @@ def process_node_form(form, node_id=None, node_type=None, user=None):
 
     if node_id:
         # Update existing node
+        print ("UPDATE")
         node = attractsdk.Node.find(node_id, api=api)
         node.name = form.name.data
         node.description = form.description.data
         if 'parent' in form:
             node.parent = form.parent.data
-        def get_data(node_schema, form_schema, prefix=""):
+        def update_data(node_schema, form_schema, prefix=""):
+            print (node_schema)
             for pr in node_schema:
                 schema_prop = node_schema[pr]
                 form_prop = form_schema[pr]
@@ -175,7 +188,7 @@ def process_node_form(form, node_id=None, node_type=None, user=None):
                     continue
                 prop_name = "{0}{1}".format(prefix, pr)
                 if schema_prop['type']=='dict':
-                    get_data(
+                    update_data(
                         schema_prop['schema'],
                         form_prop['schema'],
                         "{0}->".format(prop_name))
@@ -194,8 +207,10 @@ def process_node_form(form, node_id=None, node_type=None, user=None):
                     pass
                 else:
                     node.properties[prop_name] = data
-        get_data(node_schema, form_schema)
+        update_data(node_schema, form_schema)
         update = node.update(api=api)
+        print ("UPDATE")
+        print (update)
         return update
     else:
         # Create a new node
@@ -227,13 +242,26 @@ def process_node_form(form, node_id=None, node_type=None, user=None):
                 if schema_prop['type'] == 'integer':
                     if data == '':
                         data = 0
+                if schema_prop['type'] == 'list':
+                    if data == '':
+                        data = []
                 path = prop_name.split('->')
                 if len(path) > 1:
-                    pass
+                    def recursive(path, rdict, data):
+                        item = path.pop(0)
+                        if not item in rdict:
+                            rdict[item] = {}
+                        if len(path)>0:
+                            rdict[item] = recursive (path, rdict[item], data)
+                        else:
+                            rdict[item] = data
+                        return rdict
+                    prop['properties'] = recursive(path, prop['properties'], data)
                 else:
                     prop['properties'][prop_name] = data
 
         get_data(node_schema, form_schema)
+        print (prop)
 
         prop['node_type'] = form.node_type_id.data
         # Pardon the local path, this is for testing purposes and will be removed

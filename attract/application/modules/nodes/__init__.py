@@ -11,11 +11,17 @@ from flask import url_for
 from flask import session
 from flask import request
 
+from datetime import datetime
+
 from application.modules.nodes.forms import get_node_form
 from application.modules.nodes.forms import process_node_form
 from application.helpers import Pagination
 
 from application import SystemUtility
+
+
+RFC1123_DATE_FORMAT = '%a, %d %b %Y %H:%M:%S GMT'
+
 
 # Name of the Blueprint
 nodes = Blueprint('nodes', __name__)
@@ -122,6 +128,8 @@ def edit(node_id):
     node = Node.find(node_id, api=api)
     node_type = NodeType.find(node.node_type, api=api)
     form = get_node_form(node_type)
+    node_schema = node_type['dyn_schema'].to_dict()
+    form_schema = node_type['form_schema'].to_dict()
 
     if form.validate_on_submit():
         if process_node_form(form, node_id=node_id, node_type=node_type):
@@ -132,21 +140,42 @@ def edit(node_id):
         else:
             print ("ERROR")
     else:
+        # Populate Form
         form.name.data = node.name
         form.description.data = node.description
         form.picture.data = node.picture
+        if node.parent:
+            form.parent.data = node.parent
+
+        def set_properties(
+                node_schema, form_schema, prop_dict, form, prefix=""):
+            for prop in node_schema:
+                schema_prop = node_schema[prop]
+                form_prop = form_schema[prop]
+                prop_name = "{0}{1}".format(prefix, prop)
+                if schema_prop['type'] == 'dict':
+                    set_properties(
+                        schema_prop['schema'],
+                        form_prop['schema'],
+                        prop_dict[prop_name],
+                        form,
+                        "{0}->".format(prop_name))
+                else:
+                    try:
+                        data = prop_dict[prop]
+                    except KeyError:
+                        print ("{0} not found in form".format(prop_name))
+                    if schema_prop['type'] == 'datetime':
+                        data = datetime.strptime(data, RFC1123_DATE_FORMAT)
+                        form[prop_name].data = data
 
         prop_dict = node.properties.to_dict()
-        for prop in prop_dict:
-            for field in form:
-                if field.name == prop:
-                    value = prop_dict[prop]
-                    field.data = value
-                    break
+        set_properties(node_schema, form_schema, prop_dict, form)
 
     return render_template('nodes/edit.html',
         node=node,
         form=form,
+        errors=form.errors,
         type_names=type_names(),
         email=SystemUtility.session_item('email'))
 
