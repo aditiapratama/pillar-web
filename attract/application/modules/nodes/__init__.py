@@ -85,7 +85,7 @@ def view(node_id):
                                children=children,
                                email=SystemUtility.session_item('email'))
     else:
-        abort(404)
+        return abort(404)
 
 
 @nodes.route("/<node_type_id>/add", methods=['GET', 'POST'])
