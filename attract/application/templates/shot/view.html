@@ -2,19 +2,19 @@
 
 {% block body %}
 <div class="col-md-9">
-  <h2>{{node['name']}}</h2>
+  <h2>{{node.name}}</h2>
+  <p>{{node.description}}</p>
   <div class="row">
     <div class="col-md-6">
-      {% if node['picture']!="" %}
+      {% if node.picture %}
         <a href="#" class="picture">
-            <img src="/static/pictures/{{node['picture']}}" alt="{{node['name']}}">
+            <img src="/static/pictures/{{node.picture}}" alt="{{node.name}}">
         </a>
       {% else %}
         <p>Picture goes here</p>
       {% endif %}
     </div>
     <div class="col-md-6">
-      <p>{{node['description']}}</p>
       <h4>Notes:</h4>
       <p>
         {% if notes %}
@@ -27,14 +27,12 @@
   </div>
   <div class="row">
     <div class="col-md-6">
-        <p>Duration: {% if node['properties']['cut_out'] and node['properties']['cut_in'] %}
-        {{node['properties']['cut_out']-node['properties']['cut_in']}}
-        {% endif %}</p>
-      <p>Cut In: {{node['properties']['cut_in']}}</p>
-      <p>Cut Out: {{node['properties']['cut_out']}}</p>
+      <p>Duration: {{node.properties.cut_out - node.properties.cut_in}}</p>
+      <p>Cut In: {{node.properties.cut_in}}</p>
+      <p>Cut Out: {{node.properties.cut_out}}</p>
     </div>
     <div class="col-md-6">
-      <p>Status: {{node['properties']['status']}}</p>
+      <p>Status: {{node.properties.status}}</p>
       <p>Tasks:</p>
       <ul>
       {% for child in children %}

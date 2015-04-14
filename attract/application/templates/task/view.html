@@ -2,10 +2,10 @@
 
 {% block body %}
 <div class="col-md-9">
-  <h2>{{node['name']}}</h2>
+  <h2>{{node.name}}</h2>
   <div class="row">
     <div class="col-md-6">
-      {% if node['picture']!="" %}
+      {% if node.picture %}
         <a href="#" class="picture">
             <img src="/static/pictures/{{node['picture']}}" alt="{{node['name']}}">
         </a>
@@ -14,7 +14,7 @@
       {% endif %}
     </div>
     <div class="col-md-6">
-      <p>{{node['description']}}</p>
+      <p>{{node.description}}</p>
       <h4>Notes:</h4>
       <p>
         {% if notes %}
@@ -27,9 +27,9 @@
   </div>
   <div class="row">
     <div class="col-md-6">
-      <p>Status: {{node['properties']['status']}}</p>
+      <p>Status: {{node.properties.status}}</p>
       {% if parent %}
-      <p>Parent: <a href="{{url_for('nodes.view', node_id=parent['_id'])}}">{{parent['name']}}</a></p>
+      <p>Parent: <a href="{{url_for('nodes.view', node_id=parent._id)}}">{{parent.name}}</a></p>
       {% endif %}
     </div>
     <div class="col-md-6">
@@ -39,7 +39,7 @@
     <div class="col-md-11">
     </div>
     <div class="col-md-1">
-      <a class="btn btn-default btn-s" href="{{url_for('nodes.edit', node_id=node['_id'])}}"><i class="glyphicon glyphicon-edit"></i> Edit</a>
+      <a class="btn btn-default btn-s" href="{{url_for('nodes.edit', node_id=node._id)}}"><i class="glyphicon glyphicon-edit"></i> Edit</a>
     </div>
   </div>
 </div>
