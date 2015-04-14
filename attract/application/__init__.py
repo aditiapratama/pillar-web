@@ -86,13 +86,10 @@ app.register_blueprint(nodes, url_prefix='/nodes')
 app.register_blueprint(users, url_prefix='/users')
 
 
-def atc_unauthorized(exctype, value, traceback):
+@app.errorhandler(UnauthorizedAccess)
+def handle_invalid_usage(error):
     """Global exception handling for attractsdk UnauthorizedAccess
     Currently the api is fully locked down so we need to constantly
     check for user authorization.
     """
-    if exctype == UnauthorizedAccess:
-        return redirect(url_for('users.login'))
-    else:
-        sys.__excepthook__(exctype, value, traceback)
-sys.excepthook = atc_unauthorized
+    return redirect(url_for('users.login'))
