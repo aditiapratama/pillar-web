@@ -87,7 +87,20 @@
       </footer>
 
     </div><!--/.fluid-container-->
-
+    {% assets filters="jsmin", 
+        output="assets/packed/attract.js",
+          "assets/js/jquery.min.js", 
+          "assets/js/bootstrap.min.js", 
+          "assets/js/jquery.dataTables.min.js",
+          "assets/js/jquery.dataTables.fnGetColumnData.js",
+          "assets/js/jquery.dataTables.fnFilterClear.js",
+          "assets/js/jquery.dataTables.bootstrap.js",
+          "assets/js/jquery.chosen.min.js",
+          "assets/js/bootstrap-markdown.js",
+          "assets/js/markdown.js",
+          "assets/js/jquery.attract.js" %}
+      <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}  
     {% block footer_scripts %}
     {% endblock %}
 

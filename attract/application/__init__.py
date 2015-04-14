@@ -12,6 +12,7 @@ from flask import url_for
 
 from flask.ext.mail import Mail
 from flask.ext.thumbnails import Thumbnail
+from flask.ext.assets import Environment
 
 
 # Initialize the Flask all object
@@ -65,6 +66,7 @@ class SystemUtility():
 # Initialized the available extensions
 mail = Mail(app)
 thumb = Thumbnail(app)
+assets = Environment(app)
 
 
 # Import controllers
