@@ -149,19 +149,6 @@ def get_node_form(node_type):
     return ProceduralForm()
 
 
-def httpdate(dt):
-    """Return a string representation of a date according to RFC 1123
-    (HTTP/1.1).
-
-    The supplied date must be in UTC.
-
-    """
-    weekday = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"][dt.weekday()]
-    month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep",
-             "Oct", "Nov", "Dec"][dt.month - 1]
-    return "%s, %02d %s %04d %02d:%02d:%02d GMT" % (weekday, dt.day, month,
-        dt.year, dt.hour, dt.minute, dt.second)
-
 def process_node_form(form, node_id=None, node_type=None, user=None):
     """Generic function used to process new nodes, as well as edits
     """
@@ -199,6 +186,8 @@ def process_node_form(form, node_id=None, node_type=None, user=None):
                         data = 0
                     else:
                         data = int(form[prop_name].data)
+                if schema_prop['type'] == 'datetime':
+                    data = datetime.strftime(data, RFC1123_DATE_FORMAT)
                 else:
                     if pr in form:
                         data = form[prop_name].data
@@ -245,6 +234,8 @@ def process_node_form(form, node_id=None, node_type=None, user=None):
                 if schema_prop['type'] == 'list':
                     if data == '':
                         data = []
+                if schema_prop['type'] == 'datetime':
+                    data = datetime.strftime(data, RFC1123_DATE_FORMAT)
                 path = prop_name.split('->')
                 if len(path) > 1:
                     def recursive(path, rdict, data):
