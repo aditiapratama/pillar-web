@@ -1,5 +1,6 @@
 from attractsdk import Node
 from attractsdk import NodeType
+from attractsdk.exceptions import UnauthorizedAccess
 
 from flask import abort
 from flask import Blueprint
@@ -42,6 +43,7 @@ def index(node_name=""):
         node_name = "shot"
 
     node_type_list = NodeType.all({'where': "name=='{0}'".format(node_name)}, api=api)
+
     node_type = node_type_list['_items'][0]
     nodes = Node.all({
         'where': '{"node_type" : "%s"}' % (node_type['_id']),
@@ -78,12 +80,13 @@ def view(node_id):
             {'where': 'parent==ObjectId("%s")' % node['_id']}, api=api)
 
         children = children.to_dict()['_items']
-        return render_template('{0}/view.html'.format(node_type['name']),
-                               node=node,
-                               type_names=type_names(),
-                               parent=parent,
-                               children=children,
-                               email=SystemUtility.session_item('email'))
+        return render_template(
+            '{0}/view.html'.format(node_type['name']),
+            node=node,
+            type_names=type_names(),
+            parent=parent,
+            children=children,
+            email=SystemUtility.session_item('email'))
     else:
         return abort(404)
 

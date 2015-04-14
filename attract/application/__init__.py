@@ -1,20 +1,23 @@
+import sys
 import os
 import config
-import attractsdk
+from attractsdk import Api
+from attractsdk.exceptions import UnauthorizedAccess
+
 from flask import Flask
 from flask import session
 from flask import Blueprint
-from flask.ext.mail import Mail
-# from flask.ext.sqlalchemy import SQLAlchemy
-from flask.ext.thumbnails import Thumbnail
-from flask.ext.assets import Environment
+from flask import redirect
+from flask import url_for
 
-# from attractsdk import Api as attractsdk
+from flask.ext.mail import Mail
+from flask.ext.thumbnails import Thumbnail
+
 
 # Initialize the Flask all object
 app = Flask(__name__,
-            template_folder='templates',
-            static_folder='static')
+    template_folder='templates',
+    static_folder='static')
 
 # Filemanager used by Flask-Admin extension
 filemanager = Blueprint('filemanager', __name__, static_folder='static/files')
@@ -44,7 +47,7 @@ class SystemUtility():
 
     @staticmethod
     def attract_api():
-        api = attractsdk.Api(
+        api = Api(
             endpoint=SystemUtility.attract_server_endpoint(),
             username=None,
             password=None,
@@ -62,7 +65,7 @@ class SystemUtility():
 # Initialized the available extensions
 mail = Mail(app)
 thumb = Thumbnail(app)
-assets = Environment(app)
+
 
 # Import controllers
 from application.modules.node_types import node_types
@@ -71,7 +74,7 @@ from application.modules.users import users
 from application.modules.main import homepage
 from application.helpers import url_for_other_page
 
-
+# Pagination global to use un jinja template
 app.jinja_env.globals['url_for_other_page'] = url_for_other_page
 
 # Register blueprints for the imported controllers
@@ -79,3 +82,15 @@ app.register_blueprint(filemanager)
 app.register_blueprint(node_types, url_prefix='/node-types')
 app.register_blueprint(nodes, url_prefix='/nodes')
 app.register_blueprint(users, url_prefix='/users')
+
+
+def atc_unauthorized(exctype, value, traceback):
+    """Global exception handling for attractsdk UnauthorizedAccess
+    Currently the api is fully locked down so we need to constantly
+    check for user authorization.
+    """
+    if exctype == UnauthorizedAccess:
+        return redirect(url_for('users.login'))
+    else:
+        sys.__excepthook__(exctype, value, traceback)
+sys.excepthook = atc_unauthorized

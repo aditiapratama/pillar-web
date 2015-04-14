@@ -44,8 +44,9 @@ def authenticate(username, password):
 
 @users.route("/login", methods=['GET', 'POST'])
 def login():
-    if 'token' in session and 'email' in session:
-        return redirect('/')
+    session.pop('email', None)
+    session.pop('token', None)
+    session.pop('user_id', None)
 
     form = UserLoginForm()
     if form.validate_on_submit():
