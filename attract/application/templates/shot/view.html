@@ -37,7 +37,7 @@
       <p>Status: {{node['properties']['status']}}</p>
       <p>Tasks:</p>
       <ul>
-      {% for child in childs %}
+      {% for child in children %}
       <li><a href="{{url_for('nodes.view', node_id=child['_id'])}}">{{ child['name']}}</a></li>
       {% endfor %}
       </ul>

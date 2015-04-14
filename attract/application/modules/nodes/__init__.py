@@ -74,15 +74,15 @@ def view(node_id):
             parent = Node.find(node['parent'], api=api)
         except KeyError:
             parent = None
-        childs = Node.all(
+        children = Node.all(
             {'where': 'parent==ObjectId("%s")' % node['_id']}, api=api)
 
-        childs = childs.to_dict()['_items']
+        children = children.to_dict()['_items']
         return render_template('{0}/view.html'.format(node_type['name']),
                                node=node,
                                type_names=type_names(),
                                parent=parent,
-                               childs=childs,
+                               children=children,
                                email=SystemUtility.session_item('email'))
     else:
         abort(404)
