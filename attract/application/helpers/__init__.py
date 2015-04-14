@@ -42,3 +42,7 @@ def url_for_other_page(page):
     args = request.view_args.copy()
     args['page'] = page
     return url_for(request.endpoint, **args)
+
+
+def percentage(items, total):
+    return float(items) * 100 / float(total)
