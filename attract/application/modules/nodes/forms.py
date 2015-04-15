@@ -1,3 +1,5 @@
+import attractsdk
+
 from flask_wtf import Form
 from wtforms import FieldList
 from wtforms import FormField
@@ -9,11 +11,11 @@ from wtforms import BooleanField
 from wtforms import IntegerField
 from wtforms import TextAreaField
 from wtforms import SelectMultipleField
-import attractsdk
 from wtforms import DateTimeField
 from wtforms import Form as BasicForm
 from wtforms.validators import DataRequired
 
+from flask import request
 from datetime import datetime
 
 from application import SystemUtility
@@ -230,9 +232,9 @@ def process_node_form(form, node_id=None, node_type=None, user=None):
                     node.properties[prop_name] = data
         update_data(node_schema, form_schema)
         update = node.update(api=api)
-        #node = attractsdk.Node.find(node_id, api=api)
-        #picture_file = open('/Users/fsiddi/Desktop/1500x500.jpeg', 'rb')
-        #post = node.replace_picture(picture_file, api=api)
+        if form.picture.data:
+            image_data = request.files[form.picture.name].read()
+            post = node.replace_picture(image_data, api=api)
 
         return update
     else:
