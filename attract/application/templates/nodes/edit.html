@@ -16,6 +16,11 @@
         </div>
     {% endif %}
     {% endwith %}
+    {% if error!="" %}
+        <div class="alert alert-danger" role="alert">
+                {{error}}
+        </div>
+    {% endif %}
 </div>
 <div class="col-md-9">
   <h2>Edit {{ node.name }}</h2>
