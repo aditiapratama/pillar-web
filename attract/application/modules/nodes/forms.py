@@ -122,9 +122,21 @@ def get_node_form(node_type):
                 continue
             prop_name = "{0}{1}".format(prefix, prop)
             if schema_prop['type']=='dict':
-                build_form(schema_prop['schema'], form_prop['schema'], "{0}->".format(prop_name))
+                build_form(schema_prop['schema'],
+                           form_prop['schema'],
+                           "{0}->".format(prop_name))
                 continue
-            if 'allowed' in schema_prop:
+            if schema_prop['type'] == 'list' and 'items' in form_prop:
+                items = eval("attractsdk.{0}".format(form_prop['items'][0]))
+                users = items.all(api=api)["_items"]
+                select = []
+                for user in users:
+                    print (user)
+                    select.append((user['_id'], user['email']))
+                setattr(ProceduralForm,
+                        prop_name,
+                        SelectField(choices=select))
+            elif 'allowed' in schema_prop:
                 select = []
                 for option in schema_prop['allowed']:
                     select.append((str(option), str(option)))
@@ -198,8 +210,6 @@ def process_node_form(form, node_id=None, node_type=None, user=None):
                     node.properties[prop_name] = data
         update_data(node_schema, form_schema)
         update = node.update(api=api)
-        print ("UPDATE")
-        print (update)
         return update
     else:
         # Create a new node
