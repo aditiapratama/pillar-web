@@ -6,7 +6,9 @@ from wtforms import FileField
 from wtforms import SelectField
 from wtforms import HiddenField
 from wtforms import BooleanField
+from wtforms import IntegerField
 from wtforms import TextAreaField
+from wtforms import SelectMultipleField
 import attractsdk
 from wtforms import DateTimeField
 from wtforms import Form as BasicForm
@@ -122,9 +124,20 @@ def get_node_form(node_type):
                 continue
             prop_name = "{0}{1}".format(prefix, prop)
             if schema_prop['type']=='dict':
-                build_form(schema_prop['schema'], form_prop['schema'], "{0}->".format(prop_name))
+                build_form(schema_prop['schema'],
+                           form_prop['schema'],
+                           "{0}->".format(prop_name))
                 continue
-            if 'allowed' in schema_prop:
+            if schema_prop['type'] == 'list' and 'items' in form_prop:
+                items = eval("attractsdk.{0}".format(form_prop['items'][0]))
+                users = items.all(api=api)["_items"]
+                select = []
+                for user in users:
+                    select.append((user['_id'], user['email']))
+                setattr(ProceduralForm,
+                        prop_name,
+                        SelectMultipleField(choices=select))
+            elif 'allowed' in schema_prop:
                 select = []
                 for option in schema_prop['allowed']:
                     select.append((str(option), str(option)))
@@ -135,6 +148,10 @@ def get_node_form(node_type):
                 setattr(ProceduralForm,
                         prop_name,
                         DateTimeField(prop_name, default=datetime.now()))
+            elif schema_prop['type']=='integer':
+                setattr(ProceduralForm,
+                        prop_name,
+                        IntegerField(prop_name))
             elif 'maxlength' in schema_prop and schema_prop['maxlength']>64:
                 setattr(ProceduralForm,
                         prop_name,
@@ -149,9 +166,23 @@ def get_node_form(node_type):
     return ProceduralForm()
 
 
+def recursive(path, rdict, data):
+    item = path.pop(0)
+    if not item in rdict:
+        rdict[item] = {}
+    if len(path)>0:
+        rdict[item] = recursive (path, rdict[item], data)
+    else:
+        rdict[item] = data
+    return rdict
+
+
 def process_node_form(form, node_id=None, node_type=None, user=None):
     """Generic function used to process new nodes, as well as edits
     """
+    if not user:
+        print ("User is None")
+        return False
     api = SystemUtility.attract_api()
     node_schema = node_type['dyn_schema'].to_dict()
     form_schema = node_type['form_schema'].to_dict()
@@ -161,10 +192,10 @@ def process_node_form(form, node_id=None, node_type=None, user=None):
         node = attractsdk.Node.find(node_id, api=api)
         node.name = form.name.data
         node.description = form.description.data
+        node.user = node.user
         if 'parent' in form:
             node.parent = form.parent.data
         def update_data(node_schema, form_schema, prefix=""):
-            print (node_schema)
             for pr in node_schema:
                 schema_prop = node_schema[pr]
                 form_prop = form_schema[pr]
@@ -192,15 +223,17 @@ def process_node_form(form, node_id=None, node_type=None, user=None):
                         data = form[prop_name].data
                 path = prop_name.split('->')
                 if len(path)>1:
-                    pass
+                    recursive_prop = recursive(
+                        path, node.properties.to_dict(), data)
+                    node.properties = recursive_prop
                 else:
                     node.properties[prop_name] = data
         update_data(node_schema, form_schema)
         update = node.update(api=api)
-
-        node = attractsdk.Node.find(node_id, api=api)
+        #node = attractsdk.Node.find(node_id, api=api)
         #picture_file = open('/Users/fsiddi/Desktop/1500x500.jpeg', 'rb')
         #post = node.replace_picture(picture_file, api=api)
+
         return update
     else:
         # Create a new node
@@ -239,15 +272,6 @@ def process_node_form(form, node_id=None, node_type=None, user=None):
                     data = datetime.strftime(data, RFC1123_DATE_FORMAT)
                 path = prop_name.split('->')
                 if len(path) > 1:
-                    def recursive(path, rdict, data):
-                        item = path.pop(0)
-                        if not item in rdict:
-                            rdict[item] = {}
-                        if len(path)>0:
-                            rdict[item] = recursive (path, rdict[item], data)
-                        else:
-                            rdict[item] = data
-                        return rdict
                     prop['properties'] = recursive(path, prop['properties'], data)
                 else:
                     prop['properties'][prop_name] = data

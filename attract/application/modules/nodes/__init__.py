@@ -108,7 +108,7 @@ def add(node_type_id):
     email = SystemUtility.session_item('email')
     if form.validate_on_submit():
         if process_node_form(form, node_type=ntype, user=user_id):
-            flash('Node correctly added.')
+            flash('Node correctly added')
             return redirect(url_for('nodes.index', node_name=ntype['name']))
     else:
         print form.errors
@@ -128,17 +128,21 @@ def edit(node_id):
     node = Node.find(node_id, api=api)
     node_type = NodeType.find(node.node_type, api=api)
     form = get_node_form(node_type)
+    user_id = SystemUtility.session_item('user_id')
     node_schema = node_type['dyn_schema'].to_dict()
     form_schema = node_type['form_schema'].to_dict()
+    error = ""
 
     if form.validate_on_submit():
-        if process_node_form(form, node_id=node_id, node_type=node_type):
+        if process_node_form(
+                form, node_id=node_id, node_type=node_type, user=user_id):
             node = Node.find(node_id, api=api)
             form = get_node_form( node_type )
-            flash ("Node correctly edited.")
+            flash ('Node "{0}" correctly edited'.format(node.name))
             return redirect(url_for('nodes.index', node_name=node_type['name']))
         else:
-            print (form.errors)
+            error = "Server error"
+            print ("Error sending data")
     else:
         # Populate Form
         form.name.data = node.name
@@ -150,6 +154,8 @@ def edit(node_id):
         def set_properties(
                 node_schema, form_schema, prop_dict, form, prefix=""):
             for prop in node_schema:
+                if not prop in prop_dict:
+                    continue
                 schema_prop = node_schema[prop]
                 form_prop = form_schema[prop]
                 prop_name = "{0}{1}".format(prefix, prop)
@@ -167,7 +173,9 @@ def edit(node_id):
                         print ("{0} not found in form".format(prop_name))
                     if schema_prop['type'] == 'datetime':
                         data = datetime.strptime(data, RFC1123_DATE_FORMAT)
+                    if prop_name in form:
                         form[prop_name].data = data
+
 
         prop_dict = node.properties.to_dict()
         set_properties(node_schema, form_schema, prop_dict, form)
@@ -176,6 +184,7 @@ def edit(node_id):
         node=node,
         form=form,
         errors=form.errors,
+        error=error,
         type_names=type_names(),
         email=SystemUtility.session_item('email'))
 
@@ -186,8 +195,9 @@ def delete(node_id):
     """
     api = SystemUtility.attract_api()
     node = Node.find(node_id, api=api)
+    name = node.name
     if node.delete(api=api):
-        flash('Node correctly deleted.')
+        flash('Node "{0}" correctly deleted'.format(name))
         return redirect('/')
     else:
         return redirect(url_for('node.edit', node_id=node._id))
