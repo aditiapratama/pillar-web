@@ -138,7 +138,7 @@ def edit(node_id):
             flash ("Node correctly edited.")
             return redirect(url_for('nodes.index', node_name=node_type['name']))
         else:
-            print ("ERROR")
+            print (form.errors)
     else:
         # Populate Form
         form.name.data = node.name

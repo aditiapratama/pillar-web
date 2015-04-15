@@ -158,7 +158,6 @@ def process_node_form(form, node_id=None, node_type=None, user=None):
 
     if node_id:
         # Update existing node
-        print ("UPDATE")
         node = attractsdk.Node.find(node_id, api=api)
         node.name = form.name.data
         node.description = form.description.data
@@ -198,8 +197,10 @@ def process_node_form(form, node_id=None, node_type=None, user=None):
                     node.properties[prop_name] = data
         update_data(node_schema, form_schema)
         update = node.update(api=api)
-        print ("UPDATE")
-        print (update)
+
+        node = attractsdk.Node.find(node_id, api=api)
+        #picture_file = open('/Users/fsiddi/Desktop/1500x500.jpeg', 'rb')
+        #post = node.replace_picture(picture_file, api=api)
         return update
     else:
         # Create a new node
@@ -258,5 +259,6 @@ def process_node_form(form, node_id=None, node_type=None, user=None):
         # Pardon the local path, this is for testing purposes and will be removed
         # files = {'picture': open('/Users/fsiddi/Desktop/1500x500.jpeg', 'rb')}
         files = None
-        post = node.post(prop, files=files, api=api)
+        post = node.post(prop, api=api)
+
         return post
