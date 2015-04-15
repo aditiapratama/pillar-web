@@ -232,9 +232,10 @@ def process_node_form(form, node_id=None, node_type=None, user=None):
                     node.properties[prop_name] = data
         update_data(node_schema, form_schema)
         update = node.update(api=api)
-        if form.picture.data:
-            image_data = request.files[form.picture.name].read()
-            post = node.replace_picture(image_data, api=api)
+        # if form.picture.data:
+        #     image_data = request.files[form.picture.name].read()
+        #     post = node.replace_picture(image_data, api=api)
+
 
         return update
     else:
