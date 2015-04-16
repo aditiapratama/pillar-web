@@ -3,18 +3,18 @@
 {% block body %}
 <div class="col-md-9">
   <h2>{{node.name}}</h2>
-  <p>{{node.description}}</p>
   <div class="row">
     <div class="col-md-6">
-      {% if picture %}
+      {% if node.properties.path %}
         <a href="#" class="thumbnail">
-            <img src="/static/pictures/{{picture.properties.path}}" alt="{{node.name}}">
+            <img src="/static/pictures/{{node.properties.path}}" alt="{{node['name']}}">
         </a>
       {% else %}
         <p>Picture goes here</p>
       {% endif %}
     </div>
     <div class="col-md-6">
+      <p>{{node.description}}</p>
       <h4>Notes:</h4>
       <p>
         {% if notes %}
@@ -27,25 +27,19 @@
   </div>
   <div class="row">
     <div class="col-md-6">
-      <p>Duration: {{node.properties.cut_out - node.properties.cut_in}}</p>
-      <p>Cut In: {{node.properties.cut_in}}</p>
-      <p>Cut Out: {{node.properties.cut_out}}</p>
+      <p>Status: {{node.properties.status}}</p>
+      {% if parent %}
+      <p>Parent: <a href="{{url_for('nodes.view', node_id=parent._id)}}">{{parent.name}}</a></p>
+      {% endif %}
     </div>
     <div class="col-md-6">
-      <p>Status: {{node.properties.status}}</p>
-      <p>Tasks:</p>
-      <ul>
-      {% for child in children %}
-      <li><a href="{{url_for('nodes.view', node_id=child['_id'])}}">{{ child['name']}}</a></li>
-      {% endfor %}
-      </ul>
     </div>
   </div>
   <div class="row">
     <div class="col-md-11">
     </div>
     <div class="col-md-1">
-      <a class="btn btn-default btn-s" href="{{url_for('nodes.edit', node_id=node['_id'])}}"><i class="glyphicon glyphicon-edit"></i> Edit</a>
+      <a class="btn btn-default btn-s" href="{{url_for('nodes.edit', node_id=node._id)}}"><i class="glyphicon glyphicon-edit"></i> Edit</a>
     </div>
   </div>
 </div>

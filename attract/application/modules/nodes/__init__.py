@@ -1,6 +1,6 @@
 from attractsdk import Node
 from attractsdk import NodeType
-from attractsdk.exceptions import UnauthorizedAccess
+# from attractsdk.exceptions import UnauthorizedAccess
 
 from flask import abort
 from flask import Blueprint
@@ -8,7 +8,7 @@ from flask import render_template
 from flask import redirect
 from flask import flash
 from flask import url_for
-from flask import session
+# from flask import session
 from flask import request
 
 from datetime import datetime
@@ -82,16 +82,24 @@ def view(node_id):
             parent = Node.find(node['parent'], api=api)
         except KeyError:
             parent = None
+
         children = Node.all(
             {'where': 'parent==ObjectId("%s")' % node['_id']}, api=api)
-
         children = children.to_dict()['_items']
+        try:
+            if node['picture']:
+                picture = Node.find(node['picture'], api=api)
+            else:
+                picture = None
+        except KeyError:
+            picture = None
         return render_template(
             '{0}/view.html'.format(node_type['name']),
             node=node,
             type_names=type_names(),
             parent=parent,
             children=children,
+            picture=picture,
             email=SystemUtility.session_item('email'))
     else:
         return abort(404)
@@ -137,7 +145,6 @@ def edit(node_id):
         if process_node_form(
                 form, node_id=node_id, node_type=node_type, user=user_id):
             node = Node.find(node_id, api=api)
-            form = get_node_form( node_type )
             flash ('Node "{0}" correctly edited'.format(node.name))
             return redirect(url_for('nodes.index', node_name=node_type['name']))
         else:
@@ -196,8 +203,10 @@ def delete(node_id):
     api = SystemUtility.attract_api()
     node = Node.find(node_id, api=api)
     name = node.name
+    node_type = NodeType.find(node.node_type, api=api)
     if node.delete(api=api):
         flash('Node "{0}" correctly deleted'.format(name))
-        return redirect('/')
+        print (node_type['name'])
+        return redirect(url_for('nodes.index', node_name=node_type['name']))
     else:
-        return redirect(url_for('node.edit', node_id=node._id))
+        return redirect(url_for('nodes.edit', node_id=node._id))

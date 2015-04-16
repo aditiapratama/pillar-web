@@ -6,18 +6,20 @@ from wtforms import FieldList
 from wtforms import FormField
 from wtforms import TextField
 from wtforms import FileField
+from wtforms import DateField
 from wtforms import SelectField
 from wtforms import HiddenField
 from wtforms import BooleanField
 from wtforms import IntegerField
 from wtforms import TextAreaField
-from wtforms import SelectMultipleField
 from wtforms import DateTimeField
+from wtforms import SelectMultipleField
 from wtforms import Form as BasicForm
 from wtforms.validators import DataRequired
 
 from flask import request
 from datetime import datetime
+from datetime import date
 
 from application import SystemUtility
 
@@ -92,7 +94,7 @@ def get_node_form(node_type):
         'name',
         TextField('Name', validators=[DataRequired()]))
     # Parenting
-    if len(parent_prop['node_types']) > 0:
+    if 'node_types' in parent_prop and len(parent_prop['node_types']) > 0:
         # TODO support more than 1 type
         parent_type = parent_prop['node_types'][0]
         select = []
@@ -111,9 +113,22 @@ def get_node_form(node_type):
     setattr(ProceduralForm,
         'description',
         TextAreaField('Description'))
-    setattr(ProceduralForm,
-        'picture',
-        FileField('Picture'))
+    #setattr(ProceduralForm,
+    #    'picture',
+    #    FileField('Picture'))
+    select = []
+    select.append(('None', 'None'))
+    ntype = attractsdk.NodeType.all(
+        {'where': 'name=="file"'}, api=api)
+    nodes = attractsdk.Node.all(
+        {'where': 'node_type=="{0}"'.format(
+            ntype['_items'][0]['_id'])}, api=api)
+    for option in nodes['_items']:
+        select.append((str(option['_id']), str(option['name'])))
+    if len(select)>1:
+        setattr(ProceduralForm,
+                'picture',
+                SelectField('Picture', choices=select))
     setattr(ProceduralForm,
         'node_type_id',
         HiddenField(default=node_type._id))
@@ -148,15 +163,24 @@ def get_node_form(node_type):
                 setattr(ProceduralForm,
                         prop_name,
                         SelectField(choices=select))
-            elif schema_prop['type']=='datetime':
-                setattr(ProceduralForm,
-                        prop_name,
-                        DateTimeField(prop_name, default=datetime.now()))
-            elif schema_prop['type']=='integer':
+            elif schema_prop['type'] == 'datetime':
+                if 'dateonly' in form_prop and form_prop['dateonly']:
+                    setattr(ProceduralForm,
+                            prop_name,
+                            DateField(prop_name, default=date.today()))
+                elif schema_prop['type'] == 'date':
+                    setattr(ProceduralForm,
+                            prop_name,
+                            DateTimeField(prop_name, default=datetime.now()))
+            elif schema_prop['type'] == 'integer':
                 setattr(ProceduralForm,
                         prop_name,
                         IntegerField(prop_name))
-            elif 'maxlength' in schema_prop and schema_prop['maxlength']>64:
+            elif schema_prop['type'] == 'media':
+                setattr(ProceduralForm,
+                        prop_name,
+                        FileField(prop_name))
+            elif 'maxlength' in schema_prop and schema_prop['maxlength'] > 64:
                 setattr(ProceduralForm,
                         prop_name,
                         TextAreaField(prop_name))
@@ -196,7 +220,10 @@ def process_node_form(form, node_id=None, node_type=None, user=None):
         node = attractsdk.Node.find(node_id, api=api)
         node.name = form.name.data
         node.description = form.description.data
-        node.user = node.user
+        if 'picture' in form:
+            node.picture = form.picture.data
+            if node.picture == "None":
+                node.picture = None
         if 'parent' in form:
             node.parent = form.parent.data
         def update_data(node_schema, form_schema, prefix=""):
@@ -215,6 +242,9 @@ def process_node_form(form, node_id=None, node_type=None, user=None):
                         "{0}->".format(prop_name))
                     continue
                 data = form[prop_name].data
+                if schema_prop['type'] == 'dict':
+                    if data == 'None':
+                        continue
                 if schema_prop['type'] == 'integer':
                     if data == '':
                         data = 0
@@ -237,16 +267,19 @@ def process_node_form(form, node_id=None, node_type=None, user=None):
         # if form.picture.data:
         #     image_data = request.files[form.picture.name].read()
         #     post = node.replace_picture(image_data, api=api)
-
-
         return update
     else:
         # Create a new node
         node = attractsdk.Node()
         prop = {}
+        files = {}
         prop['name'] = form.name.data
         prop['description'] = form.description.data
         prop['user'] = user
+        if 'picture' in form:
+            prop['picture'] = form.picture.data
+        if prop['picture'] == 'None':
+            prop['picture'] = None
         if 'parent' in form:
             prop['parent'] = form.parent.data
         prop['properties'] = {}
@@ -267,6 +300,12 @@ def process_node_form(form, node_id=None, node_type=None, user=None):
                         "{0}->".format(prop_name))
                     continue
                 data = form[prop_name].data
+                if schema_prop['type'] == 'media':
+                    tmpfile = '/tmp/binary_data'
+                    data.save(tmpfile)
+                    binfile = open(tmpfile, 'rb')
+                    files[pr] = binfile
+                    continue
                 if schema_prop['type'] == 'integer':
                     if data == '':
                         data = 0
