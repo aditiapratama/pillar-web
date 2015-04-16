@@ -39,14 +39,14 @@
                   {{task.description|truncate(25)}}
                 {% endif %}
               </td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td>{{task.properties.status}}</td> 
-              <td></td>
+              <td>{{task.properties.contentType}}</td>
+              <td>{{task.properties.length}}</td>
+              <td>{{task.properties.uploadDate}}</td>
+              <td>{{task.properties.md5}}</td>
+              <td>{{task.properties.filename}}</td>
               <td>
-                {% if task.properties.notes %}
-                  {{task.properties.notes|truncate(25)}}
+                {% if task.properties.path %}
+                  {{task.properties.path|truncate(25)}}
                 {% endif %}
               </td>
               <td>
