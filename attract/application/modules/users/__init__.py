@@ -1,4 +1,5 @@
 from attractsdk import utils
+from attractsdk.users import User
 
 from flask import Blueprint
 from flask import render_template
@@ -7,6 +8,7 @@ from flask import flash
 from flask import session
 from flask import redirect
 from application.modules.users.forms import UserLoginForm
+from application.modules.users.forms import UserProfileForm
 
 from application import SystemUtility
 
@@ -77,3 +79,23 @@ def logout():
     session.pop('user_id', None)
     flash('Bye!')
     return redirect('/')
+
+
+@users.route("/profile", methods=['GET', 'POST'])
+def profile():
+    """Profile view and edit page. This is a temporary implementation.
+    """
+    api = SystemUtility.attract_api()
+    user = User.find(session['user_id'], api=api)
+
+    form = UserProfileForm(
+        first_name = user.first_name,
+        last_name = user.last_name)
+
+    if form.validate_on_submit():
+        user.first_name = form.first_name.data
+        user.last_name = form.last_name.data
+        user.update(api=api)
+        flash("Profile updated")
+
+    return render_template('users/profile.html', form=form)

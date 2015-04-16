@@ -12,3 +12,11 @@ class UserLoginForm(Form):
 
     def __init__(self, csrf_enabled=False, *args, **kwargs):
         super(UserLoginForm, self).__init__(csrf_enabled=False, *args, **kwargs)
+
+
+class UserProfileForm(Form):
+    first_name = TextField('First Name', validators=[DataRequired()])
+    last_name = TextField('Last Name', validators=[DataRequired()])
+
+    def __init__(self, csrf_enabled=False, *args, **kwargs):
+        super(UserProfileForm, self).__init__(csrf_enabled=False, *args, **kwargs)
