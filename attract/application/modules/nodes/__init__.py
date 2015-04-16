@@ -42,7 +42,7 @@ def index(node_name=""):
     """
     # Pagination index
     page = request.args.get('page', 1)
-    max_results = 100
+    max_results = 50
 
     api = SystemUtility.attract_api()
     if node_name == "":

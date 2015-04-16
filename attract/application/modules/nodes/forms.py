@@ -1,4 +1,5 @@
 import attractsdk
+from attractsdk import Node
 
 from flask_wtf import Form
 from wtforms import FieldList
@@ -95,13 +96,14 @@ def get_node_form(node_type):
         # TODO support more than 1 type
         parent_type = parent_prop['node_types'][0]
         select = []
-        ntype = attractsdk.NodeType.all(
+        node_type = attractsdk.NodeType.all(
             {'where': 'name=="{0}"'.format(parent_type)}, api=api)
-        nodes = attractsdk.Node.all(
-            {'where': 'node_type=="{0}"'.format(
-                ntype['_items'][0]['_id'])}, api=api)
-        for option in nodes['_items']:
-            select.append((str(option['_id']), str(option['name'])))
+        nodes = Node.all({
+            'where': '{"node_type" : "%s"}' % (node_type._items[0]['_id']),
+            'max_results': 100,
+            'sort' : "order"}, api=api)
+        for option in nodes._items:
+            select.append((str(option._id), str(option.name)))
         setattr(ProceduralForm,
                 'parent',
                 SelectField('Parent {0}'.format(parent_type), choices=select))
