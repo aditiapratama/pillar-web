@@ -45,7 +45,7 @@
           <a href="#" id="drop3" class="dropdown-toggle" data-toggle="dropdown">{{email}} <b class="caret"></b></a>
             <ul class="dropdown-menu" role="menu" aria-labelledby="drop3">
               <li><a role="menuitem" tabindex="-1" href="">Tasks</a></li>
-              <li><a role="menuitem" tabindex="-1" href="">Profile</a></li>
+              <li><a role="menuitem" tabindex="-1" href="{{url_for('users.profile')}}">Profile</a></li>
               <li class="divider"></li>
 
               <li><a role="menuitem" tabindex="-1" href="{{url_for('node_types.index')}}">Node Types</a></li>
@@ -65,6 +65,19 @@
     </div>
 
     <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div>
+                {% for message in messages %}
+                <div class="alert alert-success" role="alert">{{message}}</div>
+                {% endfor %}
+                </div>
+            {% endif %}
+            {% endwith %}
+        </div>
+      </div>
       <div class="row">
         {% block sidebar %}
           <div class="col-md-3">
