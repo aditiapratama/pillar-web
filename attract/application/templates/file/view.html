@@ -15,19 +15,16 @@
     </div>
     <div class="col-md-6">
       <p>{{node.description}}</p>
-      <h4>Notes:</h4>
-      <p>
-        {% if notes %}
-          {{notes}}
-        {% else %}
-          No notes at the moment
-        {% endif %}
-      </p>
     </div>
   </div>
   <div class="row">
     <div class="col-md-6">
-      <p>Status: {{node.properties.status}}</p>
+      <p>Content Type: {{node.properties.contentType}}</p>
+      <p>Length: {{node.properties.length}}</p>
+      <p>Upload date: {{node.properties.uploadDate}}</p>
+      <p>MD5: {{node.properties.md5}}</p>
+      <p>Filename: {{node.properties.filename}}</p>
+      <p>Path: {{node.properties.path}}</p>
       {% if parent %}
       <p>Parent: <a href="{{url_for('nodes.view', node_id=parent._id)}}">{{parent.name}}</a></p>
       {% endif %}

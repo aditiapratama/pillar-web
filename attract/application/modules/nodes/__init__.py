@@ -1,6 +1,7 @@
 from attractsdk import Node
 from attractsdk import NodeType
-# from attractsdk.exceptions import UnauthorizedAccess
+from attractsdk import User
+from attractsdk.exceptions import ResourceNotFound
 
 from flask import abort
 from flask import Blueprint
@@ -35,6 +36,19 @@ def type_names():
         type_names.append(str(names['name']))
     return type_names
 
+def assigned_users_to(node, node_type):
+    api = SystemUtility.attract_api()
+
+    if node_type['name']!='task':
+        return []
+    users = node['properties']['owners']['users']
+    owners = []
+    for user in users:
+        # print (user)
+        user_node = User.find(user, api=api)
+        print (user_node)
+        owners.append(user_node)
+    return owners
 
 @nodes.route("/<node_name>")
 def index(node_name=""):
@@ -63,7 +77,8 @@ def index(node_name=""):
 
     template = '{0}/index.html'.format(node_name)
 
-    return render_template(template,
+    return render_template(
+        template,
         title=node_name,
         nodes=nodes,
         node_type=node_type,
@@ -88,11 +103,17 @@ def view(node_id):
         children = children.to_dict()['_items']
         try:
             if node['picture']:
-                picture = Node.find(node['picture'], api=api)
+                try:
+                    picture = Node.find(node['picture'], api=api)
+                except ResourceNotFound:
+                    picture = None
             else:
                 picture = None
         except KeyError:
             picture = None
+
+        assigned_users = assigned_users_to(node, node_type)
+
         return render_template(
             '{0}/view.html'.format(node_type['name']),
             node=node,
@@ -100,6 +121,7 @@ def view(node_id):
             parent=parent,
             children=children,
             picture=picture,
+            assigned_users=assigned_users,
             email=SystemUtility.session_item('email'))
     else:
         return abort(404)
@@ -154,7 +176,8 @@ def edit(node_id):
         # Populate Form
         form.name.data = node.name
         form.description.data = node.description
-        form.picture.data = node.picture
+        if 'picture' in form:
+            form.picture.data = node.picture
         if node.parent:
             form.parent.data = node.parent
 
