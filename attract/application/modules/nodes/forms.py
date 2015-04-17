@@ -1,3 +1,4 @@
+import os
 import attractsdk
 from attractsdk import Node
 
@@ -21,6 +22,7 @@ from flask import request
 from datetime import datetime
 from datetime import date
 
+from application import app
 from application import SystemUtility
 
 
@@ -125,6 +127,9 @@ def get_node_form(node_type):
             ntype['_items'][0]['_id'])}, api=api)
     for option in nodes['_items']:
         select.append((str(option['_id']), str(option['name'])))
+    setattr(ProceduralForm,
+            'picture_file',
+            FileField('Picture File'))
     if len(select)>1:
         setattr(ProceduralForm,
                 'picture',
@@ -168,7 +173,7 @@ def get_node_form(node_type):
                     setattr(ProceduralForm,
                             prop_name,
                             DateField(prop_name, default=date.today()))
-                elif schema_prop['type'] == 'date':
+                else:
                     setattr(ProceduralForm,
                             prop_name,
                             DateTimeField(prop_name, default=datetime.now()))
@@ -203,6 +208,43 @@ def recursive(path, rdict, data):
     else:
         rdict[item] = data
     return rdict
+
+
+def send_file(form, node, user):
+    """Send files to storage
+    """
+    api = SystemUtility.attract_api()
+    if form.picture_file.name in request.files:
+        picture_file = request.files[form.picture_file.name]
+        if picture_file.filename == '':
+            picture_file = None
+    else:
+        picture_file = None
+
+    if picture_file:
+        picture_path = os.path.join(
+            app.config['FILE_STORAGE'], picture_file.filename)
+        picture_file.save(picture_path)
+        file_type = attractsdk.NodeType.all(
+            {'where': 'name=="file"'}, api=api)['_items'][0]['_id']
+        node_picture = attractsdk.Node()
+        prop = {}
+        prop['properties'] = {}
+        prop['name'] = picture_file.filename
+        prop['description'] = "Picture for node {0}".format(node['name'])
+        prop['user'] = user
+        prop['picture'] = None
+        prop['node_type'] = file_type
+        prop['properties']['contentType'] = picture_file.content_type
+        prop['properties']['length'] = picture_file.content_length
+        prop['properties']['uploadDate'] = datetime.strftime(
+            datetime.now(), RFC1123_DATE_FORMAT)
+        prop['properties']['md5'] = ""
+        prop['properties']['filename'] = picture_file.filename
+        prop['properties']['path'] = picture_file.filename
+        node_picture.post(prop, api=api)
+        node['picture'] = node_picture['_id']
+        return node
 
 
 def process_node_form(form, node_id=None, node_type=None, user=None):
@@ -263,6 +305,7 @@ def process_node_form(form, node_id=None, node_type=None, user=None):
                 else:
                     node.properties[prop_name] = data
         update_data(node_schema, form_schema)
+        send_file(form, node, user)
         update = node.update(api=api)
         # if form.picture.data:
         #     image_data = request.files[form.picture.name].read()
@@ -321,12 +364,11 @@ def process_node_form(form, node_id=None, node_type=None, user=None):
                     prop['properties'][prop_name] = data
 
         get_data(node_schema, form_schema)
-        print (prop)
 
         prop['node_type'] = form.node_type_id.data
         # Pardon the local path, this is for testing purposes and will be removed
         # files = {'picture': open('/Users/fsiddi/Desktop/1500x500.jpeg', 'rb')}
-        files = None
+        send_file(form, prop, user)
         post = node.post(prop, api=api)
 
         return post
