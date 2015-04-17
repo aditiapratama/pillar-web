@@ -1,3 +1,5 @@
+import os
+
 class Config(object):
     # Configured for GMAIL
     MAIL_SERVER = ''
@@ -29,3 +31,5 @@ class Development(Config):
     MEDIA_URL = ''
     MEDIA_THUMBNAIL_FOLDER = ''
     MEDIA_THUMBNAIL_URL = ''
+    FILE_STORAGE = '{0}/application/static/storage'.format(
+                os.path.join(os.path.dirname(__file__)))
