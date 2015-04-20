@@ -100,10 +100,10 @@ def get_node_form(node_type):
         # TODO support more than 1 type
         parent_type = parent_prop['node_types'][0]
         select = []
-        node_type = attractsdk.NodeType.all(
+        parent_node_type = attractsdk.NodeType.all(
             {'where': 'name=="{0}"'.format(parent_type)}, api=api)
         nodes = Node.all({
-            'where': '{"node_type" : "%s"}' % (node_type._items[0]['_id']),
+            'where': '{"node_type" : "%s"}' % (parent_node_type._items[0]['_id']),
             'max_results': 100,
             'sort' : "order"}, api=api)
         for option in nodes._items:
@@ -120,11 +120,7 @@ def get_node_form(node_type):
     #    FileField('Picture'))
     select = []
     select.append(('None', 'None'))
-    ntype = attractsdk.NodeType.all(
-        {'where': 'name=="file"'}, api=api)
-    nodes = attractsdk.Node.all(
-        {'where': 'node_type=="{0}"'.format(
-            ntype['_items'][0]['_id'])}, api=api)
+    nodes = attractsdk.File.all(api=api)
     for option in nodes['_items']:
         select.append((str(option['_id']), str(option['name'])))
     setattr(ProceduralForm,
@@ -225,23 +221,18 @@ def send_file(form, node, user):
         picture_path = os.path.join(
             app.config['FILE_STORAGE'], picture_file.filename)
         picture_file.save(picture_path)
-        file_type = attractsdk.NodeType.all(
-            {'where': 'name=="file"'}, api=api)['_items'][0]['_id']
-        node_picture = attractsdk.Node()
+        node_picture = attractsdk.File()
         prop = {}
-        prop['properties'] = {}
         prop['name'] = picture_file.filename
         prop['description'] = "Picture for node {0}".format(node['name'])
         prop['user'] = user
-        prop['picture'] = None
-        prop['node_type'] = file_type
-        prop['properties']['contentType'] = picture_file.content_type
-        prop['properties']['length'] = picture_file.content_length
-        prop['properties']['uploadDate'] = datetime.strftime(
+        prop['contentType'] = picture_file.content_type
+        prop['length'] = picture_file.content_length
+        prop['uploadDate'] = datetime.strftime(
             datetime.now(), RFC1123_DATE_FORMAT)
-        prop['properties']['md5'] = ""
-        prop['properties']['filename'] = picture_file.filename
-        prop['properties']['path'] = picture_file.filename
+        prop['md5'] = ""
+        prop['filename'] = picture_file.filename
+        prop['path'] = picture_file.filename
         node_picture.post(prop, api=api)
         node['picture'] = node_picture['_id']
         return node
@@ -321,8 +312,8 @@ def process_node_form(form, node_id=None, node_type=None, user=None):
         prop['user'] = user
         if 'picture' in form:
             prop['picture'] = form.picture.data
-        if prop['picture'] == 'None':
-            prop['picture'] = None
+            if prop['picture'] == 'None':
+                prop['picture'] = None
         if 'parent' in form:
             prop['parent'] = form.parent.data
         prop['properties'] = {}

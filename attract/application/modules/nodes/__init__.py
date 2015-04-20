@@ -1,6 +1,7 @@
 from attractsdk import Node
 from attractsdk import NodeType
 from attractsdk import User
+from attractsdk import File
 from attractsdk.exceptions import ResourceNotFound
 
 from flask import abort
@@ -104,7 +105,7 @@ def view(node_id):
         try:
             if node['picture']:
                 try:
-                    picture = Node.find(node['picture'], api=api)
+                    picture = File.find(node['picture'], api=api)
                 except ResourceNotFound:
                     picture = None
             else:

@@ -5,9 +5,9 @@
   <h2>{{node.name}}</h2>
   <div class="row">
     <div class="col-md-6">
-      {% if node.picture %}
-        <a href="#" class="picture">
-            <img src="/static/storage/{{node['picture']}}" alt="{{node['name']}}">
+      {% if picture %}
+        <a href="/static/storage/{{picture.path}}" class="thumbnail">
+            <img src="/static/storage/{{picture.path}}" alt="{{node['name']}}">
         </a>
       {% else %}
         <p>Picture goes here</p>
