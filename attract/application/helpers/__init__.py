@@ -45,4 +45,6 @@ def url_for_other_page(page):
 
 
 def percentage(items, total):
+    if total==0:
+        return 0.0
     return float(items) * 100 / float(total)

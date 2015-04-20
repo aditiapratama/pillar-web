@@ -98,4 +98,6 @@ def profile():
         user.update(api=api)
         flash("Profile updated")
 
-    return render_template('users/profile.html', form=form)
+    return render_template('users/profile.html',
+                           form=form,
+                           email=SystemUtility.session_item('email'))
