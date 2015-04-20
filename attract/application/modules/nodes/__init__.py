@@ -65,7 +65,12 @@ def index(node_name=""):
 
     node_type_list = NodeType.all({'where': "name=='{0}'".format(node_name)}, api=api)
 
+    if len(node_type_list['_items']) == 0:
+        return "Empty NodeType list", 200
+
     node_type = node_type_list['_items'][0]
+
+
     nodes = Node.all({
         'where': '{"node_type" : "%s"}' % (node_type['_id']),
         'max_results': max_results,
