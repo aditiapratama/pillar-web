@@ -2,6 +2,7 @@ from attractsdk import Node
 from attractsdk import NodeType
 from attractsdk import User
 from attractsdk import File
+from attractsdk import binaryFile
 from attractsdk.exceptions import ResourceNotFound
 
 from flask import abort
@@ -117,6 +118,10 @@ def view(node_id):
                 picture = None
         except KeyError:
             picture = None
+
+        if picture and picture.backend == "fs.files":
+            bdata = binaryFile.find(picture.path, api=api)
+            picture['data'] = bdata['data']
 
         assigned_users = assigned_users_to(node, node_type)
 

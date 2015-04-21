@@ -209,6 +209,7 @@ def recursive(path, rdict, data):
 def send_file(form, node, user):
     """Send files to storage
     """
+    backend = "fs.files"
     api = SystemUtility.attract_api()
     if form.picture_file.name in request.files:
         picture_file = request.files[form.picture_file.name]
@@ -218,9 +219,17 @@ def send_file(form, node, user):
         picture_file = None
 
     if picture_file:
+        # Save file on AttractiWeb Storage
         picture_path = os.path.join(
             app.config['FILE_STORAGE'], picture_file.filename)
         picture_file.save(picture_path)
+
+        # Send file to Attract Server
+        if backend == "fs.files":
+            picture_file_file = open(picture_path)
+            node_bfile = attractsdk.binaryFile()
+            node_bfile.post_file(picture_file_file, api=api)
+
         node_picture = attractsdk.File()
         prop = {}
         prop['name'] = picture_file.filename
@@ -232,7 +241,11 @@ def send_file(form, node, user):
             datetime.now(), RFC1123_DATE_FORMAT)
         prop['md5'] = ""
         prop['filename'] = picture_file.filename
-        prop['path'] = picture_file.filename
+        prop['backend'] = backend
+        if backend == "attract-web":
+            prop['path'] = picture_file.filename
+        elif backend == "fs.files":
+            prop['path'] = str(node_bfile['_id'])
         node_picture.post(prop, api=api)
         node['picture'] = node_picture['_id']
         return node
