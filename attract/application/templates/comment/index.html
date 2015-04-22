@@ -1,0 +1,64 @@
+{% extends 'layout.html' %}
+{% from '_pagination.html' import render_pagination %}
+
+{% block body %}
+<div class="col-md-9">
+  <div class="row">
+    <div class="col-md-12">
+      <table cellpadding="0" cellspacing="0" border="0" class="table table-striped" id="shots">
+        <thead>
+          <tr>
+            <th>Comment Name</th>
+            <th>User</th>
+            <th>Text</th>
+            <th>Parent</th>
+            <th></th>
+            <th></th>
+            <th width="8%"></th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for comment in nodes._items %}
+            <tr id="row_{{comment._id}}">
+              <td><a href="{{url_for('nodes.view', node_id=comment._id)}}">{{comment.name}}</a></td>
+              <!--<td>
+                {% if comment.description %}
+                  {{comment.description|truncate(25)}}
+                {% endif %}
+              </td>-->
+              <td>{{comment.user}}</td>
+              <td>{{comment.properties.text}}</td> 
+              <td>{{comment.parent}}</td>
+              <td>
+                {% if comment.properties.attachments %}
+                  {{comment.properties.attachments|truncate(25)}}
+                {% endif %}
+              </td>
+              <td>
+                <a class="btn btn-default btn-xs" href="{{url_for('nodes.edit', node_id=comment._id)}}"><i class="glyphicon glyphicon-edit"></i> Edit</a>
+              </td>
+            </tr>
+        {% endfor %}
+          
+        </tbody>
+        <tfoot>
+          <tr>
+            <th>Comment Name</th>
+            <th>User</th>
+            <th>Text</th>
+            <th>Parent</th>
+            <th></th>
+            <th></th>
+            <th></th>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <a href="{{url_for('nodes.add', node_type_id=node_type['_id'])}}" class="btn btn-default">Add</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

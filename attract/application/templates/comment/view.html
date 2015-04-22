@@ -23,24 +23,16 @@
   </div>
   <div class="row">
     <div class="col-md-6">
-      <p>Status: {{node.properties.status}}</p>
+        <p>{{node.properties.text}}</p>
       {% if parent %}
       <p>Parent: <a href="{{url_for('nodes.view', node_id=parent._id)}}">{{parent.name}}</a></p>
       {% endif %}
     </div>
     <div class="col-md-6">
-        <h5>Assigned to</h5>
-        <ul>
-        {% for assigned_user in assigned_users %}
-        <li>{{assigned_user.email}}</li>
-        {% endfor %}
-        </ul>
-        <h5>Childrern</h5>
-        <ul>
-        {% for child in children %}
-        <li>{{child.name}}</li>
-        {% endfor %}
-        </ul>
+      <h5>Attachments</h5>
+      {% for attachment in node.properties.attachments %}
+      <li>{{attachment}}</li>
+      {% endfor %}
     </div>
   </div>
   <div class="row">
@@ -48,16 +40,6 @@
     </div>
     <div class="col-md-1">
       <a class="btn btn-default btn-s" href="{{url_for('nodes.edit', node_id=node._id)}}"><i class="glyphicon glyphicon-edit"></i> Edit</a>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-12">
-        <h4>Comments</h4>
-        <ul>
-        {% for comment in comments %}
-        <li><strong>{{comment['username']}}</strong>: {{comment.properties.text}}</li>
-        {% endfor %}
-        </ul>
     </div>
   </div>
 </div>

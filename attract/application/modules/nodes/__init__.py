@@ -100,14 +100,24 @@ def view(node_id):
     node = Node.find(node_id, api=api)
     node_type = NodeType.find(node['node_type'], api=api)
     if node:
+        #Get Parent
         try:
             parent = Node.find(node['parent'], api=api)
         except KeyError:
             parent = None
-
+        # Get childrens
         children = Node.all(
             {'where': 'parent==ObjectId("%s")' % node['_id']}, api=api)
         children = children.to_dict()['_items']
+        # Get Comments
+        comment_type = NodeType.all({'where': 'name=="comment"'}, api=api)
+        comments = []
+        for child in children:
+            if child['node_type'] == comment_type['_items'][0]['_id']:
+                comment_user = User.find(child['user'], api=api)
+                child['username'] = comment_user['email']
+                comments.append(child)
+        # Get Picture
         try:
             if node['picture']:
                 try:
@@ -131,6 +141,7 @@ def view(node_id):
             type_names=type_names(),
             parent=parent,
             children=children,
+            comments=comments,
             picture=picture,
             assigned_users=assigned_users,
             email=SystemUtility.session_item('email'))

@@ -97,20 +97,19 @@ def get_node_form(node_type):
         TextField('Name', validators=[DataRequired()]))
     # Parenting
     if 'node_types' in parent_prop and len(parent_prop['node_types']) > 0:
-        # TODO support more than 1 type
-        parent_type = parent_prop['node_types'][0]
         select = []
-        parent_node_type = attractsdk.NodeType.all(
-            {'where': 'name=="{0}"'.format(parent_type)}, api=api)
-        nodes = Node.all({
-            'where': '{"node_type" : "%s"}' % (parent_node_type._items[0]['_id']),
-            'max_results': 100,
-            'sort' : "order"}, api=api)
-        for option in nodes._items:
-            select.append((str(option._id), str(option.name)))
+        for parent_type in parent_prop['node_types']:
+            parent_node_type = attractsdk.NodeType.all(
+                {'where': 'name=="{0}"'.format(parent_type)}, api=api)
+            nodes = Node.all({
+                'where': '{"node_type" : "%s"}' % (parent_node_type._items[0]['_id']),
+                'max_results': 100,
+                'sort' : "order"}, api=api)
+            for option in nodes._items:
+                select.append((str(option._id), str(option.name)))
         setattr(ProceduralForm,
                 'parent',
-                SelectField('Parent {0}'.format(parent_type), choices=select))
+                SelectField('Parent {0}'.format(parent_prop['node_types']), choices=select))
 
     setattr(ProceduralForm,
         'description',
@@ -152,14 +151,24 @@ def get_node_form(node_type):
                            "{0}->".format(prop_name))
                 continue
             if schema_prop['type'] == 'list' and 'items' in form_prop:
-                items = eval("attractsdk.{0}".format(form_prop['items'][0]))
-                users = items.all(api=api)["_items"]
-                select = []
-                for user in users:
-                    select.append((user['_id'], user['email']))
-                setattr(ProceduralForm,
-                        prop_name,
-                        SelectMultipleField(choices=select))
+                for item in form_prop['items']:
+                    items = eval("attractsdk.{0}".format(item[0]))
+                    print ("ITEMS")
+                    print (items)
+                    users = items.all(api=api)
+                    if users:
+                        users = users["_items"]
+                    else:
+                        users = []
+                    select = []
+                    for user in users:
+                        try:
+                            select.append((user['_id'], user[item[1]]))
+                        except KeyError:
+                            select.append((user['_id'], user['_id']))
+                    setattr(ProceduralForm,
+                            prop_name,
+                            SelectMultipleField(choices=select))
             elif 'allowed' in schema_prop:
                 select = []
                 for option in schema_prop['allowed']:
