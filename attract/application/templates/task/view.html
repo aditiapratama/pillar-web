@@ -7,7 +7,11 @@
     <div class="col-md-6">
       {% if picture %}
         <a href="/static/storage/{{picture.path}}" class="thumbnail">
-            <img src="/static/storage/{{picture.path}}" alt="{{node['name']}}">
+            {% if picture.backend == "attract-web" or picture.backend == None %}
+            <img src="/static/storage/{{picture.path}}" alt="{{node.name}}">
+            {% elif picture.backend == "fs.files" %}
+            <img src="data:image/jpeg;base64,{{picture['data']}}" alt="{{node.name}}">
+            {% endif %}
         </a>
       {% else %}
         <p>Picture goes here</p>

@@ -122,7 +122,10 @@ def get_node_form(node_type):
     select.append(('None', 'None'))
     nodes = attractsdk.File.all(api=api)
     for option in nodes['_items']:
-        select.append((str(option['_id']), str(option['name'])))
+        try:
+            select.append((str(option['_id']), str(option['name'])))
+        except KeyError:
+            select.append((str(option['_id']), str(option['filename'])))
     setattr(ProceduralForm,
             'picture_file',
             FileField('Picture File'))
@@ -209,7 +212,7 @@ def recursive(path, rdict, data):
 def send_file(form, node, user):
     """Send files to storage
     """
-    backend = "fs.files"
+    backend = app.config['FILE_STORAGE_BACKEND']
     api = SystemUtility.attract_api()
     if form.picture_file.name in request.files:
         picture_file = request.files[form.picture_file.name]
