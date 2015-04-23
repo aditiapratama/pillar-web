@@ -1,14 +1,18 @@
 from attractsdk import utils
 from attractsdk.users import User
+from attractsdk.nodes import Node
+from attractsdk.nodes import NodeType
 
 from flask import Blueprint
 from flask import render_template
-
 from flask import flash
 from flask import session
 from flask import redirect
+from flask import request
+
 from application.modules.users.forms import UserLoginForm
 from application.modules.users.forms import UserProfileForm
+from application.helpers import Pagination
 
 from application import SystemUtility
 
@@ -101,3 +105,54 @@ def profile():
     return render_template('users/profile.html',
                            form=form,
                            email=SystemUtility.session_item('email'))
+
+
+def type_names():
+    api = SystemUtility.attract_api()
+
+    types = NodeType.all(api=api)["_items"]
+    type_names = []
+    for names in types:
+        type_names.append(str(names['name']))
+    return type_names
+
+
+@users.route("/tasks", methods=['GET', 'POST'])
+def tasks():
+    """User assigned tasks"""
+    # Pagination index
+    page = request.args.get('page', 1)
+    max_results = 50
+
+    api = SystemUtility.attract_api()
+    node_type_list = NodeType.all({'where': "name=='task'"}, api=api)
+
+    if len(node_type_list['_items']) == 0:
+        return "Empty NodeType list", 200
+
+    node_type = node_type_list._items[0]
+
+    nodes = Node.all({
+        'where': '{"node_type" : "%s", "properties.owners.users": {"$in": ["%s"]}}'\
+                % (node_type['_id'], session['user_id']),
+        'max_results': max_results,
+        'page': page,
+        #'where': "status!='deleted'",
+        'sort' : "order"}, api=api)
+
+    # Build the pagination object
+    pagination = Pagination(int(page), max_results, nodes._meta.total)
+
+    template = '{0}/index.html'.format("task")
+
+    return render_template(
+        template,
+        title="task",
+        nodes=nodes,
+        node_type="task",
+        type_names=type_names(),
+        pagination=pagination,
+        email=SystemUtility.session_item('email'))
+
+    return 'ok'
+
