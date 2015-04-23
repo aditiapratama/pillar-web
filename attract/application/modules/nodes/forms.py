@@ -82,6 +82,13 @@ class NodeTypeForm(Form):
     is_extended = BooleanField('Is extended')
     properties = ModelFieldList(FormField(CustomFieldForm), model=CustomFields)
 
+def get_comment_form(node, comment_type):
+    form = get_node_form(comment_type)
+    for field in form:
+        if field.name == 'parent':
+            field.default = str(node._id)
+        print ("{0}: {1}".format(field.name, field.default))
+    return form
 
 def get_node_form(node_type):
     class ProceduralForm(Form):
@@ -102,14 +109,22 @@ def get_node_form(node_type):
             parent_node_type = attractsdk.NodeType.all(
                 {'where': 'name=="{0}"'.format(parent_type)}, api=api)
             nodes = Node.all({
-                'where': '{"node_type" : "%s"}' % (parent_node_type._items[0]['_id']),
+                'where': 'node_type=="{0}"'.format(
+                    str(parent_node_type._items[0]['_id'])),
                 'max_results': 100,
-                'sort' : "order"}, api=api)
+                'sort': "order"},
+                api=api)
             for option in nodes._items:
                 select.append((str(option._id), str(option.name)))
+
+        parent_names = ""
+        for parent_type in parent_prop['node_types']:
+            parent_names = "{0} {1},".format(parent_names, parent_type)
+
         setattr(ProceduralForm,
                 'parent',
-                SelectField('Parent {0}'.format(parent_prop['node_types']), choices=select))
+                SelectField('Parent ({0})'.format(parent_names),
+                            choices=select))
 
     setattr(ProceduralForm,
         'description',
@@ -218,6 +233,15 @@ def recursive(path, rdict, data):
     return rdict
 
 
+import hashlib
+def hashfile(afile, hasher, blocksize=65536):
+    buf = afile.read(blocksize)
+    while len(buf) > 0:
+        hasher.update(buf)
+        buf = afile.read(blocksize)
+    return hasher.hexdigest()
+
+
 def send_file(form, node, user):
     """Send files to storage
     """
@@ -236,13 +260,14 @@ def send_file(form, node, user):
             app.config['FILE_STORAGE'], picture_file.filename)
         picture_file.save(picture_path)
 
-        # Send file to Attract Server
-        if backend == "fs.files":
-            picture_file_file = open(picture_path)
-            node_bfile = attractsdk.binaryFile()
-            node_bfile.post_file(picture_file_file, api=api)
-
         node_picture = attractsdk.File()
+
+        picture_file_file = open(picture_path, 'rb')
+        if backend == 'attract':
+            hash_ = hashfile(picture_file_file, hashlib.md5())
+            name = "{0}{1}".format(hash_,
+                                   os.path.splitext(picture_path)[1])
+        picture_file_file.close()
         prop = {}
         prop['name'] = picture_file.filename
         prop['description'] = "Picture for node {0}".format(node['name'])
@@ -254,12 +279,18 @@ def send_file(form, node, user):
         prop['md5'] = ""
         prop['filename'] = picture_file.filename
         prop['backend'] = backend
-        if backend == "attract-web":
-            prop['path'] = picture_file.filename
+        if backend in ["attract"]:
+            prop['path'] = name
         elif backend == "fs.files":
             prop['path'] = str(node_bfile['_id'])
         node_picture.post(prop, api=api)
         node['picture'] = node_picture['_id']
+        # Send file to Attract Server
+        if backend == "fs.files":
+            node_bfile = attractsdk.binaryFile()
+            node_bfile.post_file(picture_path, api=api)
+        elif backend == 'attract':
+            node_picture.post_file(picture_path, name, api=api)
         return node
 
 

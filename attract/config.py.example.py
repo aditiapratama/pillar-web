@@ -36,4 +36,4 @@ class Development(Config):
     MEDIA_THUMBNAIL_URL = ''
     FILE_STORAGE = '{0}/application/static/storage'.format(
                 os.path.join(os.path.dirname(__file__)))
-    FILE_STORAGE_BACKEND = 'fs.files'
+    FILE_STORAGE_BACKEND = 'attract'

@@ -17,6 +17,7 @@ from flask import request
 from datetime import datetime
 
 from application.modules.nodes.forms import get_node_form
+from application.modules.nodes.forms import get_comment_form
 from application.modules.nodes.forms import process_node_form
 from application.helpers import Pagination
 
@@ -94,12 +95,26 @@ def index(node_name=""):
         email=SystemUtility.session_item('email'))
 
 
-@nodes.route("/<node_id>/view")
+@nodes.route("/<node_id>/view", methods=['GET', 'POST'])
 def view(node_id):
     api = SystemUtility.attract_api()
     node = Node.find(node_id, api=api)
-    node_type = NodeType.find(node['node_type'], api=api)
+    user_id = SystemUtility.session_item('user_id')
     if node:
+        node_type = NodeType.find(node['node_type'], api=api)
+        comment_type = NodeType.all({'where': 'name=="comment"'}, api=api)
+        comment_type = comment_type['_items'][0]
+        # Processing Comment Form
+        # Get comments form
+        comment_form = get_comment_form(node, comment_type)
+        if comment_form.validate_on_submit():
+            if process_node_form(comment_form,
+                                    node_id=None,
+                                    node_type=comment_type,
+                                    user=user_id):
+                node = Node.find(node_id, api=api)
+            else:
+                print (comment_form.errors)
         #Get Parent
         try:
             parent = Node.find(node['parent'], api=api)
@@ -110,10 +125,9 @@ def view(node_id):
             {'where': 'parent==ObjectId("%s")' % node['_id']}, api=api)
         children = children.to_dict()['_items']
         # Get Comments
-        comment_type = NodeType.all({'where': 'name=="comment"'}, api=api)
         comments = []
         for child in children:
-            if child['node_type'] == comment_type['_items'][0]['_id']:
+            if child['node_type'] == comment_type['_id']:
                 comment_user = User.find(child['user'], api=api)
                 child['username'] = comment_user['email']
                 comments.append(child)
@@ -128,11 +142,10 @@ def view(node_id):
                 picture = None
         except KeyError:
             picture = None
-
         if picture and picture.backend == "fs.files":
             bdata = binaryFile.find(picture.path, api=api)
             picture['data'] = bdata['data']
-
+        # Get assigned users
         assigned_users = assigned_users_to(node, node_type)
 
         return render_template(
@@ -142,6 +155,7 @@ def view(node_id):
             parent=parent,
             children=children,
             comments=comments,
+            comment_form=comment_form,
             picture=picture,
             assigned_users=assigned_users,
             email=SystemUtility.session_item('email'))

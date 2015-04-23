@@ -6,12 +6,8 @@
   <div class="row">
     <div class="col-md-6">
       {% if picture %}
-        <a href="/static/storage/{{picture.path}}" class="thumbnail">
-            {% if picture.backend == "attract-web" or picture.backend == None %}
-            <img src="/static/storage/{{picture.path}}" alt="{{node.name}}">
-            {% elif picture.backend == "fs.files" %}
-            <img src="data:image/jpeg;base64,{{picture['data']}}" alt="{{node.name}}">
-            {% endif %}
+        <a href="http://127.0.0.1:5000/file_server/file/{{picture.path}}" class="thumbnail">
+            <img src="http://127.0.0.1:5000/file_server/file/{{picture.path}}" alt="{{node.name}}">
         </a>
       {% else %}
         <p>Picture goes here</p>
@@ -53,11 +49,34 @@
   <div class="row">
     <div class="col-md-12">
         <h4>Comments</h4>
-        <ul>
         {% for comment in comments %}
-        <li><strong>{{comment['username']}}</strong>: {{comment.properties.text}}</li>
+        <div style="border-bottom: solid 1px;">
+            <h4>{{comment['username']}}</h4>
+            <p>{{comment.properties.text}}</p>
+        </div>
         {% endfor %}
-        </ul>
+        <form method="POST" enctype="multipart/form-data" action="{{url_for('nodes.view', node_id=node._id)}}">
+        {% for field in comment_form %}
+            {% if field.name == 'csrf_token' %}
+            {{ field }}
+            {% else %}
+            {% if field.type == 'HiddenField' %}
+                {{ field }}
+            {% else %}
+                <div class="form-group">
+                {{ field.label }} 
+                {{ field(class='form-control') }}
+                </div>
+            {% endif %}
+            {% endif %}
+        {% endfor %}
+        <a class="btn btn-danger" href="{{url_for('nodes.delete', node_id=node._id)}}">Delete</a>
+        <div class="pull-right">
+          <a class="btn btn-default" href="#">Cancel</a>
+          <input class="btn btn-default" type="submit" value="Update {{node.node_type.name}}">
+        </div>
+      </form>
+
     </div>
   </div>
 </div>
