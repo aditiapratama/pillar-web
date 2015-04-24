@@ -9,16 +9,6 @@ class Config(object):
     MAIL_PASSWORD = ''
     DEFAULT_MAIL_SENDER = ''
 
-    # Flask-Security setup
-    SECURITY_LOGIN_WITHOUT_CONFIRMATION = True
-    SECURITY_REGISTERABLE = True
-    SECURITY_RECOVERABLE = True
-    SECURITY_CHANGEABLE = True
-    SECUIRTY_POST_LOGIN = '/'
-    SECURITY_PASSWORD_HASH = ''
-    SECURITY_PASSWORD_SALT = ''
-    SECURITY_EMAIL_SENDER = ''
-
 
 class Development(Config):
     SECRET_KEY=''
