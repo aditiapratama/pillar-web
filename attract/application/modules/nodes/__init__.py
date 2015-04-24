@@ -21,6 +21,7 @@ from application.modules.nodes.forms import get_comment_form
 from application.modules.nodes.forms import process_node_form
 from application.helpers import Pagination
 
+from application import app
 from application import SystemUtility
 
 
@@ -158,6 +159,7 @@ def view(node_id):
             comment_form=comment_form,
             picture=picture,
             assigned_users=assigned_users,
+            config=app.config,
             email=SystemUtility.session_item('email'))
     else:
         return abort(404)
