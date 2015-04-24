@@ -4,68 +4,76 @@
 
 {% block body %}
 <div class="col-md-9">
-  <div class="row">
-    <div class="col-md-12">
-      <table cellpadding="0" cellspacing="0" border="0" class="table table-striped" id="shots">
-        <thead>
-          <tr>
-            <th>Shot Name</th>
-            <th>Description</th>
-            <th>Duration</th>
-            <th>Status</th>
-            <th>Tasks</th>
-            <th>Notes</th>
-            <th width="8%"></th>
-          </tr>
-        </thead>
-        <tbody>
-        {% for shot in nodes._items %}
-            <tr id="row_{{shot._id}}">
-              <td><a href="{{url_for('nodes.view', node_id=shot._id)}}">{{shot.name}}</a></td>
-              <td>
-                {% if shot.description %}
-                  {{shot.description|truncate(25)}}
-                {% endif %}
-              </td>
-              <td>
-                  {{shot.properties.cut_out - shot.properties.cut_in}}
-              </td>
-              <td>{{render_status_label(shot.properties.status)}}</td> 
-              <td></td>
-              <td>
-                {% if shot.properties.notes %}
-                  {{shot.properties.notes|truncate(25)}}
-                {% endif %}
-              </td>
-              <td>
-                <a class="btn btn-default btn-xs" href="{{url_for('nodes.edit', node_id=shot._id)}}"><i class="glyphicon glyphicon-edit"></i> Edit</a>
-              </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-        <tfoot>
-          <tr>
-            <th>Shot Name</th>
-            <th>Description</th>
-            <th>Duration</th>
-            <th>Status</th>
-            <th>Tasks</th>
-            <th>Notes</th>
-            <th></th>
-          </tr>
-        </tfoot>
-      </table>
-    </div>
-  </div>
-  
-  <div class="row">
-    <div class="col-md-6">
-      {{ render_pagination(pagination) }}
-    </div>
-    <div class="col-md-6">
-      <span>Showing {{nodes['_meta']['total']}} items</span>
-      <a href="{{url_for('nodes.add', node_type_id=node_type['_id'])}}" class="pull-right btn btn-default">Add</a>
-    </div>
-  </div>
+	<div class="row">
+		<div class="col-md-12">
+			<table cellpadding="0" cellspacing="0" border="0" class="table table-striped" id="shots">
+				<thead>
+					<tr>
+						<th width="15%"></th>
+						<th>Shot Name</th>
+						<th>Description</th>
+						<th>Duration</th>
+						<th>Status</th>
+						<th>Tasks</th>
+						<th>Notes</th>
+						<th width="8%"></th>
+					</tr>
+				</thead>
+				<tbody>
+				{% for shot in nodes._items %}
+						<tr id="row_{{shot._id}}">
+							<td>
+								{% if shot.picture %}
+									<a href="{{url_for('nodes.view', node_id=shot._id)}}">
+										<img class="shot-thumbnail" src="{{config['ATTRACT_SERVER_ENDPOINT']}}/file_server/file/{{shot.picture.path}}" alt="{{shot.name}}">
+									</a>
+								{% endif %}
+							</td>
+							<td><a href="{{url_for('nodes.view', node_id=shot._id)}}">{{shot.name}}</a></td>
+							<td>
+								{% if shot.description %}
+									{{shot.description|truncate(25)}}
+								{% endif %}
+							</td>
+							<td>
+									{{shot.properties.cut_out - shot.properties.cut_in}}
+							</td>
+							<td>{{render_status_label(shot.properties.status)}}</td> 
+							<td></td>
+							<td>
+								{% if shot.properties.notes %}
+									{{shot.properties.notes|truncate(25)}}
+								{% endif %}
+							</td>
+							<td>
+								<a class="btn btn-default btn-xs" href="{{url_for('nodes.edit', node_id=shot._id)}}"><i class="glyphicon glyphicon-edit"></i> Edit</a>
+							</td>
+						</tr>
+				{% endfor %}
+				</tbody>
+				<tfoot>
+					<tr>
+						<th>Shot Name</th>
+						<th>Description</th>
+						<th>Duration</th>
+						<th>Status</th>
+						<th>Tasks</th>
+						<th>Notes</th>
+						<th></th>
+					</tr>
+				</tfoot>
+			</table>
+		</div>
+	</div>
+	
+	<div class="row">
+		<div class="col-md-6">
+			{{ render_pagination(pagination) }}
+		</div>
+		<div class="col-md-6">
+			<span>Showing {{nodes['_meta']['total']}} items</span>
+			<a href="{{url_for('nodes.add', node_type_id=node_type['_id'])}}" class="pull-right btn btn-default">Add</a>
+		</div>
+	</div>
 </div>
 {% endblock %}

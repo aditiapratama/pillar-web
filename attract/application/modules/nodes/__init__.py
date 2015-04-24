@@ -66,7 +66,9 @@ def index(node_type_name=""):
     if node_type_name == "":
         node_type_name = "shot"
 
-    node_type_list = NodeType.all({'where': "name=='{0}'".format(node_type_name)}, api=api)
+    node_type_list = NodeType.all({
+        'where': "name=='{0}'".format(node_type_name),
+        }, api=api)
 
     if len(node_type_list['_items']) == 0:
         return "Empty NodeType list", 200
@@ -78,7 +80,7 @@ def index(node_type_name=""):
         'where': '{"node_type" : "%s"}' % (node_type['_id']),
         'max_results': max_results,
         'page': page,
-        #'where': "status!='deleted'",
+        'embedded': '{"picture":1}',
         'sort' : "order"}, api=api)
 
     # Build the pagination object
@@ -99,7 +101,8 @@ def index(node_type_name=""):
 @nodes.route("/<node_id>/view", methods=['GET', 'POST'])
 def view(node_id):
     api = SystemUtility.attract_api()
-    node = Node.find(node_id, api=api)
+    # Get node with embedded picture data
+    node = Node.find(node_id + '/?embedded={"picture":1}', api=api)
     user_id = SystemUtility.session_item('user_id')
     if node:
         node_type = NodeType.find(node['node_type'], api=api)
@@ -122,8 +125,9 @@ def view(node_id):
         except KeyError:
             parent = None
         # Get childrens
-        children = Node.all(
-            {'where': 'parent==ObjectId("%s")' % node['_id']}, api=api)
+        children = Node.all({
+            'where': 'parent==ObjectId("%s")' % node['_id'],
+            }, api=api)
         children = children.to_dict()['_items']
         # Get Comments
         comments = []
@@ -132,20 +136,7 @@ def view(node_id):
                 comment_user = User.find(child['user'], api=api)
                 child['username'] = comment_user['email']
                 comments.append(child)
-        # Get Picture
-        try:
-            if node['picture']:
-                try:
-                    picture = File.find(node['picture'], api=api)
-                except ResourceNotFound:
-                    picture = None
-            else:
-                picture = None
-        except KeyError:
-            picture = None
-        if picture and picture.backend == "fs.files":
-            bdata = binaryFile.find(picture.path, api=api)
-            picture['data'] = bdata['data']
+
         # Get assigned users
         assigned_users = assigned_users_to(node, node_type)
 
@@ -157,7 +148,6 @@ def view(node_id):
             children=children,
             comments=comments,
             comment_form=comment_form,
-            picture=picture,
             assigned_users=assigned_users,
             config=app.config,
             email=SystemUtility.session_item('email'))

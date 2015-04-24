@@ -75,19 +75,19 @@ input.dial:focus {
 }
 
 .progress-fix .progress-bar, .progress .progress-bar-fix {
-    background-color: #D9534F;
+	background-color: #D9534F;
 }
 
 .progress-final_1 .progress-bar, .progress .progress-bar-final_1 {
-    background-color: #5CB85C;
+	background-color: #5CB85C;
 }
 
 .progress-info .progress-bar, .progress .progress-bar-info {
-    background-color: #5BC0DE;
+	background-color: #5BC0DE;
 }
 
 .progress-in_progress .progress-bar, .progress .progress-bar-in_progress {
-    background-color: #F0AD4E;
+	background-color: #F0AD4E;
 }
 
 #shots tbody {
@@ -113,4 +113,10 @@ ul.files {
 
 tr.success .make-current {
 	display: none;
+}
+
+.shot-thumbnail {
+	max-width: 100%;
+	height: auto;
+	width: 100%;
 }

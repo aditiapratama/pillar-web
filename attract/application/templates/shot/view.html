@@ -6,9 +6,9 @@
   <p>{{node.description}}</p>
   <div class="row">
     <div class="col-md-6">
-      {% if picture %}
-        <a href="{{config['ATTRACT_SERVER_ENDPOINT']}}/file_server/file/{{picture.path}}" class="thumbnail">
-          <img src="{{config['ATTRACT_SERVER_ENDPOINT']}}/file_server/file/{{picture.path}}" alt="{{node.name}}">
+      {% if node.picture %}
+        <a href="{{config['ATTRACT_SERVER_ENDPOINT']}}/file_server/file/{{node.picture.path}}" class="thumbnail">
+          <img src="{{config['ATTRACT_SERVER_ENDPOINT']}}/file_server/file/{{node.picture.path}}" alt="{{node.name}}">
         </a>
       {% else %}
         <p>Picture goes here</p>
