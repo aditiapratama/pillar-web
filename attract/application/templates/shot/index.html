@@ -25,7 +25,7 @@
 							<td>
 								{% if shot.picture %}
 									<a href="{{url_for('nodes.view', node_id=shot._id)}}">
-										<img class="shot-thumbnail" src="{{config['ATTRACT_SERVER_ENDPOINT']}}/file_server/file/{{shot.picture.path}}" alt="{{shot.name}}">
+										<img class="table-thumbnail" src="{{config['ATTRACT_SERVER_ENDPOINT']}}/file_server/file/{{shot.picture.path}}" alt="{{shot.name}}">
 									</a>
 								{% endif %}
 							</td>

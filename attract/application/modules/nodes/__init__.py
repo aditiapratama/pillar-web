@@ -34,7 +34,7 @@ nodes = Blueprint('nodes', __name__)
 def type_names():
     api = SystemUtility.attract_api()
 
-    types = NodeType.all(api=api)["_items"]
+    types = NodeType.all(api=api)['_items']
     type_names = []
     for names in types:
         type_names.append(str(names['name']))
@@ -43,7 +43,7 @@ def type_names():
 def assigned_users_to(node, node_type):
     api = SystemUtility.attract_api()
 
-    if node_type['name']!='task':
+    if node_type['name'] != "task":
         return []
     users = node['properties']['owners']['users']
     owners = []

@@ -137,7 +137,7 @@ def tasks():
                 % (node_type['_id'], session['user_id']),
         'max_results': max_results,
         'page': page,
-        'embedded': '{"parent":1}',
+        'embedded': '{"parent":1, "picture":1}',
         'sort' : "order"}, api=api)
 
     # Build the pagination object
