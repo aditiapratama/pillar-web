@@ -119,7 +119,7 @@ def type_names():
 
 @users.route("/tasks", methods=['GET', 'POST'])
 def tasks():
-    """User assigned tasks"""
+    """User-assigned tasks"""
     # Pagination index
     page = request.args.get('page', 1)
     max_results = 50
@@ -132,26 +132,21 @@ def tasks():
 
     node_type = node_type_list._items[0]
 
-    nodes = Node.all({
+    tasks = Node.all({
         'where': '{"node_type" : "%s", "properties.owners.users": {"$in": ["%s"]}}'\
                 % (node_type['_id'], session['user_id']),
         'max_results': max_results,
         'page': page,
-        #'where': "status!='deleted'",
         'sort' : "order"}, api=api)
 
     # Build the pagination object
-    pagination = Pagination(int(page), max_results, nodes._meta.total)
+    pagination = Pagination(int(page), max_results, tasks._meta.total)
 
-    template = '{0}/index.html'.format("task")
 
     return render_template(
-        template,
+        'users/tasks.html',
         title="task",
-        nodes=nodes,
-        node_type="task",
-        type_names=type_names(),
-        pagination=pagination,
+        tasks=tasks._items,
         email=SystemUtility.session_item('email'))
 
     return 'ok'
