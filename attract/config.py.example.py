@@ -9,11 +9,9 @@ class Config(object):
     MAIL_PASSWORD = ''
     DEFAULT_MAIL_SENDER = ''
 
-
 class Development(Config):
     SECRET_KEY=''
-    #SERVER_NAME='attract.local:5555'
-    ATTRACT_SERVER='http://127.0.0.1:5000'
+    ATTRACT_SERVER_ENDPOINT = 'http://127.0.0.1:5000'
     HOST='0.0.0.0'
     PORT=5001
     DEBUG=True
