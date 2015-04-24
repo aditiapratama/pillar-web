@@ -8,8 +8,8 @@
         <div class="panel-heading">{{comment['username']}}</div>
         <div class="panel-body">
             {% if comment.picture %}
-                <a href="{{config['ATTRACT_SERVER']}}/file_server/file/{{comment.picture.path}}" class="thumbnail">
-                <img src="{{config['ATTRACT_SERVER']}}/file_server/file/{{comment.picture.path}}" alt="{{comment.text}}">
+                <a href="{{config['ATTRACT_SERVER_ENDPOINT']}}/file_server/file/{{comment.picture.path}}" class="thumbnail">
+                <img src="{{config['ATTRACT_SERVER_ENDPOINT']}}/file_server/file/{{comment.picture.path}}" alt="{{comment.text}}">
                 </a>
             {% endif %}
             <p>{{comment.properties.text}}</p>
