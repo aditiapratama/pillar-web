@@ -129,12 +129,24 @@ def view(node_id):
             'where': 'parent==ObjectId("%s")' % node['_id'],
             }, api=api)
         children = children.to_dict()['_items']
+        # TODO this logic should be on Server:
+        AllNodeTypes = NodeType.all(api=api)
+        for child in children:
+            for ntype in AllNodeTypes['_items']:
+                if child['node_type'] == ntype['_id']:
+                    child['node_type_name'] = ntype['name']
+                    break
         # Get Comments
         comments = []
         for child in children:
             if child['node_type'] == comment_type['_id']:
                 comment_user = User.find(child['user'], api=api)
                 child['username'] = comment_user['email']
+                if child['picture']:
+                    try:
+                        child['picture'] = File.find(child['picture'], api=api)
+                    except ResourceNotFound:
+                        pass
                 comments.append(child)
 
         # Get assigned users

@@ -17,6 +17,7 @@ from wtforms import DateTimeField
 from wtforms import SelectMultipleField
 from wtforms import Form as BasicForm
 from wtforms.validators import DataRequired
+from wtforms.widgets import HiddenInput
 
 from flask import request
 from datetime import datetime
@@ -82,13 +83,40 @@ class NodeTypeForm(Form):
     is_extended = BooleanField('Is extended')
     properties = ModelFieldList(FormField(CustomFieldForm), model=CustomFields)
 
+
+def hiddenValue(data):
+    def hidden_value ():
+        return data
+
+    return hidden_value
+
+
+def set_hidden(field, data):
+    hiddenInput = HiddenInput()
+    field.widget = hiddenInput
+    field.data = data
+    field._value = hiddenValue(data)
+
+
 def get_comment_form(node, comment_type):
     form = get_node_form(comment_type)
     for field in form:
         if field.name == 'parent':
-            field.default = str(node._id)
-        print ("{0}: {1}".format(field.name, field.default))
+            field = set_hidden(field, str(node._id))
+        elif field.name in ['name',
+                            'description',
+                            'picture',
+                            'attachments']:
+            data = field.data
+            if field.name == 'name':
+                data = "Comment on {0}".format(node.name)
+            elif field.name == 'description':
+                data = "Comment on {0}, by {1}".format(node.name, node.user)
+            elif field.name == 'attachments':
+                data = ""
+            field = set_hidden(field, data)
     return form
+
 
 def get_node_form(node_type):
     class ProceduralForm(Form):
@@ -183,7 +211,7 @@ def get_node_form(node_type):
                             select.append((user['_id'], user['_id']))
                     setattr(ProceduralForm,
                             prop_name,
-                            SelectMultipleField(choices=select))
+                            SelectMultipleField(choices=select, default="552f85bf41acdf7a5bc16da5"))
             elif 'allowed' in schema_prop:
                 select = []
                 for option in schema_prop['allowed']:

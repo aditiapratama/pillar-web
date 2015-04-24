@@ -1,4 +1,5 @@
 {% extends 'layout.html' %}
+{% from '_comments.html' import render_comments %}
 
 {% block body %}
 <div class="col-md-9">
@@ -39,7 +40,9 @@
       <p>Tasks:</p>
       <ul>
       {% for child in children %}
+      {% if child['node_type_name'] == 'task' %}
       <li><a href="{{url_for('nodes.view', node_id=child['_id'])}}">{{ child['name']}}</a></li>
+      {% endif %}
       {% endfor %}
       </ul>
     </div>
@@ -51,6 +54,7 @@
       <a class="btn btn-default btn-s" href="{{url_for('nodes.edit', node_id=node['_id'])}}"><i class="glyphicon glyphicon-edit"></i> Edit</a>
     </div>
   </div>
+  {{ render_comments(comments, comment_form, node) }}
 </div>
 
 {% endblock %}
