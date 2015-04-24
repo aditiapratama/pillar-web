@@ -54,8 +54,8 @@ def assigned_users_to(node, node_type):
         owners.append(user_node)
     return owners
 
-@nodes.route("/<node_name>")
-def index(node_name=""):
+@nodes.route("/<node_type_name>")
+def index(node_type_name=""):
     """Generic function to list all nodes
     """
     # Pagination index
@@ -63,10 +63,10 @@ def index(node_name=""):
     max_results = 50
 
     api = SystemUtility.attract_api()
-    if node_name == "":
-        node_name = "shot"
+    if node_type_name == "":
+        node_type_name = "shot"
 
-    node_type_list = NodeType.all({'where': "name=='{0}'".format(node_name)}, api=api)
+    node_type_list = NodeType.all({'where': "name=='{0}'".format(node_type_name)}, api=api)
 
     if len(node_type_list['_items']) == 0:
         return "Empty NodeType list", 200
@@ -84,11 +84,11 @@ def index(node_name=""):
     # Build the pagination object
     pagination = Pagination(int(page), max_results, nodes._meta.total)
 
-    template = '{0}/index.html'.format(node_name)
+    template = '{0}/index.html'.format(node_type_name)
 
     return render_template(
         template,
-        title=node_name,
+        title=node_type_name,
         nodes=nodes,
         node_type=node_type,
         type_names=type_names(),
@@ -177,7 +177,7 @@ def add(node_type_id):
     if form.validate_on_submit():
         if process_node_form(form, node_type=ntype, user=user_id):
             flash('Node correctly added')
-            return redirect(url_for('nodes.index', node_name=ntype['name']))
+            return redirect(url_for('nodes.index', node_type_name=ntype['name']))
     else:
         print form.errors
     return render_template('nodes/add.html',
@@ -206,7 +206,7 @@ def edit(node_id):
                 form, node_id=node_id, node_type=node_type, user=user_id):
             node = Node.find(node_id, api=api)
             flash ('Node "{0}" correctly edited'.format(node.name))
-            return redirect(url_for('nodes.index', node_name=node_type['name']))
+            return redirect(url_for('nodes.index', node_type_name=node_type['name']))
         else:
             error = "Server error"
             print ("Error sending data")
@@ -268,6 +268,6 @@ def delete(node_id):
     if node.delete(api=api):
         flash('Node "{0}" correctly deleted'.format(name))
         print (node_type['name'])
-        return redirect(url_for('nodes.index', node_name=node_type['name']))
+        return redirect(url_for('nodes.index', node_type_name=node_type['name']))
     else:
         return redirect(url_for('nodes.edit', node_id=node._id))
