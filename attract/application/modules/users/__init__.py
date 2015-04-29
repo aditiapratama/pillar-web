@@ -2,6 +2,7 @@ from attractsdk import utils
 from attractsdk.users import User
 from attractsdk.nodes import Node
 from attractsdk.nodes import NodeType
+from attractsdk.tokens import Token
 
 from flask import Blueprint
 from flask import render_template
@@ -15,6 +16,12 @@ from application.modules.users.forms import UserProfileForm
 from application.helpers import Pagination
 
 from application import SystemUtility
+from application import userClass
+
+from flask.ext.login import login_user
+from flask.ext.login import logout_user
+from flask.ext.login import current_user
+
 
 # Name of the Blueprint
 users = Blueprint('users', __name__)
@@ -50,27 +57,12 @@ def authenticate(username, password):
 
 @users.route("/login", methods=['GET', 'POST'])
 def login():
-    session.pop('email', None)
-    session.pop('token', None)
-    session.pop('user_id', None)
-
     form = UserLoginForm()
     if form.validate_on_submit():
         token = authenticate(form.email.data, form.password.data)['token']
         if token:
-            session['email'] = form.email.data
-            session['token'] = token
-            # Set up api for querying about the user's ObjectId
-            api = SystemUtility.attract_api()
-            # We make a request with the token
-            params = {'where': "token=='{0}'".format(token)}
-            url = utils.join_url_params("tokens", params)
-            # Since this is the first query we make with this token,
-            # the id will be created during the same request.
-            token = api.get(url)
-            # Add the user_id to the session
-            session['user_id'] = token['_items'][0]['user']
-
+            user = userClass(token)
+            login_user(user)
             flash('Welcome {0}!'.format(form.email.data))
             return redirect('/')
     return render_template('users/login.html', form=form)
@@ -78,9 +70,7 @@ def login():
 
 @users.route("/logout")
 def logout():
-    session.pop('email', None)
-    session.pop('token', None)
-    session.pop('user_id', None)
+    logout_user()
     flash('Bye!')
     return redirect('/')
 
@@ -103,8 +93,7 @@ def profile():
         flash("Profile updated")
 
     return render_template('users/profile.html',
-                           form=form,
-                           email=SystemUtility.session_item('email'))
+                           form=form)
 
 
 def type_names():
@@ -141,14 +130,13 @@ def tasks():
         'sort' : "order"}, api=api)
 
     # Build the pagination object
-    pagination = Pagination(int(page), max_results, tasks._meta.total)
+    # pagination = Pagination(int(page), max_results, tasks._meta.total)
 
 
     return render_template(
         'users/tasks.html',
         title="task",
-        tasks=tasks._items,
-        email=SystemUtility.session_item('email'))
+        tasks=tasks._items)
 
     return 'ok'
 

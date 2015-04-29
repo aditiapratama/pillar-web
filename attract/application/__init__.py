@@ -2,6 +2,8 @@ import sys
 import os
 import config
 from attractsdk import Api
+from attractsdk.users import User
+from attractsdk.tokens import Token
 from attractsdk.exceptions import UnauthorizedAccess
 
 from flask import Flask
@@ -14,6 +16,10 @@ from flask.ext.mail import Mail
 from flask.ext.thumbnails import Thumbnail
 from flask.ext.assets import Environment
 
+from flask.ext.login import LoginManager
+from flask.ext.login import UserMixin
+from flask.ext.login import current_user
+
 
 # Initialize the Flask all object
 app = Flask(__name__,
@@ -25,6 +31,52 @@ filemanager = Blueprint('filemanager', __name__, static_folder='static/files')
 
 # Choose the configuration to load
 app.config.from_object(config.Development)
+
+
+# Login manager
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = "users.login"
+login_manager.login_message = u"Please login."
+
+
+@login_manager.user_loader
+def load_user(userid):
+    api = Api(
+        endpoint=SystemUtility.attract_server_endpoint(),
+        username=None,
+        password=None,
+        token=userid
+    )
+
+    params = {'where': 'token=="{0}"'.format(userid)}
+    token = Token.all(params, api=api)
+    if token:
+        user_id = token['_items'][0]['user']
+        user = User.find(user_id, api=api)
+    if token and user:
+        login_user = userClass(userid)
+        login_user.email = user['email']
+        try:
+            login_user.first_name = user['first_name']
+        except KeyError:
+            pass
+        try:
+            login_user.last_name = user['last_name']
+        except KeyError:
+            pass
+    else:
+        login_user = None
+    return login_user
+
+
+class userClass(UserMixin):
+    def __init__(self, token):
+        # We store the Token instead of ID
+        self.id = token
+        self.first_name = None
+        self.last_name = None
+
 
 class SystemUtility():
     def __new__(cls, *args, **kwargs):
@@ -52,7 +104,7 @@ class SystemUtility():
             endpoint=SystemUtility.attract_server_endpoint(),
             username=None,
             password=None,
-            token=SystemUtility.session_item('token')
+            token=current_user.id
         )
         return api
 

@@ -2,7 +2,7 @@ from attractsdk import Node
 from attractsdk import NodeType
 from attractsdk import User
 from attractsdk import File
-from attractsdk import binaryFile
+# from attractsdk import binaryFile
 from attractsdk.exceptions import ResourceNotFound
 
 from flask import abort
@@ -23,6 +23,9 @@ from application.helpers import Pagination
 
 from application import app
 from application import SystemUtility
+
+from flask.ext.login import login_required
+from flask.ext.login import current_user
 
 
 RFC1123_DATE_FORMAT = '%a, %d %b %Y %H:%M:%S GMT'
@@ -48,13 +51,12 @@ def assigned_users_to(node, node_type):
     users = node['properties']['owners']['users']
     owners = []
     for user in users:
-        # print (user)
         user_node = User.find(user, api=api)
-        print (user_node)
         owners.append(user_node)
     return owners
 
 @nodes.route("/<node_type_name>")
+@login_required
 def index(node_type_name=""):
     """Generic function to list all nodes
     """
@@ -94,11 +96,11 @@ def index(node_type_name=""):
         nodes=nodes,
         node_type=node_type,
         type_names=type_names(),
-        pagination=pagination,
-        email=SystemUtility.session_item('email'))
+        pagination=pagination)
 
 
 @nodes.route("/<node_id>/view", methods=['GET', 'POST'])
+@login_required
 def view(node_id):
     api = SystemUtility.attract_api()
     # Get node with embedded picture data
@@ -161,13 +163,13 @@ def view(node_id):
             comments=comments,
             comment_form=comment_form,
             assigned_users=assigned_users,
-            config=app.config,
-            email=SystemUtility.session_item('email'))
+            config=app.config)
     else:
         return abort(404)
 
 
 @nodes.route("/<node_type_id>/add", methods=['GET', 'POST'])
+@login_required
 def add(node_type_id):
     """Generic function to add a node of any type
     """
@@ -175,7 +177,6 @@ def add(node_type_id):
     ntype = NodeType.find(node_type_id, api=api)
     form = get_node_form(ntype)
     user_id = SystemUtility.session_item('user_id')
-    email = SystemUtility.session_item('email')
     if form.validate_on_submit():
         if process_node_form(form, node_type=ntype, user=user_id):
             flash('Node correctly added')
@@ -186,11 +187,11 @@ def add(node_type_id):
         node_type=ntype,
         form=form,
         errors=form.errors,
-        type_names=type_names(),
-        email=email)
+        type_names=type_names())
 
 
 @nodes.route("/<node_id>/edit", methods=['GET', 'POST'])
+@login_required
 def edit(node_id):
     """Generic node editing form
     """
@@ -255,11 +256,11 @@ def edit(node_id):
         form=form,
         errors=form.errors,
         error=error,
-        type_names=type_names(),
-        email=SystemUtility.session_item('email'))
+        type_names=type_names())
 
 
 @nodes.route("/<node_id>/delete", methods=['GET', 'POST'])
+@login_required
 def delete(node_id):
     """Generic node deletion
     """

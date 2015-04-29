@@ -7,10 +7,14 @@ from flask import render_template
 from application import SystemUtility
 from application.helpers import percentage
 
+from flask.ext.login import login_required
+
+
 # Name of the Blueprint
 stats = Blueprint('stats', __name__)
 
 @stats.route("/")
+@login_required
 def index():
     """Custom production stats entry point
     """

@@ -6,12 +6,15 @@ from flask import url_for
 from attractsdk import NodeType
 from application.modules.nodes.forms import NodeTypeForm
 
+from flask.ext.login import login_required
+
 
 # Name of the Blueprint
 node_types = Blueprint('node_types', __name__)
 
 
 @node_types.route("/")
+@login_required
 def index():
     """Display the node types
     """
@@ -23,6 +26,7 @@ def index():
 
 
 @node_types.route("/add", methods=['GET', 'POST'])
+@login_required
 def add():
     form = NodeTypeForm()
     if form.validate_on_submit():
@@ -36,6 +40,7 @@ def add():
 
 
 @node_types.route("/<node_type_id>/edit", methods=['GET', 'POST'])
+@login_required
 def edit(node_type_id):
     node_type = NodeType.find(node_type_id)
     form = NodeTypeForm(obj=node_type)
