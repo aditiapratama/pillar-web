@@ -130,7 +130,7 @@ from application.modules.users import users
 from application.modules.main import homepage
 from application.helpers import url_for_other_page
 from application.modules.stats import stats
-# from application.modules.files import files
+from application.modules.files import files
 
 # Pagination global to use un jinja template
 app.jinja_env.globals['url_for_other_page'] = url_for_other_page
@@ -141,7 +141,7 @@ app.register_blueprint(node_types, url_prefix='/node-types')
 app.register_blueprint(nodes, url_prefix='/nodes')
 app.register_blueprint(users, url_prefix='/users')
 app.register_blueprint(stats, url_prefix='/stats')
-# app.register_blueprint(files, url_prefix='/files')
+app.register_blueprint(files, url_prefix='/files')
 
 
 @app.errorhandler(UnauthorizedAccess)

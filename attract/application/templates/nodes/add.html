@@ -1,4 +1,5 @@
 {% extends 'layout.html' %}
+{% from '_file_uploader.html' import render_file_uploader %}
 
 {% block body %}
 <div class="col-md-9">
@@ -36,6 +37,7 @@
         {% endfor %}
         <input class="btn btn-default" type="submit" value="Create {{ node_type.name }}">
       </form>
+      {{ render_file_uploader() }}
     </div>
   </div>
 </div>

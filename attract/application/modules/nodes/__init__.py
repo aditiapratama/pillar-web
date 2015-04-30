@@ -144,12 +144,23 @@ def view(node_id):
             if child['node_type'] == comment_type['_id']:
                 comment_user = User.find(child['user'], api=api)
                 child['username'] = comment_user['email']
+                # Add picture for childs
                 if child['picture']:
                     try:
                         child['picture'] = File.find(child['picture'], api=api)
                     except ResourceNotFound:
                         pass
                 comments.append(child)
+
+        # Get comment attachments
+        for comment in comments:
+            comment['attachments'] = []
+            for attachment in comment['properties']['attachments']:
+                try:
+                    attachment_file = File.find(attachment, api=api)
+                except ResourceNotFound:
+                    attachment_file = None
+                comment['attachments'].append(attachment_file)
 
         # Get assigned users
         assigned_users = assigned_users_to(node, node_type)

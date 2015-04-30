@@ -1,5 +1,6 @@
 {% extends 'layout.html' %}
 {% from '_comments.html' import render_comments %}
+{% from '_file_uploader.html' import render_file_uploader %}
 
 {% block body %}
 <div class="col-md-9">
@@ -48,6 +49,7 @@
     </div>
   </div>
   {{ render_comments(comments, comment_form, node) }}
+  {{ render_file_uploader() }}
 </div>
 
 {% endblock %}

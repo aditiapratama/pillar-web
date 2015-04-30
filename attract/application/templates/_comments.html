@@ -8,11 +8,20 @@
         <div class="panel-heading">{{comment['username']}}</div>
         <div class="panel-body">
             {% if comment.picture %}
+            <div class="col-md-6">
                 <a href="{{config['ATTRACT_SERVER_ENDPOINT']}}/file_server/file/{{comment.picture.path}}" class="thumbnail">
                 <img src="{{config['ATTRACT_SERVER_ENDPOINT']}}/file_server/file/{{comment.picture.path}}" alt="{{comment.text}}">
                 </a>
+            </div>
             {% endif %}
             <p>{{comment.properties.text}}</p>
+            <div class="col-md-6">
+                {% for attachment in comment.attachments %}
+                <a href="{{config['ATTRACT_SERVER_ENDPOINT']}}/file_server/file/{{attachment.path}}" class="thumbnail">
+                    <img src="{{config['ATTRACT_SERVER_ENDPOINT']}}/file_server/file/{{attachment.path}}" alt="{{attachment.name}}">
+                </a>
+                {% endfor %}
+            </div>
         </div>
         </div>
         {% endfor %}

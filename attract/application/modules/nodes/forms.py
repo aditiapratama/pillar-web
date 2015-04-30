@@ -67,8 +67,6 @@ class ModelFieldList(FieldList):
             pass"""
         testModel = CustomFields()
         getattr(obj, name).append(testModel)
-        # print ("testModel")
-        # print (obj.get(name))
         super(ModelFieldList, self).populate_obj(obj, name)
 
 
@@ -106,7 +104,7 @@ def get_comment_form(node, comment_type):
         elif field.name in ['name',
                             'description',
                             'picture',
-                            'attachments']:
+                            'picture_file']:
             data = field.data
             if field.name == 'name':
                 data = "Comment on {0}".format(node.name)
@@ -162,15 +160,15 @@ def get_node_form(node_type):
     #    FileField('Picture'))
     select = []
     select.append(('None', 'None'))
-    nodes = attractsdk.File.all(api=api)
+    nodes = attractsdk.File.all({'max_results': 200}, api=api)
     for option in nodes['_items']:
         try:
             select.append((str(option['_id']), str(option['name'])))
         except KeyError:
             select.append((str(option['_id']), str(option['filename'])))
-    setattr(ProceduralForm,
-            'picture_file',
-            FileField('Picture File'))
+    # setattr(ProceduralForm,
+    #         'picture_file',
+    #         FileField('Picture File'))
     if len(select)>1:
         setattr(ProceduralForm,
                 'picture',
@@ -196,9 +194,7 @@ def get_node_form(node_type):
             if schema_prop['type'] == 'list' and 'items' in form_prop:
                 for item in form_prop['items']:
                     items = eval("attractsdk.{0}".format(item[0]))
-                    print ("ITEMS")
-                    print (items)
-                    users = items.all(api=api)
+                    users = items.all({'max_results': 200}, api=api)
                     if users:
                         users = users["_items"]
                     else:
@@ -275,7 +271,7 @@ def send_file(form, node, user):
     """
     backend = app.config['FILE_STORAGE_BACKEND']
     api = SystemUtility.attract_api()
-    if form.picture_file.name in request.files:
+    if 'picture_file' in form and form.picture_file.name in request.files:
         picture_file = request.files[form.picture_file.name]
         if picture_file.filename == '':
             picture_file = None
@@ -443,7 +439,7 @@ def process_node_form(form, node_id=None, node_type=None, user=None):
         prop['node_type'] = form.node_type_id.data
         # Pardon the local path, this is for testing purposes and will be removed
         # files = {'picture': open('/Users/fsiddi/Desktop/1500x500.jpeg', 'rb')}
-        send_file(form, prop, user)
+        # send_file(form, prop, user)
         post = node.post(prop, api=api)
 
         return post
