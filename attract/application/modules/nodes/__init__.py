@@ -105,7 +105,7 @@ def view(node_id):
     api = SystemUtility.attract_api()
     # Get node with embedded picture data
     node = Node.find(node_id + '/?embedded={"picture":1}', api=api)
-    user_id = SystemUtility.session_item('user_id')
+    user_id = current_user.objectid
     if node:
         node_type = NodeType.find(node['node_type'], api=api)
         comment_type = NodeType.all({'where': 'name=="comment"'}, api=api)
@@ -176,7 +176,7 @@ def add(node_type_id):
     api = SystemUtility.attract_api()
     ntype = NodeType.find(node_type_id, api=api)
     form = get_node_form(ntype)
-    user_id = SystemUtility.session_item('user_id')
+    user_id = current_user.objectid
     if form.validate_on_submit():
         if process_node_form(form, node_type=ntype, user=user_id):
             flash('Node correctly added')
@@ -199,7 +199,7 @@ def edit(node_id):
     node = Node.find(node_id, api=api)
     node_type = NodeType.find(node.node_type, api=api)
     form = get_node_form(node_type)
-    user_id = SystemUtility.session_item('user_id')
+    user_id = current_user.objectid
     node_schema = node_type['dyn_schema'].to_dict()
     form_schema = node_type['form_schema'].to_dict()
     error = ""
