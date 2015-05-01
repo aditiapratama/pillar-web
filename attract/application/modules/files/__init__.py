@@ -43,8 +43,7 @@ def index():
     backend = app.config['FILE_STORAGE_BACKEND']
     api = SystemUtility.attract_api()
     user = current_user.objectid
-
-    print (request.files)
+    node_picture = File()
 
     for file_ in request.files:
         filestorage = request.files[file_]
@@ -53,8 +52,6 @@ def index():
         picture_path = os.path.join(
             app.config['FILE_STORAGE'], filestorage.filename)
         filestorage.save(picture_path)
-
-        node_picture = File()
 
         picture_file_file = open(picture_path, 'rb')
         if backend == 'attract':
@@ -75,29 +72,34 @@ def index():
         prop['backend'] = backend
         if backend in ["attract"]:
             prop['path'] = name
-        # elif backend == "fs.files":
-        #     prop['path'] = str(node_bfile['_id'])
         node_picture.post(prop, api=api)
-        # node['picture'] = node_picture['_id']
-        # Send file to Attract Server
-        # if backend == "fs.files":
-        #     node_bfile = attractsdk.binaryFile()
-        #     node_bfile.post_file(picture_path, api=api)
-        # elif backend == 'attract':
+        prop['_id'] = node_picture['_id']
         if backend == 'attract':
             node_picture.post_file(picture_path, name, api=api)
-        # return node
 
-        url = "{0}/file_server/file/{1}".format(app.config['ATTRACT_SERVER_ENDPOINT'], name)
-
+        url = "{0}/file_server/file/{1}".format(app.config['ATTRACT_SERVER_ENDPOINT'], prop['path'])
         rfiles.append( {
-            "id": node_picture['_id'],
-            "name": filestorage.filename,
-            "size": filestorage.content_length,
+            "id": prop['_id'],
+            "name": prop['filename'],
+            "size": prop['length'],
             "url": url,
             "thumbnailUrl": url,
             "deleteUrl": url,
             "deleteType": "DELETE"
         })
+
+    if False:
+        pictures = node_picture.all({'max_results': 200, 'sort': '-uploadDate'}, api=api)
+        for file_ in pictures['_items']:
+            url = "{0}/file_server/file/{1}".format(app.config['ATTRACT_SERVER_ENDPOINT'], file_['path'])
+            rfiles.append( {
+                "id": file_['_id'],
+                "name": file_['filename'],
+                "size": file_['length'],
+                "url": url,
+                "thumbnailUrl": url,
+                "deleteUrl": url,
+                "deleteType": "DELETE"
+            })
 
     return jsonify(dict(files=rfiles))

@@ -14,13 +14,15 @@
 $(function () {
     'use strict';
 
+    var formName = '';
+
     console.log("Initializing");
     // Initialize the jQuery File Upload widget:
     $('#fileupload').fileupload({
         // Uncomment the following to send cross-domain cookies:
         //xhrFields: {withCredentials: true},
-        disableImageResize: false,
-        imageMaxWidth: 80,
+        //disableImageResize: false,
+        //imageMaxWidth: 80,
         url: '/files/'
     });
 
@@ -41,7 +43,14 @@ $(function () {
             $('#attachments').append(new Option(file.name, file.id, true, true));
         }
     }
-    $('#fileupload').bind('fileuploaddone', sendToForm)
+    $('#fileupload').bind('fileuploaddone', sendToForm);
+
+    var checkFiles = function (e, data) {
+        if (data.files.length > 1) {
+            return false;
+        }
+    }
+    $('#fileupload').bind('fileuploadsend', checkFiles);
 
     // Load existing files:
     $('#fileupload').addClass('fileupload-processing');

@@ -18,6 +18,8 @@ from wtforms import SelectMultipleField
 from wtforms import Form as BasicForm
 from wtforms.validators import DataRequired
 from wtforms.widgets import HiddenInput
+from wtforms.widgets import HTMLString
+from wtforms.widgets import Select
 
 from flask import request
 from datetime import datetime
@@ -83,17 +85,46 @@ class NodeTypeForm(Form):
 
 
 def hiddenValue(data):
+    """Function for field._value
+    on custom hidden Fields"""
     def hidden_value ():
         return data
-
     return hidden_value
 
 
 def set_hidden(field, data):
+    """change field to hidden"""
     hiddenInput = HiddenInput()
     field.widget = hiddenInput
     field.data = data
     field._value = hiddenValue(data)
+
+
+class FileSelect(Select):
+    def __init__(self, **kwargs):
+        super(FileSelect, self).__init__(**kwargs)
+        print ("INIT")
+        #self.error_class = error_class
+
+    def __call__(self, field, **kwargs):
+        html =  super(FileSelect, self).__call__(field, **kwargs)
+        button= """
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+  Set File
+</button>"""
+        return HTMLString(html+button)
+
+
+class FileSelectField(SelectField):
+    def __init__(self, name, **kwargs):
+        super(FileSelectField, self).__init__(name, **kwargs)
+        self.widget = FileSelect()
+
+
+class FileSelectMultipleField(SelectMultipleField):
+    def __init__(self, **kwargs):
+        super(FileSelectMultipleField, self).__init__(**kwargs)
+        self.widget = FileSelect(multiple=True)
 
 
 def get_comment_form(node, comment_type):
@@ -172,7 +203,7 @@ def get_node_form(node_type):
     if len(select)>1:
         setattr(ProceduralForm,
                 'picture',
-                SelectField('Picture', choices=select))
+                FileSelectField('Picture', choices=select))
     setattr(ProceduralForm,
         'node_type_id',
         HiddenField(default=node_type._id))
@@ -207,7 +238,7 @@ def get_node_form(node_type):
                             select.append((user['_id'], user['_id']))
                     setattr(ProceduralForm,
                             prop_name,
-                            SelectMultipleField(choices=select, default="552f85bf41acdf7a5bc16da5"))
+                            FileSelectMultipleField(choices=select))
             elif 'allowed' in schema_prop:
                 select = []
                 for option in schema_prop['allowed']:
