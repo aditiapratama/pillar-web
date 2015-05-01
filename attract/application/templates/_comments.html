@@ -5,7 +5,7 @@
         <h4>Comments</h4>
         {% for comment in comments %}
         <div class="panel panel-default">
-        <div class="panel-heading">{{comment['username']}}</div>
+        <div class="panel-heading">{{comment['user']['email']}}</div>
         <div class="panel-body">
             {% if comment.picture %}
             <div class="col-md-6">

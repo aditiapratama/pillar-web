@@ -107,10 +107,11 @@ def view(node_id):
     node = Node.find(node_id + '/?embedded={"picture":1}', api=api)
     user_id = current_user.objectid
     if node:
-        node_type = NodeType.find(node['node_type'], api=api)
+        # Get comment type
         comment_type = NodeType.all({'where': 'name=="comment"'}, api=api)
         comment_type = comment_type['_items'][0]
-        # Processing Comment Form
+        # Get node type
+        node_type = NodeType.find(node['node_type'], api=api)
         # Get comments form
         comment_form = get_comment_form(node, comment_type)
         if comment_form.validate_on_submit():
@@ -121,7 +122,7 @@ def view(node_id):
                 node = Node.find(node_id, api=api)
             else:
                 print (comment_form.errors)
-        #Get Parent
+        # Get Parent
         try:
             parent = Node.find(node['parent'], api=api)
         except KeyError:
@@ -129,7 +130,8 @@ def view(node_id):
         # Get childrens
         children = Node.all({
             'where': 'parent==ObjectId("%s")' % node['_id'],
-            }, api=api)
+            'embedded': '{"picture":1, "user":1}'}, api=api)
+        print (children)
         children = children.to_dict()['_items']
         # TODO this logic should be on Server:
         AllNodeTypes = NodeType.all(api=api)
@@ -142,14 +144,6 @@ def view(node_id):
         comments = []
         for child in children:
             if child['node_type'] == comment_type['_id']:
-                comment_user = User.find(child['user'], api=api)
-                child['username'] = comment_user['email']
-                # Add picture for childs
-                if child['picture']:
-                    try:
-                        child['picture'] = File.find(child['picture'], api=api)
-                    except ResourceNotFound:
-                        pass
                 comments.append(child)
 
         # Get comment attachments
