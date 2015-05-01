@@ -32,7 +32,7 @@ $(function () {
         )
     );
 
-    $('#fileupload').fileupload('option', 'done', function(e, data) {
+    var sendToForm = function(data) {
         // console.log(data.result);
         for (var file_id in data.result.files) {
             var file = data.result.files[file_id];
@@ -40,7 +40,10 @@ $(function () {
             $('#picture').append(new Option(file.name, file.id, true, true));
             $('#attachments').append(new Option(file.name, file.id, true, true));
         }
-    })
+        $.Event('done');
+        console.log($);
+        console.log($.Event);
+    }
 
     if (window.location.hostname === 'demo') {
         // Demo settings:
@@ -79,6 +82,7 @@ $(function () {
         }).always(function () {
             $(this).removeClass('fileupload-processing');
         }).done(function (result) {
+            sendToForm(result);
             $(this).fileupload('option', 'done')
                 .call(this, $.Event('done'), {result: result});
         });
