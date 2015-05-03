@@ -1,44 +1,49 @@
 {% extends 'layout.html' %}
 {% from '_macros/_file_uploader.html' import render_file_uploader %}
+{% from '_macros/_file_uploader_javascript.html' import render_file_uploader_javascript %}
 
 {% block body %}
 <div class="col-md-9">
-    {% with errors = errors %}
-    {% if errors %}
-        <div>
-        {% for field in errors %}
-        <div class="alert alert-danger" role="alert">
-            <strong>{{field}}</strong>
-            {% for message in errors[field] %}
-                {{message}}|
-            {% endfor %}
-        </div>
-        {% endfor %}
-        </div>
-    {% endif %}
-    {% endwith %}
-  <h2>Add {{ node_type.name }}</h2>
-  <div class="row">
-    <div class="col-md-6">
-      <form method="POST" enctype="multipart/form-data" action="{{url_for('nodes.add', node_type_id=node_type._id)}}">
-        {% for field in form %}
-          {% if field.name == 'csrf_token' %}
-            {{ field }}
-          {% else %}
-            {% if field.type == "HiddenField" %}
-                {{ field }}
-            {% else %}
-              <div class="form-group">
-                {{ field.label }}
-                {{ field(class='form-control') }}
-              </div>
-            {% endif %}
-          {% endif %}
-        {% endfor %}
-        <input class="btn btn-default" type="submit" value="Create {{ node_type.name }}">
-      </form>
-      {{ render_file_uploader() }}
-    </div>
-  </div>
+		{% with errors = errors %}
+		{% if errors %}
+				<div>
+				{% for field in errors %}
+				<div class="alert alert-danger" role="alert">
+						<strong>{{field}}</strong>
+						{% for message in errors[field] %}
+								{{message}}|
+						{% endfor %}
+				</div>
+				{% endfor %}
+				</div>
+		{% endif %}
+		{% endwith %}
+	<h2>Add {{ node_type.name }}</h2>
+	<div class="row">
+		<div class="col-md-6">
+			<form method="POST" enctype="multipart/form-data" action="{{url_for('nodes.add', node_type_id=node_type._id)}}">
+				{% for field in form %}
+					{% if field.name == 'csrf_token' %}
+						{{ field }}
+					{% else %}
+						{% if field.type == "HiddenField" %}
+								{{ field }}
+						{% else %}
+							<div class="form-group">
+								{{ field.label }}
+								{{ field(class='form-control') }}
+							</div>
+						{% endif %}
+					{% endif %}
+				{% endfor %}
+				<input class="btn btn-default" type="submit" value="Create {{ node_type.name }}">
+			</form>
+			{{ render_file_uploader() }}
+		</div>
+	</div>
 </div>
+{% endblock %}
+
+{% block footer_scripts %}
+{{render_file_uploader_javascript()}}
 {% endblock %}
