@@ -11,8 +11,8 @@ from flask import render_template
 from flask import redirect
 from flask import flash
 from flask import url_for
-# from flask import session
 from flask import request
+from flask import jsonify
 
 from datetime import datetime
 
@@ -97,6 +97,59 @@ def index(node_type_name=""):
         node_type=node_type,
         type_names=type_names(),
         pagination=pagination)
+
+
+# XXX Hack to get custom data for DataTables for shot view
+@nodes.route("/shots.json")
+@login_required
+def shots_index():
+    max_results = 100
+
+    api = SystemUtility.attract_api()
+    node_type_name = "shot"
+    node_type_list = NodeType.all({
+        'where': "name=='{0}'".format(node_type_name),
+        }, api=api)
+
+    node_type = node_type_list._items[0]
+
+    nodes = Node.all({
+        'where': '{"node_type" : "%s"}' % (node_type._id),
+        'max_results': max_results,
+        'embedded': '{"picture":1}',
+        'sort' : "order"}, api=api)
+
+    # Get the task node type object id
+    node_type_list = NodeType.all({
+        'where': "name=='task'",
+        }, api=api)
+    node_type_task = node_type_list._items[0]
+
+    nodes_datatables = []
+    for node in nodes._items:
+        tasks = Node.all({
+            'where': '{"node_type" : "%s", "parent" : "%s"}'\
+                    % (node_type_task._id, node._id),
+            'sort' : "order"}, api=api)
+
+        #: shot name, Animation, Lighting, Simulation
+        data = [node.name, None, None, None]
+
+        for task in tasks._items:
+            index = None
+            if task.name == 'Animation':
+                index = 1
+            elif task.name == 'Lighting':
+                index = 2
+            elif task.name == 'Simulation':
+                index = 3
+
+            if index:
+                data[index] = task.properties.status
+
+        nodes_datatables.append(data)
+
+    return jsonify(data=nodes_datatables)
 
 
 @nodes.route("/<node_id>/view", methods=['GET', 'POST'])
