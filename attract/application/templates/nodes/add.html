@@ -1,5 +1,5 @@
 {% extends 'layout.html' %}
-{% from '_file_uploader.html' import render_file_uploader %}
+{% from '_macros/_file_uploader.html' import render_file_uploader %}
 
 {% block body %}
 <div class="col-md-9">
@@ -29,7 +29,7 @@
                 {{ field }}
             {% else %}
               <div class="form-group">
-                {{ field.label }} 
+                {{ field.label }}
                 {{ field(class='form-control') }}
               </div>
             {% endif %}
