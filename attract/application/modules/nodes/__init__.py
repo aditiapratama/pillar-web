@@ -192,7 +192,7 @@ def view(node_id):
                                     node_id=None,
                                     node_type=comment_type,
                                     user=user_id):
-                node = Node.find(node_id, api=api)
+                node = Node.find(node_id + '/?embedded={"picture":1}', api=api)
             else:
                 print (comment_form.errors)
         # Get Parent

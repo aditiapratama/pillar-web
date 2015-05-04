@@ -1,3 +1,4 @@
+{% from '_macros/_file_uploader.html' import render_file_uploader %}
 {% macro render_comments(comments, comment_form, node) %}
 
   <div class="row">
@@ -45,5 +46,7 @@
 
     </div>
   </div>
+
+{{ render_file_uploader() }}
 
 {% endmacro %}

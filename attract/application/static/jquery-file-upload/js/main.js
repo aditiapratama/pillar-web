@@ -11,12 +11,32 @@
 
 /* global $, window */
 
+var upload_file_to = '';
+var upload_multiple_files = false;
+
+function set_upload_parameters(upload_to, multiple) {
+    upload_file_to = upload_to;
+    upload_multiple_files = multiple;
+    clear_upload_files();
+    if (multiple) {
+        $("#file_upload_input").attr("multiple", "");
+    } else {
+        $("#file_upload_input").removeAttr("multiple");
+    }
+}
+
+function clear_upload_files() {
+    var table = $("#file_uploader_table")[0];
+    while (table.firstChild) {
+        table.removeChild(table.firstChild);
+    }
+}
+
 $(function () {
     'use strict';
 
     var formName = '';
 
-    console.log("Initializing");
     // Initialize the jQuery File Upload widget:
     $('#fileupload').fileupload({
         // Uncomment the following to send cross-domain cookies:
@@ -39,18 +59,24 @@ $(function () {
     var sendToForm = function(e, data) {
         for (var file_id in data.result.files) {
             var file = data.result.files[file_id];
-            $('#picture').append(new Option(file.name, file.id, true, true));
-            $('#attachments').append(new Option(file.name, file.id, true, true));
+
+            $('#'+upload_file_to).append(new Option(file.name, file.id, true, true));
         }
     }
     $('#fileupload').bind('fileuploaddone', sendToForm);
 
-    var checkFiles = function (e, data) {
-        if (data.files.length > 1) {
-            return false;
+
+    var addToForm = function(e, data) {
+        if (upload_multiple_files) {
+            return;
+        }
+        var table = $("#file_uploader_table")[0];
+        while (table.firstChild) {
+            table.removeChild(table.firstChild);
         }
     }
-    $('#fileupload').bind('fileuploadsend', checkFiles);
+    $('#fileupload').bind('fileuploadadd', addToForm);
+
 
     // Load existing files:
     $('#fileupload').addClass('fileupload-processing');
