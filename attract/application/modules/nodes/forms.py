@@ -103,13 +103,11 @@ def set_hidden(field, data):
 class FileSelect(Select):
     def __init__(self, **kwargs):
         super(FileSelect, self).__init__(**kwargs)
-        print ("INIT")
-        #self.error_class = error_class
 
     def __call__(self, field, **kwargs):
         html =  super(FileSelect, self).__call__(field, **kwargs)
         button= """
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+<button style="margin-top: 5px;" type="button" class="btn btn-primary" data-toggle="modal" data-target="#fileUploaderModal">
   Set File
 </button>"""
         return HTMLString(html+button)
@@ -225,20 +223,26 @@ def get_node_form(node_type):
             if schema_prop['type'] == 'list' and 'items' in form_prop:
                 for item in form_prop['items']:
                     items = eval("attractsdk.{0}".format(item[0]))
-                    users = items.all({'max_results': 200}, api=api)
-                    if users:
-                        users = users["_items"]
+                    items_to_select = items.all({'max_results': 200}, api=api)
+                    if items_to_select:
+                        items_to_select = items_to_select["_items"]
                     else:
-                        users = []
+                        items_to_select = []
                     select = []
-                    for user in users:
+                    for select_item in items_to_select:
                         try:
-                            select.append((user['_id'], user[item[1]]))
+                            select.append((select_item['_id'], select_item[item[1]]))
                         except KeyError:
-                            select.append((user['_id'], user['_id']))
-                    setattr(ProceduralForm,
-                            prop_name,
-                            FileSelectMultipleField(choices=select))
+                            # Backwards compatibility
+                            select.append((select_item['_id'], select_item['_id']))
+                    if item[0] == 'File':
+                        setattr(ProceduralForm,
+                                prop_name,
+                                FileSelectMultipleField(choices=select))
+                    else:
+                        setattr(ProceduralForm,
+                                prop_name,
+                                SelectMultipleField(choices=select))
             elif 'allowed' in schema_prop:
                 select = []
                 for option in schema_prop['allowed']:

@@ -172,7 +172,7 @@ def view(node_id):
                                     node_id=None,
                                     node_type=comment_type,
                                     user=user_id):
-                node = Node.find(node_id, api=api)
+                node = Node.find(node_id + '/?embedded={"picture":1}', api=api)
             else:
                 print (comment_form.errors)
         # Get Parent
@@ -184,7 +184,6 @@ def view(node_id):
         children = Node.all({
             'where': 'parent==ObjectId("%s")' % node['_id'],
             'embedded': '{"picture":1, "user":1}'}, api=api)
-        print (children)
         children = children.to_dict()['_items']
         # TODO this logic should be on Server:
         AllNodeTypes = NodeType.all(api=api)
