@@ -21,6 +21,7 @@ from application import userClass
 from flask.ext.login import login_user
 from flask.ext.login import logout_user
 from flask.ext.login import current_user
+from flask.ext.login import login_required
 
 
 # Name of the Blueprint
@@ -76,11 +77,12 @@ def logout():
 
 
 @users.route("/profile", methods=['GET', 'POST'])
+@login_required
 def profile():
     """Profile view and edit page. This is a temporary implementation.
     """
     api = SystemUtility.attract_api()
-    user = User.find(session['user_id'], api=api)
+    user = User.find(current_user.objectid, api=api)
 
     form = UserProfileForm(
         first_name = user.first_name,
@@ -107,6 +109,7 @@ def type_names():
 
 
 @users.route("/tasks", methods=['GET', 'POST'])
+@login_required
 def tasks():
     """User-assigned tasks"""
     # Pagination index
@@ -123,7 +126,7 @@ def tasks():
 
     tasks = Node.all({
         'where': '{"node_type" : "%s", "properties.owners.users": {"$in": ["%s"]}}'\
-                % (node_type['_id'], session['user_id']),
+                % (node_type['_id'], current_user.objectid),
         'max_results': max_results,
         'page': page,
         'embedded': '{"parent":1, "picture":1}',
