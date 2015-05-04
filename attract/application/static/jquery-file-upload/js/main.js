@@ -18,6 +18,11 @@ function set_upload_parameters(upload_to, multiple) {
     upload_file_to = upload_to;
     upload_multiple_files = multiple;
     clear_upload_files();
+    if (multiple) {
+        $("#file_upload_input").attr("multiple", "");
+    } else {
+        $("#file_upload_input").removeAttr("multiple");
+    }
 }
 
 function clear_upload_files() {

@@ -67,7 +67,7 @@ def index():
         prop['length'] = filestorage.content_length
         prop['uploadDate'] = datetime.strftime(
             datetime.now(), RFC1123_DATE_FORMAT)
-        prop['md5'] = ""
+        prop['md5'] = hash_
         prop['filename'] = filestorage.filename
         prop['backend'] = backend
         if backend in ["attract"]:
@@ -88,6 +88,7 @@ def index():
             "deleteType": "DELETE"
         })
 
+    # GET
     if False:
         pictures = node_picture.all({'max_results': 200, 'sort': '-uploadDate'}, api=api)
         for file_ in pictures['_items']:
