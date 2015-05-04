@@ -133,16 +133,36 @@ def shots_index():
             'sort' : "order"}, api=api)
 
         #: shot name, Animation, Lighting, Simulation
-        data = [node.name, None, None, None]
+        data = {
+            '_id': node._id,
+            'order': node.order,
+            'picture': None,
+            'name': node.name,
+            'description': node.description,
+            'url_view': url_for('nodes.view', node_id=node._id),
+            'url_edit': url_for('nodes.edit', node_id=node._id),
+            'animation': None,
+            'lighting': None,
+            'simulation': None}
+
+        if node.picture:
+            # This is an address on the Attract server, so it should be built
+            # entirely here
+            data['picture'] = app.config['ATTRACT_SERVER_ENDPOINT'] + "/file_server/file/" + node.picture.path
+
+        if node.order is None:
+            data['order'] = 0
 
         for task in tasks._items:
+            # If there are tasks assigned to the shot we loop through them and
+            # match them with the existing data indexes.
             index = None
             if task.name == 'Animation':
-                index = 1
+                index = 'animation'
             elif task.name == 'Lighting':
-                index = 2
+                index = 'lighting'
             elif task.name == 'Simulation':
-                index = 3
+                index = 'simulation'
 
             if index:
                 data[index] = task.properties.status
@@ -180,11 +200,11 @@ def view(node_id):
             parent = Node.find(node['parent'], api=api)
         except KeyError:
             parent = None
-        # Get childrens
+        # Get children
         children = Node.all({
             'where': 'parent==ObjectId("%s")' % node['_id'],
             'embedded': '{"picture":1, "user":1}'}, api=api)
-        print (children)
+
         children = children.to_dict()['_items']
         # TODO this logic should be on Server:
         AllNodeTypes = NodeType.all(api=api)

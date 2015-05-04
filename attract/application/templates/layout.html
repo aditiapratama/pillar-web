@@ -27,6 +27,9 @@
 		<link rel="apple-touch-icon-precomposed" sizes="72x72" href="{{ url_for('static', filename='assets/ico/apple-touch-icon-72-precomposed.png') }}">
 		<link rel="apple-touch-icon-precomposed" href="{{ url_for('static', filename='assets/ico/apple-touch-icon-57-precomposed.png') }}">
 
+		{% block header_items %}
+
+		{% endblock %}
 
 
 	</head>
@@ -107,19 +110,16 @@
 			</footer>
 
 		</div><!--/.fluid-container-->
+
 		{% assets filters="jsmin",
 				output="assets/packed/attract.js",
-					"assets/js/jquery.min.js",
 					"assets/js/bootstrap.min.js",
-					"assets/js/jquery.dataTables.min.js",
-					"assets/js/jquery.dataTables.fnGetColumnData.js",
-					"assets/js/jquery.dataTables.fnFilterClear.js",
-					"assets/js/jquery.dataTables.bootstrap.js",
 					"assets/js/jquery.chosen.min.js",
 					"assets/js/bootstrap-markdown.js",
 					"assets/js/markdown.js",
 					"assets/js/jquery.attract.js" %}
 			<script type="text/javascript" src="{{ ASSET_URL }}"></script>
+			<script type="text/javascript" src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 		{% endassets %}
 		{% block footer_scripts %}
 
