@@ -141,9 +141,14 @@ def shots_index():
             'description': node.description,
             'url_view': url_for('nodes.view', node_id=node._id),
             'url_edit': url_for('nodes.edit', node_id=node._id),
-            'animation': None,
-            'lighting': None,
-            'simulation': None}
+            'tasks': {
+                'animation': None,
+                'lighting': None,
+                'fx_hair': None,
+                'fx_grass': None,
+                'fx_smoke': None
+                },
+            }
 
         if node.picture:
             # This is an address on the Attract server, so it should be built
@@ -156,16 +161,8 @@ def shots_index():
         for task in tasks._items:
             # If there are tasks assigned to the shot we loop through them and
             # match them with the existing data indexes.
-            index = None
-            if task.name == 'Animation':
-                index = 'animation'
-            elif task.name == 'Lighting':
-                index = 'lighting'
-            elif task.name == 'Simulation':
-                index = 'simulation'
-
-            if index:
-                data[index] = task.properties.status
+            if task.name in data['tasks']:
+                data['tasks'][task.name] = task.properties.status
 
         nodes_datatables.append(data)
 

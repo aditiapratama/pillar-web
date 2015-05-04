@@ -24,7 +24,9 @@
 						<th>Description</th>
 						<th>Animation</th>
 						<th>Lighting</th>
-						<th>Simulation</th>
+						<th>FX Hair</th>
+						<th>FX Grass</th>
+						<th>FX Smoke</th>
 						<th width="8%"></th>
 					</tr>
 				</thead>
@@ -142,17 +144,20 @@
 
 			$('#shots').dataTable({
 				"paging": false,
+				"order": [[ 0, "asc" ]],
 				"ajax": "/nodes/shots.json",
 				"columns": [
 					{"data": "_id"},
 					{"data": "order"},
-					{"data": "picture"},
-					{"data": "name"},
-					{"data": "description"},
-					{"data": "animation"},
-					{"data": "lighting"},
-					{"data": "simulation"},
-					{"data": null}
+					{"data": "picture"},					//0
+					{"data": "name"},							//1
+					{"data": "description"},			//2
+					{"data": "tasks.animation"},	//3
+					{"data": "tasks.lighting"},		//4
+					{"data": "tasks.fx_hair"},		//5
+					{"data": "tasks.fx_grass"},		//6
+					{"data": "tasks.fx_smoke"},		//7
+					{"data": null}								//8
 				],
 				"columnDefs": [
 					{
@@ -160,6 +165,10 @@
 						"visible": false,
 						"searchable": false
 					},
+					{
+						"targets": [2,10],
+						"sortable": false
+					}
 				],
 				"createdRow": function ( row, data, index ) {
 					if ( data.picture) {
@@ -168,20 +177,29 @@
 					}
 
 					$('td', row).eq(1).html('<a href="' + data.url_view + '">' + data.name + '</a>');
-					if (data.animation) {
-						$('td', row).eq(3).html(render_status_label(data.animation));
+
+					if (data.tasks.animation) {
+						$('td', row).eq(3).html(render_status_label(data.tasks.animation));
 					}
 
-					if (data.lighting) {
-						$('td', row).eq(4).html(render_status_label(data.lighting));
+					if (data.tasks.lighting) {
+						$('td', row).eq(4).html(render_status_label(data.tasks.lighting));
 					}
 
-					if (data.simulation) {
-						$('td', row).eq(5).html(render_status_label(data.simulation));
+					if (data.tasks.fx_hair) {
+						$('td', row).eq(5).html(render_status_label(data.tasks.fx_hair));
+					}
+
+					if (data.tasks.fx_grass) {
+						$('td', row).eq(6).html(render_status_label(data.tasks.fx_grass));
+					}
+
+					if (data.tasks.fx_smoke) {
+						$('td', row).eq(7).html(render_status_label(data.tasks.fx_smoke));
 					}
 
 					var edit_tag = '<a class="btn btn-default btn-xs" href="' + data.url_edit + '"><i class="glyphicon glyphicon-edit"></i> Edit</a>';
-					$('td', row).eq(6).html(edit_tag);
+					$('td', row).eq(8).html(edit_tag);
 				}
 			});
 
