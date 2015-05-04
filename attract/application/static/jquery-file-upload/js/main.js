@@ -39,8 +39,8 @@ $(function () {
     var sendToForm = function(e, data) {
         for (var file_id in data.result.files) {
             var file = data.result.files[file_id];
-            $('#picture').append(new Option(file.name, file.id, true, true));
-            $('#attachments').append(new Option(file.name, file.id, true, true));
+
+            $('#'+upload_file_to).append(new Option(file.name, file.id, true, true));
         }
     }
     $('#fileupload').bind('fileuploaddone', sendToForm);

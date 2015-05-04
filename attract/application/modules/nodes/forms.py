@@ -107,9 +107,9 @@ class FileSelect(Select):
     def __call__(self, field, **kwargs):
         html =  super(FileSelect, self).__call__(field, **kwargs)
         button= """
-<button style="margin-top: 5px;" type="button" class="btn btn-primary" data-toggle="modal" data-target="#fileUploaderModal">
+<button onclick="upload_file_to='{0}'" style="margin-top: 5px;" type="button" class="btn btn-primary" data-toggle="modal" data-target="#fileUploaderModal">
   Set File
-</button>"""
+</button>""".format(field.id)
         return HTMLString(html+button)
 
 
