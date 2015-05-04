@@ -7,7 +7,7 @@
 		<meta name="description" content="">
 		<meta name="author" content="">
 
-		<link href="{{ url_for('static', filename='assets/css/bootstrap.min.css') }}" rel="stylesheet">
+		<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
 		<link href="{{ url_for('static', filename='assets/css/chosen.min.css') }}" rel="stylesheet">
 		<link href="{{ url_for('static', filename='assets/css/bootstrap-markdown.min.css') }}" rel="stylesheet">
 		<link href="{{ url_for('static', filename='assets/css/dataTables.bootstrap.css') }}" rel="stylesheet">
@@ -82,7 +82,7 @@
 			</div>
 		</div>
 
-		<div class="container">
+		<div class="container-fluid">
 			<div class="row">
 				<div class="col-md-12">
 						{% with messages = get_flashed_messages() %}
@@ -112,10 +112,10 @@
 			</footer>
 
 		</div><!--/.fluid-container-->
+		<script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
 		{% assets filters="jsmin",
 				output="assets/packed/attract.js",
-					"assets/js/bootstrap.min.js",
 					"assets/js/jquery.chosen.min.js",
 					"assets/js/bootstrap-markdown.js",
 					"assets/js/markdown.js",
