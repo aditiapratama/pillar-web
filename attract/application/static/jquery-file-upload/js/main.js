@@ -11,12 +11,27 @@
 
 /* global $, window */
 
+var upload_file_to = '';
+var upload_multiple_files = false;
+
+function set_upload_parameters(upload_to, multiple) {
+    upload_file_to = upload_to;
+    upload_multiple_files = multiple;
+    clear_upload_files();
+}
+
+function clear_upload_files() {
+    var table = $("#file_uploader_table")[0];
+    while (table.firstChild) {
+        table.removeChild(table.firstChild);
+    }
+}
+
 $(function () {
     'use strict';
 
     var formName = '';
 
-    console.log("Initializing");
     // Initialize the jQuery File Upload widget:
     $('#fileupload').fileupload({
         // Uncomment the following to send cross-domain cookies:
@@ -45,12 +60,18 @@ $(function () {
     }
     $('#fileupload').bind('fileuploaddone', sendToForm);
 
-    var checkFiles = function (e, data) {
-        if (data.files.length > 1) {
-            return false;
+
+    var addToForm = function(e, data) {
+        if (upload_multiple_files) {
+            return;
+        }
+        var table = $("#file_uploader_table")[0];
+        while (table.firstChild) {
+            table.removeChild(table.firstChild);
         }
     }
-    $('#fileupload').bind('fileuploadsend', checkFiles);
+    $('#fileupload').bind('fileuploadadd', addToForm);
+
 
     // Load existing files:
     $('#fileupload').addClass('fileupload-processing');

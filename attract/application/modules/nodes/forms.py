@@ -102,14 +102,19 @@ def set_hidden(field, data):
 
 class FileSelect(Select):
     def __init__(self, **kwargs):
+        self.is_multiple = kwargs.get('multiple')
         super(FileSelect, self).__init__(**kwargs)
 
     def __call__(self, field, **kwargs):
         html =  super(FileSelect, self).__call__(field, **kwargs)
+        if self.is_multiple:
+            multiple_value = 'true';
+        else:
+            multiple_value = 'false';
         button= """
-<button onclick="upload_file_to='{0}'" style="margin-top: 5px;" type="button" class="btn btn-primary" data-toggle="modal" data-target="#fileUploaderModal">
-  Set File
-</button>""".format(field.id)
+<button onclick="set_upload_parameters('{0}', {1});" style="margin-top: 5px;" type="button" class="btn btn-primary" data-toggle="modal" data-target="#fileUploaderModal">
+  Upload Files
+</button>""".format(field.id, multiple_value)
         return HTMLString(html+button)
 
 
