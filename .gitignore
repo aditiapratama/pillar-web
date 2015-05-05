@@ -6,4 +6,8 @@
 
 config.py
 
+node_modules/
+.sass-cache/
+*.css.map
+
 attract/application/static/storage/
