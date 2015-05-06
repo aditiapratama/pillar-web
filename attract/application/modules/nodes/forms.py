@@ -203,10 +203,9 @@ def get_node_form(node_type):
     # setattr(ProceduralForm,
     #         'picture_file',
     #         FileField('Picture File'))
-    if len(select)>1:
-        setattr(ProceduralForm,
-                'picture',
-                FileSelectField('Picture', choices=select))
+    setattr(ProceduralForm,
+        'picture',
+        FileSelectField('Picture', choices=select))
     setattr(ProceduralForm,
         'node_type_id',
         HiddenField(default=node_type._id))
