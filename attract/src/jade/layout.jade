@@ -1,0 +1,116 @@
+doctype
+html(lang="en")
+	head
+		meta(charset="utf-8")
+		title Attract
+		meta(name="viewport", content="width=device-width, initial-scale=1.0")
+		meta(name="description", content="")
+		meta(name="author", content="")
+		link(href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css", rel="stylesheet")
+
+		link(href="{{ url_for('static', filename='assets/css/bootstrap-markdown.min.css') }}", rel="stylesheet")
+		link(href="{{ url_for('static', filename='assets/css/attract.css') }}", rel="stylesheet")
+		link(href="{{ url_for('static', filename='assets/css/bootstrap-colorpicker.min.css') }}", rel="stylesheet")
+
+		link(href="{{ url_for('static', filename='gallery/css/blueimp-gallery.min.css') }}", rel="stylesheet")
+		link(href="{{ url_for('static', filename='jquery-file-upload/css/jquery.fileupload.css') }}", rel="stylesheet")
+		link(href="{{ url_for('static', filename='jquery-file-upload/css/jquery.fileupload-ui.css') }}", rel="stylesheet")
+
+		noscript
+			link(href="{{ url_for('static', filename='jquery-file-upload/css/jquery.fileupload-noscript.css') }}", rel="stylesheet")
+		noscript
+			link(href="{{ url_for('static', filename='jquery-file-upload/css/jquery.fileupload-ui-noscript.css') }}", rel="stylesheet")
+
+		link(href="{{ url_for('static', filename='assets/ico/favicon.png') }}", rel="shortcut icon")
+
+		| {% block header_items %}{% endblock %}
+
+	body
+		.navbar.navbar-inverse.navbar-fixed-top(role="navigation")
+			.container-fluid
+				.navbar-header
+					button.navbar-toggle(data-target=".navbar-collapse", data-toggle="collapse", type="button")
+						span.sr-only Toggle navigation
+						span.icon-bar
+						span.icon-bar
+						span.icon-bar
+					a.navbar-brand(href="/") Attract
+
+				.navbar-collapse.collapse
+					ul.nav.navbar-nav.navbar-right
+						li#node_types.dropdown
+							a#drop4.dropdown-toggle(href="#", data-toggle="dropdown")
+								| Nodes <b class="caret"></b>
+
+							ul.dropdown-menu(role="menu", aria-labelledby="drop4")
+								| {% for name in type_names %}
+								li
+									a {{name.title()}}
+								| {% endfor %}
+
+						li#fat-menu.dropdown
+
+							a#drop3.dropdown-toggle(data-toggle="dropdown")
+								| {{current_user.email}} <b class="caret"></b>
+							ul.dropdown-menu(role="menu", aria-labelledby="drop3")
+								li
+									a(href="{{url_for('users.tasks')}}", role="menuitem", tabindex="-1")
+										| Tasks
+								li
+									a(href="{{url_for('users.tasks')}}", role="menuitem", tabindex="-1")
+										| Profile
+								li.divider
+
+								//
+									li
+										a(href="{{url_for('node_types.index')}}", role="menuitem", tabindex="-1")
+											| Node Types
+										a(href="{{url_for('nodes.index', node_type_name='')}}", role="menuitem", tabindex="-1")
+											| All Nodes
+								| {% if email!="" %}
+								li
+									a(href="{{url_for('users.logout')}}", role="menuitem", tabindex="-1")
+										| Log out
+								| {% else %}
+								li
+									a(href="{{url_for('users.login')}}", role="menuitem", tabindex="-1")
+										| Log in
+								| {% endif %}
+		.container-fluid
+			.row
+				.col-md-12
+					| {% with messages = get_flashed_messages() %}
+					|		{% if messages %}
+					div
+						|	{% for message in messages %}
+						.alert.alert-success(role="alert")
+							| {{message}}
+						|	{% endfor %}
+					|		{% endif %}
+					| {% endwith %}
+
+			.row
+				| {% block body %}{% endblock %}
+				| {% block sidebar %}
+				.col-md-3
+				|	{% endblock %}
+
+			hr
+
+			footer
+				p Attract 3 - Python powered
+
+		| {#
+		| {% assets filters="jsmin",
+		|		 output="assets/packed/attract.js",
+		|		 "assets/js/bootstrap-markdown.js",
+		|		 "assets/js/markdown.js",
+		|		 "assets/js/jquery.attract.js" %}
+		script(type="text/javascript", src="{{ ASSET_URL }}")
+		| {% endassets %}
+		| #}
+
+		script(type="text/javascript", src="//code.jquery.com/jquery-1.11.1.min.js")
+		script(type="text/javascript", src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js")
+
+		| {% block footer_scripts %}{% endblock %}
