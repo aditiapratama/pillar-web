@@ -1,4 +1,3 @@
-import os
 import attractsdk
 from attractsdk import Node
 
@@ -21,11 +20,9 @@ from wtforms.widgets import HiddenInput
 from wtforms.widgets import HTMLString
 from wtforms.widgets import Select
 
-from flask import request
 from datetime import datetime
 from datetime import date
 
-from application import app
 from application import SystemUtility
 
 
@@ -171,7 +168,7 @@ def get_node_form(node_type):
             nodes = Node.all({
                 'where': 'node_type=="{0}"'.format(
                     str(parent_node_type._items[0]['_id'])),
-                'max_results': 100,
+                'max_results': 999,
                 'sort': "order"},
                 api=api)
             for option in nodes._items:
@@ -194,7 +191,9 @@ def get_node_form(node_type):
     #    FileField('Picture'))
     select = []
     select.append(('None', 'None'))
-    nodes = attractsdk.File.all({'max_results': 200}, api=api)
+    nodes = attractsdk.File.all(
+        {'max_results': 999, 'where': '{"is_preview" : {"$ne":true}}'},
+        api=api)
     for option in nodes['_items']:
         try:
             select.append((str(option['_id']), str(option['name'])))
@@ -296,67 +295,6 @@ def recursive(path, rdict, data):
     return rdict
 
 
-import hashlib
-def hashfile(afile, hasher, blocksize=65536):
-    buf = afile.read(blocksize)
-    while len(buf) > 0:
-        hasher.update(buf)
-        buf = afile.read(blocksize)
-    return hasher.hexdigest()
-
-
-def send_file(form, node, user):
-    """Send files to storage
-    """
-    backend = app.config['FILE_STORAGE_BACKEND']
-    api = SystemUtility.attract_api()
-    if 'picture_file' in form and form.picture_file.name in request.files:
-        picture_file = request.files[form.picture_file.name]
-        if picture_file.filename == '':
-            picture_file = None
-    else:
-        picture_file = None
-
-    if picture_file:
-        # Save file on AttractiWeb Storage
-        picture_path = os.path.join(
-            app.config['FILE_STORAGE'], picture_file.filename)
-        picture_file.save(picture_path)
-
-        node_picture = attractsdk.File()
-
-        picture_file_file = open(picture_path, 'rb')
-        if backend == 'attract':
-            hash_ = hashfile(picture_file_file, hashlib.md5())
-            name = "{0}{1}".format(hash_,
-                                   os.path.splitext(picture_path)[1])
-        picture_file_file.close()
-        prop = {}
-        prop['name'] = picture_file.filename
-        prop['description'] = "Picture for node {0}".format(node['name'])
-        prop['user'] = user
-        prop['contentType'] = picture_file.content_type
-        prop['length'] = picture_file.content_length
-        prop['uploadDate'] = datetime.strftime(
-            datetime.now(), RFC1123_DATE_FORMAT)
-        prop['md5'] = ""
-        prop['filename'] = picture_file.filename
-        prop['backend'] = backend
-        if backend in ["attract"]:
-            prop['path'] = name
-        elif backend == "fs.files":
-            prop['path'] = str(node_bfile['_id'])
-        node_picture.post(prop, api=api)
-        node['picture'] = node_picture['_id']
-        # Send file to Attract Server
-        if backend == "fs.files":
-            node_bfile = attractsdk.binaryFile()
-            node_bfile.post_file(picture_path, api=api)
-        elif backend == 'attract':
-            node_picture.post_file(picture_path, name, api=api)
-        return node
-
-
 def process_node_form(form, node_id=None, node_type=None, user=None):
     """Generic function used to process new nodes, as well as edits
     """
@@ -415,7 +353,7 @@ def process_node_form(form, node_id=None, node_type=None, user=None):
                 else:
                     node.properties[prop_name] = data
         update_data(node_schema, form_schema)
-        send_file(form, node, user)
+        # send_file(form, node, user)
         update = node.update(api=api)
         # if form.picture.data:
         #     image_data = request.files[form.picture.name].read()

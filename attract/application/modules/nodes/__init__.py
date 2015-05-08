@@ -154,6 +154,13 @@ def shots_index():
             # This is an address on the Attract server, so it should be built
             # entirely here
             data['picture'] = app.config['ATTRACT_SERVER_ENDPOINT'] + "/file_server/file/" + node.picture.path
+            # Get previews
+            picture_node = File.find(node.picture['_id'] + \
+                                    '/?embedded={"previews":1}', api=api)
+            for preview in picture_node.previews:
+                if preview.preview_name == 'xs_png':
+                    data['picture_thumbnail'] = app.config['ATTRACT_SERVER_ENDPOINT'] + "/file_server/file/" + preview.path
+                    break
 
         if node.order is None:
             data['order'] = 0
@@ -192,6 +199,14 @@ def view(node_id):
                 node = Node.find(node_id + '/?embedded={"picture":1}', api=api)
             else:
                 print (comment_form.errors)
+        # Get previews
+        if node.picture:
+            picture_node = File.find(node.picture['_id'] + \
+                                    '/?embedded={"previews":1}', api=api)
+            for preview in picture_node.previews:
+                if preview.preview_name == 'l_png':
+                    node['picture_thumbnail'] = preview
+                    break
         # Get Parent
         try:
             parent = Node.find(node['parent'], api=api)
@@ -289,42 +304,44 @@ def edit(node_id):
             error = "Server error"
             print ("Error sending data")
     else:
-        # Populate Form
-        form.name.data = node.name
-        form.description.data = node.description
-        if 'picture' in form:
-            form.picture.data = node.picture
-        if node.parent:
-            form.parent.data = node.parent
+        print form.errors
 
-        def set_properties(
-                node_schema, form_schema, prop_dict, form, prefix=""):
-            for prop in node_schema:
-                if not prop in prop_dict:
-                    continue
-                schema_prop = node_schema[prop]
-                form_prop = form_schema[prop]
-                prop_name = "{0}{1}".format(prefix, prop)
-                if schema_prop['type'] == 'dict':
-                    set_properties(
-                        schema_prop['schema'],
-                        form_prop['schema'],
-                        prop_dict[prop_name],
-                        form,
-                        "{0}->".format(prop_name))
-                else:
-                    try:
-                        data = prop_dict[prop]
-                    except KeyError:
-                        print ("{0} not found in form".format(prop_name))
-                    if schema_prop['type'] == 'datetime':
-                        data = datetime.strptime(data, RFC1123_DATE_FORMAT)
-                    if prop_name in form:
-                        form[prop_name].data = data
+    # Populate Form
+    form.name.data = node.name
+    form.description.data = node.description
+    if 'picture' in form:
+        form.picture.data = node.picture
+    if node.parent:
+        form.parent.data = node.parent
+
+    def set_properties(
+            node_schema, form_schema, prop_dict, form, prefix=""):
+        for prop in node_schema:
+            if not prop in prop_dict:
+                continue
+            schema_prop = node_schema[prop]
+            form_prop = form_schema[prop]
+            prop_name = "{0}{1}".format(prefix, prop)
+            if schema_prop['type'] == 'dict':
+                set_properties(
+                    schema_prop['schema'],
+                    form_prop['schema'],
+                    prop_dict[prop_name],
+                    form,
+                    "{0}->".format(prop_name))
+            else:
+                try:
+                    data = prop_dict[prop]
+                except KeyError:
+                    print ("{0} not found in form".format(prop_name))
+                if schema_prop['type'] == 'datetime':
+                    data = datetime.strptime(data, RFC1123_DATE_FORMAT)
+                if prop_name in form:
+                    form[prop_name].data = data
 
 
-        prop_dict = node.properties.to_dict()
-        set_properties(node_schema, form_schema, prop_dict, form)
+    prop_dict = node.properties.to_dict()
+    set_properties(node_schema, form_schema, prop_dict, form)
 
     return render_template('nodes/edit.html',
         node=node,
