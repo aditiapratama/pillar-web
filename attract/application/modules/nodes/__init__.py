@@ -209,13 +209,14 @@ def view(node_id):
         if node.picture:
             picture_node = File.find(node.picture['_id'] + \
                                     '/?embedded={"previews":1}', api=api)
+            node['picture'] = app.config['ATTRACT_SERVER_ENDPOINT'] + "/file_server/file/" + picture_node.path
             if picture_node.previews:
                 for preview in picture_node.previews:
                     if preview.size == 'l':
-                        node['picture_thumbnail'] = preview
+                        node['picture_thumbnail'] = app.config['ATTRACT_SERVER_ENDPOINT'] + "/file_server/file/" + preview.path
                         break
             else:
-                node['picture_thumbnail'] = picture_node
+                node['picture_thumbnail'] = node['picture']
         # Get Parent
         try:
             parent = Node.find(node['parent'], api=api)
