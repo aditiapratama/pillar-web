@@ -161,7 +161,7 @@ def shots_index():
 
             if picture_node.previews:
                 for preview in picture_node.previews:
-                    if preview.size == 'xs':
+                    if preview.size == 'm':
                         data['picture_thumbnail'] = app.config['ATTRACT_SERVER_ENDPOINT'] + "/file_server/file/" + preview.path
                         break
             else:
@@ -209,11 +209,11 @@ def view(node_id):
         if node.picture:
             picture_node = File.find(node.picture['_id'] + \
                                     '/?embedded={"previews":1}', api=api)
-            node['picture'] = app.config['ATTRACT_SERVER_ENDPOINT'] + "/file_server/file/" + picture_node.path
+            node['picture'] = "{0}{1}".format(SystemUtility.attract_server_endpoint_static(), picture_node.path)
             if picture_node.previews:
                 for preview in picture_node.previews:
                     if preview.size == 'l':
-                        node['picture_thumbnail'] = app.config['ATTRACT_SERVER_ENDPOINT'] + "/file_server/file/" + preview.path
+                        node['picture_thumbnail'] = "{0}{1}".format(SystemUtility.attract_server_endpoint_static(), preview.path)
                         break
             else:
                 node['picture_thumbnail'] = node['picture']

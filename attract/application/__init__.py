@@ -103,7 +103,7 @@ class SystemUtility():
     @staticmethod
     def attract_server_endpoint_static():
         """Endpoint to retrieve static files (previews, videos, etc)"""
-        return "{0}/file_server/file/".format(cls.attract_server_endpoint)
+        return "{0}/file_server/file/".format(SystemUtility.attract_server_endpoint())
 
     @staticmethod
     def attract_api():
