@@ -95,10 +95,10 @@ class SystemUtility():
     @staticmethod
     def attract_server_endpoint():
         """Gets the endpoint for the authentication API. If the env variable
-        is defined, it's possible to override the (default) production address.
+        is defined, we will use the one from the config object.
         """
         return os.environ.get(
-            'ATTRACT_SERVER_ENDPOINT', "http://127.0.0.1:5000")
+            'ATTRACT_SERVER_ENDPOINT', app.config['ATTRACT_SERVER_ENDPOINT'])
 
     @staticmethod
     def attract_server_endpoint_static():
