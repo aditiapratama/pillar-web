@@ -101,6 +101,11 @@ class SystemUtility():
             'ATTRACT_SERVER_ENDPOINT', "http://127.0.0.1:5000")
 
     @staticmethod
+    def attract_server_endpoint_static():
+        """Endpoint to retrieve static files (previews, videos, etc)"""
+        return "{0}/file_server/file/".format(cls.attract_server_endpoint)
+
+    @staticmethod
     def attract_api():
         api = Api(
             endpoint=SystemUtility.attract_server_endpoint(),

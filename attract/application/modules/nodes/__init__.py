@@ -153,10 +153,15 @@ def shots_index():
         if node.picture:
             # This is an address on the Attract server, so it should be built
             # entirely here
-            data['picture'] = app.config['ATTRACT_SERVER_ENDPOINT'] + "/file_server/file/" + node.picture.path
+            data['picture'] = "{0}/file_server/file/{1}".format(
+                app.config['ATTRACT_SERVER_ENDPOINT'], node.picture.path)
             # Get previews
             picture_node = File.find(node.picture['_id'] + \
                                     '/?embedded={"previews":1}', api=api)
+
+            # Ensure previews have been generated:
+            if not picture_node.previews:
+                print 'missing preview'
             for preview in picture_node.previews:
                 if preview.size == 'xs':
                     data['picture_thumbnail'] = app.config['ATTRACT_SERVER_ENDPOINT'] + "/file_server/file/" + preview.path
