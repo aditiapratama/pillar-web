@@ -157,10 +157,13 @@ def shots_index():
             # Get previews
             picture_node = File.find(node.picture['_id'] + \
                                     '/?embedded={"previews":1}', api=api)
-            for preview in picture_node.previews:
-                if preview.size == 'xs':
-                    data['picture_thumbnail'] = app.config['ATTRACT_SERVER_ENDPOINT'] + "/file_server/file/" + preview.path
-                    break
+            if picture_node.previews:
+                for preview in picture_node.previews:
+                    if preview.size == 'xs':
+                        data['picture_thumbnail'] = app.config['ATTRACT_SERVER_ENDPOINT'] + "/file_server/file/" + preview.path
+                        break
+            else:
+                data['picture_thumbnail'] = data['picture']
 
         if node.order is None:
             data['order'] = 0
@@ -203,10 +206,13 @@ def view(node_id):
         if node.picture:
             picture_node = File.find(node.picture['_id'] + \
                                     '/?embedded={"previews":1}', api=api)
-            for preview in picture_node.previews:
-                if preview.size == 'l':
-                    node['picture_thumbnail'] = preview
-                    break
+            if picture_node.previews:
+                for preview in picture_node.previews:
+                    if preview.size == 'l':
+                        node['picture_thumbnail'] = preview
+                        break
+            else:
+                node['picture_thumbnail'] = picture_node
         # Get Parent
         try:
             parent = Node.find(node['parent'], api=api)
