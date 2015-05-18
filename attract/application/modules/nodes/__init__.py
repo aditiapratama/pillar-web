@@ -4,6 +4,7 @@ from attractsdk import User
 from attractsdk import File
 # from attractsdk import binaryFile
 from attractsdk.exceptions import ResourceNotFound
+from attractsdk.exceptions import ForbiddenAccess
 
 from flask import abort
 from flask import Blueprint
@@ -71,7 +72,7 @@ def index(node_type_name=""):
         node_type_name = "shot"
 
     node_type_list = NodeType.all({
-        'where': "name=='{0}'".format(node_type_name),
+        'where': '{"name" : "%s"}' % node_type_name,
         }, api=api)
 
     if len(node_type_list['_items']) == 0:
@@ -110,20 +111,20 @@ def shots_index():
     api = SystemUtility.attract_api()
     node_type_name = "shot"
     node_type_list = NodeType.all({
-        'where': "name=='{0}'".format(node_type_name),
+        'where': '{"name" : "%s"}' % node_type_name,
         }, api=api)
 
     node_type = node_type_list._items[0]
 
     nodes = Node.all({
-        'where': '{"node_type" : "%s"}' % (node_type._id),
+        'where': '{"node_type" : "%s"}' % node_type._id,
         'max_results': max_results,
         'embedded': '{"picture":1}',
         'sort' : "order"}, api=api)
 
     # Get the task node type object id
     node_type_list = NodeType.all({
-        'where': "name=='task'",
+        'where': '{"name" : "task"}',
         }, api=api)
     node_type_task = node_type_list._items[0]
 
@@ -203,11 +204,14 @@ def shots_view(shot_id):
 def view(node_id):
     api = SystemUtility.attract_api()
     # Get node with embedded picture data
-    node = Node.find(node_id + '/?embedded={"picture":1}', api=api)
+    try:
+        node = Node.find(node_id + '/?embedded={"picture":1}', api=api)
+    except ResourceNotFound:
+        node = None
     user_id = current_user.objectid
     if node:
         # Get comment type
-        comment_type = NodeType.all({'where': 'name=="comment"'}, api=api)
+        comment_type = NodeType.all({'where': '{"name" : "comment"}'}, api=api)
         comment_type = comment_type['_items'][0]
         # Get node type
         node_type = NodeType.find(node['node_type'], api=api)
@@ -238,9 +242,11 @@ def view(node_id):
             parent = Node.find(node['parent'], api=api)
         except KeyError:
             parent = None
+        except ResourceNotFound:
+            parent = None
         # Get children
         children = Node.all({
-            'where': 'parent==ObjectId("%s")' % node['_id'],
+            'where': '{"parent" : "%s"}' % node['_id'],
             'embedded': '{"picture":1, "user":1}'}, api=api)
 
         children = children.to_dict()['_items']
@@ -564,9 +570,16 @@ def delete(node_id):
     node = Node.find(node_id, api=api)
     name = node.name
     node_type = NodeType.find(node.node_type, api=api)
-    if node.delete(api=api):
+    try:
+        node.delete(api=api)
+        forbidden = False
+    except ForbiddenAccess:
+        forbidden = True
+
+    if not forbidden:
         flash('Node "{0}" correctly deleted'.format(name))
-        print (node_type['name'])
+        # print (node_type['name'])
         return redirect(url_for('nodes.index', node_type_name=node_type['name']))
     else:
+        flash('Forbidden access')
         return redirect(url_for('nodes.edit', node_id=node._id))

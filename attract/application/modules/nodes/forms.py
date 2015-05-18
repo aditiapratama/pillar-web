@@ -164,10 +164,10 @@ def get_node_form(node_type):
         select = []
         for parent_type in parent_prop['node_types']:
             parent_node_type = attractsdk.NodeType.all(
-                {'where': 'name=="{0}"'.format(parent_type)}, api=api)
+                {'where': '{"name" : "%s"}' % parent_type}, api=api)
             nodes = Node.all({
-                'where': 'node_type=="{0}"'.format(
-                    str(parent_node_type._items[0]['_id'])),
+                'where': '{"node_type" : "%s"}' % str(
+                    parent_node_type._items[0]['_id']),
                 'max_results': 999,
                 'sort': "order"},
                 api=api)
