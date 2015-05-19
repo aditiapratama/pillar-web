@@ -140,7 +140,7 @@ def shots_index():
             'picture': None,
             'name': node.name,
             'description': node.description,
-            'url_view': url_for('nodes.view', node_id=node._id, format='json'),
+            'url_view': url_for('nodes.view', node_id=node._id, embed=1),
             'url_edit': url_for('nodes.edit', node_id=node._id),
             'tasks': {
                 'animation': None,
@@ -179,7 +179,7 @@ def shots_index():
                 data['tasks'][task.name] = {
                 'name': task.name,
                 'status': task.properties.status,
-                'url_view': url_for('nodes.view', node_id=task._id),
+                'url_view': url_for('nodes.view', node_id=task._id, embed=1),
                 }
 
 
@@ -276,8 +276,14 @@ def view(node_id):
                     'parent': parent
                 })
         else:
+            embed_string = ''
+            # Check if we want to embed the content via an AJAX call
+            if request.args.get('embed'):
+                if request.args.get('embed') == '1':
+                    # Define the prefix for the embedded template
+                    embed_string = '_embed'
             return_content = render_template(
-            '{0}/view.html'.format(node_type['name']),
+            '{0}/view{1}.html'.format(node_type['name'], embed_string),
             node=node,
             type_names=type_names(),
             parent=parent,
