@@ -100,27 +100,30 @@
 			}
 
 			function render_status_label(task) {
-				switch(task.status) {
-					case 'in-progress':
-						label_class = 'warning';
-						label_text = 'In progress';
-						break;
-					case 'todo':
-						label_class = 'info';
-						label_text = 'Todo';
-						break;
-					case 'done':
-						label_class = 'success';
-						label_text = 'Done';
-						break;
-					case null:
-						return "";
-					default:
-						label_class = 'default';
-						label_text = task.status;
-						break
+				if (task) {
+					switch(task.status) {
+						case 'in-progress':
+							label_class = 'warning';
+							label_text = 'In progress';
+							break;
+						case 'todo':
+							label_class = 'info';
+							label_text = 'Todo';
+							break;
+						case 'done':
+							label_class = 'success';
+							label_text = 'Done';
+							break;
+						default:
+							label_class = 'default';
+							label_text = task.status;
+							break
+					}
+					return tag = '<span task-view-url="' + task.url_view + '" class="load-task-view label label-'+label_class+'">'+label_text+'</span>'
+				} else {
+					return '<span class="btn btn-default btn-xs task-add">Add</span>';
 				}
-				return tag = '<span task-view-url="' + task.url_view + '" class="load-task-view label label-'+label_class+'">'+label_text+'</span>'
+
 			}
 
 			var shots_table = $('#shots').DataTable({
@@ -163,9 +166,9 @@
 						$('td', row).eq(3).html(render_status_label(data.tasks.animation));
 					}
 
-					if (data.tasks.lighting) {
-						$('td', row).eq(4).html(render_status_label(data.tasks.lighting));
-					}
+
+					$('td', row).eq(4).html(render_status_label(data.tasks.lighting));
+
 
 					if (data.tasks.fx_hair) {
 						$('td', row).eq(5).html(render_status_label(data.tasks.fx_hair));
@@ -223,6 +226,10 @@
 				// $('#task_details_description').val(data['node']['description']);
 
 			});
+		});
+
+		$(document).on("click", ".task-add", function() {
+			console.log('a');
 		});
 
 		// $('#shots tbody').on( 'click', 'tr', function () {

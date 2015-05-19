@@ -30,8 +30,8 @@
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
             <li id="node_types" class="dropdown"><a id="drop4" href="#" data-toggle="dropdown" class="dropdown-toggle">Nodes <b class="caret"></b></a>
-              <ul role="menu" aria-labelledby="drop4" class="dropdown-menu">{% for name in type_names %}
-                <li><a>{{name.title()}}</a></li>{% endfor %}
+              <ul role="menu" aria-labelledby="drop4" class="dropdown-menu">{% for n in node_types %}
+                <li><a href="{{url_for('nodes.index', node_type_name=n)}}">{{n}}</a></li>{% endfor %}
               </ul>
             </li>
             <li id="fat-menu" class="dropdown"><a id="drop3" data-toggle="dropdown" class="dropdown-toggle">{{current_user.email}} <b class="caret"></b></a>

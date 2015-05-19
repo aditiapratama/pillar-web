@@ -2,6 +2,7 @@ import sys
 import os
 import config
 from attractsdk import Api
+from attractsdk import NodeType
 from attractsdk.users import User
 from attractsdk.tokens import Token
 from attractsdk.exceptions import UnauthorizedAccess
@@ -156,3 +157,17 @@ def handle_invalid_usage(error):
     check for user authorization.
     """
     return redirect(url_for('users.login'))
+
+@app.context_processor
+def inject_node_types():
+    api = SystemUtility.attract_api()
+
+    types = NodeType.all(api=api)['_items']
+    node_types = []
+    for t in types:
+        # If we need to include more info, we can turn node_types into a dict
+        # node_types[t.name] = dict(
+        #     url_view=url_for('nodes.index', node_type_name=t.name))
+        node_types.append(str(t['name']))
+
+    return dict(node_types=node_types)

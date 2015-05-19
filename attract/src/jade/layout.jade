@@ -43,9 +43,10 @@ html(lang="en")
 								| Nodes <b class="caret"></b>
 
 							ul.dropdown-menu(role="menu", aria-labelledby="drop4")
-								| {% for name in type_names %}
+								| {% for n in node_types %}
 								li
-									a {{name.title()}}
+									a(href="{{url_for('nodes.index', node_type_name=n)}}")
+										| {{n}}
 								| {% endfor %}
 
 						li#fat-menu.dropdown
