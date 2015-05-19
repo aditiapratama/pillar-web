@@ -187,10 +187,13 @@ def shots_index():
 
     return jsonify(data=nodes_datatables)
 
+
+# XXX Hack to get custom data
 @nodes.route("/shots/<shot_id>.json")
 @login_required
 def shots_view(shot_id):
     return jsonify(_id=shot_id)
+
 
 @nodes.route("/<node_id>/view", methods=['GET', 'POST'])
 @login_required
@@ -318,6 +321,43 @@ def add(node_type_id):
         form=form,
         errors=form.errors,
         type_names=type_names())
+
+
+# XXX Hack to create ta task with a single click
+@nodes.route("/tasks/add", methods=['POST'])
+@login_required
+def task_add():
+    api = SystemUtility.attract_api()
+    shot_id = request.form['shot_id']
+    task_name = request.form['task_name']
+
+    node_type_list = NodeType.all({
+        'where': "name=='task'",
+        }, api=api)
+    node_type = node_type_list['_items'][0]
+
+    node_type_id = node_type._id
+    import datetime
+
+    RFC1123_DATE_FORMAT = '%a, %d %b %Y %H:%M:%S GMT'
+    node = Node()
+    prop = {}
+    prop['node_type'] = node_type_id
+    prop['name'] = task_name
+    prop['description'] = ''
+    prop['user'] = current_user.objectid
+    prop['parent'] = shot_id
+    prop['properties'] = {
+        'status': 'todo',
+        'owners': {
+            'users': [],
+            'groups': []},
+        'time': {
+            'duration': 10,
+            'start': datetime.datetime.strftime(datetime.datetime.now(), '%a, %d %b %Y %H:%M:%S GMT')}
+        }
+    post = node.post(prop, api=api)
+    return jsonify(node.to_dict())
 
 
 @nodes.route("/<node_id>/edit", methods=['GET', 'POST'])

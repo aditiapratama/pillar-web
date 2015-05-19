@@ -55,20 +55,8 @@
 {% block sidebar %}
 	<div class="col-md-4" id="shots-sidebar">
 		<div id="shot_details_container">
-			<h2></h2>
-			<p id="shot_details_description"></p>
-			<img id="shot_details_picture" src="" />
-			<p id="shot_details_properties_notes"></p>
-			<a id="shot_details_edit" class="btn btn-default" href="#">Edit</a>
-			<h3>Tasks</h3>
-			<ul id="shot_details_tasks"></ul>
 		</div>
 		<div id="task_details_container">
-			<h2></h2>
-			<p id="task_details_shot_name"></p>
-			<select id="task_details_properties_status" class="form-control">
-			</select>
-			<textarea id="task_details_description" class="form-control"></textarea>
 		</div>
 	</div><!--/end col-md-3 -->
 {% endblock %}
@@ -104,7 +92,7 @@
 				return options;
 			}
 
-			function render_status_label(task) {
+			function render_status_label(task, task_name) {
 				if (task) {
 					switch(task.status) {
 						case 'in-progress':
@@ -126,7 +114,7 @@
 					}
 					return tag = '<span task-view-url="' + task.url_view + '" class="load-task-view label label-'+label_class+'">'+label_text+'</span>'
 				} else {
-					return '<span class="btn btn-default btn-xs task-add">Add</span>';
+					return '<span class="btn btn-default btn-xs task-add" task-name="'+task_name+'">Add</span>';
 				}
 
 			}
@@ -159,33 +147,18 @@
 						"sortable": false
 					}
 				],
-				"createdRow": function ( row, data, index ) {
+				"rowCallback": function ( row, data, index ) {
 					if ( data.picture) {
 						var img_tag = '<img alt="' + data.name + '" src="' + data.picture_thumbnail + '" class="table-thumbnail">';
 						$('td', row).eq(0).html('<a href="' + data.url_view + '">' + img_tag + '</a>');
 					}
 
 					$('td', row).eq(1).html('<a href="' + data.url_view + '">' + data.name + '</a>');
-
-					if (data.tasks.animation) {
-						$('td', row).eq(3).html(render_status_label(data.tasks.animation));
-					}
-
-
-					$('td', row).eq(4).html(render_status_label(data.tasks.lighting));
-
-
-					if (data.tasks.fx_hair) {
-						$('td', row).eq(5).html(render_status_label(data.tasks.fx_hair));
-					}
-
-					if (data.tasks.fx_grass) {
-						$('td', row).eq(6).html(render_status_label(data.tasks.fx_grass));
-					}
-
-					if (data.tasks.fx_smoke) {
-						$('td', row).eq(7).html(render_status_label(data.tasks.fx_smoke));
-					}
+					$('td', row).eq(3).html(render_status_label(data.tasks.animation, 'animation'));
+					$('td', row).eq(4).html(render_status_label(data.tasks.lighting, 'lighting'));
+					$('td', row).eq(5).html(render_status_label(data.tasks.fx_hair, 'fx_hair'));
+					$('td', row).eq(6).html(render_status_label(data.tasks.fx_grass, 'fx_grass'));
+					$('td', row).eq(7).html(render_status_label(data.tasks.fx_smoke, 'fx_smoke'));
 
 					var view_tag = '<span class="btn btn-default btn-xs load-shot-view" shot-view-url="' + data.url_view + '"><i class="glyphicon glyphicon-edit"></i> View</span>';
 					$('td', row).eq(8).html(view_tag);
@@ -198,24 +171,6 @@
 				$('#shot_details_container').show();
 				$('#shot_details_container').html(data);
 				$('#task_details_container').hide();
-				// console.log(data);
-				// $('#shot_details_container').show();
-				// $('#task_details_container').hide();
-				// $('#shots-sidebar h2').text(data['node']['name']);
-				// $('#shot_details_description').text(data['node']['description']);
-				// $('#shot_details_picture').attr('src', data['node']['picture']);
-				// $('#shot_details_properties_notes').text(data['node']['properties']['notes']);
-				// $('#shot_details_edit').attr('href', data['node']['url_edit']);
-
-				// tasks = [];
-				// $.each(data['children'], function(k, v) {
-				// 	tasks.push('<li>' + v['name']+ '</li>');
-				// 	//$('#shot_details_tasks').append('<li>' + v['name']+ '</li>');
-				// 	// $.each(post, function(k, v) {
-				// 	// 	console.log(k, v);
-				// 	// });
-				// });
-				// $('#shot_details_tasks').html(tasks);
 			});
 		});
 
@@ -225,34 +180,26 @@
 				$('#shot_details_container').hide();
 				$('#task_details_container').html(data);
 				$('#task_details_container').show();
-				// $('#task_details_container h2').text(data['parent']['name']);
-				// var status = render_status_options(data['node']['properties']['status']);
-				// $('#task_details_properties_status').html(status);
-				// $('#task_details_description').val(data['node']['description']);
-
 			});
 		});
 
 		$(document).on("click", ".task-add", function() {
-			console.log('a');
+
+			var row = shots_table.row($(this).closest('tr'))
+			row_data = row.data();
+			task_name = $(this).attr('task-name');
+			$.post(
+				"{{url_for('nodes.task_add')}}",
+				{shot_id: row_data['_id'], task_name: task_name},
+				function(node_data) {
+					row_data['tasks'][task_name] = {
+						'name': task_name,
+						'status': 'todo',
+						'url_view': '/nodes/' + node_data['_id'] + '/view?embed=1'}
+					shots_table.row(row).data(row_data).draw();
+			});
+
 		});
-
-		// $('#shots tbody').on( 'click', 'tr', function () {
-		// 		if ($(this).hasClass('selected')) {
-		// 				$(this).removeClass('selected');
-		// 				$('#shots-sidebar').html('');
-		// 		}
-		// 		else {
-		// 				shots_table.$('tr.selected').removeClass('selected');
-		// 				$(this).addClass('selected');
-		// 				row_data = shots_table.row(this).data()
-		// 				$.get(row_data['url_view'] , function(data) {
-		// 					$('#shots-sidebar').text(data);
-
-		// 				});
-		// 		}
-		// });
-
 
 
 		});
