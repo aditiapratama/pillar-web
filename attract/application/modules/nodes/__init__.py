@@ -100,7 +100,7 @@ def index(node_type_name=""):
 
 
 # XXX Hack to get custom data for DataTables for shot view
-@nodes.route("/shots.json")
+@nodes.route("/shots/index.json")
 @login_required
 def shots_index():
     max_results = 100
@@ -134,12 +134,13 @@ def shots_index():
 
         #: shot name, Animation, Lighting, Simulation
         data = {
+            'DT_RowId': "row_{0}".format(node._id),
             '_id': node._id,
             'order': node.order,
             'picture': None,
             'name': node.name,
             'description': node.description,
-            'url_view': url_for('nodes.view', node_id=node._id),
+            'url_view': url_for('nodes.view', node_id=node._id, format='json'),
             'url_edit': url_for('nodes.edit', node_id=node._id),
             'tasks': {
                 'animation': None,
@@ -175,12 +176,21 @@ def shots_index():
             # If there are tasks assigned to the shot we loop through them and
             # match them with the existing data indexes.
             if task.name in data['tasks']:
-                data['tasks'][task.name] = task.properties.status
+                data['tasks'][task.name] = {
+                'name': task.name,
+                'status': task.properties.status,
+                'url_view': url_for('nodes.view', node_id=task._id),
+                }
+
 
         nodes_datatables.append(data)
 
     return jsonify(data=nodes_datatables)
 
+@nodes.route("/shots/<shot_id>.json")
+@login_required
+def shots_view(shot_id):
+    return jsonify(_id=shot_id)
 
 @nodes.route("/<node_id>/view", methods=['GET', 'POST'])
 @login_required
@@ -254,7 +264,19 @@ def view(node_id):
         # Get assigned users
         assigned_users = assigned_users_to(node, node_type)
 
-        return render_template(
+        if request.args.get('format'):
+            if request.args.get('format') == 'json':
+                node = node.to_dict()
+                node['url_edit'] = url_for('nodes.edit', node_id=node['_id']),
+                if parent:
+                    parent = parent.to_dict()
+                return_content = jsonify({
+                    'node': node,
+                    'children': children,
+                    'parent': parent
+                })
+        else:
+            return_content = render_template(
             '{0}/view.html'.format(node_type['name']),
             node=node,
             type_names=type_names(),
@@ -264,6 +286,8 @@ def view(node_id):
             comment_form=comment_form,
             assigned_users=assigned_users,
             config=app.config)
+
+        return return_content
     else:
         return abort(404)
 

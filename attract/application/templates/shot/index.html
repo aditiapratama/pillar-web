@@ -28,66 +28,6 @@
 					</tr>
 				</thead>
 			</table>
-			{#
-			<table cellpadding="0" cellspacing="0" border="0" class="table table-striped" id="shots_">
-				<thead>
-					<tr>
-						<th width="15%"></th>
-						<th>Shot Name</th>
-						<th>Description</th>
-						<th>Duration</th>
-						<th>Status</th>
-						<th>Tasks</th>
-						<th>Notes</th>
-						<th width="8%"></th>
-					</tr>
-				</thead>
-				<tbody>
-				{% for shot in nodes._items %}
-						<tr id="row_{{shot._id}}">
-							<td>
-								{% if shot.picture %}
-									<a href="{{url_for('nodes.view', node_id=shot._id)}}">
-										<img class="table-thumbnail" src="{{config['ATTRACT_SERVER_ENDPOINT']}}/file_server/file/{{shot.picture.path}}" alt="{{shot.name}}">
-									</a>
-								{% endif %}
-							</td>
-							<td><a href="{{url_for('nodes.view', node_id=shot._id)}}">{{shot.name}}</a></td>
-							<td>
-								{% if shot.description %}
-									{{shot.description|truncate(25)}}
-								{% endif %}
-							</td>
-							<td>
-									{{shot.properties.cut_out - shot.properties.cut_in}}
-							</td>
-							<td>{{render_status_label(shot.properties.status)}}</td>
-							<td></td>
-							<td>
-								{% if shot.properties.notes %}
-									{{shot.properties.notes|truncate(25)}}
-								{% endif %}
-							</td>
-							<td>
-								<a class="btn btn-default btn-xs" href="{{url_for('nodes.edit', node_id=shot._id)}}"><i class="glyphicon glyphicon-edit"></i> Edit</a>
-							</td>
-						</tr>
-				{% endfor %}
-				</tbody>
-				<tfoot>
-					<tr>
-						<th></th>
-						<th>Shot Name</th>
-						<th>Description</th>
-						<th>Duration</th>
-						<th>Status</th>
-						<th>Tasks</th>
-						<th>Notes</th>
-						<th></th>
-					</tr>
-				</tfoot>
-			</table>
-			#}
 		</div>
 	</div>
 
@@ -107,8 +47,23 @@
 {% endblock %}
 
 {% block sidebar %}
-	<div class="col-md-4">
-
+	<div class="col-md-4" id="shots-sidebar">
+		<div id="shot_details_container">
+			<h2></h2>
+			<p id="shot_details_description"></p>
+			<img id="shot_details_picture" src="" />
+			<p id="shot_details_properties_notes"></p>
+			<a id="shot_details_edit" class="btn btn-default" href="#">Edit</a>
+			<h3>Tasks</h3>
+			<ul id="shot_details_tasks"></ul>
+		</div>
+		<div id="task_details_container">
+			<h2></h2>
+			<p id="task_details_shot_name"></p>
+			<select id="task_details_properties_status" class="form-control">
+			</select>
+			<textarea id="task_details_description" class="form-control"></textarea>
+		</div>
 	</div><!--/end col-md-3 -->
 {% endblock %}
 
@@ -119,10 +74,31 @@
 	<!--<script type="text/javascript" src="//cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.js"></script>
 -->
 	<script type="text/javascript">
+
 		$(document).ready(function(){
 
-			function render_status_label(status) {
-				switch(status) {
+			function render_status_options(status) {
+				var selected = false;
+				var options = []
+
+				statuses = ['in_progress', 'final1', 'final2', 'cbb', 'todo', 'review']
+				$.each(statuses, function(key, value) {
+					selected = false;
+					if (status === value) {
+						selected = true;
+					};
+					option = $("<option />", {
+						value: value,
+						text: value,
+						selected: selected
+					});
+					options.push(option);
+				});
+				return options;
+			}
+
+			function render_status_label(task) {
+				switch(task.status) {
 					case 'in-progress':
 						label_class = 'warning';
 						label_text = 'In progress';
@@ -139,16 +115,16 @@
 						return "";
 					default:
 						label_class = 'default';
-						label_text = status;
+						label_text = task.status;
 						break
 				}
-				return tag = '<span class="label label-'+label_class+'">'+label_text+'</span>'
+				return tag = '<span task-view-url="' + task.url_view + '" class="load-task-view label label-'+label_class+'">'+label_text+'</span>'
 			}
 
-			$('#shots').dataTable({
+			var shots_table = $('#shots').DataTable({
 				"paging": false,
 				"order": [[ 0, "asc" ]],
-				"ajax": "/nodes/shots.json",
+				"ajax": "/nodes/shots/index.json",
 				"columns": [
 					{"data": "_id"},
 					{"data": "order"},
@@ -201,10 +177,66 @@
 						$('td', row).eq(7).html(render_status_label(data.tasks.fx_smoke));
 					}
 
-					var edit_tag = '<a class="btn btn-default btn-xs" href="' + data.url_edit + '"><i class="glyphicon glyphicon-edit"></i> Edit</a>';
-					$('td', row).eq(8).html(edit_tag);
+					var view_tag = '<span class="btn btn-default btn-xs load-shot-view" shot-view-url="' + data.url_view + '"><i class="glyphicon glyphicon-edit"></i> View</span>';
+					$('td', row).eq(8).html(view_tag);
 				}
 			});
+
+		$(document).on("click", ".load-shot-view", function() {
+			shot_view_url = $(this).attr('shot-view-url')
+			$.get(shot_view_url, function(data) {
+				// console.log(data);
+				$('#shot_details_container').show();
+				$('#task_details_container').hide();
+				$('#shots-sidebar h2').text(data['node']['name']);
+				$('#shot_details_description').text(data['node']['description']);
+				$('#shot_details_picture').attr('src', data['node']['picture']);
+				$('#shot_details_properties_notes').text(data['node']['properties']['notes']);
+				$('#shot_details_edit').attr('href', data['node']['url_edit']);
+
+				tasks = [];
+				$.each(data['children'], function(k, v) {
+					tasks.push('<li>' + v['name']+ '</li>');
+					//$('#shot_details_tasks').append('<li>' + v['name']+ '</li>');
+					// $.each(post, function(k, v) {
+					// 	console.log(k, v);
+					// });
+				});
+				$('#shot_details_tasks').html(tasks);
+			});
+		});
+
+		$(document).on("click", ".load-task-view", function() {
+			task_view_url = $(this).attr('task-view-url')
+			$.get(task_view_url, function(data) {
+				$('#shot_details_container').hide();
+				$('#task_details_container').html(data);
+				$('#task_details_container').show();
+				// $('#task_details_container h2').text(data['parent']['name']);
+				// var status = render_status_options(data['node']['properties']['status']);
+				// $('#task_details_properties_status').html(status);
+				// $('#task_details_description').val(data['node']['description']);
+
+			});
+		});
+
+		// $('#shots tbody').on( 'click', 'tr', function () {
+		// 		if ($(this).hasClass('selected')) {
+		// 				$(this).removeClass('selected');
+		// 				$('#shots-sidebar').html('');
+		// 		}
+		// 		else {
+		// 				shots_table.$('tr.selected').removeClass('selected');
+		// 				$(this).addClass('selected');
+		// 				row_data = shots_table.row(this).data()
+		// 				$.get(row_data['url_view'] , function(data) {
+		// 					$('#shots-sidebar').text(data);
+
+		// 				});
+		// 		}
+		// });
+
+
 
 		});
 	</script>
