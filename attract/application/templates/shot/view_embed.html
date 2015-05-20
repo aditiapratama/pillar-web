@@ -7,16 +7,15 @@
   <h2>{{node.name}}</h2>
   <p>{{node.description}}</p>
   <hr/>
+  {% if node.picture_thumbnail %}
+    <a href="{{node.picture_thumbnail}}" class="thumbnail">
+      <img src="{{node.picture_thumbnail}}" alt="{{node.name}}">
+    </a>
+  {% else %}
+    <img src="http://placehold.it/550x250&text=Preview+Image" style="width: 100%">
+  {% endif %}
+  <hr/>
   <div class="row">
-    <div class="col-md-6">
-      {% if node.picture_thumbnail %}
-        <a href="{{node.picture_thumbnail}}" class="thumbnail">
-          <img src="{{node.picture_thumbnail}}" alt="{{node.name}}">
-        </a>
-      {% else %}
-        <img src="http://placehold.it/550x250&text=Preview+Image" style="width: 100%">
-      {% endif %}
-    </div>
     <div class="col-md-6">
       <div class="well">
         <h4>Notes:</h4>
