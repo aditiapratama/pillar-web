@@ -95,11 +95,14 @@
 			function render_status_label(task, task_name) {
 				if (task) {
 					switch(task.status) {
+						case 'todo':
+							label_text = 'ToDo';
+							break;
 						case 'in-progress':
 							label_text = 'In progress';
 							break;
-						case 'todo':
-							label_text = 'ToDo';
+						case 'cbb':
+							label_text = 'Could Be Better';
 							break;
 						case 'review':
 							label_text = 'Review';
