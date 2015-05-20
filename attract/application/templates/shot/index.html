@@ -183,6 +183,11 @@
 				$('#task_details_container').html(data);
 				$('#task_details_container').show();
 			});
+
+			$('.load-task-view').removeClass('active');
+
+			$(this).addClass('active');
+
 		});
 
 		$(document).on("click", ".task-add", function() {

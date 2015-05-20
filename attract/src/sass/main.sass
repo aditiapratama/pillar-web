@@ -226,15 +226,24 @@ $color_status-done: #e7f5d3
 	border: thin solid darken(lightgray, 10%)
 	color: #444
 
+	&.active
+		border: 2px dashed darken(lightgray, 15%)
+
 .label-in-progress
 	background-color: $color_status-in-progress
 	border: thin solid darken($color_status-in-progress, 20%)
 	color: #b86811
 
+	&.active
+		border: 2px dashed darken($color_status-in-progress, 25%)
+
 .label-review
 	background-color: $color_status-review
 	border: thin solid darken($color_status-review, 10%)
-	color: #073763
+	color: #174773
+
+	&.active
+		border: 2px dashed darken($color_status-review, 25%)
 
 .label-done,
 .label-final,
@@ -244,6 +253,12 @@ $color_status-done: #e7f5d3
 	border: thin solid darken($color_status-done, 10%)
 	color: #38761d
 
+	&.active
+		border: 2px dashed darken($color_status-done, 15%)
+
 .label-cbb
 	border: thin solid #A7CA98
 	color: #38761d
+
+	&.active
+		border: 2px dashed darken(#A7CA98, 5%)
