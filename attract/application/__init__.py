@@ -160,6 +160,9 @@ def handle_invalid_usage(error):
 
 @app.context_processor
 def inject_node_types():
+    if current_user.is_anonymous:
+        return dict(node_types={})
+
     api = SystemUtility.attract_api()
 
     types = NodeType.all(api=api)['_items']
