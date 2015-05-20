@@ -148,9 +148,14 @@ table td:nth-child(3)
 	visibility: hidden
 	margin: 0 auto
 	text-align: center
-	width: 100%
+	width: 90%
 	cursor: pointer
 	border: thin dashed gray
+
+	position: absolute
+	top: 50%
+	transform: translateY(-50%)
+
 	&:hover
 		background-color: white
 		border: thin dashed gray
@@ -162,10 +167,14 @@ table td:nth-child(3)
 .load-task-view
 	cursor: pointer
 	display: block
-	height: 80%
+	width: 90%
 	font-size: .9em
 	line-height: 1.5em
 	margin: 0 auto
+
+	position: absolute
+	top: 50%
+	transform: translateY(-50%)
 
 	&:hover
 		opacity: .8
