@@ -3,39 +3,30 @@
 
 
 {% block body %}
-<div class="col-md-9">
+<div class="col-md-12">
   <h2>{{node.name}}</h2>
   <p>{{node.description}}</p>
-  <hr/>
   {% if node.picture_thumbnail %}
-    <a href="{{node.picture_thumbnail}}" class="thumbnail">
-      <img src="{{node.picture_thumbnail}}" alt="{{node.name}}">
+    <a href="{{node.picture_thumbnail}}">
+      <img src="{{node.picture_thumbnail}}" style="width: 100%" alt="{{node.name}}">
     </a>
   {% else %}
     <img src="http://placehold.it/550x250&text=Preview+Image" style="width: 100%">
   {% endif %}
-  <hr/>
   <div class="row">
     <div class="col-md-6">
-      <div class="well">
-        <h4>Notes:</h4>
-        <p>
-          {% if node.properties.notes %}
-            {{node.properties.notes}}
-          {% else %}
-            No notes at the moment
-          {% endif %}
-        </p>
-      </div>
+      <h4>Notes:</h4>
+      <p>
+        {% if node.properties.notes %}
+          {{node.properties.notes}}
+        {% else %}
+          No notes at the moment
+        {% endif %}
+      </p>
     </div>
   </div>
   <hr/>
   <div class="row">
-    <div class="col-md-6">
-      <p>Duration: {{node.properties.cut_out - node.properties.cut_in}}</p>
-      <p>Cut In: {{node.properties.cut_in}}</p>
-      <p>Cut Out: {{node.properties.cut_out}}</p>
-    </div>
     <div class="col-md-6">
       {% if parent %}
       <p>Scene: <a href="{{url_for('nodes.view', node_id=parent._id)}}">{{parent.name}}</a></p>
@@ -50,9 +41,14 @@
       {% endfor %}
       </ul>
     </div>
+    <div class="col-md-6">
+      <p>Duration: {{node.properties.cut_out - node.properties.cut_in}}</p>
+      <p>Cut In: {{node.properties.cut_in}}</p>
+      <p>Cut Out: {{node.properties.cut_out}}</p>
+    </div>
   </div>
   <div class="row">
-    <div class="col-md-2 col-md-push-10">
+    <div class="col-md-6 col-md-push-6">
       <a class="btn btn-default btn-info btn-block btn-s" href="{{url_for('nodes.edit', node_id=node['_id'])}}"><i class="glyphicon glyphicon-edit"></i> Edit Shot</a>
     </div>
   </div>
