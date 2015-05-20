@@ -137,3 +137,36 @@ table td:nth-child(2)
 table td:nth-child(3)
 	//max-width: 300px
 	+text-overflow-ellipsis
+
+
+/* Shots List */
+.table td
+	position: relative
+
+.task-add
+	display: none
+	margin: 0 auto
+	text-align: center
+	width: 100%
+	cursor: pointer
+	border: thin dashed gray
+	&:hover
+		background-color: white
+
+.table td:hover
+	.task-add
+		display: block
+
+.load-task-view
+	cursor: pointer
+	display: block
+	height: 80%
+	font-size: .9em
+	line-height: 1.5em
+	margin: 0 auto
+	&:hover
+		opacity: .8
+
+.load-shot-view
+	display: block
+
