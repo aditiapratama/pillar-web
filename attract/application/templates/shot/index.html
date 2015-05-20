@@ -9,28 +9,26 @@
 
 
 {% block body %}
-<div class="col-md-8">
-	<div class="row">
-		<div class="col-md-12">
-			<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-hover" id="shots">
-				<thead>
-					<tr>
-						<th></th>
-						<th></th>
-						<th width="15%"></th>
-						<th>Name</th>
-						<th>Description</th>
-						<th>Animation</th>
-						<th>Lighting</th>
-						<th>FX Hair</th>
-						<th>FX Grass</th>
-						<th>FX Smoke</th>
-						<th width="8%"></th>
-					</tr>
-				</thead>
-			</table>
-		</div>
-	</div>
+<div class="col-md-8" id="shots-main">
+
+	<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-hover" id="shots">
+		<thead>
+			<tr>
+				<th></th>
+				<th></th>
+				<th width="15%"></th>
+				<th>Name</th>
+				<th>Description</th>
+				<th>Animation</th>
+				<th>Lighting</th>
+				<th>FX Hair</th>
+				<th>FX Grass</th>
+				<th>FX Smoke</th>
+				<th width="8%"></th>
+			</tr>
+		</thead>
+	</table>
+
 
 	{#
 	<div class="row">
@@ -43,11 +41,9 @@
 		</div>
 	</div>
 	#}
-	<div class="row">
-		<div class="col-md-12">
-			<a href="{{url_for('nodes.add', node_type_id=node_type['_id'])}}" class="pull-right btn btn-default">Add</a>
-		</div>
-	</div>
+
+	<a href="{{url_for('nodes.add', node_type_id=node_type['_id'])}}" class="pull-right btn btn-default">Add</a>
+
 </div>
 
 {% endblock %}

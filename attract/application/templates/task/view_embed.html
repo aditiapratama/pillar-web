@@ -5,7 +5,6 @@
 
 {% block body %}
 <div class="col-md-12">
-	<h2>{{node.name}}</h2>
 	<div class="row">
 		<div class="col-md-12">
 			{% if node.picture_thumbnail %}
@@ -17,6 +16,7 @@
 			{% endif %}
 		</div>
 		<div class="col-md-12">
+			<h3>{{node.name}}</h3>
 			<p>{{node.description}}</p>
 		</div>
 	</div>

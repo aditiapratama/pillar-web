@@ -78,17 +78,16 @@ html(lang="en")
 										| Log in
 								| {% endif %}
 		.container-fluid
-			.row
-				.col-md-12
-					| {% with messages = get_flashed_messages() %}
-					|		{% if messages %}
-					div
-						|	{% for message in messages %}
-						.alert.alert-success(role="alert")
-							| {{message}}
-						|	{% endfor %}
-					|		{% endif %}
-					| {% endwith %}
+
+			| {% with messages = get_flashed_messages() %}
+			|		{% if messages %}
+			div
+				|	{% for message in messages %}
+				.alert.alert-success(role="alert")
+					| {{message}}
+				|	{% endfor %}
+			|		{% endif %}
+			| {% endwith %}
 
 			.row
 				| {% block body %}{% endblock %}
