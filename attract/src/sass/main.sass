@@ -144,7 +144,8 @@ table td:nth-child(3)
 	position: relative
 
 .task-add
-	display: none
+	display: block
+	visibility: hidden
 	margin: 0 auto
 	text-align: center
 	width: 100%
@@ -152,10 +153,11 @@ table td:nth-child(3)
 	border: thin dashed gray
 	&:hover
 		background-color: white
+		border: thin dashed gray
 
 .table td:hover
 	.task-add
-		display: block
+		visibility: visible
 
 .load-task-view
 	cursor: pointer
@@ -164,9 +166,47 @@ table td:nth-child(3)
 	font-size: .9em
 	line-height: 1.5em
 	margin: 0 auto
+
 	&:hover
 		opacity: .8
 
 .load-shot-view
 	display: block
+	visibility: hidden
 
+.table tr:hover
+	.load-shot-view
+		visibility: visible
+
+/* Label Status */
+$color_status-todo: lightgray
+$color_status-in-progress: #fff2cc
+$color_status-review: #e4f5f9
+$color_status-done: #e7f5d3
+
+.label-todo
+	background-color: lightgray
+	border: thin solid darken(lightgray, 10%)
+	color: #444
+
+.label-in-progress
+	background-color: $color_status-in-progress
+	border: thin solid darken($color_status-in-progress, 20%)
+	color: #b86811
+
+.label-review
+	background-color: $color_status-review
+	border: thin solid darken($color_status-review, 10%)
+	color: #073763
+
+.label-done,
+.label-final,
+.label-final1,
+.label-final2
+	background-color: $color_status-done
+	border: thin solid darken($color_status-done, 10%)
+	color: #38761d
+
+.label-cbb
+	border: thin solid #A7CA98
+	color: #38761d

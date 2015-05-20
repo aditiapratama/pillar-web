@@ -96,25 +96,21 @@
 				if (task) {
 					switch(task.status) {
 						case 'in-progress':
-							label_class = 'warning';
 							label_text = 'In progress';
 							break;
 						case 'todo':
-							label_class = 'info';
-							label_text = 'Todo';
+							label_text = 'ToDo';
 							break;
 						case 'done':
-							label_class = 'success';
 							label_text = 'Done';
 							break;
 						default:
-							label_class = 'default';
 							label_text = task.status;
 							break
 					}
-					return tag = '<span task-view-url="' + task.url_view + '" class="load-task-view label label-'+label_class+'">'+label_text+'</span>'
+					return tag = '<span task-view-url="' + task.url_view + '" class="load-task-view label label-'+ task.status +'">'+ label_text +'</span>'
 				} else {
-					return '<span class="btn btn-default btn-xs task-add" task-name="'+task_name+'">Add</span>';
+					return '<span class="btn btn-default btn-xs task-add" title="Add Task" task-name="'+task_name+'">+ Add</span>';
 				}
 
 			}
