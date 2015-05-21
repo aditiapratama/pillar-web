@@ -221,7 +221,7 @@ def get_node_form(node_type):
             if schema_prop['type']=='dict':
                 build_form(schema_prop['schema'],
                            form_prop['schema'],
-                           "{0}->".format(prop_name))
+                           "{0}__".format(prop_name))
                 continue
             if schema_prop['type'] == 'list' and 'items' in form_prop:
                 for item in form_prop['items']:
@@ -329,7 +329,7 @@ def process_node_form(form, node_id=None, node_type=None, user=None):
                     update_data(
                         schema_prop['schema'],
                         form_prop['schema'],
-                        "{0}->".format(prop_name))
+                        "{0}__".format(prop_name))
                     continue
                 data = form[prop_name].data
                 if schema_prop['type'] == 'dict':
@@ -345,7 +345,7 @@ def process_node_form(form, node_id=None, node_type=None, user=None):
                 else:
                     if pr in form:
                         data = form[prop_name].data
-                path = prop_name.split('->')
+                path = prop_name.split('__')
                 if len(path)>1:
                     recursive_prop = recursive(
                         path, node.properties.to_dict(), data)
@@ -388,7 +388,7 @@ def process_node_form(form, node_id=None, node_type=None, user=None):
                     get_data(
                         schema_prop['schema'],
                         form_prop['schema'],
-                        "{0}->".format(prop_name))
+                        "{0}__".format(prop_name))
                     continue
                 data = form[prop_name].data
                 if schema_prop['type'] == 'media':
@@ -405,7 +405,7 @@ def process_node_form(form, node_id=None, node_type=None, user=None):
                         data = []
                 if schema_prop['type'] == 'datetime':
                     data = datetime.strftime(data, RFC1123_DATE_FORMAT)
-                path = prop_name.split('->')
+                path = prop_name.split('__')
                 if len(path) > 1:
                     prop['properties'] = recursive(path, prop['properties'], data)
                 else:

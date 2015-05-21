@@ -27,6 +27,8 @@ from application import SystemUtility
 from flask.ext.login import login_required
 from flask.ext.login import current_user
 
+from jinja2.exceptions import TemplateNotFound
+
 
 RFC1123_DATE_FORMAT = '%a, %d %b %Y %H:%M:%S GMT'
 
@@ -141,7 +143,7 @@ def shots_index():
             'name': node.name,
             'description': node.description,
             'url_view': url_for('nodes.view', node_id=node._id, embed=1),
-            'url_edit': url_for('nodes.edit', node_id=node._id),
+            'url_edit': url_for('nodes.edit', node_id=node._id, embed=1),
             'tasks': {
                 'animation': None,
                 'lighting': None,
@@ -180,6 +182,7 @@ def shots_index():
                 'name': task.name,
                 'status': task.properties.status,
                 'url_view': url_for('nodes.view', node_id=task._id, embed=1),
+                'url_edit': url_for('nodes.edit', node_id=task._id, embed=1),
                 }
 
 
@@ -323,7 +326,7 @@ def add(node_type_id):
         type_names=type_names())
 
 
-# XXX Hack to create ta task with a single click
+# XXX Hack to create a task with a single click
 @nodes.route("/tasks/add", methods=['POST'])
 @login_required
 def task_add():
@@ -358,6 +361,29 @@ def task_add():
         }
     post = node.post(prop, api=api)
     return jsonify(node.to_dict())
+
+
+# XXX Hack to edit tasks via AJAX
+@nodes.route("/tasks/edit", methods=['POST'])
+@login_required
+def task_edit():
+    """We want to be able to edit the following properties:
+    - status
+    - owners
+    - description
+    - picture (optional)
+    """
+    api = SystemUtility.attract_api()
+    task_id = request.form['task_id']
+
+    task = Node.find(task_id, api=api)
+    task.description = request.form['task_description']
+    task.properties.status = request.form['task_status']
+    task.properties.owners.users = request.form.getlist('task_owners_users[]')
+
+    task.update(api=api)
+
+    return jsonify(task.to_dict())
 
 
 @nodes.route("/<node_id>/edit", methods=['GET', 'POST'])
@@ -408,7 +434,7 @@ def edit(node_id):
                     form_prop['schema'],
                     prop_dict[prop_name],
                     form,
-                    "{0}->".format(prop_name))
+                    "{0}__".format(prop_name))
             else:
                 try:
                     data = prop_dict[prop]
@@ -423,12 +449,33 @@ def edit(node_id):
     prop_dict = node.properties.to_dict()
     set_properties(node_schema, form_schema, prop_dict, form)
 
-    return render_template('nodes/edit.html',
-        node=node,
-        form=form,
-        errors=form.errors,
-        error=error,
-        type_names=type_names())
+
+    embed_string = ''
+    # Check if we want to embed the content via an AJAX call
+    if request.args.get('embed'):
+        if request.args.get('embed') == '1':
+            # Define the prefix for the embedded template
+            embed_string = '_embed'
+
+    template = '{0}/edit{1}.html'.format(node_type['name'], embed_string)
+
+    # We should more simply check if the template file actually exsists on
+    # the filesystem level
+    try:
+        return render_template(
+                template,
+                node=node,
+                form=form,
+                errors=form.errors,
+                error=error)
+    except TemplateNotFound:
+        template = 'nodes/edit{1}.html'.format(node_type['name'], embed_string)
+        return render_template(
+                template,
+                node=node,
+                form=form,
+                errors=form.errors,
+                error=error)
 
 
 @nodes.route("/<node_id>/delete", methods=['GET', 'POST'])
