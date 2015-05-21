@@ -95,8 +95,11 @@
 						case 'todo':
 							label_text = 'ToDo';
 							break;
-						case 'in-progress':
+						case 'in_progress':
 							label_text = 'In progress';
+							break;
+						case 'on_hold':
+							label_text = 'On Hold';
 							break;
 						case 'cbb':
 							label_text = 'Could Be Better';
@@ -104,8 +107,11 @@
 						case 'review':
 							label_text = 'Review';
 							break;
-						case 'done':
-							label_text = 'Done';
+						case 'approved':
+							label_text = 'Approved';
+							break;
+						case 'final':
+							label_text = 'Final';
 							break;
 						default:
 							label_text = task.status;
