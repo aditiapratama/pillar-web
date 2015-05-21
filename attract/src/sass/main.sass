@@ -248,7 +248,7 @@ $color_status-done: #e7f5d3
 	&.active
 		border: 2px dashed darken(lightgray, 15%)
 
-.label-in-progress
+.label-in-progress, .label-in_progress, .label-on_hold
 	background-color: $color_status-in-progress
 	border: thin solid darken($color_status-in-progress, 20%)
 	color: #b86811
@@ -265,6 +265,7 @@ $color_status-done: #e7f5d3
 		border: 2px dashed darken($color_status-review, 25%)
 
 .label-done,
+.label-approved,
 .label-final,
 .label-final1,
 .label-final2
