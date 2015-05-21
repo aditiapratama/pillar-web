@@ -59,6 +59,7 @@ def load_user(userid):
         login_user = userClass(userid)
         login_user.email = user['email']
         login_user.objectid = user['_id']
+        login_user.permissions = user['computed_permissions']
         try:
             login_user.first_name = user['first_name']
         except KeyError:
@@ -79,6 +80,7 @@ class userClass(UserMixin):
         self.first_name = None
         self.last_name = None
         self.objectid = None
+        self.permissions = None
 
 
 class SystemUtility():
@@ -157,6 +159,7 @@ def handle_invalid_usage(error):
     check for user authorization.
     """
     return redirect(url_for('users.login'))
+
 
 @app.context_processor
 def inject_node_types():

@@ -42,8 +42,9 @@
 	</div>
 	#}
 
+    {% if 'POST' in current_user.permissions.type_mixed_permissions[node_type['_id']] %}
 	<a href="{{url_for('nodes.add', node_type_id=node_type['_id'])}}" class="pull-right btn btn-default">Add</a>
-
+    {% endif %}
 </div>
 
 {% endblock %}
