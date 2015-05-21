@@ -117,9 +117,9 @@
 							label_text = task.status;
 							break
 					}
-					return tag = '<span task-view-url="' + task.url_view + '" class="load-task-view label label-'+ task.status +'">'+ label_text +'</span>'
+					return tag = '<span task-edit-url="' + task.url_edit + '" class="load-task-view label label-'+ task.status +'">'+ label_text +'</span>'
 				} else {
-					return '<span class="btn btn-default btn-xs task-add" title="Add Task" task-name="'+task_name+'">+ Add</span>';
+					return '<span class="btn btn-default btn-xs task-add" title="Add Task" task-name="'+ task_name + '">+ Add</span>';
 				}
 
 			}
@@ -180,7 +180,7 @@
 		});
 
 		$(document).on("click", ".load-task-view", function() {
-			task_view_url = $(this).attr('task-view-url')
+			task_view_url = $(this).attr('task-edit-url')
 			$.get(task_view_url, function(data) {
 				$('#shot_details_container').hide();
 				$('#task_details_container').html(data);
@@ -193,8 +193,8 @@
 
 		});
 
+		// Add a task to a shot by simply clicking on a table cell
 		$(document).on("click", ".task-add", function() {
-
 			var row = shots_table.row($(this).closest('tr'))
 			row_data = row.data();
 			task_name = $(this).attr('task-name');
@@ -208,7 +208,6 @@
 						'url_view': '/nodes/' + node_data['_id'] + '/view?embed=1'}
 					shots_table.row(row).data(row_data).draw();
 			});
-
 		});
 
 
