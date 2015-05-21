@@ -10,5 +10,6 @@ node_modules/
 .sass-cache/
 *.css.map
 attract/application/static/assets/css/main.css
+attract/application/templates/**/*
 
 attract/application/static/storage/
