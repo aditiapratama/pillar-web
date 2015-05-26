@@ -1,3 +1,9 @@
+/* Label Status */
+$color_status-todo: lightgray
+$color_status-in-progress: #fff2cc
+$color_status-review: #e4f5f9
+$color_status-done: #e7f5d3
+
 =text-overflow-ellipsis
 	overflow: hidden
 	white-space: nowrap
@@ -187,6 +193,52 @@ table td:nth-child(3)
 	& .action_cancel
 		display: none
 
+#field_status
+	& .form-control
+		text-transform: capitalize
+		&:focus
+			box-shadow: none !important
+
+		&.todo
+			background-color: lightgray
+			border: thin solid darken(lightgray, 10%)
+			color: #444
+
+		&.in-progress,
+		&.in_progress,
+		&.on_hold
+			background-color: $color_status-in-progress
+			border: thin solid darken($color_status-in-progress, 20%)
+			color: #b86811
+
+		&.review
+			background-color: $color_status-review
+			border: thin solid darken($color_status-review, 10%)
+			color: #174773
+
+		&.done,
+		&.approved,
+		&.final,
+		&.final1,
+		&.final2
+			background-color: $color_status-done
+			border: thin solid darken($color_status-done, 10%)
+			color: #38761d
+
+		&.cbb
+			border: thin solid #A7CA98
+			color: #38761d
+
+		&.conflict
+			border: thin solid crimson !important
+			color: crimson !important
+			font-weight: bold
+			background-color: white !important
+
+#field_owners__users
+	.form-control
+		min-height: 150px
+
 #shots-sidebar_edit
 	text-transform: capitalize
 
@@ -285,11 +337,7 @@ table td:nth-child(3)
 	.load-shot-view
 		visibility: visible
 
-/* Label Status */
-$color_status-todo: lightgray
-$color_status-in-progress: #fff2cc
-$color_status-review: #e4f5f9
-$color_status-done: #e7f5d3
+
 
 .label-todo
 	background-color: lightgray
@@ -345,3 +393,4 @@ $color_status-done: #e7f5d3
 
 	&.active
 		border: 2px dashed crimson !important
+
