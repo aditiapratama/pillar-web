@@ -29,13 +29,11 @@
 	{% endif %}
 	<form method="POST" enctype="multipart/form-data" action="{{url_for('nodes.edit', node_id=node._id)}}">
 
-			<div class="pull-left">
-				<h2>{{node.name}}</h2>
-					<a href="{{url_for('nodes.edit', node_id=node._id)}}">
-						<i class="glyphicon glyphicon-edit pull-right"></i>
-					</a>
-				</h2>
-			</div>
+			<h2>{{node.name}}
+				<a href="{{url_for('nodes.edit', node_id=node._id)}}">
+					<i class="glyphicon glyphicon-edit pull-right"></i>
+				</a>
+			</h2>
 
 			<div class="pull-right">
 				<h2>
@@ -121,6 +119,13 @@
 		.always(function() {
 			//$('.task-update').delay(1000).html('<i class="glyphicon glyphicon-ok"></i> Update');
 		})
+	});
+
+	$("select#status").addClass($("select#status :selected").val());
+
+	$("select#status").on("change",function(){
+		$(this).removeClass();
+		$(this).addClass("form-control " + $(this).val());
 	});
 
 </script>
