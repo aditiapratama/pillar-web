@@ -91,8 +91,7 @@
 
 		var table = $('#shots').DataTable();
 
-		table.row(task_parent).data().tasks[task_name]['status'] = task_status;
-		table.draw();
+
 
 		$.post("/nodes/tasks/edit", {
 			task_id: task_id,
@@ -109,9 +108,10 @@
 				// shots_table.row(row).data(row_data).draw();
 
 		})
-		.done(function() {
-			console.log('success');
+		.done(function(task_data) {
 			$('.task-update').fadeToggle('.task-success').delay(1500).fadeToggle('.task-update');
+			table.row(task_parent).data().tasks[task_name]['status'] = task_data['properties']['status'];
+			table.draw();
 		})
 		.fail(function() {
 			$('.task-update').fadeToggle('.task-error').delay(1500).fadeToggle('.task-update');
