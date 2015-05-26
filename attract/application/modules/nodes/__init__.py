@@ -386,6 +386,31 @@ def task_edit():
     return jsonify(task.to_dict())
 
 
+# XXX Hack to edit tasks via AJAX
+@nodes.route("/shots/edit", methods=['POST'])
+@login_required
+def shot_edit():
+    """We want to be able to edit the following properties:
+    - notes
+    - status
+    - cut in
+    - cut out
+    - picture (optional)
+    """
+    api = SystemUtility.attract_api()
+    shot_id = request.form['shot_id']
+
+    shot = Node.find(shot_id, api=api)
+    shot.properties.notes = request.form['shot_notes']
+    shot.properties.status = request.form['shot_status']
+    shot.properties.cut_in = int(request.form['shot_cut_in'])
+    shot.properties.cut_out = int(request.form['shot_cut_out'])
+
+    shot.update(api=api)
+
+    return jsonify(shot.to_dict())
+
+
 @nodes.route("/<node_id>/edit", methods=['GET', 'POST'])
 @login_required
 def edit(node_id):
