@@ -29,12 +29,13 @@
 	{% endif %}
 	<form method="POST" enctype="multipart/form-data" action="{{url_for('nodes.edit', node_id=node._id)}}">
 
+			<div class="pull-left">
 				<h2>{{node.name}}</h2>
 					<a href="{{url_for('nodes.edit', node_id=node._id)}}">
 						<i class="glyphicon glyphicon-edit pull-right"></i>
 					</a>
 				</h2>
-
+			</div>
 
 			<div class="pull-right">
 				<h2>
@@ -43,7 +44,6 @@
 			</div>
 
 			<div class="clearfix"></div>
-
 
 			{% for field in form %}
 				{% if field.name == 'csrf_token' %}
@@ -75,7 +75,7 @@
 </div>
 {{ render_file_uploader() }}
 
-	<script type="text/javascript" src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
 
 <script type="text/javascript">
 
