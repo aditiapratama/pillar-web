@@ -29,8 +29,6 @@
 	{% endif %}
 	<form method="POST" enctype="multipart/form-data" action="{{url_for('nodes.edit', node_id=node._id)}}">
 
-				<h2>{{ node._id }}</h2>
-				<h2>{{ node.parent }}</h2>
 				<h2>{{node.name}}</h2>
 					<a href="{{url_for('nodes.edit', node_id=node._id)}}">
 						<i class="glyphicon glyphicon-edit pull-right"></i>
@@ -81,17 +79,22 @@
 
 <script type="text/javascript">
 
-	$(document).on("click", ".task-update", function() {
+	$( "[task-id^='{{node._id}}']").off( "click" );
 
-		var table = $('#shots').DataTable();
-		//console.log( table.row( '{{ node.parent }}' ).data() );
-		table.row('#row_{{ node.parent }}').nodes().to$().addClass( 'danger' );
-		//table.row('#row_{{ node.parent }}').data(2).to$().addClass( 'danger' );
+	$(document).on("click", "[task-id^='{{node._id}}']", function() {
 
 		task_id = $(this).attr('task-id');
 		task_description = $('#description').val();
 		task_status = $('#status').val();
 		task_owners_users = $("#owners__users").val() || [];
+		task_name = '{{ node.name }}';
+		task_parent = '#row_{{ node.parent }}';
+
+		var table = $('#shots').DataTable();
+
+		table.row(task_parent).data().tasks[task_name]['status'] = task_status;
+		table.draw();
+
 		$.post("/nodes/tasks/edit", {
 			task_id: task_id,
 			task_status: task_status,
@@ -111,12 +114,9 @@
 			$('.task-update').fadeToggle('.task-success').delay(1500).fadeToggle('.task-update');
 		})
 		.fail(function() {
-			console.log('fail');
 			$('.task-update').fadeToggle('.task-error').delay(1500).fadeToggle('.task-update');
 		})
 		.always(function() {
-			console.log('always');
-
 			//$('.task-update').delay(1000).html('<i class="glyphicon glyphicon-ok"></i> Update');
 		})
 	});
