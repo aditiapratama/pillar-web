@@ -28,18 +28,22 @@
 		</a>
 	{% endif %}
 	<form method="POST" enctype="multipart/form-data" action="{{url_for('nodes.edit', node_id=node._id)}}">
-			<div class="pull-left">
-				<h2>{{ node.name }}</h2>
-			</div>
+
+				<h2>{{ node.name }}
+					<a href="{{url_for('nodes.edit', node_id=node._id)}}">
+						<i class="glyphicon glyphicon-edit pull-right"></i>
+					</a>
+				</h2>
+
 
 			<div class="pull-right">
 				<h2>
-				<input class="btn btn-default btn-success" type="submit" value="Update task">
+				<input class="btn btn-success action_submit" type="submit" value="Update task">
 			</h2>
 			</div>
 
 			<div class="clearfix"></div>
-			<hr/>
+
 
 			{% for field in form %}
 				{% if field.name == 'csrf_token' %}
@@ -59,9 +63,11 @@
 				<i class="glyphicon glyphicon-trash"></i>
 			</a>
 			<div class="pull-right">
-				<a class="btn btn-default" href="#">Cancel</a>
-				<input class="btn btn-default btn-success" type="submit" value="Update {{node.node_type.name}}">
-				<span class="btn btn-default task-update" task-id="{{node._id}}">Update AJAX</span>
+				<a class="btn btn-default action_cancel" href="#">Cancel</a>
+				<input class="btn btn-success action_submit" type="submit" value="Update {{node.node_type.name}}">
+				<span class="btn btn-success task-update" task-id="{{node._id}}">
+					<i class="glyphicon glyphicon-ok"></i> Update
+				</span>
 			</div>
 		</form>
 </div>

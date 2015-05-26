@@ -166,7 +166,7 @@ table td:nth-child(3)
 	overflow-x: hidden
 	padding: 15px 0 15px 0
 
-#shots-sidebar_edit
+#shots-sidebar
 
 	/* First hide everything */
 	& [id^="field_"]
@@ -177,6 +177,10 @@ table td:nth-child(3)
 	& #field_description,
 	& #field_owners__users,
 		display: block
+
+	& .action_submit,
+	& .action_cancel
+		display: none
 
 .node__image_preview
 	width: 100%
