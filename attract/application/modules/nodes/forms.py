@@ -218,7 +218,7 @@ def get_node_form(node_type):
             if 'visible' in form_prop and not form_prop['visible']:
                 continue
             prop_name = "{0}{1}".format(prefix, prop)
-            if schema_prop['type']=='dict':
+            if schema_prop['type'] == 'dict':
                 build_form(schema_prop['schema'],
                            form_prop['schema'],
                            "{0}__".format(prop_name))
@@ -325,7 +325,7 @@ def process_node_form(form, node_id=None, node_type=None, user=None):
                 if 'visible' in form_prop and not form_prop['visible']:
                     continue
                 prop_name = "{0}{1}".format(prefix, pr)
-                if schema_prop['type']=='dict':
+                if schema_prop['type'] == 'dict':
                     update_data(
                         schema_prop['schema'],
                         form_prop['schema'],
@@ -346,7 +346,7 @@ def process_node_form(form, node_id=None, node_type=None, user=None):
                     if pr in form:
                         data = form[prop_name].data
                 path = prop_name.split('__')
-                if len(path)>1:
+                if len(path) > 1:
                     recursive_prop = recursive(
                         path, node.properties.to_dict(), data)
                     node.properties = recursive_prop

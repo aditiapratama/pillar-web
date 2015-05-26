@@ -384,8 +384,60 @@ def task_edit():
 
     task = Node.find(task_id, api=api)
     task.description = request.form['task_description']
+    if request.form['task_revision']:
+        task.properties.revision = int(request.form['task_revision'])
     task.properties.status = request.form['task_status']
     task.properties.owners.users = request.form.getlist('task_owners_users[]')
+
+    siblings = Node.all({
+        'where': 'parent==ObjectId("%s")' % task.parent,
+        'embedded': '{"picture":1, "user":1}'}, api=api)
+
+    def check_conflict(task_current, task_sibling):
+        return revsion_conflict[task_current.name](task_current, task_sibling)
+
+    def task_animation(task_current, task_sibling):
+        if task_sibling.name in ['fx_hair', 'fx_smoke', 'fx_grass', 'animation']:
+            if task_current.properties.revision > task_sibling.properties.revision:
+                return True
+        return False
+
+    def task_lighting(task_current, task_sibling):
+        if task_sibling.name in ['fx_hair', 'fx_smoke', 'fx_grass', 'animation']:
+            if task_current.properties.revision < task_sibling.properties.revision:
+                return True
+        return False
+
+    def task_fx_hair(task_current, task_sibling):
+        if task_sibling.name in ['animation']:
+            if task_current.properties.revision < task_sibling.properties.revision:
+                return True
+        if task_sibling.name in ['lighting']:
+            if task_current.properties.revision > task_sibling.properties.revision:
+                return True
+        return False
+
+
+    def task_fx_grass(task_current, task_sibling):
+        pass
+
+    def task_fx_smoke(task_current, task_sibling):
+        pass
+
+    revsion_conflict = {
+        'animation': task_animation,
+        'lighting': task_lighting,
+        'fx_hair': task_fx_hair,
+        'fx_grass': task_fx_grass,
+        'fx_smoke': task_fx_smoke
+    }
+
+    if task.properties.revision:
+        for sibling in siblings._items:
+            if sibling.properties.revision and sibling._id != task_id:
+                if check_conflict(task, sibling) == True:
+                    task.properties.status = 'conflict'
+                    break
 
     task.update(api=api)
 
