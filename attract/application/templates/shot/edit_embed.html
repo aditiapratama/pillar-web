@@ -1,0 +1,100 @@
+{% from '_macros/_file_uploader.html' import render_file_uploader %}
+
+
+{% block body %}
+{% with errors = errors %}
+	{% if errors %}
+		{% for field in errors %}
+			<div class="alert alert-danger" role="alert">
+					<strong>{{field}}</strong>
+					{% for message in errors[field] %}
+						{{message}}|
+					{% endfor %}
+			</div>
+		{% endfor %}
+	{% endif %}
+{% endwith %}
+
+{% if error!="" %}
+	<div class="alert alert-danger" role="alert">
+		{{error}}
+	</div>
+{% endif %}
+
+<div class="col-md-12" id="shots-sidebar_edit">
+	{% if node.picture_thumbnail %}
+		<a href="{{node.picture_thumbnail}}">
+			<img src="{{node.picture_thumbnail}}" alt="{{node.name}}" class="node__image_preview">
+		</a>
+	{% endif %}
+	<form method="POST" enctype="multipart/form-data" action="{{url_for('nodes.edit', node_id=node._id)}}">
+
+				<h2>{{ node.name }}
+					<a href="{{url_for('nodes.edit', node_id=node._id)}}">
+						<i class="glyphicon glyphicon-edit pull-right"></i>
+					</a>
+				</h2>
+				<p>{{node.description}}</p>
+
+
+			<div class="pull-right">
+				<h2>
+				<input class="btn btn-success action_submit" type="submit" value="Update shot">
+			</h2>
+			</div>
+
+			<div class="clearfix"></div>
+
+
+			{% for field in form %}
+				{% if field.name == 'csrf_token' %}
+					{{ field }}
+				{% else %}
+					{% if field.type == 'HiddenField' %}
+							{{ field }}
+					{% else %}
+						<div class="form-group" id="field_{{ field.name }}">
+							{{ field.label }}
+							{{ field(class='form-control') }}
+						</div>
+					{% endif %}
+				{% endif %}
+			{% endfor %}
+			<a class="btn btn-danger" href="{{url_for('nodes.delete', node_id=node._id)}}">
+				<i class="glyphicon glyphicon-trash"></i>
+			</a>
+			<div class="pull-right">
+				<a class="btn btn-default action_cancel" href="#">Cancel</a>
+				<input class="btn btn-success action_submit" type="submit" value="Update {{node.node_type.name}}">
+				<span class="btn btn-success shot-update" shot-id="{{node._id}}">
+					<i class="glyphicon glyphicon-ok"></i> Update
+				</span>
+			</div>
+		</form>
+</div>
+{{ render_file_uploader() }}
+
+<script type="text/javascript">
+
+	$(document).on("click", ".shot-update", function() {
+		shot_id = $(this).attr('shot-id');
+		shot_notes = $('#notes').val();
+		shot_status = $('#status').val();
+		shot_cut_in = $('#cut_in').val();
+		shot_cut_out = $('#cut_out').val();
+		$.post("/nodes/shots/edit", {
+			shot_id: shot_id,
+			shot_status: shot_status,
+			shot_notes: shot_notes,
+			shot_cut_in: shot_cut_in,
+			shot_cut_out: shot_cut_out},
+			function(node_data) {
+				console.log('Task updated');
+		});
+	});
+
+</script>
+
+{% endblock %}
+
+
