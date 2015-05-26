@@ -29,7 +29,9 @@
 	{% endif %}
 	<form method="POST" enctype="multipart/form-data" action="{{url_for('nodes.edit', node_id=node._id)}}">
 
-				<h2>{{ node.name }}
+				<h2>{{ node._id }}</h2>
+				<h2>{{ node.parent }}</h2>
+				<h2>{{node.name}}</h2>
 					<a href="{{url_for('nodes.edit', node_id=node._id)}}">
 						<i class="glyphicon glyphicon-edit pull-right"></i>
 					</a>
@@ -59,23 +61,33 @@
 					{% endif %}
 				{% endif %}
 			{% endfor %}
-			<a class="btn btn-danger" href="{{url_for('nodes.delete', node_id=node._id)}}">
+			<a class="btn task-delete" href="{{url_for('nodes.delete', node_id=node._id)}}" title="Delete Task">
 				<i class="glyphicon glyphicon-trash"></i>
 			</a>
 			<div class="pull-right">
 				<a class="btn btn-default action_cancel" href="#">Cancel</a>
 				<input class="btn btn-success action_submit" type="submit" value="Update {{node.node_type.name}}">
-				<span class="btn btn-success task-update" task-id="{{node._id}}">
-					<i class="glyphicon glyphicon-ok"></i> Update
+				<span class="btn btn-default task-error"><i class="glyphicon glyphicon-warning-sign"></i> Houston!</span>
+				<span class="btn btn-default task-success"><i class="glyphicon glyphicon-ok"></i> Success!</span>
+				<span class="btn btn-default task-update" task-id="{{node._id}}">
+					<i class="glyphicon glyphicon-refresh"></i> Update Task
 				</span>
 			</div>
 		</form>
 </div>
 {{ render_file_uploader() }}
 
+	<script type="text/javascript" src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
+
 <script type="text/javascript">
 
 	$(document).on("click", ".task-update", function() {
+
+		var table = $('#shots').DataTable();
+		//console.log( table.row( '{{ node.parent }}' ).data() );
+		table.row('#row_{{ node.parent }}').nodes().to$().addClass( 'danger' );
+		//table.row('#row_{{ node.parent }}').data(2).to$().addClass( 'danger' );
+
 		task_id = $(this).attr('task-id');
 		task_description = $('#description').val();
 		task_status = $('#status').val();
@@ -86,7 +98,6 @@
 			task_description: task_description,
 			task_owners_users: task_owners_users},
 			function(node_data) {
-				console.log('Task updated');
 
 				// row_data['tasks'][task_name] = {
 				// 	'name': task_name,
@@ -94,7 +105,20 @@
 				// 	'url_view': '/nodes/' + node_data['_id'] + '/view?embed=1'}
 				// shots_table.row(row).data(row_data).draw();
 
-		});
+		})
+		.done(function() {
+			console.log('success');
+			$('.task-update').fadeToggle('.task-success').delay(1500).fadeToggle('.task-update');
+		})
+		.fail(function() {
+			console.log('fail');
+			$('.task-update').fadeToggle('.task-error').delay(1500).fadeToggle('.task-update');
+		})
+		.always(function() {
+			console.log('always');
+
+			//$('.task-update').delay(1000).html('<i class="glyphicon glyphicon-ok"></i> Update');
+		})
 	});
 
 </script>

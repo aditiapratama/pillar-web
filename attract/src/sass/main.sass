@@ -185,9 +185,39 @@ table td:nth-child(3)
 	& .action_cancel
 		display: none
 
+#shots-sidebar_edit
+	text-transform: capitalize
+
 .node__image_preview
 	width: 100%
 
+.task-update,
+.task-success,
+.task-error
+	min-width: 150px
+	position: absolute
+	bottom: 0
+	right: 15px
+	display: block
+
+.task-success,
+.task-error
+	user-select: none
+	pointer-events: none
+	cursor: default
+	visible: hidden
+
+.task-success
+	color: #398439
+	border-color: #398439
+
+.task-error, .task-delete
+	color: #d9534f
+	border-color: #d43f3a
+
+.task-delete:hover
+	background-color: #d9534f
+	color: white
 
 /* Shots List */
 .table td
