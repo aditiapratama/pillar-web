@@ -2,28 +2,26 @@
 
 
 {% block body %}
-<div class="col-md-9">
-		{% with errors = errors %}
-		{% if errors %}
-				<div>
-				{% for field in errors %}
-				<div class="alert alert-danger" role="alert">
-						<strong>{{field}}</strong>
-						{% for message in errors[field] %}
-								{{message}}|
-						{% endfor %}
-				</div>
-				{% endfor %}
-				</div>
-		{% endif %}
-		{% endwith %}
-		{% if error!="" %}
-				<div class="alert alert-danger" role="alert">
-					{{error}}
-				</div>
-		{% endif %}
-</div>
-<div class="col-md-6 col-md-push-3">
+{% with errors = errors %}
+	{% if errors %}
+		{% for field in errors %}
+			<div class="alert alert-danger" role="alert">
+					<strong>{{field}}</strong>
+					{% for message in errors[field] %}
+						{{message}}|
+					{% endfor %}
+			</div>
+		{% endfor %}
+	{% endif %}
+{% endwith %}
+
+{% if error!="" %}
+	<div class="alert alert-danger" role="alert">
+		{{error}}
+	</div>
+{% endif %}
+
+<div class="col-md-12" id="shots-sidebar_edit">
 	{% if node.picture_thumbnail %}
 		<a href="{{node.picture_thumbnail}}">
 			<img src="{{node.picture_thumbnail}}" alt="{{node.name}}" class="node__image_preview">
@@ -54,14 +52,21 @@
 					{% if field.type == 'HiddenField' %}
 							{{ field }}
 					{% else %}
-						<div class="form-group">
+						<div class="form-group" id="field_{{ field.name }}">
 							{{ field.label }}
 							{{ field(class='form-control') }}
 						</div>
 					{% endif %}
 				{% endif %}
 			{% endfor %}
-			<a class="btn btn-danger" href="{{url_for('nodes.delete', node_id=node._id)}}">Delete</a>
+			<a class="btn task-delete" href="{{url_for('nodes.delete', node_id=node._id)}}" title="Delete Task">
+				<i class="glyphicon glyphicon-trash"></i>
+			</a>
+			<a class="btn task-edit" href="{{url_for('nodes.edit', node_id=node._id)}}">
+				<i class="glyphicon glyphicon-edit"></i>
+			</a>
+
+
 			<div class="pull-right">
 				<a class="btn btn-default action_cancel" href="#">Cancel</a>
 				<input class="btn btn-success action_submit" type="submit" value="Update {{node.node_type.name}}">
