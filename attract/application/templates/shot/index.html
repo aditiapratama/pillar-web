@@ -208,7 +208,7 @@
 					row_data['tasks'][task_name] = {
 						'name': task_name,
 						'status': 'todo',
-						'url_view': '/nodes/' + node_data['_id'] + '/view?embed=1'}
+						'url_edit': '/nodes/' + node_data['_id'] + '/edit?embed=1'}
 					shots_table.row(row).data(row_data).draw();
 			});
 		});
