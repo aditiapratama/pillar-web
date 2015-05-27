@@ -266,6 +266,10 @@ def get_node_form(node_type):
                 setattr(ProceduralForm,
                         prop_name,
                         IntegerField(prop_name))
+            elif schema_prop['type'] == 'boolean':
+                setattr(ProceduralForm,
+                        prop_name,
+                        BooleanField(prop_name))
             elif schema_prop['type'] == 'media':
                 setattr(ProceduralForm,
                         prop_name,
