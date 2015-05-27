@@ -143,7 +143,7 @@ def shots_index():
             'picture': None,
             'name': node.name,
             'description': node.description,
-            'url_view': url_for('nodes.view', node_id=node._id, embed=1),
+            'url_view': url_for('nodes.view', node_id=node._id),
             'url_edit': url_for('nodes.edit', node_id=node._id, embed=1),
             'tasks': {
                 'animation': None,
