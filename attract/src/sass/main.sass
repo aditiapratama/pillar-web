@@ -240,7 +240,42 @@ table td:nth-child(3)
 		min-height: 150px
 
 #shots-sidebar_edit
-	text-transform: capitalize
+	h2
+		text-transform: capitalize
+
+#description_print
+	font-size: 1.2em
+	padding: 2px
+	margin: 0 0 15px 0
+	border: 1px solid transparent
+	color: lighten(black, 40%)
+
+#description_form
+	display: none
+
+	& textarea
+		font-size: 1.2em
+		width: 100%
+		min-height: 100px
+
+.description_toggle
+	opacity: 0
+	font-size: 1.2em
+	margin: 0 0 20px 0
+	color: CornflowerBlue
+	cursor: pointer
+	position: absolute
+	top: 0
+	right: 0
+
+	&:hover
+		color: CadetBlue
+
+#description_container
+	position: relative
+	&:hover
+		.description_toggle
+			opacity: 1.0
 
 .node__image_preview
 	width: 100%
@@ -272,6 +307,14 @@ table td:nth-child(3)
 .task-delete:hover
 	background-color: #d9534f
 	color: white
+
+.task-edit
+	color: lightblue
+	border-color: lightblue
+
+	&:hover
+		background-color: CornflowerBlue
+		color: white
 
 /* Shots List */
 .table td

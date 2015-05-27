@@ -29,11 +29,7 @@
 	{% endif %}
 	<form method="POST" enctype="multipart/form-data" action="{{url_for('nodes.edit', node_id=node._id)}}">
 
-			<h2>{{node.name}}
-				<a href="{{url_for('nodes.edit', node_id=node._id)}}">
-					<i class="glyphicon glyphicon-edit pull-right"></i>
-				</a>
-			</h2>
+			<h2>{{node.name}}</h2>
 
 			<div class="pull-right">
 				<h2>
@@ -41,11 +37,17 @@
 			</h2>
 			</div>
 
-			<div class="clearfix"></div>
-
 			{% for field in form %}
 				{% if field.name == 'csrf_token' %}
 					{{ field }}
+				{% elif field.name == 'description' %}
+					<div id="description_container">
+						<div id="description_print">{{ node.description }}</div>
+						<div id="description_form">{{ field }}</div>
+						<div class="description_toggle">
+							<i class="glyphicon glyphicon-edit"></i>
+						</div>
+					</div>
 				{% else %}
 					{% if field.type == 'HiddenField' %}
 							{{ field }}
@@ -60,6 +62,11 @@
 			<a class="btn task-delete" href="{{url_for('nodes.delete', node_id=node._id)}}" title="Delete Task">
 				<i class="glyphicon glyphicon-trash"></i>
 			</a>
+			<a class="btn task-edit" href="{{url_for('nodes.edit', node_id=node._id)}}">
+				<i class="glyphicon glyphicon-edit"></i>
+			</a>
+
+
 			<div class="pull-right">
 				<a class="btn btn-default action_cancel" href="#">Cancel</a>
 				<input class="btn btn-success action_submit" type="submit" value="Update {{node.node_type.name}}">
@@ -126,6 +133,11 @@
 	$("select#status").on("change",function(){
 		$(this).removeClass();
 		$(this).addClass("form-control " + $(this).val());
+	});
+
+	$(".description_toggle").on("click",function(){
+		$("#description_print").toggle();
+		$("#description_form").toggle();
 	});
 
 </script>
