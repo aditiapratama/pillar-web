@@ -5,12 +5,13 @@
 
 {% block header_items %}
 	<link href="//cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.css" rel="stylesheet">
+	<link href="//cdn.datatables.net/fixedheader/2.1.2/css/dataTables.fixedHeader.css" rel="stylesheet">
+
 {% endblock %}
 
 
 {% block body %}
 <div class="col-md-8" id="shots-main">
-
 	<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-hover" id="shots">
 		<thead>
 			<tr>
@@ -28,19 +29,6 @@
 			</tr>
 		</thead>
 	</table>
-
-
-	{#
-	<div class="row">
-		<div class="col-md-6">
-			{{ render_pagination(pagination) }}
-		</div>
-		<div class="col-md-6">
-			<span>Showing {{nodes['_meta']['total']}} items</span>
-			<a href="{{url_for('nodes.add', node_type_id=node_type['_id'])}}" class="pull-right btn btn-default">Add</a>
-		</div>
-	</div>
-	#}
 
 	<a href="{{url_for('nodes.add', node_type_id=node_type['_id'])}}" class="pull-right btn btn-default">Add</a>
 
@@ -60,6 +48,7 @@
 {% block footer_scripts %}
 
 	<script type="text/javascript" src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
+	<script type="text/javascript" src="//cdn.datatables.net/fixedheader/2.1.2/js/dataTables.fixedHeader.min.js"></script>
 
 
 	<!--<script type="text/javascript" src="//cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.js"></script>
@@ -171,6 +160,8 @@
 					$('td', row).eq(8).html(view_tag);
 				}
 			});
+
+		new $.fn.dataTable.FixedHeader(shots_table);
 
 		$(document).on("click", ".load-shot-view", function() {
 			shot_view_url = $(this).attr('shot-view-url')
