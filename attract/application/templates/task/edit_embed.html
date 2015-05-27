@@ -42,11 +42,15 @@
 					{{ field }}
 				{% elif field.name == 'description' %}
 					<div id="description_container">
-						<div id="description_print">{{ node.description }}</div>
-						<div id="description_form">{{ field }}</div>
-						<div class="description_toggle">
-							<i class="glyphicon glyphicon-edit"></i>
-						</div>
+						{% if node.description %}
+							<div id="description_print">{{ node.description }}</div>
+							<div id="description_form" style="display: none">{{ field }}</div>
+							<div class="description_toggle">
+								<i class="glyphicon glyphicon-edit"></i>
+							</div>
+						{% else %}
+							<div id="description_form">{{ field(placeholder='Write a note') }}</div>
+						{% endif %}
 					</div>
 				{% else %}
 					{% if field.type == 'HiddenField' %}

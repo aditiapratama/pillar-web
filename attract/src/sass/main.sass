@@ -250,12 +250,11 @@ table td:nth-child(3)
 	color: lighten(black, 40%)
 
 #description_form
-	display: none
-
 	& textarea
 		font-size: 1.2em
 		width: 100%
 		min-height: 100px
+		margin: 0
 
 .description_toggle
 	opacity: 0
@@ -272,6 +271,8 @@ table td:nth-child(3)
 
 #description_container
 	position: relative
+	min-height: 120px
+
 	&:hover
 		.description_toggle
 			opacity: 1.0
