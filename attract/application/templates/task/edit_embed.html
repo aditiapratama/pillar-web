@@ -29,12 +29,12 @@
 	{% endif %}
 	<form method="POST" enctype="multipart/form-data" action="{{url_for('nodes.edit', node_id=node._id)}}">
 
-			<h2>{{node.name}}</h2>
-			{% if parent %}
-				{{parent.name}}
-				{{parent.properties.cut_in}}
-				{{parent.properties.cut_out}}
-			{% endif %}
+			<h2>
+				{% if parent %}
+					{{parent.name}}<span class="separator"></span>
+				{% endif %}
+				{{node.name}}
+			</h2>
 
 			<div class="pull-right">
 				<h2>
@@ -42,21 +42,29 @@
 			</h2>
 			</div>
 
+			{% if parent %}
+			<div class="node__parent_info">
+				<div class="cut_in">
+				Cut in: {{parent.properties.cut_in}}
+				Cut out: {{parent.properties.cut_out}}
+				</div>
+			</div>
+			{% endif %}
+
+			<hr/>
+
 			{% for field in form %}
 				{% if field.name == 'csrf_token' %}
 					{{ field }}
 				{% elif field.name == 'description' %}
 					<div id="description_container">
-
-							<div id="description_form">
-								{% if node.description %}
-									{{ field }}
-								{% else %}
-									{{ field(placeholder='Write a note') }}
-								{% endif %}
-							</div>
-
-
+						<div id="description_form">
+							{% if node.description %}
+								{{ field }}
+							{% else %}
+								{{ field(placeholder='Write a note') }}
+							{% endif %}
+						</div>
 					</div>
 				{% else %}
 					{% if field.type == 'HiddenField' %}
@@ -131,8 +139,8 @@
 			table.row(task_parent).data().tasks[task_name]['status'] = task_data['properties']['status'];
 
 			// Remove class updated from rows, and add to current one
-			// table.rows('.updated').nodes().to$().removeClass('updated');
-			// table.row(task_parent).nodes().to$().addClass('updated');
+			table.rows('.updated').nodes().to$().removeClass('updated');
+			table.row(task_parent).nodes().to$().addClass('updated');
 
 			table.draw();
 

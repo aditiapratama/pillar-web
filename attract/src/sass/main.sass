@@ -168,14 +168,63 @@ table td:nth-child(3)
 	.shots-shot_name
 		font-weight: 500
 
+// .table.dataTable tbody tr.updated:nth-child(odd) td,
+// .table.dataTable tbody tr.updated:nth-child(even) td,
+// .table.dataTable tbody tr.updated:nth-child(odd) th,
+// .table.dataTable tbody tr.updated:nth-child(even) th
+// 	background-color: desaturate(rgba($color_status-updated, .7), 15%) !important
+// 	color: $color_text-default
+
 .table.dataTable tbody tr.updated:nth-child(odd) td,
+.table.dataTable tbody tr.updated:nth-child(odd) th
+	animation: fx-updated-row-odd 1.5s ease forwards
+
 .table.dataTable tbody tr.updated:nth-child(even) td,
-.table.dataTable tbody tr.updated:nth-child(odd) th,
 .table.dataTable tbody tr.updated:nth-child(even) th
-	background-color: desaturate(rgba($color_status-updated, .7), 15%) !important
-	border-top: thin solid desaturate(rgba($color_status-updated, .2), 15%) !important
-	border-bottom: thin solid desaturate(rgba($color_status-updated, .2), 15%) !important
-	color: $color_text-default
+	animation: fx-updated-row-even 8s ease forwards
+
+$table_row_background_odd: #f9f9f9
+$table_row_background_even: white
+
+@-webkit-keyframes fx-updated-row-even
+	0%
+		background-color: $table_row_background_even
+	10%
+		background-color: $color_status-updated
+	40%
+		background-color: $color_status-updated
+	100%
+		background-color: $table_row_background_even
+
+@keyframes fx-updated-row-even
+	0%
+		background-color: $table_row_background_even
+	10%
+		background-color: $color_status-updated
+	40%
+		background-color: $color_status-updated
+	100%
+		background-color: $table_row_background_even
+
+@-webkit-keyframes fx-updated-row-odd
+	0%
+		background-color: $table_row_background_odd
+	10%
+		background-color: $color_status-updated
+	40%
+		background-color: $color_status-updated
+	100%
+		background-color: $table_row_background_odd
+
+@keyframes fx-updated-row-odd
+	0%
+		background-color: $table_row_background_odd
+	10%
+		background-color: $color_status-updated
+	40%
+		background-color: $color_status-updated
+	100%
+		background-color: $table_row_background_odd
 
 
 /* Shots Sidebar */
