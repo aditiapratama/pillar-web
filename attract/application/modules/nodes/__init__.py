@@ -533,6 +533,14 @@ def edit(node_id):
     set_properties(node_schema, form_schema, prop_dict, form)
 
 
+    # Get Parent
+    try:
+        parent = Node.find(node['parent'], api=api)
+    except KeyError:
+        parent = None
+    except ResourceNotFound:
+        parent = None
+
     embed_string = ''
     # Check if we want to embed the content via an AJAX call
     if request.args.get('embed'):
@@ -548,6 +556,7 @@ def edit(node_id):
         return render_template(
                 template,
                 node=node,
+                parent=parent,
                 form=form,
                 errors=form.errors,
                 error=error)
@@ -556,6 +565,7 @@ def edit(node_id):
         return render_template(
                 template,
                 node=node,
+                parent=parent,
                 form=form,
                 errors=form.errors,
                 error=error)

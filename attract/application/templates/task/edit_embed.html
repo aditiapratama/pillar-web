@@ -30,6 +30,11 @@
 	<form method="POST" enctype="multipart/form-data" action="{{url_for('nodes.edit', node_id=node._id)}}">
 
 			<h2>{{node.name}}</h2>
+			{% if parent %}
+				{{parent.name}}
+				{{parent.properties.cut_in}}
+				{{parent.properties.cut_out}}
+			{% endif %}
 
 			<div class="pull-right">
 				<h2>
