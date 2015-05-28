@@ -42,12 +42,16 @@
 					{{ field }}
 				{% elif field.name == 'description' %}
 					<div id="description_container">
-						{% if node.description %}
-							<div id="description_print" title="Click to edit">{{ node.description }}</div>
-							<div id="description_form" style="display: none">{{ field }}</div>
-						{% else %}
-							<div id="description_form">{{ field(placeholder='Write a note') }}</div>
-						{% endif %}
+
+							<div id="description_form">
+								{% if node.description %}
+									{{ field }}
+								{% else %}
+									{{ field(placeholder='Write a note') }}
+								{% endif %}
+							</div>
+
+
 					</div>
 				{% else %}
 					{% if field.type == 'HiddenField' %}
@@ -85,8 +89,8 @@
 
 <script type="text/javascript">
 
-	$( "[task-id^='{{node._id}}']").off( "click" );
 
+	// Action for Update button
 	$(document).on("click", "[task-id^='{{node._id}}']", function() {
 
 		task_id = $(this).attr('task-id');
@@ -113,8 +117,8 @@
 			// 	'url_view': '/nodes/' + node_data['_id'] + '/view?embed=1'}
 			// shots_table.row(row).data(row_data).draw();
 
-			$("#description_print").toggle();
-			$("#description_form").toggle();
+			// $("#description_print").toggle();
+			// $("#description_form").toggle();
 
 		})
 		.done(function(task_data) {
@@ -143,10 +147,10 @@
 		$(this).addClass("form-control " + $(this).val());
 	});
 
-	$("#description_print").on("click",function(){
-		$("#description_print").toggle();
-		$("#description_form").toggle();
-	});
+	// $("#description_print").on("click",function(){
+	// 	$("#description_print").toggle();
+	// 	$("#description_form").toggle();
+	// });
 
 </script>
 

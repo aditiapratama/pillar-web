@@ -185,7 +185,8 @@
 		});
 
 		$(document).on("click", ".load-task-view", function() {
-			task_view_url = $(this).attr('task-edit-url')
+			$(".task-update").off( "click" );
+			task_view_url = $(this).attr('task-edit-url');
 			$.get(task_view_url, function(data) {
 				$('#shot_details_container').hide();
 				$('#task_details_container').html(data);
