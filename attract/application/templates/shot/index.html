@@ -199,10 +199,10 @@
 
 
 			// Remove class updated from rows, and add to current one
-			table.rows('.updated').nodes().to$().removeClass('updated');
-			table.row(task_parent).nodes().to$().addClass('updated');
+			shots_table.rows('.updated').nodes().to$().removeClass('updated');
+			shots_table.row(task_parent).nodes().to$().addClass('updated');
 
-			table.draw();
+			shots_table.draw();
 
 		});
 
