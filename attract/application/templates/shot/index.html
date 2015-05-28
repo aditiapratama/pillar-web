@@ -6,7 +6,6 @@
 {% block header_items %}
 	<link href="//cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.css" rel="stylesheet">
 	<link href="//cdn.datatables.net/fixedheader/2.1.2/css/dataTables.fixedHeader.css" rel="stylesheet">
-
 {% endblock %}
 
 
@@ -160,7 +159,7 @@
 						$('td', row).eq(0).html('<a href="' + data.url_view + '">' + img_tag + '</a>');
 					}
 
-					$('td', row).eq(1).html('<a href="' + data.url_view + '">' + data.name + '</a>');
+					$('td', row).eq(1).html('<a class="load-shot-view" shot-view-url="' + data.url_edit + '" href="' + data.url_view + '">' + data.name + '</a>');
 					$('td', row).eq(3).html(render_status_label(data.tasks.animation, 'animation'));
 					$('td', row).eq(4).html(render_status_label(data.tasks.lighting, 'lighting'));
 					$('td', row).eq(5).html(render_status_label(data.tasks.fx_hair, 'fx_hair'));
@@ -175,13 +174,25 @@
 		// TODO: Needs time
 		//new $.fn.dataTable.FixedHeader(shots_table);
 
-		$(document).on("click", ".load-shot-view", function() {
+		$(document).on("click", ".load-shot-view", function(e) {
+			e.preventDefault();
+
 			shot_view_url = $(this).attr('shot-view-url')
 			$.get(shot_view_url, function(data) {
 				$('#shot_details_container').show();
 				$('#shot_details_container').html(data);
 				$('#task_details_container').hide();
 			});
+
+			var shots_table = $('#shots').DataTable();
+			var row = shots_table.row($(this).closest('tr'))
+
+			// Remove class 'active' from rows, and add to current one
+			shots_table.rows('.active').nodes().to$().removeClass('active');
+			shots_table.row(row).nodes().to$().addClass('active');
+
+			shots_table.draw();
+
 		});
 
 		$(document).on("click", ".load-task-view", function() {
@@ -196,11 +207,12 @@
 			$('.load-task-view').removeClass('active');
 			$(this).addClass('active');
 
+			var shots_table = $('#shots').DataTable();
+			var row = shots_table.row($(this).closest('tr'))
 
-
-			// Remove class updated from rows, and add to current one
-			shots_table.rows('.updated').nodes().to$().removeClass('updated');
-			shots_table.row(task_parent).nodes().to$().addClass('updated');
+			// Remove class 'active' from rows, and add to current one
+			shots_table.rows('.active').nodes().to$().removeClass('active');
+			shots_table.row(row).nodes().to$().addClass('active');
 
 			shots_table.draw();
 

@@ -1,4 +1,5 @@
 $color_text-default: #444
+$color_link-default: #337ab7
 
 /* Label Status */
 $color_status-todo: lightgray
@@ -6,6 +7,7 @@ $color_status-in-progress: #fff2cc
 $color_status-review: #e4f5f9
 $color_status-done: #e7f5d3
 
+$color_status-active: #E6F3FD
 $color_status-updated: #e7f5d3
 
 =text-overflow-ellipsis
@@ -108,9 +110,9 @@ input.dial:focus
 #shots tbody
 	font-size: 12px
 
-
-#shots tbody td
-	padding: 3px 8px
+	& td
+		padding: 3px 8px
+		vertical-align: middle
 
 
 h3.stats-title
@@ -168,12 +170,25 @@ table td:nth-child(3)
 	.shots-shot_name
 		font-weight: 500
 
-// .table.dataTable tbody tr.updated:nth-child(odd) td,
-// .table.dataTable tbody tr.updated:nth-child(even) td,
-// .table.dataTable tbody tr.updated:nth-child(odd) th,
-// .table.dataTable tbody tr.updated:nth-child(even) th
-// 	background-color: desaturate(rgba($color_status-updated, .7), 15%) !important
-// 	color: $color_text-default
+.table.dataTable tbody tr a
+	color: $color_text-default
+
+	& a
+		color: $color_text-default
+
+.table.dataTable tbody tr.active:nth-child(odd) td,
+.table.dataTable tbody tr.active:nth-child(odd):hover td,
+.table.dataTable tbody tr.active:nth-child(even) td,
+.table.dataTable tbody tr.active:nth-child(even):hover td,
+.table.dataTable tbody tr.active:nth-child(odd) th,
+.table.dataTable tbody tr.active:nth-child(odd):hover th,
+.table.dataTable tbody tr.active:nth-child(even) th,
+.table.dataTable tbody tr.active:nth-child(even):hover th
+	background-color: $color_status-active !important
+	color: $color_text-default !important
+
+	& a
+		color: $color_text-default !important
 
 .table.dataTable tbody tr.updated:nth-child(odd) td,
 .table.dataTable tbody tr.updated:nth-child(odd) th
@@ -426,11 +441,23 @@ $table_row_background_even: white
 	top: 50%
 	transform: translateY(-50%)
 
+a.load-shot-view
+	visibility: visible
+	color: $color_link-default !important
+	position: relative
+	top: 15px
+	transform: translateY(-15px)
+
 .table tr:hover
 	.load-shot-view
 		visibility: visible
 
-
+.node_title
+	.parent_name
+		color: lighten($color_text-default, 30%)
+		border-right: 2px solid lighten($color_text-default, 60%)
+		padding-right: 15px
+		margin-right: 5px
 
 .label-todo
 	background-color: lightgray

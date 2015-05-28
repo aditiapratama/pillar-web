@@ -29,9 +29,9 @@
 	{% endif %}
 	<form method="POST" enctype="multipart/form-data" action="{{url_for('nodes.edit', node_id=node._id)}}">
 
-			<h2>
+			<h2 class="node_title">
 				{% if parent %}
-					{{parent.name}}<span class="separator"></span>
+					<span class="parent_name">{{parent.name}}</span>
 				{% endif %}
 				{{node.name}}
 			</h2>
@@ -46,6 +46,7 @@
 			<div class="node__parent_info">
 				<div class="cut_in">
 				Cut in: {{parent.properties.cut_in}}
+				<br/>
 				Cut out: {{parent.properties.cut_out}}
 				</div>
 			</div>
