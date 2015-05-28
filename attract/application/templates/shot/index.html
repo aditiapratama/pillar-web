@@ -12,20 +12,21 @@
 
 {% block body %}
 <div class="col-md-8" id="shots-main">
+
 	<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-hover" id="shots">
-		<thead>
+		<thead class="shots-header">
 			<tr>
-				<th></th>
-				<th></th>
-				<th width="15%"></th>
-				<th>Name</th>
-				<th>Description</th>
-				<th>Animation</th>
-				<th>Lighting</th>
-				<th>FX Hair</th>
-				<th>FX Grass</th>
-				<th>FX Smoke</th>
-				<th width="8%"></th>
+				<th></th> {# 0 #}
+				<th></th> {# 1 #}
+				<th></th> {# 2 #}
+				<th>Name</th> {# 3 #}
+				<th>Description</th> {# 4 #}
+				<th>Animation</th> {# 5 #}
+				<th>Lighting</th> {# 6 #}
+				<th>FX Hair</th> {# 7 #}
+				<th>FX Grass</th> {# 8 #}
+				<th>FX Smoke</th> {# 9 #}
+				<th></th> {# 10 #}
 			</tr>
 		</thead>
 	</table>
@@ -122,15 +123,25 @@
 				"columns": [
 					{"data": "_id"},
 					{"data": "order"},
-					{"data": "picture"},					//0
-					{"data": "name"},							//1
-					{"data": "description"},			//2
-					{"data": "tasks.animation"},	//3
-					{"data": "tasks.lighting"},		//4
-					{"data": "tasks.fx_hair"},		//5
-					{"data": "tasks.fx_grass"},		//6
-					{"data": "tasks.fx_smoke"},		//7
-					{"data": null}								//8
+
+					{"data": "picture",											//0
+					 "width": "80px",
+					 "className": "shots-shot_thumbnail"},
+
+					{"data": "name",												//1
+					 "className": "shots-shot_name"},
+
+					{"data": "description",									//2
+					 "className": "shots-shot_description"},
+
+					{"data": "tasks.animation",
+					 "width": "70px"},						//3
+					{"data": "tasks.lighting",
+					"width": "70px"},							//4
+					{"data": "tasks.fx_hair", "width": "70px"},							//5
+					{"data": "tasks.fx_grass", "width": "70px"},							//6
+					{"data": "tasks.fx_smoke", "width": "70px",},							//7
+					{"data": null}													//8
 				],
 				"columnDefs": [
 					{
@@ -161,7 +172,8 @@
 				}
 			});
 
-		new $.fn.dataTable.FixedHeader(shots_table);
+		// TODO: Needs time
+		//new $.fn.dataTable.FixedHeader(shots_table);
 
 		$(document).on("click", ".load-shot-view", function() {
 			shot_view_url = $(this).attr('shot-view-url')

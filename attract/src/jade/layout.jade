@@ -77,28 +77,27 @@ html(lang="en")
 									a(href="{{url_for('users.login')}}", role="menuitem", tabindex="-1")
 										| Log in
 								| {% endif %}
-		.container-fluid
 
-			| {% with messages = get_flashed_messages() %}
-			|		{% if messages %}
-			div
-				|	{% for message in messages %}
-				.alert.alert-success(role="alert")
-					| {{message}}
-				|	{% endfor %}
-			|		{% endif %}
-			| {% endwith %}
+		| {% with messages = get_flashed_messages() %}
+		|		{% if messages %}
+		div
+			|	{% for message in messages %}
+			.alert.alert-success(role="alert")
+				| {{message}}
+			|	{% endfor %}
+		|		{% endif %}
+		| {% endwith %}
 
-			.row
-				| {% block body %}{% endblock %}
-				| {% block sidebar %}
-				.col-md-3
-				|	{% endblock %}
+		.row
+			| {% block body %}{% endblock %}
+			| {% block sidebar %}
+			.col-md-3
+			|	{% endblock %}
 
-			hr
+		hr
 
-			footer
-				p Attract 3 - Python powered
+		footer
+			p Attract 3 - Python powered
 
 		| {#
 		| {% assets filters="jsmin",

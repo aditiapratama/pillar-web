@@ -60,13 +60,13 @@
 					{% endif %}
 				{% endif %}
 			{% endfor %}
+
 			<a class="btn task-delete" href="{{url_for('nodes.delete', node_id=node._id)}}" title="Delete Task">
 				<i class="glyphicon glyphicon-trash"></i>
 			</a>
 			<a class="btn task-edit" href="{{url_for('nodes.edit', node_id=node._id)}}">
 				<i class="glyphicon glyphicon-edit"></i>
 			</a>
-
 
 			<div class="pull-right">
 				<a class="btn btn-default action_cancel" href="#">Cancel</a>
@@ -107,20 +107,26 @@
 			task_owners_users: task_owners_users},
 			function(node_data) {
 
-				// row_data['tasks'][task_name] = {
-				// 	'name': task_name,
-				// 	'status': 'todo',
-				// 	'url_view': '/nodes/' + node_data['_id'] + '/view?embed=1'}
-				// shots_table.row(row).data(row_data).draw();
+			// row_data['tasks'][task_name] = {
+			// 	'name': task_name,
+			// 	'status': 'todo',
+			// 	'url_view': '/nodes/' + node_data['_id'] + '/view?embed=1'}
+			// shots_table.row(row).data(row_data).draw();
 
-		$("#description_print").toggle();
-		$("#description_form").toggle();
+			$("#description_print").toggle();
+			$("#description_form").toggle();
 
 		})
 		.done(function(task_data) {
 			$('.task-update').fadeToggle('.task-success').delay(1500).fadeToggle('.task-update');
 			table.row(task_parent).data().tasks[task_name]['status'] = task_data['properties']['status'];
-			table.draw();
+
+			// Remove class updated from rows, and add to current one
+			// table.rows('.updated').nodes().to$().removeClass('updated');
+			// table.row(task_parent).nodes().to$().addClass('updated');
+
+			// table.draw();
+
 		})
 		.fail(function() {
 			$('.task-update').fadeToggle('.task-error').delay(1500).fadeToggle('.task-update');

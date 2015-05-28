@@ -53,24 +53,21 @@
           </ul>
         </div>
       </div>
+    </div>{% with messages = get_flashed_messages() %}
+    		{% if messages %}
+    <div>	{% for message in messages %}
+      <div role="alert" class="alert alert-success">{{message}}</div>	{% endfor %}
+    </div>		{% endif %}
+    {% endwith %}
+    <div class="row">
+      {% block body %}{% endblock %}
+      {% block sidebar %}
+      <div class="col-md-3"></div>	{% endblock %}
     </div>
-    <div class="container-fluid">
-      {% with messages = get_flashed_messages() %}
-      		{% if messages %}
-      <div>	{% for message in messages %}
-        <div role="alert" class="alert alert-success">{{message}}</div>	{% endfor %}
-      </div>		{% endif %}
-      {% endwith %}
-      <div class="row">
-        {% block body %}{% endblock %}
-        {% block sidebar %}
-        <div class="col-md-3"></div>	{% endblock %}
-      </div>
-      <hr>
-      <footer>
-        <p>Attract 3 - Python powered</p>
-      </footer>
-    </div>{#
+    <hr>
+    <footer>
+      <p>Attract 3 - Python powered</p>
+    </footer>{#
     {% assets filters="jsmin",
     		 output="assets/packed/attract.js",
     		 "assets/js/bootstrap-markdown.js",

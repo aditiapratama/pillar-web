@@ -1,8 +1,12 @@
+$color_text-default: #444
+
 /* Label Status */
 $color_status-todo: lightgray
 $color_status-in-progress: #fff2cc
 $color_status-review: #e4f5f9
 $color_status-done: #e7f5d3
+
+$color_status-updated: #e7f5d3
 
 =text-overflow-ellipsis
 	overflow: hidden
@@ -127,9 +131,9 @@ tr.success .make-current
 
 
 .table-thumbnail
-	max-width: 100%
-	height: auto
-	width: 100%
+	max-width: 100px
+//	height: auto
+//	width: 100%
 
 textarea#description.form-control
 	min-height: 150px !important
@@ -156,6 +160,22 @@ table td:nth-child(3)
 	overflow: auto
 
 	padding: 15px
+
+/* Table Shots (DataTable) */
+#shots
+	.shots-shot_thumbnail
+		text-align: center
+	.shots-shot_name
+		font-weight: 500
+
+.table.dataTable tbody tr.updated:nth-child(odd) td,
+.table.dataTable tbody tr.updated:nth-child(even) td,
+.table.dataTable tbody tr.updated:nth-child(odd) th,
+.table.dataTable tbody tr.updated:nth-child(even) th
+	background-color: desaturate(rgba($color_status-updated, .7), 15%) !important
+	border-top: thin solid desaturate(rgba($color_status-updated, .2), 15%) !important
+	border-bottom: thin solid desaturate(rgba($color_status-updated, .2), 15%) !important
+	color: $color_text-default
 
 
 /* Shots Sidebar */
@@ -245,10 +265,10 @@ table td:nth-child(3)
 #description_print
 	font-size: 1.2em
 	padding: 2px
-	margin: 0 0 15px 0
+	margin: 0
 	border: 1px solid transparent
 	color: lighten(black, 40%)
-	min-height: 120px
+	min-height: 100px
 	cursor: text
 
 #description_form
@@ -308,14 +328,6 @@ table td:nth-child(3)
 /* Shots List */
 .table td
 	position: relative
-
-.table th
-	&.sorting
-		white-space: nowrap
-		min-width: 80px
-
-.table .table-thumbnail
-	min-width: 90px
 
 .task-add
 	display: block
