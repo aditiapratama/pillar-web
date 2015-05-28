@@ -140,7 +140,7 @@
 			table.row(task_parent).data().tasks[task_name]['status'] = task_data['properties']['status'];
 
 			// Remove class updated from rows, and add to current one
-			table.rows('.updated').nodes().to$().removeClass('updated');
+			table.rows('.updated').nodes().to$().removeClass('active updated');
 			table.row(task_parent).nodes().to$().addClass('updated');
 
 			table.draw();

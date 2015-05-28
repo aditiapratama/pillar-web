@@ -188,7 +188,7 @@
 			var row = shots_table.row($(this).closest('tr'))
 
 			// Remove class 'active' from rows, and add to current one
-			shots_table.rows('.active').nodes().to$().removeClass('active');
+			shots_table.rows('.active').nodes().to$().removeClass('active updated');
 			shots_table.row(row).nodes().to$().addClass('active');
 
 			shots_table.draw();
@@ -211,7 +211,7 @@
 			var row = shots_table.row($(this).closest('tr'))
 
 			// Remove class 'active' from rows, and add to current one
-			shots_table.rows('.active').nodes().to$().removeClass('active');
+			shots_table.rows('.active').nodes().to$().removeClass('active updated');
 			shots_table.row(row).nodes().to$().addClass('active');
 
 			shots_table.draw();
