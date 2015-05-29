@@ -1,13 +1,21 @@
 {% macro render_status_label(status) %}
   {% if status == 'in_progress' %}
-  <span class="label label-warning">In progress</span>
+  <span class="label label-{{status}}">In progress</span>
   {% elif status == 'todo' %}
-  <span class="label label-info">Todo</span>
+  <span class="label label-{{status}}">Todo</span>
   {% elif status == 'on_hold' %}
-  <span class="label label-default">On hold</span>
-  {% elif status == 'review_required' %}
-  <span class="label label-primary">Review required</span>
+  <span class="label label-{{status}}">On Hold</span>
+  {% elif status == 'cbb' %}
+  <span class="label label-{{status}}">Could Be Better</span>
+  {% elif status == 'review' %}
+  <span class="label label-{{status}}">Review</span>
+  {% elif status == 'approved' %}
+  <span class="label label-{{status}}">Approved</span>
+  {% elif status == 'final' %}
+  <span class="label label-{{status}}">Final</span>
+  {% elif status == 'conflict' %}
+  <span class="label label-{{status}}">Conflict</span>
   {% else %}
-  <span class="label label-default">{{status}}</span>
+  <span class="label label-{{status}}">{{status}}</span>
   {% endif %}
 {% endmacro %}
