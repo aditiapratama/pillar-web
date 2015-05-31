@@ -184,6 +184,9 @@ def shots_index():
                 'status': task.properties.status,
                 'url_view': url_for('nodes.view', node_id=task._id, embed=1),
                 'url_edit': url_for('nodes.edit', node_id=task._id, embed=1),
+                'is_conflicting': task.properties.is_conflicting,
+                'is_processing': task.properties.is_rendering,
+                'is_open': task.properties.is_open
                 }
 
 
@@ -246,8 +249,8 @@ def view(node_id):
             parent = None
         # Get children
         children = Node.all({
-            'where': '{"parent" : "%s"}' % node['_id'],
-            'embedded': '{"picture":1, "user":1}'}, api=api)
+            'where': '{"parent": "%s"}' % node['_id'],
+            'embedded': '{"picture": 1, "user": 1}'}, api=api)
 
         children = children.to_dict()['_items']
         # TODO this logic should be on Server:
@@ -398,7 +401,7 @@ def task_edit():
         return revsion_conflict[task_current.name](task_current, task_sibling)
 
     def task_animation(task_current, task_sibling):
-        if task_sibling.name in ['fx_hair', 'fx_smoke', 'fx_grass', 'animation']:
+        if task_sibling.name in ['fx_hair', 'fx_smoke', 'fx_grass', 'lighting']:
             if task_current.properties.revision > task_sibling.properties.revision:
                 return True
         return False
@@ -437,8 +440,10 @@ def task_edit():
         for sibling in siblings._items:
             if sibling.properties.revision and sibling._id != task_id:
                 if check_conflict(task, sibling) == True:
-                    task.properties.status = 'conflict'
+                    task.properties.is_conflicting = True
                     break
+                else:
+                    task.properties.is_conflicting = False
 
     task.update(api=api)
 

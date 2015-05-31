@@ -140,6 +140,7 @@
 		.done(function(task_data) {
 			$('.task-update').fadeToggle('.task-success').delay(1500).fadeToggle('.task-update');
 			table.row(task_parent).data().tasks[task_name]['status'] = task_data['properties']['status'];
+			table.row(task_parent).data().tasks[task_name]['is_conflicting'] = task_data['properties']['is_conflicting'];
 
 			// Remove class updated from rows, and add to current one
 			table.rows('.updated').nodes().to$().removeClass('active updated');

@@ -108,7 +108,13 @@
 							label_text = task.status;
 							break
 					}
-					return tag = '<span task-edit-url="' + task.url_edit + '" class="load-task-view label label-'+ task.status +'">'+ label_text +'</span>'
+
+					if (task.is_conflicting) {
+						label_text = 'Conflict';
+						task.status = 'conflict';
+					}
+
+					return tag = '<span task-edit-url="' + task.url_edit + '" class="load-task-view label label-' + task.status + '">' + label_text + '</span>'
 				} else {
 					return '<span class="btn btn-default btn-xs task-add" title="Add Task" task-name="'+ task_name + '">+ Add</span>';
 				}
@@ -120,27 +126,17 @@
 				"order": [[ 1, "asc" ]],
 				"ajax": "/nodes/shots/index.json",
 				"columns": [
-					{"data": "_id"},
-					{"data": "order"},
-
-					{"data": "picture",											//0
-					 "width": "80px",
-					 "className": "shots-shot_thumbnail"},
-
-					{"data": "name",												//1
-					 "className": "shots-shot_name"},
-
-					{"data": "description",									//2
-					 "className": "shots-shot_description"},
-
-					{"data": "tasks.animation",
-					 "width": "70px"},						//3
-					{"data": "tasks.lighting",
-					"width": "70px"},							//4
-					{"data": "tasks.fx_hair", "width": "70px"},							//5
-					{"data": "tasks.fx_grass", "width": "70px"},							//6
-					{"data": "tasks.fx_smoke", "width": "70px",},							//7
-					{"data": null}													//8
+					/*    */{"data": "_id"},
+					/*    */{"data": "order"},
+					/*  0 */{"data": "picture", "width": "80px", "className": "shots-shot_thumbnail"},
+					/*  1 */{"data": "name", "className": "shots-shot_name"},
+					/*  2 */{"data": "description",  "className": "shots-shot_description"},
+					/*  3 */{"data": "tasks.animation", "width": "70px"},
+					/*  4 */{"data": "tasks.lighting", "width": "70px"},
+					/*  5 */{"data": "tasks.fx_hair", "width": "70px"},
+					/*  6 */{"data": "tasks.fx_grass", "width": "70px"},
+					/*  7 */{"data": "tasks.fx_smoke", "width": "70px"},
+					/*  8 */{"data": null}
 				],
 				"columnDefs": [
 					{
@@ -149,7 +145,7 @@
 						"searchable": false
 					},
 					{
-						"targets": [2,10],
+						"targets": [2, 10],
 						"sortable": false
 					}
 				],
