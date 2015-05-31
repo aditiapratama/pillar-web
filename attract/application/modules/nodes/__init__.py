@@ -387,6 +387,7 @@ def task_edit():
     if request.form['task_revision']:
         task.properties.revision = int(request.form['task_revision'])
     task.properties.status = request.form['task_status']
+    task.properties.filepath = request.form['task_filepath']
     task.properties.owners.users = request.form.getlist('task_owners_users[]')
 
     siblings = Node.all({
