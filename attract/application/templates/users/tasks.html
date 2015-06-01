@@ -18,8 +18,9 @@
 				{#  3 #} <th>Shot</th>
 				{#  4 #} <th>Name</th>
 				{#  5 #} <th>Description</th>
-				{#  6 #} <th>Status</th>
-				{#  7 #} <th></th>
+				{#  6 #} <th>Duration</th>
+				{#  7 #} <th>Status</th>
+				{#  8 #} <th></th>
 			</tr>
 		</thead>
 
@@ -46,6 +47,20 @@
 
 		$(document).ready(function(){
 
+			function render_timing(timing) {
+				var timing_text = '';
+				if (timing['cut_in'] && timing['cut_out']) {
+					timing_frames = timing['cut_out'] - timing['cut_in'];
+
+					timing_text += '<span title="';
+					timing_text += timing_frames;
+					timing_text += 'f">';
+					timing_text += Math.round(timing_frames / 24);
+					timing_text += 's</span>';
+				}
+				return timing_text;
+			}
+
 			function render_status_options(status) {
 				var selected = false;
 				var options = []
@@ -67,47 +82,42 @@
 			}
 
 			function render_status_label(task, task_name) {
-				if (task) {
-					switch(task.status) {
-						case 'todo':
-							label_text = 'ToDo';
-							break;
-						case 'in_progress':
-							label_text = 'In progress';
-							break;
-						case 'on_hold':
-							label_text = 'On Hold';
-							break;
-						case 'cbb':
-							label_text = 'Could Be Better';
-							break;
-						case 'review':
-							label_text = 'Review';
-							break;
-						case 'approved':
-							label_text = 'Approved';
-							break;
-						case 'final':
-							label_text = 'Final';
-							break;
-						case 'conflict':
-							label_text = 'Conflict';
-							break;
-						default:
-							label_text = task.status;
-							break
-					}
-
-					if (task.is_conflicting) {
+				switch(task.status) {
+					case 'todo':
+						label_text = 'ToDo';
+						break;
+					case 'in_progress':
+						label_text = 'In progress';
+						break;
+					case 'on_hold':
+						label_text = 'On Hold';
+						break;
+					case 'cbb':
+						label_text = 'Could Be Better';
+						break;
+					case 'review':
+						label_text = 'Review';
+						break;
+					case 'approved':
+						label_text = 'Approved';
+						break;
+					case 'final':
+						label_text = 'Final';
+						break;
+					case 'conflict':
 						label_text = 'Conflict';
-						task.status = 'conflict';
-					}
-
-					return tag = '<span task-edit-url="' + task.url_edit + '" class="load-task-view label label-' + task.status + '">' + label_text + '</span>'
-				} else {
-					return '<span class="btn btn-default btn-xs task-add" title="Add Task" task-name="'+ task_name + '">+ Add</span>';
+						break;
+					default:
+						label_text = task.status;
+						break
 				}
 
+				if (task.is_conflicting) {
+					label_text = 'Conflict';
+					task.status = 'conflict';
+				}
+
+				return tag = '<span task-edit-url="' + task.url_edit + '" class="load-task-view label label-' + task.status + '">' + label_text + '</span>'
 			}
 
 			var shots_table = $('#user_tasks').DataTable({
@@ -115,14 +125,15 @@
 				"order": [[ 1, "asc" ]],
 				"data": {{tasks_data | safe}},
 				"columns": [
-					/*    */{"data": "_id"},
-					/*    */{"data": "order"},
-					/*  0 */{"data": "picture", "width": "80px", "className": "shots-shot_thumbnail"},
-					/*  1 */{"data": "parent.name"},
-					/*  2 */{"data": "name", "className": "shots-shot_name"},
-					/*  3 */{"data": "description", "className": "shots-shot_description"},
-					/*  4 */{"data": "status"},
-					/*  5 */{"data": null}
+					/*    */ {"data": "_id"},
+					/*    */ {"data": "order"},
+					/*  0 */ {"data": "picture", "width": "80px", "className": "shots-shot_thumbnail"},
+					/*  1 */ {"data": "parent.name"},
+					/*  2 */ {"data": "name", "className": "shots-shot_name"},
+					/*  3 */ {"data": "description", "className": "shots-shot_description"},
+					/*  4 */ {"data": null,},
+					/*  5 */ {"data": "status"},
+					/*  6 */ {"data": null}
 				],
 				"columnDefs": [
 					{
@@ -139,14 +150,11 @@
 					}
 
 					$('td', row).eq(2).html('<a class="load-shot-view" shot-view-url="' + data.url_edit + '" href="' + data.url_view + '">' + data.name + '</a>');
-					$('td', row).eq(4).html(render_status_label(data, data.name));
-					// $('td', row).eq(4).html(render_status_label(data.tasks.lighting, 'lighting'));
-					// $('td', row).eq(5).html(render_status_label(data.tasks.fx_hair, 'fx_hair'));
-					// $('td', row).eq(6).html(render_status_label(data.tasks.fx_grass, 'fx_grass'));
-					// $('td', row).eq(7).html(render_status_label(data.tasks.fx_smoke, 'fx_smoke'));
+					$('td', row).eq(4).html(render_timing(data.timing));
+					$('td', row).eq(5).html(render_status_label(data, data.name));
 
 					var view_tag = '<span class="btn btn-default btn-xs load-shot-view" shot-view-url="' + data.url_edit + '"><i class="glyphicon glyphicon-edit"></i> View</span>';
-					$('td', row).eq(5).html(view_tag);
+					$('td', row).eq(6).html(view_tag);
 				}
 			});
 

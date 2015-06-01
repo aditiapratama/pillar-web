@@ -145,6 +145,10 @@ def tasks():
             'order': task.order,
             'picture': None,
             'name': task.name,
+            'timing': {
+                'cut_in': task.parent.properties.cut_in,
+                'cut_out': task.parent.properties.cut_out,
+            },
             'parent': task.parent.to_dict(),
             'description': task.description,
             'url_view': url_for('nodes.view', node_id=task._id),
@@ -153,8 +157,6 @@ def tasks():
             }
 
         tasks_datatable.append(data)
-
-    print tasks_datatable
 
     return render_template(
         'users/tasks.html',
