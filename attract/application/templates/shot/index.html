@@ -17,12 +17,13 @@
 				{#  2 #} <th></th>
 				{#  3 #} <th>Name</th>
 				{#  4 #} <th>Description</th>
-				{#  5 #} <th>Animation</th>
-				{#  6 #} <th>Lighting</th>
-				{#  7 #} <th>FX Hair</th>
-				{#  8 #} <th>FX Grass</th>
-				{#  9 #} <th>FX Smoke</th>
-				{# 10 #} <th></th>
+				{#  5 #} <th>Duration</th>
+				{#  6 #} <th>Animation</th>
+				{#  7 #} <th>Lighting</th>
+				{#  8 #} <th>FX Hair</th>
+				{#  9 #} <th>FX Grass</th>
+				{# 10 #} <th>FX Smoke</th>
+				{# 11 #} <th></th>
 			</tr>
 		</thead>
 	</table>
@@ -53,6 +54,20 @@
 	<script type="text/javascript">
 
 		$(document).ready(function(){
+
+			function render_timing(timing) {
+				var timing_text = '';
+				if (timing['cut_in'] && timing['cut_out']) {
+					timing_frames = timing['cut_out'] - timing['cut_in'];
+
+					timing_text += '<span title="';
+					timing_text += timing_frames;
+					timing_text += 'f">';
+					timing_text += Math.round(timing_frames / 24);
+					timing_text += 's</span>';
+				}
+				return timing_text;
+			}
 
 			function render_status_options(status) {
 				var selected = false;
@@ -128,12 +143,14 @@
 					/*  0 */{"data": "picture", "width": "80px", "className": "shots-shot_thumbnail"},
 					/*  1 */{"data": "name", "className": "shots-shot_name"},
 					/*  2 */{"data": "description",  "className": "shots-shot_description"},
-					/*  3 */{"data": "tasks.animation", "width": "70px"},
-					/*  4 */{"data": "tasks.lighting", "width": "70px"},
-					/*  5 */{"data": "tasks.fx_hair", "width": "70px"},
-					/*  6 */{"data": "tasks.fx_grass", "width": "70px"},
-					/*  7 */{"data": "tasks.fx_smoke", "width": "70px"},
-					/*  8 */{"data": null}
+					/*  3 */{"data": "timing"},
+					/*  4 */{"data": "tasks.animation", "width": "70px"},
+					/*  5 */{"data": "tasks.lighting", "width": "70px"},
+					/*  6 */{"data": "tasks.fx_hair", "width": "70px"},
+					/*  7 */{"data": "tasks.fx_grass", "width": "70px"},
+					/*  8 */{"data": "tasks.fx_smoke", "width": "70px"},
+					/*  9 */{"data": null}
+
 				],
 				"columnDefs": [
 					{
@@ -142,7 +159,7 @@
 						"searchable": false
 					},
 					{
-						"targets": [2, 10],
+						"targets": [2, 11],
 						"sortable": false
 					}
 				],
@@ -153,14 +170,15 @@
 					}
 
 					$('td', row).eq(1).html('<a class="load-shot-view" shot-view-url="' + data.url_edit + '" href="' + data.url_view + '">' + data.name + '</a>');
-					$('td', row).eq(3).html(render_status_label(data.tasks.animation, 'animation'));
-					$('td', row).eq(4).html(render_status_label(data.tasks.lighting, 'lighting'));
-					$('td', row).eq(5).html(render_status_label(data.tasks.fx_hair, 'fx_hair'));
-					$('td', row).eq(6).html(render_status_label(data.tasks.fx_grass, 'fx_grass'));
-					$('td', row).eq(7).html(render_status_label(data.tasks.fx_smoke, 'fx_smoke'));
+					$('td', row).eq(3).html(render_timing(data.timing));
+					$('td', row).eq(4).html(render_status_label(data.tasks.animation, 'animation'));
+					$('td', row).eq(5).html(render_status_label(data.tasks.lighting, 'lighting'));
+					$('td', row).eq(6).html(render_status_label(data.tasks.fx_hair, 'fx_hair'));
+					$('td', row).eq(7).html(render_status_label(data.tasks.fx_grass, 'fx_grass'));
+					$('td', row).eq(8).html(render_status_label(data.tasks.fx_smoke, 'fx_smoke'));
 
 					var view_tag = '<span class="btn btn-default btn-xs load-shot-view" shot-view-url="' + data.url_edit + '"><i class="glyphicon glyphicon-edit"></i> View</span>';
-					$('td', row).eq(8).html(view_tag);
+					$('td', row).eq(9).html(view_tag);
 				}
 			});
 

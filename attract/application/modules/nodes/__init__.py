@@ -135,7 +135,6 @@ def shots_index():
                     % (node_type_task._id, node._id),
             'sort' : "order"}, api=api)
 
-        #: shot name, Animation, Lighting, Simulation
         data = {
             'DT_RowId': "row_{0}".format(node._id),
             '_id': node._id,
@@ -143,6 +142,10 @@ def shots_index():
             'picture': None,
             'name': node.name,
             'description': node.description,
+            'timing': {
+                'cut_in': node.properties.cut_in,
+                'cut_out': node.properties.cut_out
+                },
             'url_view': url_for('nodes.view', node_id=node._id),
             'url_edit': url_for('nodes.edit', node_id=node._id, embed=1),
             'tasks': {
