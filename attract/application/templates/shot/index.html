@@ -1,11 +1,8 @@
 {% extends 'layout.html' %}
-{% from '_macros/_pagination.html' import render_pagination %}
-{% from '_macros/_status_label.html' import render_status_label %}
 {% from '_macros/_file_uploader_javascript.html' import render_file_uploader_javascript %}
 
 {% block header_items %}
 	<link href="//cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.css" rel="stylesheet">
-	<link href="//cdn.datatables.net/fixedheader/2.1.2/css/dataTables.fixedHeader.css" rel="stylesheet">
 {% endblock %}
 
 
@@ -15,17 +12,17 @@
 	<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-hover" id="shots">
 		<thead class="shots-header">
 			<tr>
-				<th></th> {# 0 #}
-				<th></th> {# 1 #}
-				<th></th> {# 2 #}
-				<th>Name</th> {# 3 #}
-				<th>Description</th> {# 4 #}
-				<th>Animation</th> {# 5 #}
-				<th>Lighting</th> {# 6 #}
-				<th>FX Hair</th> {# 7 #}
-				<th>FX Grass</th> {# 8 #}
-				<th>FX Smoke</th> {# 9 #}
-				<th></th> {# 10 #}
+				{#  0 #} <th></th>
+				{#  1 #} <th></th>
+				{#  2 #} <th></th>
+				{#  3 #} <th>Name</th>
+				{#  4 #} <th>Description</th>
+				{#  5 #} <th>Animation</th>
+				{#  6 #} <th>Lighting</th>
+				{#  7 #} <th>FX Hair</th>
+				{#  8 #} <th>FX Grass</th>
+				{#  9 #} <th>FX Smoke</th>
+				{# 10 #} <th></th>
 			</tr>
 		</thead>
 	</table>
