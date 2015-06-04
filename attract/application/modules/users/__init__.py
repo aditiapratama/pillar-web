@@ -139,6 +139,12 @@ def tasks():
 
     tasks_datatable = []
     for task in tasks._items:
+        cut_in = 0
+        cut_out = 0
+        if task.parent.properties.cut_in:
+            cut_in = task.parent.properties.cut_in
+        if task.parent.properties.cut_out:
+            cut_out = task.parent.properties.cut_out
         data = {
             'DT_RowId': "row_{0}".format(task._id),
             '_id': task._id,
