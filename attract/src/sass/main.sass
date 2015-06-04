@@ -1,3 +1,5 @@
+@import url(../css/font_attract.css)
+
 $color_text-default: #444
 $color_link-default: #337ab7
 
@@ -111,8 +113,11 @@ input.dial:focus
 	font-size: 12px
 
 	& td
-		padding: 3px 8px
+		position: relative
+		padding: 0
 		vertical-align: middle
+		border: none
+		box-shadow: 0 1px 0 rgba(black, .1)
 
 
 h3.stats-title
@@ -133,7 +138,7 @@ tr.success .make-current
 
 
 .table-thumbnail
-	max-width: 100px
+	max-width: 120px
 //	height: auto
 //	width: 100%
 
@@ -169,6 +174,8 @@ table td:nth-child(3)
 		text-align: center
 	.shots-shot_name
 		font-weight: 500
+		& a
+			padding: 12px 8px
 
 .table.dataTable tbody tr a
 	color: $color_text-default
@@ -445,7 +452,7 @@ a.load-shot-view
 	visibility: visible
 	color: $color_link-default !important
 	position: relative
-	top: 15px
+	top: 17px
 	transform: translateY(-15px)
 
 .table tr:hover

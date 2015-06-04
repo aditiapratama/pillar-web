@@ -170,6 +170,7 @@
 					}
 
 					$('td', row).eq(1).html('<a class="load-shot-view" shot-view-url="' + data.url_edit + '" href="' + data.url_view + '">' + data.name + '</a>');
+					$('td', row).eq(2).html('<a class="load-shot-view" shot-view-url="' + data.url_edit + '" href="' + data.url_view + '">' + data.description + '</a>');
 					$('td', row).eq(3).html(render_timing(data.timing));
 					$('td', row).eq(4).html(render_status_label(data.tasks.animation, 'animation'));
 					$('td', row).eq(5).html(render_status_label(data.tasks.lighting, 'lighting'));
@@ -186,6 +187,9 @@
 		//new $.fn.dataTable.FixedHeader(shots_table);
 
 		$(document).on("click", ".load-shot-view", function(e) {
+			$(".shot-update").unbind( "click" );
+			$(".task-update").unbind( "click" );
+
 			e.preventDefault();
 
 			shot_view_url = $(this).attr('shot-view-url')
@@ -207,7 +211,9 @@
 		});
 
 		$(document).on("click", ".load-task-view", function() {
-			$(".task-update").off( "click" );
+			$(".shot-update").unbind( "click" );
+			$(".task-update").unbind( "click" );
+
 			task_view_url = $(this).attr('task-edit-url');
 			$.get(task_view_url, function(data) {
 				$('#shot_details_container').hide();
