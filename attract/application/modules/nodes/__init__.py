@@ -135,8 +135,17 @@ def shots_index():
                     % (node_type_task._id, node._id),
             'sort' : "order"}, api=api)
 
+        shot_status = None
+
+        try:
+            shot_status = node.properties.status
+        except:
+            # Notify about missing status property. This should be prominent.
+            pass
+
         data = {
             'DT_RowId': "row_{0}".format(node._id),
+            'DT_RowClass': shot_status,
             '_id': node._id,
             'order': node.order,
             'picture': None,

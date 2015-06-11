@@ -76,12 +76,15 @@
 
 <script type="text/javascript">
 
-	$(document).on("click", ".shot-update", function() {
+	$(document).on("click", "[shot-id^='{{node._id}}']", function() {
 		shot_id = $(this).attr('shot-id');
 		shot_notes = $('#notes').val();
 		shot_status = $('#status').val();
 		shot_cut_in = $('#cut_in').val();
 		shot_cut_out = $('#cut_out').val();
+
+		var table = $('#shots').DataTable();
+
 		$.post("/nodes/shots/edit", {
 			shot_id: shot_id,
 			shot_status: shot_status,
@@ -89,8 +92,18 @@
 			shot_cut_in: shot_cut_in,
 			shot_cut_out: shot_cut_out},
 			function(node_data) {
-				console.log('Task updated');
-		});
+				}).done(function(shot_data){
+					row_tag = "#row_" + shot_id;
+					$('.shot-update').fadeToggle('.shot-success').delay(1500).fadeToggle('.shot-update');
+					table.row(row_tag).nodes().to$().removeClass(shot_status);
+					table.row(row_tag).nodes().to$().addClass(shot_data.properties.status);
+
+					// Remove class updated from rows, and add to current one
+					table.rows('.updated').nodes().to$().removeClass('active updated');
+					table.row(row_tag).nodes().to$().addClass('updated');
+
+					table.draw();
+				});
 	});
 
 </script>

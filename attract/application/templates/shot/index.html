@@ -163,7 +163,7 @@
 						"sortable": false
 					}
 				],
-				"rowCallback": function ( row, data, index ) {
+				"rowCallback": function (row, data, index) {
 					if ( data.picture) {
 						var img_tag = '<img alt="' + data.name + '" src="' + data.picture_thumbnail + '" class="table-thumbnail">';
 						$('td', row).eq(0).html('<a href="' + data.url_view + '">' + img_tag + '</a>');
@@ -204,6 +204,17 @@
 			shots_table.draw();
 
 		});
+
+		// Unfinished
+		// $('#shots tbody').on( 'click', 'tr', function () {
+
+		// 	var shots_table = $('#shots').DataTable();
+		// 	var row = shots_table.row($(this).closest('tr'))
+
+		// 	job_id = $(this).attr('id').replace('row_', '');
+		// 	console.log(job_id);
+		// });
+
 
 		$(document).on("click", ".load-task-view", function() {
 			// $(".shot-update").unbind( "click" );
