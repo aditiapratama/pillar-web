@@ -2,6 +2,7 @@
 
 $color_text-default: #444
 $color_link-default: #337ab7
+$color_link-accent: lighten($color_link-default, 20%)
 
 /* Label Status */
 $color_status-todo: lightgray
@@ -183,19 +184,21 @@ table td:nth-child(3)
 	& a
 		color: $color_text-default
 
-.table.dataTable tbody tr.active:nth-child(odd) td,
-.table.dataTable tbody tr.active:nth-child(odd):hover td,
-.table.dataTable tbody tr.active:nth-child(even) td,
-.table.dataTable tbody tr.active:nth-child(even):hover td,
-.table.dataTable tbody tr.active:nth-child(odd) th,
-.table.dataTable tbody tr.active:nth-child(odd):hover th,
-.table.dataTable tbody tr.active:nth-child(even) th,
-.table.dataTable tbody tr.active:nth-child(even):hover th
-	background-color: $color_status-active !important
-	color: $color_text-default !important
+/* Style active rows */
 
-	& a
-		color: $color_text-default !important
+// .table.dataTable tbody tr.active:nth-child(odd) td,
+// .table.dataTable tbody tr.active:nth-child(odd):hover td,
+// .table.dataTable tbody tr.active:nth-child(even) td,
+// .table.dataTable tbody tr.active:nth-child(even):hover td,
+// .table.dataTable tbody tr.active:nth-child(odd) th,
+// .table.dataTable tbody tr.active:nth-child(odd):hover th,
+// .table.dataTable tbody tr.active:nth-child(even) th,
+// .table.dataTable tbody tr.active:nth-child(even):hover th
+// 	background-color: $color_status-active !important
+// 	color: $color_text-default !important
+
+// 	& a
+// 		color: $color_text-default !important
 
 .table.dataTable tbody tr.updated:nth-child(odd) td,
 .table.dataTable tbody tr.updated:nth-child(odd) th
@@ -438,18 +441,12 @@ $table_row_background_even: white
 	&:hover
 		opacity: .8
 
-.load-shot-view
+.table td.shots-shot_name a
 	display: block
-	visibility: hidden
 	width: auto
 	margin: 0 auto
-
-	position: absolute
-	top: 50%
-	transform: translateY(-50%)
-
-a.load-shot-view
 	visibility: visible
+
 	color: $color_link-default !important
 	position: relative
 	top: 17px
@@ -476,6 +473,30 @@ a.load-shot-view
 		line-height: 1.5em
 		margin: 0 auto
 
+.table
+	tr:hover
+		opacity: 0.9
+		cursor: pointer
+		a
+			color: $color_link-accent
+
+	tr[data-shot-status ~= "final"]
+		background-color: $color_status-done
+	// tr[data-shot-status ~= "in_progress"]
+	// 	background-color: $color_status-in-progress
+	tr[data-shot-status ~= "review"],
+	tr[data-shot-status ~= "review_required"]
+		background-color: $color_status-review
+	tr[data-shot-status ~= "todo"]
+		background-color: $color_status-todo
+
+	tr.active
+		color: white
+		a
+			color: white !important
+
+.table tr.review_required
+	background-color: $color_status-review
 
 /* Labels */
 .label-todo

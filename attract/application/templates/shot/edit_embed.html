@@ -95,13 +95,15 @@
 				}).done(function(shot_data){
 					row_tag = "#row_" + shot_id;
 					$('.shot-update').fadeToggle('.shot-success').delay(1500).fadeToggle('.shot-update');
-					table.row(row_tag).to$().attr('data-shot-status', shot_data.properties.status);
+
+					table.rows(row_tag).nodes().to$().attr('data-shot-status', shot_data.properties.status);
 
 					// Remove class updated from rows, and add to current one
-					table.rows('.updated').nodes().to$().removeClass('active updated');
-					table.row(row_tag).nodes().to$().addClass('updated');
+					//table.rows('.updated').nodes().to$().removeClass('active updated');
+					//table.row(row_tag).nodes().to$().addClass('updated');
 
-					table.draw();
+					// Redraw only the current row
+					table.row(row_tag).draw();
 				});
 	});
 
