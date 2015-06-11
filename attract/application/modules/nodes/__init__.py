@@ -145,7 +145,7 @@ def shots_index():
 
         data = {
             'DT_RowId': "row_{0}".format(node._id),
-            'DT_RowClass': shot_status,
+            'DT_RowAttr': {'data-shot-status':shot_status},
             '_id': node._id,
             'order': node.order,
             'picture': None,
