@@ -187,16 +187,11 @@
 		//new $.fn.dataTable.FixedHeader(shots_table);
 
 		$(document).on("click", ".load-shot-view", function(e) {
-			$(".shot-update").unbind( "click" );
-			$(".task-update").unbind( "click" );
-
 			e.preventDefault();
-
 			shot_view_url = $(this).attr('shot-view-url')
 			$.get(shot_view_url, function(data) {
-				$('#shot_details_container').show();
 				$('#shot_details_container').html(data);
-				$('#task_details_container').hide();
+				$('#task_details_container').empty();
 			});
 
 			var shots_table = $('#shots').DataTable();
@@ -211,14 +206,13 @@
 		});
 
 		$(document).on("click", ".load-task-view", function() {
-			$(".shot-update").unbind( "click" );
-			$(".task-update").unbind( "click" );
+			// $(".shot-update").unbind( "click" );
+			// $(".task-update").unbind( "click" );
 
 			task_view_url = $(this).attr('task-edit-url');
 			$.get(task_view_url, function(data) {
-				$('#shot_details_container').hide();
+				$('#shot_details_container').empty();
 				$('#task_details_container').html(data);
-				$('#task_details_container').show();
 			});
 
 			$('.load-task-view').removeClass('active');
