@@ -478,18 +478,19 @@ $table_row_background_even: white
 	tr:hover
 		opacity: 0.9
 		cursor: pointer
+		color: $color_link-accent
 		a
 			color: $color_link-accent
 
 	tr[data-shot-status ~= "final"]
-		background-color: $color_status-done
+		background-color: $color_status-done !important
 	// tr[data-shot-status ~= "in_progress"]
 	// 	background-color: $color_status-in-progress
 	tr[data-shot-status ~= "review"],
 	tr[data-shot-status ~= "review_required"]
-		background-color: $color_status-review
+		background-color: $color_status-review !important
 	tr[data-shot-status ~= "todo"]
-		background-color: $color_status-todo
+		background-color: $color_status-todo !important
 
 	tr.active
 		color: #08C
