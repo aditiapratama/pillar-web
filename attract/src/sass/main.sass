@@ -94,21 +94,62 @@ input.dial:focus
 	margin-top: 10px
 
 
-.progress-fix .progress-bar, .progress .progress-bar-fix
-	background-color: #D9534F
+.progress-bar
+	&.progress-bar-todo
+		background-color: #CCC
 
+	&.progress-bar-on_hold
+		background-color: #D9534F
 
-.progress-final_1 .progress-bar, .progress .progress-bar-final_1
-	background-color: #5CB85C
+	&.progress-bar-final
+		background-color: #5CB85C
 
+	&.progress-bar-review,
+	&.progress-bar-review_required
+		background-color: #5BC0DE
 
-.progress-info .progress-bar, .progress .progress-bar-info
-	background-color: #5BC0DE
+	&.progress-bar-in_progress
+		background-color: #F0AD4E
 
+.stats-legend
+	position: relative
+	display: inline-block
+	text-align: center
+	margin: 20px auto
 
-.progress-in_progress .progress-bar, .progress .progress-bar-in_progress
-	background-color: #F0AD4E
+	.stats-legend_item
+		text-align: center
+		background-color: #ddd
+		border-radius: 50%
+		height: 80px
+		width: 80px
+		display: inline-block
+		float: left
+		margin: 0 15px
+		color: white
+		font-size: .8em
 
+		span
+			position: absolute
+			top: 50%
+			transform: translateY(-50%)
+			width: 80px
+			display: block
+			text-align: center
+
+		&.in_progress
+			background-color: #F0AD4E
+		&.review,
+		&.review_required
+			background-color: #5BC0DE
+		&.final
+			background-color: #5CB85C
+
+		&.on_hold
+			background-color: #D9534F
+
+		&.todo
+			background-color: #CCC
 
 #shots tbody
 	font-size: 12px
