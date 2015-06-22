@@ -6,9 +6,10 @@ $color_link-accent: lighten($color_link-default, 20%)
 
 /* Label Status */
 $color_status-todo: lightgray
-$color_status-in-progress: #fff2cc
+$color_status-on_hold: #fff2cc
+$color_status-in_progress: #fff2cc
 $color_status-review: #e4f5f9
-$color_status-done: #e7f5d3
+$color_status-final: #e7f5d3
 
 $color_status-active: #E6F3FD
 $color_status-updated: #e7f5d3
@@ -342,8 +343,8 @@ $table_row_background_even: white
 		&.in-progress,
 		&.in_progress,
 		&.on_hold
-			background-color: $color_status-in-progress
-			border: thin solid darken($color_status-in-progress, 20%)
+			background-color: $color_status-in_progress
+			border: thin solid darken($color_status-in_progress, 20%)
 			color: #b86811
 
 		&.review
@@ -356,8 +357,8 @@ $table_row_background_even: white
 		&.final,
 		&.final1,
 		&.final2
-			background-color: $color_status-done
-			border: thin solid darken($color_status-done, 10%)
+			background-color: $color_status-final
+			border: thin solid darken($color_status-final, 10%)
 			color: #38761d
 
 		&.cbb
@@ -524,9 +525,9 @@ $table_row_background_even: white
 			color: $color_link-accent
 
 	tr[data-shot-status ~= "final"]
-		background-color: $color_status-done !important
+		background-color: $color_status-final !important
 	// tr[data-shot-status ~= "in_progress"]
-	// 	background-color: $color_status-in-progress
+	// 	background-color: $color_status-in_progress
 	tr[data-shot-status ~= "review"],
 	tr[data-shot-status ~= "review_required"]
 		background-color: $color_status-review !important
@@ -551,12 +552,12 @@ $table_row_background_even: white
 		border: 2px dashed darken(lightgray, 15%)
 
 .label-in-progress, .label-in_progress, .label-on_hold
-	background-color: $color_status-in-progress
-	border: thin solid darken($color_status-in-progress, 20%)
+	background-color: $color_status-in_progress
+	border: thin solid darken($color_status-in_progress, 20%)
 	color: #b86811
 
 	&.active
-		border: 2px dashed darken($color_status-in-progress, 25%)
+		border: 2px dashed darken($color_status-in_progress, 25%)
 
 .label-review
 	background-color: $color_status-review
@@ -571,12 +572,12 @@ $table_row_background_even: white
 .label-final,
 .label-final1,
 .label-final2
-	background-color: $color_status-done
-	border: thin solid darken($color_status-done, 10%)
+	background-color: $color_status-final
+	border: thin solid darken($color_status-final, 10%)
 	color: #38761d
 
 	&.active
-		border: 2px dashed darken($color_status-done, 15%)
+		border: 2px dashed darken($color_status-final, 15%)
 
 .label-cbb
 	border: thin solid #A7CA98

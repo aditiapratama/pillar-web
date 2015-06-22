@@ -9,7 +9,7 @@
       <div class="progress">
         {% for status in node_statuses %}
           <div class="progress-bar progress-bar-{{status}}" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{node_statuses[status]['completion']}}%;">
-            {{node_statuses[status]['completion']|round(1, 'floor')}}%
+            {{ (node_statuses[status]['frames'] / 24) | round(1, 'floor') }}s
           </div>
         {% endfor %}
       </div>
@@ -30,15 +30,15 @@
   {% for status in node_statuses %}
     <div class="row">
       <div class="col-md-12">
-      <h3>{{status}}</h3>
-      <h4>Shots: {{node_statuses[status]['count']}} · Frames: {{node_statuses[status]['frames']}}</h3>
-      <div class="progress">
-        <div class="progress-bar progress-bar-{{status}}" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{node_statuses[status]['completion']}}%;">
-          <span class="sr-only">{{node_statuses[status]['completion']}}% Complete</span>
+        <h3>{{status}}</h3>
+        <h4>Shots: {{node_statuses[status]['count']}} · Frames: {{node_statuses[status]['frames']}}</h3>
+        <div class="progress">
+          <div class="progress-bar progress-bar-{{status}}" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{node_statuses[status]['completion']}}%;">
+            <span class="sr-only">{{node_statuses[status]['completion']}}% Complete</span>
+          </div>
         </div>
       </div>
     </div>
-  </div>
   {% endfor %}
 </div>
 
