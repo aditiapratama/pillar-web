@@ -8,18 +8,10 @@
 
       <div class="progress">
         {% for status in node_statuses %}
-          <div class="progress-bar progress-bar-{{status}}" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{node_statuses[status]['completion']}}%;">
+          <div class="progress-bar progress-bar-{{status}}" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{node_statuses[status]['completion']}}%;" title="{{node_statuses[status]['frames']}}">
             {{ (node_statuses[status]['frames'] / 24) | round(1, 'floor') }}s
           </div>
         {% endfor %}
-      </div>
-
-      <div class="stats-legend">
-      {% for status in node_statuses %}
-        <div class="stats-legend_item {{status}}">
-          <span>{{status}}</span>
-        </div>
-      {% endfor %}
       </div>
 
     </div>
