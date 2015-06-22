@@ -141,8 +141,8 @@
 					/*    */{"data": "order"},
 					/*  0 */{"data": "picture", "width": "80px", "className": "shots-shot_thumbnail"},
 					/*  1 */{"data": "name", "className": "shots-shot_name"},
-					/*  2 */{"data": "description",  "className": "shots-shot_description"},
-					/*  3 */{"data": "timing"},
+					/*  2 */{"data": "description", "className": "shots-shot_description"},
+					/*  3 */{"data": "timing", "className": "shots-shot_timing"},
 					/*  4 */{"data": "tasks.animation", "width": "70px"},
 					/*  5 */{"data": "tasks.lighting", "width": "70px"},
 					/*  6 */{"data": "tasks.fx_hair", "width": "70px"},
@@ -184,9 +184,10 @@
 		// TODO: Needs time
 		//new $.fn.dataTable.FixedHeader(shots_table);
 
-		$('#shots tbody').on( 'click', 'tr', function () {
+		$('#shots tbody').on( 'click', '.shots-shot_description, .shots-shot_timing', function () {
 
-			row = $(this);
+			var row = $(this).closest('tr');
+			console.log(row);
 			shot_view_url = row.attr('shot-view-url');
 			shot_name = row.children('td.shots-shot_name').text();
 
@@ -206,7 +207,7 @@
 		});
 
 
-		$(document).on("click", ".load-task-view", function() {
+		$('#shots tbody').on('click', '.load-task-view', function() {
 
 			task_view_url = $(this).attr('task-edit-url');
 			$.get(task_view_url, function(data) {
@@ -218,7 +219,7 @@
 			$(this).addClass('active');
 
 			var shots_table = $('#shots').DataTable();
-			var row = shots_table.row($(this).closest('tr'))
+			var row = shots_table.row($(this).closest('tr'));
 
 			// Remove class 'active' from rows, and add to current one
 			shots_table.rows('.active').nodes().to$().removeClass('active updated');
@@ -229,7 +230,7 @@
 		});
 
 		// Add a task to a shot by simply clicking on a table cell
-		$(document).on("click", ".task-add", function() {
+		$('#shots tbody').on('click', '.task-add', function() {
 			var row = shots_table.row($(this).closest('tr'))
 			row_data = row.data();
 			task_name = $(this).attr('task-name');
