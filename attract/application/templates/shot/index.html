@@ -16,7 +16,7 @@
 				{#  1 #} <th></th>
 				{#  2 #} <th></th>
 				{#  3 #} <th>Name</th>
-				{#  4 #} <th>Description</th>
+				{#  4 #} <th>Notes</th>
 				{#  5 #} <th>Duration</th>
 				{#  6 #} <th>Animation</th>
 				{#  7 #} <th>Lighting</th>
@@ -141,7 +141,7 @@
 					/*    */{"data": "order"},
 					/*  0 */{"data": "picture", "width": "80px", "className": "shots-shot_thumbnail"},
 					/*  1 */{"data": "name", "className": "shots-shot_name"},
-					/*  2 */{"data": "description", "className": "shots-shot_description"},
+					/*  2 */{"data": "notes", "className": "shots-shot_notes",},
 					/*  3 */{"data": "timing", "className": "shots-shot_timing"},
 					/*  4 */{"data": "tasks.animation", "width": "70px"},
 					/*  5 */{"data": "tasks.lighting", "width": "70px"},
@@ -158,7 +158,13 @@
 					{
 						"targets": [2, 10],
 						"sortable": false
-					}
+					},
+					// TODO: currently this code does not work
+					// {
+					// 	"width": "10px",
+					// 	"targets": 4
+					// }
+
 				],
 				"rowCallback": function (row, data, index) {
 
@@ -171,7 +177,7 @@
 					}
 
 					$('td', row).eq(1).html('<a href="' + data.url_view + '">' + data.name + '</a>');
-					$('td', row).eq(2).html(data.description);
+					$('td', row).eq(2).html(data.notes);
 					$('td', row).eq(3).html(render_timing(data.timing));
 					$('td', row).eq(4).html(render_status_label(data.tasks.animation, 'animation'));
 					$('td', row).eq(5).html(render_status_label(data.tasks.lighting, 'lighting'));
@@ -184,7 +190,7 @@
 		// TODO: Needs time
 		//new $.fn.dataTable.FixedHeader(shots_table);
 
-		$('#shots tbody').on( 'click', '.shots-shot_description, .shots-shot_timing', function () {
+		$('#shots tbody').on( 'click', '.shots-shot_notes, .shots-shot_timing', function () {
 
 			var row = $(this).closest('tr');
 			console.log(row);

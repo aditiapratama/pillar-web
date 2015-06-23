@@ -98,6 +98,9 @@
 
 					table.rows(row_tag).nodes().to$().attr('data-shot-status', shot_data.properties.status);
 
+					var row_data = table.row(row_tag).data();
+					row_data.notes = shot_data.properties.notes;
+
 					// Remove class updated from rows, and add to current one
 					//table.rows('.updated').nodes().to$().removeClass('active updated');
 					//table.row(row_tag).nodes().to$().addClass('updated');

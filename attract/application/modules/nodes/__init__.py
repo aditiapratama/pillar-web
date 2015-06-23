@@ -150,7 +150,8 @@ def shots_index():
             'order': node.order,
             'picture': None,
             'name': node.name,
-            'description': node.description,
+            #'description': node.description,
+            'notes': node.properties.notes,
             'timing': {
                 'cut_in': node.properties.cut_in,
                 'cut_out': node.properties.cut_out
