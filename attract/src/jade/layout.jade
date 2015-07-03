@@ -9,7 +9,6 @@ html(lang="en")
 		link(href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css", rel="stylesheet")
 
 		link(href="{{ url_for('static', filename='assets/css/bootstrap-markdown.min.css') }}", rel="stylesheet")
-		link(href="{{ url_for('static', filename='assets/css/main.css') }}", rel="stylesheet")
 		link(href="{{ url_for('static', filename='assets/css/bootstrap-colorpicker.min.css') }}", rel="stylesheet")
 
 		link(href="{{ url_for('static', filename='gallery/css/blueimp-gallery.min.css') }}", rel="stylesheet")
@@ -25,6 +24,8 @@ html(lang="en")
 
 		| {% block header_items %}{% endblock %}
 
+		link(href="{{ url_for('static', filename='assets/css/main.css') }}", rel="stylesheet")
+
 	body
 		.navbar.navbar-inverse.navbar-fixed-top(role="navigation")
 			.container-fluid
@@ -37,7 +38,16 @@ html(lang="en")
 					a.navbar-brand(href="/") Attract
 
 				.navbar-collapse.collapse
+					ul.nav.navbar-nav.navbar-left
+						li
+							a(href="{{url_for('users.tasks')}}", role="menuitem", tabindex="-1")
+								| <span class="glyphicon glyphicon-dashboard"></span> My Tasks
+						li
+							a(href="{{url_for('stats.index')}}", role="menuitem", tabindex="-1")
+								| <span class="glyphicon glyphicon-stats"></span> Stats
+
 					ul.nav.navbar-nav.navbar-right
+						| {% if node_types %}
 						li#node_types.dropdown
 							a#drop4.dropdown-toggle(href="#", data-toggle="dropdown")
 								| Nodes <b class="caret"></b>
@@ -48,6 +58,7 @@ html(lang="en")
 									a(href="{{url_for('nodes.index', node_type_name=n)}}")
 										| {{n}}
 								| {% endfor %}
+						| {% endif %}
 
 						li#fat-menu.dropdown
 
@@ -77,28 +88,27 @@ html(lang="en")
 									a(href="{{url_for('users.login')}}", role="menuitem", tabindex="-1")
 										| Log in
 								| {% endif %}
-		.container-fluid
 
-			| {% with messages = get_flashed_messages() %}
-			|		{% if messages %}
-			div
-				|	{% for message in messages %}
-				.alert.alert-success(role="alert")
-					| {{message}}
-				|	{% endfor %}
-			|		{% endif %}
-			| {% endwith %}
+		| {% with messages = get_flashed_messages() %}
+		|		{% if messages %}
+		div
+			|	{% for message in messages %}
+			.alert.alert-success(role="alert")
+				| {{message}}
+			|	{% endfor %}
+		|		{% endif %}
+		| {% endwith %}
 
-			.row
-				| {% block body %}{% endblock %}
-				| {% block sidebar %}
-				.col-md-3
-				|	{% endblock %}
+		.row
+			| {% block body %}{% endblock %}
+			| {% block sidebar %}
+			.col-md-3
+			|	{% endblock %}
 
-			hr
+		hr
 
-			footer
-				p Attract 3 - Python powered
+		footer
+			p Attract 3 - Python powered
 
 		| {#
 		| {% assets filters="jsmin",

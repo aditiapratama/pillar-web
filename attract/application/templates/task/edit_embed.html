@@ -29,7 +29,12 @@
 	{% endif %}
 	<form method="POST" enctype="multipart/form-data" action="{{url_for('nodes.edit', node_id=node._id)}}">
 
-			<h2>{{node.name}}</h2>
+			<h2 class="node_title">
+				{% if parent %}
+					<span class="parent_name">{{parent.name}}</span>
+				{% endif %}
+				{{node.name}}
+			</h2>
 
 			<div class="pull-right">
 				<h2>
@@ -37,15 +42,29 @@
 			</h2>
 			</div>
 
+			{% if parent %}
+			<div class="node__parent_info">
+				<div class="cut_in">
+				Cut in: {{parent.properties.cut_in}}
+				<br/>
+				Cut out: {{parent.properties.cut_out}}
+				</div>
+			</div>
+			{% endif %}
+
+			<hr/>
+
 			{% for field in form %}
 				{% if field.name == 'csrf_token' %}
 					{{ field }}
 				{% elif field.name == 'description' %}
 					<div id="description_container">
-						<div id="description_print">{{ node.description }}</div>
-						<div id="description_form">{{ field }}</div>
-						<div class="description_toggle">
-							<i class="glyphicon glyphicon-edit"></i>
+						<div id="description_form">
+							{% if node.description %}
+								{{ field }}
+							{% else %}
+								{{ field(placeholder='Write a note') }}
+							{% endif %}
 						</div>
 					</div>
 				{% else %}
@@ -59,13 +78,13 @@
 					{% endif %}
 				{% endif %}
 			{% endfor %}
+
 			<a class="btn task-delete" href="{{url_for('nodes.delete', node_id=node._id)}}" title="Delete Task">
 				<i class="glyphicon glyphicon-trash"></i>
 			</a>
 			<a class="btn task-edit" href="{{url_for('nodes.edit', node_id=node._id)}}">
 				<i class="glyphicon glyphicon-edit"></i>
 			</a>
-
 
 			<div class="pull-right">
 				<a class="btn btn-default action_cancel" href="#">Cancel</a>
@@ -84,41 +103,50 @@
 
 <script type="text/javascript">
 
-	$( "[task-id^='{{node._id}}']").off( "click" );
 
+	// Action for Update button
 	$(document).on("click", "[task-id^='{{node._id}}']", function() {
-
 		task_id = $(this).attr('task-id');
 		task_description = $('#description').val();
 		task_status = $('#status').val();
 		task_revision = $('#revision').val();
+		task_filepath = $('#filepath').val();
 		task_owners_users = $("#owners__users").val() || [];
 		task_name = '{{ node.name }}';
 		task_parent = '#row_{{ node.parent }}';
 
 		var table = $('#shots').DataTable();
 
-
-
 		$.post("/nodes/tasks/edit", {
 			task_id: task_id,
 			task_status: task_status,
+			task_filepath: task_filepath,
 			task_revision: task_revision,
 			task_description: task_description,
 			task_owners_users: task_owners_users},
 			function(node_data) {
 
-				// row_data['tasks'][task_name] = {
-				// 	'name': task_name,
-				// 	'status': 'todo',
-				// 	'url_view': '/nodes/' + node_data['_id'] + '/view?embed=1'}
-				// shots_table.row(row).data(row_data).draw();
+			// row_data['tasks'][task_name] = {
+			// 	'name': task_name,
+			// 	'status': 'todo',
+			// 	'url_view': '/nodes/' + node_data['_id'] + '/view?embed=1'}
+			// shots_table.row(row).data(row_data).draw();
+
+			// $("#description_print").toggle();
+			// $("#description_form").toggle();
 
 		})
 		.done(function(task_data) {
 			$('.task-update').fadeToggle('.task-success').delay(1500).fadeToggle('.task-update');
 			table.row(task_parent).data().tasks[task_name]['status'] = task_data['properties']['status'];
+			table.row(task_parent).data().tasks[task_name]['is_conflicting'] = task_data['properties']['is_conflicting'];
+
+			// Remove class updated from rows, and add to current one
+			table.rows('.updated').nodes().to$().removeClass('active updated');
+			table.row(task_parent).nodes().to$().addClass('updated');
+
 			table.draw();
+
 		})
 		.fail(function() {
 			$('.task-update').fadeToggle('.task-error').delay(1500).fadeToggle('.task-update');
@@ -135,10 +163,10 @@
 		$(this).addClass("form-control " + $(this).val());
 	});
 
-	$(".description_toggle").on("click",function(){
-		$("#description_print").toggle();
-		$("#description_form").toggle();
-	});
+	// $("#description_print").on("click",function(){
+	// 	$("#description_print").toggle();
+	// 	$("#description_form").toggle();
+	// });
 
 </script>
 

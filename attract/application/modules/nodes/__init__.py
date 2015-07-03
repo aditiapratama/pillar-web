@@ -135,14 +135,27 @@ def shots_index():
                     % (node_type_task._id, node._id),
             'sort' : "order"}, api=api)
 
-        #: shot name, Animation, Lighting, Simulation
+        shot_status = None
+
+        try:
+            shot_status = node.properties.status
+        except:
+            # Notify about missing status property. This should be prominent.
+            pass
+
         data = {
             'DT_RowId': "row_{0}".format(node._id),
+            'DT_RowAttr': {'data-shot-status':shot_status},
             '_id': node._id,
             'order': node.order,
             'picture': None,
             'name': node.name,
-            'description': node.description,
+            #'description': node.description,
+            'notes': node.properties.notes,
+            'timing': {
+                'cut_in': node.properties.cut_in,
+                'cut_out': node.properties.cut_out
+                },
             'url_view': url_for('nodes.view', node_id=node._id),
             'url_edit': url_for('nodes.edit', node_id=node._id, embed=1),
             'tasks': {
@@ -184,6 +197,9 @@ def shots_index():
                 'status': task.properties.status,
                 'url_view': url_for('nodes.view', node_id=task._id, embed=1),
                 'url_edit': url_for('nodes.edit', node_id=task._id, embed=1),
+                'is_conflicting': task.properties.is_conflicting,
+                'is_processing': task.properties.is_rendering,
+                'is_open': task.properties.is_open
                 }
 
 
@@ -246,8 +262,8 @@ def view(node_id):
             parent = None
         # Get children
         children = Node.all({
-            'where': '{"parent" : "%s"}' % node['_id'],
-            'embedded': '{"picture":1, "user":1}'}, api=api)
+            'where': '{"parent": "%s"}' % node['_id'],
+            'embedded': '{"picture": 1, "user": 1}'}, api=api)
 
         children = children.to_dict()['_items']
         # TODO this logic should be on Server:
@@ -387,6 +403,7 @@ def task_edit():
     if request.form['task_revision']:
         task.properties.revision = int(request.form['task_revision'])
     task.properties.status = request.form['task_status']
+    task.properties.filepath = request.form['task_filepath']
     task.properties.owners.users = request.form.getlist('task_owners_users[]')
 
     siblings = Node.all({
@@ -397,7 +414,7 @@ def task_edit():
         return revsion_conflict[task_current.name](task_current, task_sibling)
 
     def task_animation(task_current, task_sibling):
-        if task_sibling.name in ['fx_hair', 'fx_smoke', 'fx_grass', 'animation']:
+        if task_sibling.name in ['fx_hair', 'fx_smoke', 'fx_grass', 'lighting']:
             if task_current.properties.revision > task_sibling.properties.revision:
                 return True
         return False
@@ -436,8 +453,10 @@ def task_edit():
         for sibling in siblings._items:
             if sibling.properties.revision and sibling._id != task_id:
                 if check_conflict(task, sibling) == True:
-                    task.properties.status = 'conflict'
+                    task.properties.is_conflicting = True
                     break
+                else:
+                    task.properties.is_conflicting = False
 
     task.update(api=api)
 
@@ -533,6 +552,14 @@ def edit(node_id):
     set_properties(node_schema, form_schema, prop_dict, form)
 
 
+    # Get Parent
+    try:
+        parent = Node.find(node['parent'], api=api)
+    except KeyError:
+        parent = None
+    except ResourceNotFound:
+        parent = None
+
     embed_string = ''
     # Check if we want to embed the content via an AJAX call
     if request.args.get('embed'):
@@ -548,6 +575,7 @@ def edit(node_id):
         return render_template(
                 template,
                 node=node,
+                parent=parent,
                 form=form,
                 errors=form.errors,
                 error=error)
@@ -556,6 +584,7 @@ def edit(node_id):
         return render_template(
                 template,
                 node=node,
+                parent=parent,
                 form=form,
                 errors=form.errors,
                 error=error)

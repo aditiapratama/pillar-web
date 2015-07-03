@@ -1,3 +1,4 @@
+import json
 from attractsdk import utils
 from attractsdk.users import User
 from attractsdk.nodes import Node
@@ -10,6 +11,7 @@ from flask import flash
 from flask import session
 from flask import redirect
 from flask import request
+from flask import url_for
 
 from application.modules.users.forms import UserLoginForm
 from application.modules.users.forms import UserProfileForm
@@ -135,11 +137,35 @@ def tasks():
     # Build the pagination object
     # pagination = Pagination(int(page), max_results, tasks._meta.total)
 
+    tasks_datatable = []
+    for task in tasks._items:
+        cut_in = 0
+        cut_out = 0
+        if task.parent.properties.cut_in:
+            cut_in = task.parent.properties.cut_in
+        if task.parent.properties.cut_out:
+            cut_out = task.parent.properties.cut_out
+        data = {
+            'DT_RowId': "row_{0}".format(task._id),
+            '_id': task._id,
+            'order': task.order,
+            'picture': None,
+            'name': task.name,
+            'timing': {
+                'cut_in': task.parent.properties.cut_in,
+                'cut_out': task.parent.properties.cut_out,
+            },
+            'parent': task.parent.to_dict(),
+            'description': task.description,
+            'url_view': url_for('nodes.view', node_id=task._id),
+            'url_edit': url_for('nodes.edit', node_id=task._id, embed=1),
+            'status': task.properties.status,
+            }
+
+        tasks_datatable.append(data)
 
     return render_template(
         'users/tasks.html',
         title="task",
-        tasks=tasks._items)
-
-    return 'ok'
-
+        tasks_data=json.dumps(tasks_datatable),
+        node_type=node_type)

@@ -1,8 +1,18 @@
+@import url(../css/font_attract.css)
+
+$color_text-default: #444
+$color_link-default: #337ab7
+$color_link-accent: lighten($color_link-default, 20%)
+
 /* Label Status */
 $color_status-todo: lightgray
-$color_status-in-progress: #fff2cc
+$color_status-on_hold: #fff2cc
+$color_status-in_progress: #fff2cc
 $color_status-review: #e4f5f9
-$color_status-done: #e7f5d3
+$color_status-final: #e7f5d3
+
+$color_status-active: #E6F3FD
+$color_status-updated: #e7f5d3
 
 =text-overflow-ellipsis
 	overflow: hidden
@@ -85,28 +95,72 @@ input.dial:focus
 	margin-top: 10px
 
 
-.progress-fix .progress-bar, .progress .progress-bar-fix
-	background-color: #D9534F
+.progress-bar
+	&.progress-bar-todo
+		background-color: #CCC
 
+	&.progress-bar-on_hold
+		background-color: #D9534F
 
-.progress-final_1 .progress-bar, .progress .progress-bar-final_1
-	background-color: #5CB85C
+	&.progress-bar-final
+		background-color: #5CB85C
 
+	&.progress-bar-review,
+	&.progress-bar-review_required
+		background-color: #5BC0DE
 
-.progress-info .progress-bar, .progress .progress-bar-info
-	background-color: #5BC0DE
+	&.progress-bar-in_progress
+		background-color: #F0AD4E
 
+.stats-legend
+	position: relative
+	display: inline-block
+	text-align: center
+	margin: 20px auto
 
-.progress-in_progress .progress-bar, .progress .progress-bar-in_progress
-	background-color: #F0AD4E
+	.stats-legend_item
+		text-align: center
+		background-color: #ddd
+		border-radius: 50%
+		height: 80px
+		width: 80px
+		display: inline-block
+		float: left
+		margin: 0 15px
+		color: white
+		font-size: .8em
 
+		span
+			position: absolute
+			top: 50%
+			transform: translateY(-50%)
+			width: 80px
+			display: block
+			text-align: center
+
+		&.in_progress
+			background-color: #F0AD4E
+		&.review,
+		&.review_required
+			background-color: #5BC0DE
+		&.final
+			background-color: #5CB85C
+
+		&.on_hold
+			background-color: #D9534F
+
+		&.todo
+			background-color: #CCC
 
 #shots tbody
 	font-size: 12px
 
-
-#shots tbody td
-	padding: 3px 8px
+	& td
+		position: relative
+		padding: 0
+		vertical-align: middle
+		border: none
+		box-shadow: 0 1px 0 rgba(black, .1)
 
 
 h3.stats-title
@@ -127,9 +181,9 @@ tr.success .make-current
 
 
 .table-thumbnail
-	max-width: 100%
-	height: auto
-	width: 100%
+	max-width: 120px
+//	height: auto
+//	width: 100%
 
 textarea#description.form-control
 	min-height: 150px !important
@@ -153,10 +207,92 @@ table td:nth-child(3)
 	left: 0
 	top: 50px
 	bottom: 0
-	position: fixed
 	overflow: auto
 
 	padding: 15px
+
+/* Table Shots (DataTable) */
+#shots
+	.shots-shot_thumbnail
+		text-align: center
+	.shots-shot_name
+		font-weight: 500
+		& a
+			padding: 12px 8px
+
+.table.dataTable tbody tr a
+	color: $color_text-default
+
+	& a
+		color: $color_text-default
+
+/* Style active rows */
+.table.dataTable tbody tr.active:nth-child(odd) td,
+.table.dataTable tbody tr.active:nth-child(odd):hover td,
+.table.dataTable tbody tr.active:nth-child(even) td,
+.table.dataTable tbody tr.active:nth-child(even):hover td,
+.table.dataTable tbody tr.active:nth-child(odd) th,
+.table.dataTable tbody tr.active:nth-child(odd):hover th,
+.table.dataTable tbody tr.active:nth-child(even) th,
+.table.dataTable tbody tr.active:nth-child(even):hover th
+	background-color: inherit !important
+	color: $color_link-accent !important
+	font-weight: 600
+
+	& a
+		color: $color_link-accent !important
+		font-weight: 600
+
+.table.dataTable tbody tr.updated:nth-child(odd) td,
+.table.dataTable tbody tr.updated:nth-child(odd) th
+	animation: fx-updated-row-odd 1.5s ease forwards
+
+.table.dataTable tbody tr.updated:nth-child(even) td,
+.table.dataTable tbody tr.updated:nth-child(even) th
+	animation: fx-updated-row-even 8s ease forwards
+
+$table_row_background_odd: #f9f9f9
+$table_row_background_even: white
+
+@-webkit-keyframes fx-updated-row-even
+	0%
+		background-color: $table_row_background_even
+	10%
+		background-color: $color_status-updated
+	40%
+		background-color: $color_status-updated
+	100%
+		background-color: $table_row_background_even
+
+@keyframes fx-updated-row-even
+	0%
+		background-color: $table_row_background_even
+	10%
+		background-color: $color_status-updated
+	40%
+		background-color: $color_status-updated
+	100%
+		background-color: $table_row_background_even
+
+@-webkit-keyframes fx-updated-row-odd
+	0%
+		background-color: $table_row_background_odd
+	10%
+		background-color: $color_status-updated
+	40%
+		background-color: $color_status-updated
+	100%
+		background-color: $table_row_background_odd
+
+@keyframes fx-updated-row-odd
+	0%
+		background-color: $table_row_background_odd
+	10%
+		background-color: $color_status-updated
+	40%
+		background-color: $color_status-updated
+	100%
+		background-color: $table_row_background_odd
 
 
 /* Shots Sidebar */
@@ -207,8 +343,8 @@ table td:nth-child(3)
 		&.in-progress,
 		&.in_progress,
 		&.on_hold
-			background-color: $color_status-in-progress
-			border: thin solid darken($color_status-in-progress, 20%)
+			background-color: $color_status-in_progress
+			border: thin solid darken($color_status-in_progress, 20%)
 			color: #b86811
 
 		&.review
@@ -221,8 +357,8 @@ table td:nth-child(3)
 		&.final,
 		&.final1,
 		&.final2
-			background-color: $color_status-done
-			border: thin solid darken($color_status-done, 10%)
+			background-color: $color_status-final
+			border: thin solid darken($color_status-final, 10%)
 			color: #38761d
 
 		&.cbb
@@ -242,37 +378,29 @@ table td:nth-child(3)
 #shots-sidebar_edit
 	h2
 		text-transform: capitalize
+	#field_description
+		display: none
 
 #description_print
 	font-size: 1.2em
 	padding: 2px
-	margin: 0 0 15px 0
+	margin: 0
 	border: 1px solid transparent
 	color: lighten(black, 40%)
+	min-height: 100px
+	cursor: text
 
 #description_form
-	display: none
-
 	& textarea
 		font-size: 1.2em
 		width: 100%
 		min-height: 100px
-
-.description_toggle
-	opacity: 0
-	font-size: 1.2em
-	margin: 0 0 20px 0
-	color: CornflowerBlue
-	cursor: pointer
-	position: absolute
-	top: 0
-	right: 0
-
-	&:hover
-		color: CadetBlue
+		margin: 0
 
 #description_container
 	position: relative
+	min-height: 120px
+
 	&:hover
 		.description_toggle
 			opacity: 1.0
@@ -320,14 +448,6 @@ table td:nth-child(3)
 .table td
 	position: relative
 
-.table th
-	&.sorting
-		white-space: nowrap
-		min-width: 80px
-
-.table .table-thumbnail
-	min-width: 90px
-
 .task-add
 	display: block
 	visibility: hidden
@@ -366,22 +486,65 @@ table td:nth-child(3)
 	&:hover
 		opacity: .8
 
-.load-shot-view
+.table td.shots-shot_name a
 	display: block
-	visibility: hidden
 	width: auto
 	margin: 0 auto
+	visibility: visible
 
-	position: absolute
-	top: 50%
-	transform: translateY(-50%)
+	color: $color_link-default !important
+	position: relative
+	top: 17px
+	transform: translateY(-15px)
 
 .table tr:hover
 	.load-shot-view
 		visibility: visible
 
+.node_title
+	.parent_name
+		color: lighten($color_text-default, 30%)
+		border-right: 2px solid lighten($color_text-default, 60%)
+		padding-right: 15px
+		margin-right: 5px
 
 
+.status
+	.label
+		display: block
+		width: 90%
+		font-size: .9em
+		font-weight: 400
+		line-height: 1.5em
+		margin: 0 auto
+
+.table
+	tr:hover
+		opacity: 0.9
+		cursor: pointer
+		color: $color_link-accent
+		a
+			color: $color_link-accent
+
+	tr[data-shot-status ~= "final"]
+		background-color: $color_status-final !important
+	// tr[data-shot-status ~= "in_progress"]
+	// 	background-color: $color_status-in_progress
+	tr[data-shot-status ~= "review"],
+	tr[data-shot-status ~= "review_required"]
+		background-color: $color_status-review !important
+	tr[data-shot-status ~= "todo"]
+		background-color: $color_status-todo !important
+
+	tr.active
+		color: #08C
+		a
+			color: #08C !important
+
+.table tr.review_required
+	background-color: $color_status-review
+
+/* Labels */
 .label-todo
 	background-color: lightgray
 	border: thin solid darken(lightgray, 10%)
@@ -391,12 +554,12 @@ table td:nth-child(3)
 		border: 2px dashed darken(lightgray, 15%)
 
 .label-in-progress, .label-in_progress, .label-on_hold
-	background-color: $color_status-in-progress
-	border: thin solid darken($color_status-in-progress, 20%)
+	background-color: $color_status-in_progress
+	border: thin solid darken($color_status-in_progress, 20%)
 	color: #b86811
 
 	&.active
-		border: 2px dashed darken($color_status-in-progress, 25%)
+		border: 2px dashed darken($color_status-in_progress, 25%)
 
 .label-review
 	background-color: $color_status-review
@@ -411,12 +574,12 @@ table td:nth-child(3)
 .label-final,
 .label-final1,
 .label-final2
-	background-color: $color_status-done
-	border: thin solid darken($color_status-done, 10%)
+	background-color: $color_status-final
+	border: thin solid darken($color_status-final, 10%)
 	color: #38761d
 
 	&.active
-		border: 2px dashed darken($color_status-done, 15%)
+		border: 2px dashed darken($color_status-final, 15%)
 
 .label-cbb
 	border: thin solid #A7CA98
@@ -437,3 +600,6 @@ table td:nth-child(3)
 	&.active
 		border: 2px dashed crimson !important
 
+
+.shots-shot_notes
+	max-width: 300px
