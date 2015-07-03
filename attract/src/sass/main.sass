@@ -6,7 +6,7 @@ $color_link-accent: lighten($color_link-default, 20%)
 
 /* Label Status */
 $color_status-todo: lightgray
-$color_status-on_hold: #fff2cc
+$color_status-on_hold: #fff2cc /* UNUSED */
 $color_status-in_progress: #fff2cc
 $color_status-review: #e4f5f9
 $color_status-final: #e7f5d3
@@ -519,6 +519,8 @@ $table_row_background_even: white
 		margin: 0 auto
 
 .table
+	tr
+		color: $color_text-default
 	tr:hover
 		opacity: 0.9
 		cursor: pointer
@@ -535,6 +537,14 @@ $table_row_background_even: white
 		background-color: $color_status-review !important
 	tr[data-shot-status ~= "todo"]
 		background-color: $color_status-todo !important
+
+	tr[data-shot-status ~= "in-progress"],
+	tr[data-shot-status ~= "in_progress"]
+		background-color: $color_status-in_progress !important
+
+	tr[data-shot-status ~= "on_hold"]
+		//background-color: $color_status-on_hold !important
+		color: crimson
 
 	tr.active
 		color: #08C
