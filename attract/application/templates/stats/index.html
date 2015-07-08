@@ -41,20 +41,6 @@
 {% endblock %}
 
 {% block footer_scripts %}
-{#
-You can get the hours by doing integer casting int(16.5) = 16 subtract your hours from your decimal to get your minutes:
-
-16.5-16 = .5
-that minutes bit is actually a fraction of an hour, so:
-.5 (hours) * 60 (minutes/hour) = 30 minutes
-
-Once you break it into parts, you just call the constructor:
-j = datetime.time(hour = 16, minute=30)
-this should return : datetime(16,30)
-
-#}
-
-
 <script>
   $(".stats-seconds").each(function(){
     var time = $(this).text().split(".");
