@@ -22,12 +22,8 @@
         {% set seconds = (node_statuses[status]['frames'] / 24) | round(1, 'floor') %}
         <h4>
           <strong>{{node_statuses[status]['count']}}</strong> shots
-          {% if seconds > 60 %}
-          · <strong class="stats-seconds">{{ (seconds / 60)  | round(2, 'floor')}}</strong> min
-          {% else %}
-          · <strong>{{ seconds }}</strong> sec
-          {% endif %}
-          · <strong>{{node_statuses[status]['frames']}}</strong> frames
+          · <strong class="stats-time">eee</strong>
+          · <strong class="stats-frames">{{node_statuses[status]['frames']}}</strong> frames
         </h4>
         <div class="progress">
           <div class="progress-bar progress-bar-{{status}}" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{node_statuses[status]['completion']}}%;">
@@ -42,16 +38,28 @@
 
 {% block footer_scripts %}
 <script>
-  $(".stats-seconds").each(function(){
-    var time = $(this).text().split(".");
-    var minutes = time[0];
-    var seconds = time[1] / 60;
+  function rectime(secs) {
+    var hr = Math.floor(secs / 3600);
+    var min = Math.floor((secs - (hr * 3600))/60);
+    var sec = secs - (hr * 3600) - (min * 60);
 
-    seconds = (""+seconds).split(".");
-    minutes = +time[0] + +seconds[0];
-    time = minutes + ":" + (seconds[1]).substr(0, 2);
+    if (hr < 10) {hr = "0" + hr; }
+    if (min < 10) {min = "0" + min;}
+    if (sec < 10) {sec = "0" + sec;}
+    if (hr) {hr = "00";}
 
-    $(this).text(time);
+    return hr + ':' + min + ':' + sec;
+  };
+
+  $(".stats-frames").each(function(){
+    var frames = $(this).text();
+    var fps = 24;
+    var seconds = frames / fps;
+
+    var time = rectime(Math.round(seconds));
+
+    $(this).prev().text(time);
+
   });
 </script>
 {% endblock %}
