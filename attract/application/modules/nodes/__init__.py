@@ -30,11 +30,8 @@ from flask.ext.login import current_user
 
 from jinja2.exceptions import TemplateNotFound
 
-
 RFC1123_DATE_FORMAT = '%a, %d %b %Y %H:%M:%S GMT'
 
-
-# Name of the Blueprint
 nodes = Blueprint('nodes', __name__)
 
 def type_names():
@@ -71,18 +68,15 @@ def index(node_type_name=""):
     if node_type_name == "":
         node_type_name = "shot"
 
-    node_type_list = NodeType.all({
+    node_type = NodeType.find_first({
         'where': '{"name" : "%s"}' % node_type_name,
         }, api=api)
 
-    if len(node_type_list['_items']) == 0:
+    if not node_type:
         return "Empty NodeType list", 200
 
-    node_type = node_type_list['_items'][0]
-
-
     nodes = Node.all({
-        'where': '{"node_type" : "%s"}' % (node_type['_id']),
+        'where': '{"node_type" : "%s"}' % (node_type._id),
         'max_results': max_results,
         'page': page,
         'embedded': '{"picture":1}',
@@ -92,128 +86,131 @@ def index(node_type_name=""):
     pagination = Pagination(int(page), max_results, nodes._meta.total)
 
     template = '{0}/index.html'.format(node_type_name)
+    try:
+        return render_template(
+            template,
+            title=node_type_name,
+            nodes=nodes,
+            node_type=node_type,
+            type_names=type_names(),
+            pagination=pagination)
+    except TemplateNotFound:
+        return render_template(
+            'nodes/index.html',
+            title=node_type_name,
+            nodes=nodes,
+            node_type=node_type,
+            type_names=type_names(),
+            pagination=pagination)
 
-    return render_template(
-        template,
-        title=node_type_name,
-        nodes=nodes,
-        node_type=node_type,
-        type_names=type_names(),
-        pagination=pagination)
 
-
-# XXX Hack to get custom data for DataTables for shot view
-@nodes.route("/shots/index.json")
+@nodes.route("/<node_type_id>/add", methods=['GET', 'POST'])
 @login_required
-def shots_index():
-    max_results = 100
-
+def add(node_type_id):
+    """Generic function to add a node of any type
+    """
     api = SystemUtility.attract_api()
-    node_type_name = "shot"
-    node_type_list = NodeType.all({
-        'where': '{"name" : "%s"}' % node_type_name,
+    ntype = NodeType.find(node_type_id, api=api)
+    form = get_node_form(ntype)
+    user_id = current_user.objectid
+    if form.validate_on_submit():
+        if process_node_form(form, node_type=ntype, user=user_id):
+            flash('Node correctly added')
+            return redirect(url_for('nodes.index', node_type_name=ntype['name']))
+    else:
+        print form.errors
+    return render_template('nodes/add.html',
+        node_type=ntype,
+        form=form,
+        errors=form.errors,
+        type_names=type_names())
+
+def jstree_parse_node(node, children=None):
+    """Generate JStree node from node object"""
+    n = {'id': node._id, 'text': node.name, 'type': node.node_type.name, 'children': True}
+    # if children:
+    #     n['children'] = children
+    return n
+
+def jstree_get_children(node_id):
+    api = SystemUtility.attract_api()
+    children = Node.all({
+        'projection': '{"name":1, "parent":1, "node_type": 1}',
+        'embedded': '{"node_type":1}',
+        'where': '{"parent": "%s"}' % node_id}, api=api)
+
+    children_list = []
+    for child in children._items:
+        children_list.append(jstree_parse_node(child))
+    return children_list
+
+def jstree_build_from_node(node):
+    api = SystemUtility.attract_api()
+    open_nodes = []
+    # Get the current node again (with parent data)
+    #parent = Node.find(node.parent + '/?projection={"name":1, "parent":1, "node_type.name": 1}&embedded={"node_type":1}', api=api)
+    parent = Node.find(node.parent, {
+        'projection': '{"name":1, "parent":1, "node_type": 1}',
+        'embedded': '{"node_type":1}',
         }, api=api)
+    while (parent):
+        open_nodes.append(jstree_parse_node(parent))
+        # If we have a parent
+        if parent.parent:
+            try:
+                parent = Node.find(parent.parent, {
+                    'projection': '{"name":1, "parent":1, "node_type": 1}',
+                    'embedded': '{"node_type":1}',
+                    }, api=api)
+            except ResourceNotFound:
+                parent = None
+        else:
+            parent = None
+    open_nodes.reverse()
+    #open_nodes.pop(0)
+    nodes_list = []
 
-    node_type = node_type_list._items[0]
+    for node in jstree_get_children(open_nodes[0]['id']):
+        # Nodes at the root of the project
+        node_dict = {
+            'id': node['id'],
+            'text': node['text'],
+            'type': 'chapter',
+            'children': True
+        }
 
-    nodes = Node.all({
-        'where': '{"node_type" : "%s"}' % node_type._id,
-        'max_results': max_results,
-        'embedded': '{"picture":1}',
-        'sort' : "order"}, api=api)
-
-    # Get the task node type object id
-    node_type_list = NodeType.all({
-        'where': '{"name" : "task"}',
-        }, api=api)
-    node_type_task = node_type_list._items[0]
-
-    nodes_datatables = []
-    for node in nodes._items:
-        tasks = Node.all({
-            'where': '{"node_type" : "%s", "parent" : "%s"}'\
-                    % (node_type_task._id, node._id),
-            'sort' : "order"}, api=api)
-
-        shot_status = None
-
-        try:
-            shot_status = node.properties.status
-        except:
-            # Notify about missing status property. This should be prominent.
-            pass
-
-        data = {
-            'DT_RowId': "row_{0}".format(node._id),
-            'DT_RowAttr': {'data-shot-status':shot_status},
-            '_id': node._id,
-            'order': node.order,
-            'picture': None,
-            'name': node.name,
-            #'description': node.description,
-            'notes': node.properties.notes,
-            'timing': {
-                'cut_in': node.properties.cut_in,
-                'cut_out': node.properties.cut_out
-                },
-            'url_view': url_for('nodes.view', node_id=node._id),
-            'url_edit': url_for('nodes.edit', node_id=node._id, embed=1),
-            'tasks': {
-                'animation': None,
-                'lighting': None,
-                'fx_hair': None,
-                'fx_grass': None,
-                'fx_smoke': None
-                },
-            }
-
-        if node.picture:
-            # This is an address on the Attract server, so it should be built
-            # entirely here
-            data['picture'] = "{0}/file_server/file/{1}".format(
-                app.config['ATTRACT_SERVER_ENDPOINT'], node.picture.path)
-            # Get previews
-            picture_node = File.find(node.picture['_id'] + \
-                                    '/?embedded={"previews":1}', api=api)
-
-            if picture_node.previews:
-                for preview in picture_node.previews:
-                    if preview.size == 'm':
-                        data['picture_thumbnail'] = app.config['ATTRACT_SERVER_ENDPOINT'] + "/file_server/file/" + preview.path
+        # Opening and selecting the tree nodes according to the landing place
+        if node['id'] == open_nodes[1]['id']:
+            current_dict = node_dict
+            current_dict['state'] = {'opened': True}
+            current_dict['children'] = jstree_get_children(node['id'])
+            # Iterate on open_nodes until the end
+            for n in open_nodes[2:]:
+                for c in current_dict['children']:
+                    if n['id'] == c['id']:
+                        current_dict = c
                         break
-            else:
-                data['picture_thumbnail'] = data['picture']
+                current_dict['state'] = {'opened': True}
+                current_dict['children'] = jstree_get_children(n['id'])
+
+            # if landing_asset_id:
+            #     current_dict['children'] = aux_product_tree_node(open_nodes[-1])
+            #     for asset in current_dict['children']:
+            #         if int(asset['id'][1:])==landing_asset_id:
+            #             asset.update(state=dict(selected=True))
+
+        nodes_list.append(node_dict)
+    return nodes_list
 
 
-        if node.order is None:
-            data['order'] = 0
-
-        for task in tasks._items:
-            # If there are tasks assigned to the shot we loop through them and
-            # match them with the existing data indexes.
-            if task.name in data['tasks']:
-                data['tasks'][task.name] = {
-                'name': task.name,
-                'status': task.properties.status,
-                'url_view': url_for('nodes.view', node_id=task._id, embed=1),
-                'url_edit': url_for('nodes.edit', node_id=task._id, embed=1),
-                'is_conflicting': task.properties.is_conflicting,
-                'is_processing': task.properties.is_rendering,
-                'is_open': task.properties.is_open
-                }
-
-
-        nodes_datatables.append(data)
-
-    return jsonify(data=nodes_datatables)
-
-
-# XXX Hack to get custom data
-@nodes.route("/shots/<shot_id>.json")
-@login_required
-def shots_view(shot_id):
-    return jsonify(_id=shot_id)
-
+def jstree_process_children(children):
+    if children:
+        jstree_children = []
+        for node in children:
+            jstree_children.append({
+                'text': node['name']
+                })
+        return jstree_children
 
 @nodes.route("/<node_id>/view", methods=['GET', 'POST'])
 @login_required
@@ -221,16 +218,16 @@ def view(node_id):
     api = SystemUtility.attract_api()
     # Get node with embedded picture data
     try:
-        node = Node.find(node_id + '/?embedded={"picture":1}', api=api)
+        node = Node.find(node_id + '/?embedded={"picture":1, "node_type":1}', api=api)
     except ResourceNotFound:
         node = None
     user_id = current_user.objectid
     if node:
         # Get comment type
-        comment_type = NodeType.all({'where': '{"name" : "comment"}'}, api=api)
-        comment_type = comment_type['_items'][0]
+        comment_type = NodeType.find_first({'where': '{"name" : "comment"}'}, api=api)
+        # comment_type = comment_type['_items'][0]
         # Get node type
-        node_type = NodeType.find(node['node_type'], api=api)
+        node_type = node.node_type #NodeType.find(node['node_type'], api=api)
         # Get comments form
         comment_form = get_comment_form(node, comment_type)
         if comment_form.validate_on_submit():
@@ -240,10 +237,11 @@ def view(node_id):
                                     user=user_id):
                 node = Node.find(node_id + '/?embedded={"picture":1}', api=api)
             else:
-                print (comment_form.errors)
+                if comment_form.errors:
+                    print(comment_form.errors)
         # Get previews
         if node.picture:
-            picture_node = File.find(node.picture['_id'] + \
+            picture_node = File.find(node.picture._id + \
                                     '/?embedded={"previews":1}', api=api)
             node['picture'] = "{0}{1}".format(SystemUtility.attract_server_endpoint_static(), picture_node.path)
             if picture_node.previews:
@@ -262,7 +260,7 @@ def view(node_id):
             parent = None
         # Get children
         children = Node.all({
-            'where': '{"parent": "%s"}' % node['_id'],
+            'where': '{"parent": "%s"}' % node._id,
             'embedded': '{"picture": 1, "user": 1}'}, api=api)
 
         children = children.to_dict()['_items']
@@ -303,6 +301,8 @@ def view(node_id):
                     'children': children,
                     'parent': parent
                 })
+            elif request.args.get('format') == 'jstree':
+                return jsonify(items=jstree_build_from_node(node))
         else:
             embed_string = ''
             # Check if we want to embed the content via an AJAX call
@@ -310,182 +310,36 @@ def view(node_id):
                 if request.args.get('embed') == '1':
                     # Define the prefix for the embedded template
                     embed_string = '_embed'
-            return_content = render_template(
-            '{0}/view{1}.html'.format(node_type['name'], embed_string),
-            node=node,
-            type_names=type_names(),
-            parent=parent,
-            children=children,
-            comments=comments,
-            comment_form=comment_form,
-            assigned_users=assigned_users,
-            config=app.config)
+
+            # We should more simply check if the template file actually exsists on
+            # the filesystem level
+            try:
+                return_content = render_template(
+                    '{0}/view{1}.html'.format(node_type['name'], embed_string),
+                    node=node,
+                    type_names=type_names(),
+                    parent=parent,
+                    children=children,
+                    comments=comments,
+                    comment_form=comment_form,
+                    assigned_users=assigned_users,
+                    config=app.config)
+            except TemplateNotFound:
+                template = 'nodes/edit{0}.html'.format(embed_string)
+                return_content = render_template(
+                    template,
+                    node=node,
+                    type_names=type_names(),
+                    parent=parent,
+                    children=children,
+                    comments=comments,
+                    comment_form=comment_form,
+                    assigned_users=assigned_users,
+                    config=app.config)
 
         return return_content
     else:
         return abort(404)
-
-
-@nodes.route("/<node_type_id>/add", methods=['GET', 'POST'])
-@login_required
-def add(node_type_id):
-    """Generic function to add a node of any type
-    """
-    api = SystemUtility.attract_api()
-    ntype = NodeType.find(node_type_id, api=api)
-    form = get_node_form(ntype)
-    user_id = current_user.objectid
-    if form.validate_on_submit():
-        if process_node_form(form, node_type=ntype, user=user_id):
-            flash('Node correctly added')
-            return redirect(url_for('nodes.index', node_type_name=ntype['name']))
-    else:
-        print form.errors
-    return render_template('nodes/add.html',
-        node_type=ntype,
-        form=form,
-        errors=form.errors,
-        type_names=type_names())
-
-
-# XXX Hack to create a task with a single click
-@nodes.route("/tasks/add", methods=['POST'])
-@login_required
-def task_add():
-    api = SystemUtility.attract_api()
-    shot_id = request.form['shot_id']
-    task_name = request.form['task_name']
-
-    node_type_list = NodeType.all({
-        'where': "name=='task'",
-        }, api=api)
-    node_type = node_type_list['_items'][0]
-
-    node_type_id = node_type._id
-    import datetime
-
-    RFC1123_DATE_FORMAT = '%a, %d %b %Y %H:%M:%S GMT'
-    node = Node()
-    prop = {}
-    prop['node_type'] = node_type_id
-    prop['name'] = task_name
-    prop['description'] = ''
-    prop['user'] = current_user.objectid
-    prop['parent'] = shot_id
-    prop['properties'] = {
-        'status': 'todo',
-        'owners': {
-            'users': [],
-            'groups': []},
-        'time': {
-            'duration': 10,
-            'start': datetime.datetime.strftime(datetime.datetime.now(), '%a, %d %b %Y %H:%M:%S GMT')}
-        }
-    post = node.post(prop, api=api)
-    return jsonify(node.to_dict())
-
-
-# XXX Hack to edit tasks via AJAX
-@nodes.route("/tasks/edit", methods=['POST'])
-@login_required
-def task_edit():
-    """We want to be able to edit the following properties:
-    - status
-    - owners
-    - description
-    - picture (optional)
-    """
-    api = SystemUtility.attract_api()
-    task_id = request.form['task_id']
-
-    task = Node.find(task_id, api=api)
-    task.description = request.form['task_description']
-    if request.form['task_revision']:
-        task.properties.revision = int(request.form['task_revision'])
-    task.properties.status = request.form['task_status']
-    task.properties.filepath = request.form['task_filepath']
-    task.properties.owners.users = request.form.getlist('task_owners_users[]')
-
-    siblings = Node.all({
-        'where': 'parent==ObjectId("%s")' % task.parent,
-        'embedded': '{"picture":1, "user":1}'}, api=api)
-
-    def check_conflict(task_current, task_sibling):
-        return revsion_conflict[task_current.name](task_current, task_sibling)
-
-    def task_animation(task_current, task_sibling):
-        if task_sibling.name in ['fx_hair', 'fx_smoke', 'fx_grass', 'lighting']:
-            if task_current.properties.revision > task_sibling.properties.revision:
-                return True
-        return False
-
-    def task_lighting(task_current, task_sibling):
-        if task_sibling.name in ['fx_hair', 'fx_smoke', 'fx_grass', 'animation']:
-            if task_current.properties.revision < task_sibling.properties.revision:
-                return True
-        return False
-
-    def task_fx_hair(task_current, task_sibling):
-        if task_sibling.name in ['animation']:
-            if task_current.properties.revision < task_sibling.properties.revision:
-                return True
-        if task_sibling.name in ['lighting']:
-            if task_current.properties.revision > task_sibling.properties.revision:
-                return True
-        return False
-
-
-    def task_fx_grass(task_current, task_sibling):
-        pass
-
-    def task_fx_smoke(task_current, task_sibling):
-        pass
-
-    revsion_conflict = {
-        'animation': task_animation,
-        'lighting': task_lighting,
-        'fx_hair': task_fx_hair,
-        'fx_grass': task_fx_grass,
-        'fx_smoke': task_fx_smoke
-    }
-
-    if task.properties.revision:
-        for sibling in siblings._items:
-            if sibling.properties.revision and sibling._id != task_id:
-                if check_conflict(task, sibling) == True:
-                    task.properties.is_conflicting = True
-                    break
-                else:
-                    task.properties.is_conflicting = False
-
-    task.update(api=api)
-
-    return jsonify(task.to_dict())
-
-
-# XXX Hack to edit tasks via AJAX
-@nodes.route("/shots/edit", methods=['POST'])
-@login_required
-def shot_edit():
-    """We want to be able to edit the following properties:
-    - notes
-    - status
-    - cut in
-    - cut out
-    - picture (optional)
-    """
-    api = SystemUtility.attract_api()
-    shot_id = request.form['shot_id']
-
-    shot = Node.find(shot_id, api=api)
-    shot.properties.notes = request.form['shot_notes']
-    shot.properties.status = request.form['shot_status']
-    shot.properties.cut_in = int(request.form['shot_cut_in'])
-    shot.properties.cut_out = int(request.form['shot_cut_out'])
-
-    shot.update(api=api)
-
-    return jsonify(shot.to_dict())
 
 
 @nodes.route("/<node_id>/edit", methods=['GET', 'POST'])

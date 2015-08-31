@@ -1,0 +1,50 @@
+{% extends 'layout.html' %}
+{% from '_macros/_pagination.html' import render_pagination %}
+{% from '_macros/_status_label.html' import render_status_label %}
+
+{% block body %}
+<div class="col-md-9">
+  <div class="row">
+    <div class="col-md-12">
+      <table cellpadding="0" cellspacing="0" border="0" class="table table-striped" id="shots">
+        <thead>
+          <tr>
+            <th>Org Name</th>
+            <th>Description</th>
+            <th>Notes</th>
+            <th width="8%"></th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for org in organizations._items %}
+            <tr id="row_{{org._id}}">
+              <td><a href="{{url_for('organizations.view', org_id=org._id)}}">{{org.name}}</a></td>
+              <td>
+                {% if org.description %}
+                  {{org.description|truncate(25)}}
+                {% endif %}
+              </td>
+              <td>
+                {{org.url}}
+              </td>
+              <td>
+                <a class="btn btn-default btn-xs" href="{{url_for('organizations.edit', org_id=org._id)}}"><i class="glyphicon glyphicon-edit"></i> Edit</a>
+              </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      {{ render_pagination(pagination) }}
+    </div>
+    <div class="col-md-6">
+      <span>Showing {{organizations['_meta']['total']}} items</span>
+      <a href="{{url_for('organizations.add')}}" class="pull-right btn btn-default">Add</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

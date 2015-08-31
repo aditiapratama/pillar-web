@@ -218,6 +218,8 @@ def get_node_form(node_type):
             if 'visible' in form_prop and not form_prop['visible']:
                 continue
             prop_name = "{0}{1}".format(prefix, prop)
+
+            # Recursive call if detects a dict
             if schema_prop['type'] == 'dict':
                 build_form(schema_prop['schema'],
                            form_prop['schema'],
@@ -409,6 +411,9 @@ def process_node_form(form, node_id=None, node_type=None, user=None):
                         data = []
                 if schema_prop['type'] == 'datetime':
                     data = datetime.strftime(data, RFC1123_DATE_FORMAT)
+                if schema_prop['type'] == 'objectid':
+                    if data == '':
+                        data = None
                 path = prop_name.split('__')
                 if len(path) > 1:
                     prop['properties'] = recursive(path, prop['properties'], data)
@@ -418,9 +423,6 @@ def process_node_form(form, node_id=None, node_type=None, user=None):
         get_data(node_schema, form_schema)
 
         prop['node_type'] = form.node_type_id.data
-        # Pardon the local path, this is for testing purposes and will be removed
-        # files = {'picture': open('/Users/fsiddi/Desktop/1500x500.jpeg', 'rb')}
-        # send_file(form, prop, user)
         post = node.post(prop, api=api)
 
         return post
