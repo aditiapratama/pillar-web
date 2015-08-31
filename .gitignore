@@ -9,6 +9,6 @@ config.py
 node_modules/
 .sass-cache/
 *.css.map
-attract/application/static/assets/css/main.css
-attract/application/static/storage/
-attract/application/templates/layout.html
+pillar-web/application/static/assets/css/main.css
+pillar-web/application/static/storage/
+pillar-web/application/templates/layout.html

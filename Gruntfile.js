@@ -12,9 +12,9 @@ module.exports = function(grunt) {
             },
             files: [{
               expand: true,
-              cwd: 'attract/src/jade',
+              cwd: 'pillar_web/src/jade',
               src: [ '**/*.jade' ],
-              dest: 'attract/application/templates',
+              dest: 'pillar_web/application/templates',
               ext: '.html'
             }]
           }
@@ -26,20 +26,20 @@ module.exports = function(grunt) {
                     style: 'compressed'
                 },
                 files: {
-                    'attract/application/static/assets/css/main.css': 'attract/src/sass/main.sass'
+                    'pillar_web/application/static/assets/css/main.css': 'pillar_web/src/sass/main.sass'
                 }
             }
         },
 
         autoprefixer: {
-            no_dest: { src: 'attract/application/static/assets/css/main.css' }
+            no_dest: { src: 'pillar_web/application/static/assets/css/main.css' }
         },
 
         watch: {
-            files: ['attract/src/sass/main.sass'],
+            files: ['pillar_web/src/sass/main.sass'],
             tasks: ['sass', 'autoprefixer'],
             jade: {
-              files: 'attract/src/jade/**/*.jade',
+              files: 'pillar_web/src/jade/**/*.jade',
               tasks: [ 'jade' ]
             },
         }
