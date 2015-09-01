@@ -9,20 +9,25 @@ git \
 nano
 
 RUN mkdir /data
+RUN mkdir /data/dev
+RUN mkdir /data/dev/pillar-web
+RUN mkdir /data/dev/pillar-python-sdk
 RUN mkdir /data/www
-RUN mkdir /data/www/pillar_web
-RUN mkdir /data/www/pillar_web_dev
 
-RUN git clone https://github.com/armadillica/pillar-web.git /data/www/pillar_web
+RUN git clone https://github.com/armadillica/pillar-web.git /data/www/pillar-web
+#RUN git clone https://github.com/armadillica/pillar-python-sdk.git /data/www/
 
 RUN pip install virtualenv
 RUN virtualenv /data/venv
-RUN . /data/venv/bin/activate
-RUN pip install -r /data/www/pillar_web/requirements.txt
+RUN . /data/venv/bin/activate && pip install -r /data/www/pillar-web/requirements.txt
 
-VOLUME /data/www/pillar_web_dev
+RUN ln -s /data/dev/pillar-python-sdk/pillarsdk /data/venv/lib/python2.7/site-packages/pillarsdk
+
+VOLUME /data/dev/pillar-web
+VOLUME /data/dev/pillar-python-sdk
 
 EXPOSE 5001
 
-#ENTRYPOINT . /data/venv/bin/activate; \
-#cd /data/www/pillar_dev; \
+ADD runserver.sh /runserver.sh
+
+ENTRYPOINT ["bash", "/runserver.sh"]
