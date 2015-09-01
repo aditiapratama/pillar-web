@@ -1,5 +1,5 @@
-from attractsdk import Node
-from attractsdk import NodeType
+from pillarsdk import Node
+from pillarsdk import NodeType
 
 from flask import Blueprint
 from flask import render_template

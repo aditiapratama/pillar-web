@@ -2,10 +2,10 @@ from math import ceil
 from flask import url_for
 from flask import request
 from flask import abort
-from attractsdk import Node
-from attractsdk import NodeType
-from attractsdk.users import User
-from attractsdk.organizations import Organization
+from pillarsdk import Node
+from pillarsdk import NodeType
+from pillarsdk.users import User
+from pillarsdk.organizations import Organization
 from application import SystemUtility
 
 

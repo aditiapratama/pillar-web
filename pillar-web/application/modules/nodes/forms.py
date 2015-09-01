@@ -1,5 +1,5 @@
-import attractsdk
-from attractsdk import Node
+import pillarsdk
+from pillarsdk import Node
 
 from flask_wtf import Form
 from wtforms import FieldList
@@ -163,7 +163,7 @@ def get_node_form(node_type):
     if 'node_types' in parent_prop and len(parent_prop['node_types']) > 0:
         select = []
         for parent_type in parent_prop['node_types']:
-            parent_node_type = attractsdk.NodeType.all(
+            parent_node_type = pillarsdk.NodeType.all(
                 {'where': '{"name" : "%s"}' % parent_type}, api=api)
             nodes = Node.all({
                 'where': '{"node_type" : "%s"}' % str(
@@ -191,7 +191,7 @@ def get_node_form(node_type):
     #    FileField('Picture'))
     select = []
     select.append(('None', 'None'))
-    nodes = attractsdk.File.all(
+    nodes = pillarsdk.File.all(
         {'max_results': 999, 'where': '{"is_preview" : {"$ne":true}}'},
         api=api)
     for option in nodes['_items']:
@@ -227,7 +227,7 @@ def get_node_form(node_type):
                 continue
             if schema_prop['type'] == 'list' and 'items' in form_prop:
                 for item in form_prop['items']:
-                    items = eval("attractsdk.{0}".format(item[0]))
+                    items = eval("pillarsdk.{0}".format(item[0]))
                     items_to_select = items.all({'max_results': 200}, api=api)
                     if items_to_select:
                         items_to_select = items_to_select["_items"]
@@ -313,7 +313,7 @@ def process_node_form(form, node_id=None, node_type=None, user=None):
 
     if node_id:
         # Update existing node
-        node = attractsdk.Node.find(node_id, api=api)
+        node = pillarsdk.Node.find(node_id, api=api)
         node.name = form.name.data
         node.description = form.description.data
         if 'picture' in form:
@@ -367,7 +367,7 @@ def process_node_form(form, node_id=None, node_type=None, user=None):
         return update
     else:
         # Create a new node
-        node = attractsdk.Node()
+        node = pillarsdk.Node()
         prop = {}
         files = {}
         prop['name'] = form.name.data

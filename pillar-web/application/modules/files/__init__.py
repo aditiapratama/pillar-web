@@ -1,7 +1,7 @@
 import os
-# from attractsdk import Node
-from attractsdk import File
-# from attractsdk import NodeType
+# from pillarsdk import Node
+from pillarsdk import File
+# from pillarsdk import NodeType
 
 from flask import jsonify
 from flask import Blueprint

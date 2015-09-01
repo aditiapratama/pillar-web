@@ -1,11 +1,11 @@
 import sys
 import os
 import config
-from attractsdk import Api
-from attractsdk import NodeType
-from attractsdk.users import User
-from attractsdk.tokens import Token
-from attractsdk.exceptions import UnauthorizedAccess
+from pillarsdk import Api
+from pillarsdk import NodeType
+from pillarsdk.users import User
+from pillarsdk.tokens import Token
+from pillarsdk.exceptions import UnauthorizedAccess
 
 from flask import Flask
 from flask import session
@@ -158,7 +158,7 @@ app.register_blueprint(organizations, url_prefix='/organizations')
 
 @app.errorhandler(UnauthorizedAccess)
 def handle_invalid_usage(error):
-    """Global exception handling for attractsdk UnauthorizedAccess
+    """Global exception handling for pillarsdk UnauthorizedAccess
     Currently the api is fully locked down so we need to constantly
     check for user authorization.
     """

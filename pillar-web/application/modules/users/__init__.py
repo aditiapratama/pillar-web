@@ -1,9 +1,9 @@
 import json
-from attractsdk import utils
-from attractsdk.users import User
-from attractsdk.nodes import Node
-from attractsdk.nodes import NodeType
-from attractsdk.tokens import Token
+from pillarsdk import utils
+from pillarsdk.users import User
+from pillarsdk.nodes import Node
+from pillarsdk.nodes import NodeType
+from pillarsdk.tokens import Token
 
 from flask import Blueprint
 from flask import render_template

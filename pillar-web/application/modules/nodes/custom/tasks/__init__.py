@@ -1,9 +1,9 @@
-from attractsdk import Node
-from attractsdk import NodeType
-from attractsdk import User
-from attractsdk import File
-from attractsdk.exceptions import ResourceNotFound
-from attractsdk.exceptions import ForbiddenAccess
+from pillarsdk import Node
+from pillarsdk import NodeType
+from pillarsdk import User
+from pillarsdk import File
+from pillarsdk.exceptions import ResourceNotFound
+from pillarsdk.exceptions import ForbiddenAccess
 
 from flask import url_for
 from flask import jsonify

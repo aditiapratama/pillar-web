@@ -3,7 +3,7 @@ from flask import render_template
 from flask import redirect
 from flask import url_for
 
-from attractsdk import NodeType
+from pillarsdk import NodeType
 from application.modules.nodes.forms import NodeTypeForm
 
 from flask.ext.login import login_required

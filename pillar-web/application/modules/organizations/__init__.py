@@ -1,7 +1,7 @@
 import json
-from attractsdk import utils
-from attractsdk.users import User
-from attractsdk.organizations import Organization
+from pillarsdk import utils
+from pillarsdk.users import User
+from pillarsdk.organizations import Organization
 
 from flask import Blueprint
 from flask import render_template
