@@ -169,8 +169,13 @@
     });
     var jstreeAPI = $('#jstree').jstree(true);
 
-    $('#jstree').on("changed.jstree", function (e, data) {
-      console.log(data.selected);
+    $('#jstree').on("select_node.jstree", function (e, data) {
+      console.log(data);
+      var url = '/nodes/' + data.node.id + '/view?embed=1'
+      $.get(url, function(data_html) {
+        $("#project_asset").html(data_html);
+        window.location.replace('#' + data.node.id);
+      });
     });
 
   };
