@@ -1,9 +1,14 @@
 {% extends 'layout.html' %}
 
 
+{% block header_items %}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" rel="stylesheet">
+{% endblock %}
+
+
 {% block body %}
 <div class="container">
-  <div id="project_overview" class="col-md-9">
+  <!-- <div id="project_overview" class="col-md-9">
     <h2>{{node.name}}</h2>
     <p>{{node.properties.url}}</p>
     <div class="row">
@@ -35,7 +40,7 @@
       </div>
       <div class="col-md-6">
         <p></p>
-        <p>Scenes:</p>
+        <p>Save the children:</p>
         <ul>
         {% for child in children %}
         <li>
@@ -52,7 +57,7 @@
         <a class="btn btn-default btn-s" href="{{url_for('nodes.edit', node_id=node['_id'])}}"><i class="glyphicon glyphicon-edit"></i> Edit</a>
       </div>
     </div>
-  </div>
+  </div> -->
   <div id="project_nav" class="col-md-3">
     <div id="jstree"></div>
   </div>
@@ -64,21 +69,27 @@
 {% endblock %}
 
 {% block footer_scripts %}
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.1.1/jstree.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
 
 <script type="text/javascript">
 
   function displayNode(data) {
-    $('#project_overview').hide();
     console.log(data);
     // Standard atributes like name and description
     var nodeType = data.node.node_type.name;
-    if (nodeType === 'group') {
-      // We have a group
-      console.log('preparing for group');
-    } else if (nodeType === 'asset_video') {
-      // Video asset
-    };
+    switch (nodeType) {
+      case 'group':
+        console.log('preparing for group');
+        break;
+      case 'asset_video':
+        console.log('asset_video');
+        break;
+      case 'project':
+         console.log('a');
+         break;
+      default:
+        console.log('Error')
+    }
   }
 
 
@@ -88,16 +99,17 @@
     if (location.hash) {
       nodeId = location.hash.substring(1);
       console.log(nodeId);
-      $.getJSON('/nodes/' + nodeId + '/view?format=json', function(data) {
-        displayNode(data);
-        // $.each(data, function(key, val) {
-        //   //$('.asset-' + key).html(val);
-        //   console.log(key, val);
-        // });
-      });
+
     } else {
       nodeId = '{{node._id}}';
     }
+    $.getJSON('/nodes/' + nodeId + '/view?format=json', function(data) {
+      displayNode(data);
+      // $.each(data, function(key, val) {
+      //   //$('.asset-' + key).html(val);
+      //   console.log(key, val);
+      // });
+    });
     // Initialize jstree
     // $('#jstree').jstree({
     //   'core' : {
@@ -131,10 +143,13 @@
                               callback.call(this, jsonObject.children);
                           });
                     } else {
-                        $.getJSON(  $SCRIPT_ROOT + "/product_tree/" + obj.id.substring(1), function( jsonObject ) {
-                            //console.log((jsonObject.type);
-                            callback.call(this, jsonObject.children);
-                        });
+                      $.getJSON('/nodes/' + obj.id + '/view?format=jstree', function(jsonObject) {
+                          callback.call(this, jsonObject['items']);
+                      });
+                        // $.getJSON(  $SCRIPT_ROOT + "/product_tree/" + obj.id.substring(1), function( jsonObject ) {
+                        //     //console.log((jsonObject.type);
+                        //     callback.call(this, jsonObject.children);
+                        // });
                     }
                 }
             }
@@ -153,6 +168,10 @@
         "plugins": ["types",] //, "state", "sort"
     });
     var jstreeAPI = $('#jstree').jstree(true);
+
+    $('#jstree').on("changed.jstree", function (e, data) {
+      console.log(data.selected);
+    });
 
   };
 

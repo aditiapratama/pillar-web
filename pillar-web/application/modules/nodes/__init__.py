@@ -125,12 +125,14 @@ def add(node_type_id):
         errors=form.errors,
         type_names=type_names())
 
+
 def jstree_parse_node(node, children=None):
     """Generate JStree node from node object"""
     n = {'id': node._id, 'text': node.name, 'type': node.node_type.name, 'children': True}
     # if children:
     #     n['children'] = children
     return n
+
 
 def jstree_get_children(node_id):
     api = SystemUtility.attract_api()
@@ -144,15 +146,19 @@ def jstree_get_children(node_id):
         children_list.append(jstree_parse_node(child))
     return children_list
 
+
 def jstree_build_from_node(node):
     api = SystemUtility.attract_api()
-    open_nodes = []
+    open_nodes = [jstree_parse_node(node)]
     # Get the current node again (with parent data)
     #parent = Node.find(node.parent + '/?projection={"name":1, "parent":1, "node_type.name": 1}&embedded={"node_type":1}', api=api)
-    parent = Node.find(node.parent, {
-        'projection': '{"name":1, "parent":1, "node_type": 1}',
-        'embedded': '{"node_type":1}',
-        }, api=api)
+    try:
+        parent = Node.find(node.parent, {
+            'projection': '{"name":1, "parent":1, "node_type": 1}',
+            'embedded': '{"node_type":1}',
+            }, api=api)
+    except ResourceNotFound:
+        parent = None
     while (parent):
         open_nodes.append(jstree_parse_node(parent))
         # If we have a parent
@@ -168,6 +174,7 @@ def jstree_build_from_node(node):
             parent = None
     open_nodes.reverse()
     #open_nodes.pop(0)
+
     nodes_list = []
 
     for node in jstree_get_children(open_nodes[0]['id']):
@@ -178,39 +185,30 @@ def jstree_build_from_node(node):
             'type': 'chapter',
             'children': True
         }
-
-        # Opening and selecting the tree nodes according to the landing place
-        if node['id'] == open_nodes[1]['id']:
-            current_dict = node_dict
-            current_dict['state'] = {'opened': True}
-            current_dict['children'] = jstree_get_children(node['id'])
-            # Iterate on open_nodes until the end
-            for n in open_nodes[2:]:
-                for c in current_dict['children']:
-                    if n['id'] == c['id']:
-                        current_dict = c
-                        break
+        if len(open_nodes) > 1:
+            # Opening and selecting the tree nodes according to the landing place
+            if node['id'] == open_nodes[1]['id']:
+                current_dict = node_dict
                 current_dict['state'] = {'opened': True}
-                current_dict['children'] = jstree_get_children(n['id'])
+                current_dict['children'] = jstree_get_children(node['id'])
+                # Iterate on open_nodes until the end
+                for n in open_nodes[2:]:
+                    for c in current_dict['children']:
+                        if n['id'] == c['id']:
+                            current_dict = c
+                            break
+                    current_dict['state'] = {'opened': True}
+                    current_dict['children'] = jstree_get_children(n['id'])
 
-            # if landing_asset_id:
-            #     current_dict['children'] = aux_product_tree_node(open_nodes[-1])
-            #     for asset in current_dict['children']:
-            #         if int(asset['id'][1:])==landing_asset_id:
-            #             asset.update(state=dict(selected=True))
+                # if landing_asset_id:
+                #     current_dict['children'] = aux_product_tree_node(open_nodes[-1])
+                #     for asset in current_dict['children']:
+                #         if int(asset['id'][1:])==landing_asset_id:
+                #             asset.update(state=dict(selected=True))
 
         nodes_list.append(node_dict)
     return nodes_list
 
-
-def jstree_process_children(children):
-    if children:
-        jstree_children = []
-        for node in children:
-            jstree_children.append({
-                'text': node['name']
-                })
-        return jstree_children
 
 @nodes.route("/<node_id>/view", methods=['GET', 'POST'])
 @login_required
@@ -220,126 +218,126 @@ def view(node_id):
     try:
         node = Node.find(node_id + '/?embedded={"picture":1, "node_type":1}', api=api)
     except ResourceNotFound:
-        node = None
-    user_id = current_user.objectid
-    if node:
-        # Get comment type
-        comment_type = NodeType.find_first({'where': '{"name" : "comment"}'}, api=api)
-        # comment_type = comment_type['_items'][0]
-        # Get node type
-        node_type = node.node_type #NodeType.find(node['node_type'], api=api)
-        # Get comments form
-        comment_form = get_comment_form(node, comment_type)
-        if comment_form.validate_on_submit():
-            if process_node_form(comment_form,
-                                    node_id=None,
-                                    node_type=comment_type,
-                                    user=user_id):
-                node = Node.find(node_id + '/?embedded={"picture":1}', api=api)
-            else:
-                if comment_form.errors:
-                    print(comment_form.errors)
-        # Get previews
-        if node.picture:
-            picture_node = File.find(node.picture._id + \
-                                    '/?embedded={"previews":1}', api=api)
-            node['picture'] = "{0}{1}".format(SystemUtility.attract_server_endpoint_static(), picture_node.path)
-            if picture_node.previews:
-                for preview in picture_node.previews:
-                    if preview.size == 'l':
-                        node['picture_thumbnail'] = "{0}{1}".format(SystemUtility.attract_server_endpoint_static(), preview.path)
-                        break
-            else:
-                node['picture_thumbnail'] = node['picture']
-        # Get Parent
-        try:
-            parent = Node.find(node['parent'], api=api)
-        except KeyError:
-            parent = None
-        except ResourceNotFound:
-            parent = None
-        # Get children
-        children = Node.all({
-            'where': '{"parent": "%s"}' % node._id,
-            'embedded': '{"picture": 1, "user": 1}'}, api=api)
-
-        children = children.to_dict()['_items']
-        # TODO this logic should be on Server:
-        AllNodeTypes = NodeType.all(api=api)
-        for child in children:
-            for ntype in AllNodeTypes['_items']:
-                if child['node_type'] == ntype['_id']:
-                    child['node_type_name'] = ntype['name']
-                    break
-        # Get Comments
-        comments = []
-        for child in children:
-            if child['node_type'] == comment_type['_id']:
-                comments.append(child)
-
-        # Get comment attachments
-        for comment in comments:
-            comment['attachments'] = []
-            for attachment in comment['properties']['attachments']:
-                try:
-                    attachment_file = File.find(attachment, api=api)
-                except ResourceNotFound:
-                    attachment_file = None
-                comment['attachments'].append(attachment_file)
-
-        # Get assigned users
-        assigned_users = assigned_users_to(node, node_type)
-
-        if request.args.get('format'):
-            if request.args.get('format') == 'json':
-                node = node.to_dict()
-                node['url_edit'] = url_for('nodes.edit', node_id=node['_id']),
-                if parent:
-                    parent = parent.to_dict()
-                return_content = jsonify({
-                    'node': node,
-                    'children': children,
-                    'parent': parent
-                })
-            elif request.args.get('format') == 'jstree':
-                return jsonify(items=jstree_build_from_node(node))
-        else:
-            embed_string = ''
-            # Check if we want to embed the content via an AJAX call
-            if request.args.get('embed'):
-                if request.args.get('embed') == '1':
-                    # Define the prefix for the embedded template
-                    embed_string = '_embed'
-
-            # We should more simply check if the template file actually exsists on
-            # the filesystem level
-            try:
-                return_content = render_template(
-                    '{0}/view{1}.html'.format(node_type['name'], embed_string),
-                    node=node,
-                    type_names=type_names(),
-                    parent=parent,
-                    children=children,
-                    comments=comments,
-                    comment_form=comment_form,
-                    assigned_users=assigned_users,
-                    config=app.config)
-            except TemplateNotFound:
-                template = 'nodes/edit{0}.html'.format(embed_string)
-                return_content = render_template(
-                    template,
-                    node=node,
-                    type_names=type_names(),
-                    parent=parent,
-                    children=children,
-                    comments=comments,
-                    comment_form=comment_form,
-                    assigned_users=assigned_users,
-                    config=app.config)
-
-        return return_content
-    else:
         return abort(404)
+
+    user_id = current_user.objectid
+
+    # Get comment type
+    comment_type = NodeType.find_first({'where': '{"name" : "comment"}'}, api=api)
+    # comment_type = comment_type['_items'][0]
+    # Get node type
+    node_type = node.node_type #NodeType.find(node['node_type'], api=api)
+    # Get comments form
+    comment_form = get_comment_form(node, comment_type)
+    if comment_form.validate_on_submit():
+        if process_node_form(comment_form,
+                                node_id=None,
+                                node_type=comment_type,
+                                user=user_id):
+            node = Node.find(node_id + '/?embedded={"picture":1}', api=api)
+        else:
+            if comment_form.errors:
+                print(comment_form.errors)
+    # Get previews
+    if node.picture:
+        picture_node = File.find(node.picture._id + \
+                                '/?embedded={"previews":1}', api=api)
+        node['picture'] = "{0}{1}".format(SystemUtility.attract_server_endpoint_static(), picture_node.path)
+        if picture_node.previews:
+            for preview in picture_node.previews:
+                if preview.size == 'l':
+                    node['picture_thumbnail'] = "{0}{1}".format(SystemUtility.attract_server_endpoint_static(), preview.path)
+                    break
+        else:
+            node['picture_thumbnail'] = node['picture']
+    # Get Parent
+    try:
+        parent = Node.find(node['parent'], api=api)
+    except KeyError:
+        parent = None
+    except ResourceNotFound:
+        parent = None
+    # Get children
+    children = Node.all({
+        'where': '{"parent": "%s"}' % node._id,
+        'embedded': '{"picture": 1, "user": 1}'}, api=api)
+
+    children = children.to_dict()['_items']
+    # TODO this logic should be on Server:
+    AllNodeTypes = NodeType.all(api=api)
+    for child in children:
+        for ntype in AllNodeTypes['_items']:
+            if child['node_type'] == ntype['_id']:
+                child['node_type_name'] = ntype['name']
+                break
+    # Get Comments
+    comments = []
+    for child in children:
+        if child['node_type'] == comment_type['_id']:
+            comments.append(child)
+
+    # Get comment attachments
+    for comment in comments:
+        comment['attachments'] = []
+        for attachment in comment['properties']['attachments']:
+            try:
+                attachment_file = File.find(attachment, api=api)
+            except ResourceNotFound:
+                attachment_file = None
+            comment['attachments'].append(attachment_file)
+
+    # Get assigned users
+    assigned_users = assigned_users_to(node, node_type)
+
+    if request.args.get('format'):
+        if request.args.get('format') == 'json':
+            node = node.to_dict()
+            node['url_edit'] = url_for('nodes.edit', node_id=node['_id']),
+            if parent:
+                parent = parent.to_dict()
+            return_content = jsonify({
+                'node': node,
+                'children': children,
+                'parent': parent
+            })
+        elif request.args.get('format') == 'jstree':
+            return jsonify(items=jstree_build_from_node(node))
+    else:
+        embed_string = ''
+        # Check if we want to embed the content via an AJAX call
+        if request.args.get('embed'):
+            if request.args.get('embed') == '1':
+                # Define the prefix for the embedded template
+                embed_string = '_embed'
+
+        # We should more simply check if the template file actually exsists on
+        # the filesystem level
+        try:
+            return_content = render_template(
+                '{0}/view{1}.html'.format(node_type['name'], embed_string),
+                node=node,
+                type_names=type_names(),
+                parent=parent,
+                children=children,
+                comments=comments,
+                comment_form=comment_form,
+                assigned_users=assigned_users,
+                config=app.config)
+        except TemplateNotFound:
+            template = 'nodes/edit{0}.html'.format(embed_string)
+            return_content = render_template(
+                template,
+                node=node,
+                type_names=type_names(),
+                parent=parent,
+                children=children,
+                comments=comments,
+                comment_form=comment_form,
+                assigned_users=assigned_users,
+                config=app.config)
+
+    return return_content
+
 
 
 @nodes.route("/<node_id>/edit", methods=['GET', 'POST'])
