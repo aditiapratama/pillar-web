@@ -143,8 +143,8 @@
                               callback.call(this, jsonObject.children);
                           });
                     } else {
-                      $.getJSON('/nodes/' + obj.id + '/view?format=jstree', function(jsonObject) {
-                          callback.call(this, jsonObject['items']);
+                      $.getJSON('/nodes/' + obj.id + '/view?format=jstree&children=1', function(jsonObject) {
+                          callback.call(this, jsonObject.children);
                       });
                         // $.getJSON(  $SCRIPT_ROOT + "/product_tree/" + obj.id.substring(1), function( jsonObject ) {
                         //     //console.log((jsonObject.type);

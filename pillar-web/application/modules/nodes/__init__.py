@@ -147,6 +147,14 @@ def jstree_get_children(node_id):
     return children_list
 
 
+def jstree_build_children(node):
+    return dict(
+        id=node['_id'],
+        text=node['name'],
+        type='group',
+        children=jstree_get_children(node['_id'])
+    )
+
 def jstree_build_from_node(node):
     api = SystemUtility.attract_api()
     open_nodes = [jstree_parse_node(node)]
@@ -210,7 +218,7 @@ def jstree_build_from_node(node):
     return nodes_list
 
 
-@nodes.route("/<node_id>/view", methods=['GET', 'POST'])
+@nodes.route("/<node_id>/view")
 @login_required
 def view(node_id):
     api = SystemUtility.attract_api()
@@ -219,6 +227,22 @@ def view(node_id):
         node = Node.find(node_id + '/?embedded={"picture":1, "node_type":1}', api=api)
     except ResourceNotFound:
         return abort(404)
+
+    # JsTree functionality.
+    # This return a lightweight version of the node, to be used by JsTree in the
+    # frontend. We have two possible cases:
+    # - https://pillar/<node_id>/view?format=jstree (construct the whole expanded
+    #   tree starting from the node_id. Use only once)
+    # - https://pillar/<node_id>/view?format=jstree&children=1 (deliver the
+    #   children of a node - use in the navigation of the tree)
+
+    if request.args.get('format') and request.args.get('format') == 'jstree':
+        if request.args.get('children') == '1':
+            return jsonify(jstree_build_children(node))
+        else:
+            return jsonify(items=jstree_build_from_node(node))
+
+    # Continue to process the node (for HTML, HTML embeded and JSON responses)
 
     user_id = current_user.objectid
 
@@ -300,8 +324,6 @@ def view(node_id):
                 'children': children,
                 'parent': parent
             })
-        elif request.args.get('format') == 'jstree':
-            return jsonify(items=jstree_build_from_node(node))
     else:
         embed_string = ''
         # Check if we want to embed the content via an AJAX call
