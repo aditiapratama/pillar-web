@@ -37,7 +37,9 @@ html(lang="en")
 
 	body.transition-none
 		.container-page
-			nav.navbar.navbar-fixed-top(role="navigation")
+			a(name="hop")
+			nav.navbar.navbar-transparent.navbar-fixed-top(role="navigation")
+				.navbar-overlay
 				.container-fluid
 					header.navbar-header
 						button.navbar-toggle(data-target=".navbar-collapse", data-toggle="collapse", type="button")
@@ -53,6 +55,8 @@ html(lang="en")
 			div
 				|	{% for message in messages %}
 				.alert.alert-success(role="alert")
+					button.close(type="button", data-dismiss="alert")
+						i.fa.fa-times-circle
 					| {{message}}
 				|	{% endfor %}
 			|		{% endif %}
@@ -60,8 +64,91 @@ html(lang="en")
 
 			| {% block body %}{% endblock %}
 
+		| {% block footer_navigation %}
+		#footer-navigation
+		.container
+			.row
+				.col-md-3.col-xs-6
+					h4 Blender Cloud
+					ul
+						a(href="{{ url_for('homepage') }}",
+							title="Blender Cloud Home")
+							li
+								i.fa.fa-home
+								| Home
+
+						a(href="/news",
+							title="Cloud News")
+							li
+								i.fa.fa-list-alt
+								| News
+
+						a(href="http://wiki.blender.org/index.php/Org:Institute/BlenderCloud",
+							title="About Blender Cloud")
+							li
+								i.bf-cloud
+								| About
+
+				.col-md-3.col-xs-6
+					h4 Blender
+					ul
+						a(href="http://www.blender.org",
+							title="Blender Official Website")
+							li
+								i.bf-blender
+								| Blender.org
+
+						a(href="http://www.blender.org/store",
+							title="The Official Blender Store")
+							li
+								i.fa.fa-shopping-cart
+								| Blender Store
+
+						a(href="http://www.blendernetwork.org",
+							title="The Network of Blender Professionals")
+							li
+								i.bf-network
+								| Blender Network
+
+				.col-md-3.col-xs-6
+					| With the support of the <br/> MEDIA Programme of the European Union<br/><br/>
+					img.img-responsive(
+						src="https://gooseberry.blender.org/wp-content/uploads/2014/01/media_programme.png",
+						style="max-width: 68%")
+
+				.col-md-2.col-xs-12
+					h4 Contact & Support
+					ul
+						a(href="http://twitter.com/Blender_Cloud",
+							title="Follow us on Twitter")
+							li
+								i.fa.fa-twitter
+								| Blender_Cloud
+
+						a(href="mailto:cloudsupport@blender.org"
+							title="Support Email")
+							li
+								i.fa.fa-envelope-o
+								| E-mail
+
+		| {% endblock %}
+
+		| {% block footer %}
 		footer
-			p Attract 3 - Python powered
+			.container
+				span.pull-left
+					p
+						a(href="{# XXX {{url_for('terms_and_conditions')}} #}")
+							| Terms & Services, Cancellation
+						| ·
+						a(href="{# XXX {{url_for('privacy')}} #}")
+						| Privacy Policy
+				span.pull-right
+					p
+						| Blender Cloud
+						a(href="#hop")
+							i.fa.fa-caret-up
+		| {% endblock %}
 
 		| {#
 		| {% assets filters="jsmin",

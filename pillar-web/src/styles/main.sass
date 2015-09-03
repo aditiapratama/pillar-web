@@ -1,23 +1,24 @@
 @import _normalize
-
-$color-text-default: #444
-$color-link-default: #337ab7
-$color-link-accent: lighten($color-link-default, 20%)
-
-/* Label Status */
-$color-status-todo: lightgray
-$color-status-on_hold: #fff2cc
-$color-status-in_progress: #fff2cc
-$color-status-review: #e4f5f9
-$color-status-final: #e7f5d3
-
-$color-status-active: #E6F3FD
-$color-status-updated: #e7f5d3
-
-body
-	padding-top: 50px
-
+@import _config
 @import _utils
 // @import attract/_main
 
+body
+	font:
+		family: $font-body, sans-serif
+		size: $font-size
+	color: $color-text
+	background-color: darken($color-background, 8%)
+	-webkit-font-smoothing: antialiased
+
+a
+	color: $color-primary
+
+	&:hover
+		color: $color-primary-dark
+
 .container-page
+	padding-top: 60px
+	background-color: $color-background
+
+
