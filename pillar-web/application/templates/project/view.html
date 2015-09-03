@@ -8,11 +8,11 @@
 
 {% block body %}
 <div class="container">
-  <div id="project_nav" class="col-md-3">
-    <div id="jstree"></div>
-  </div>
-  <div id="project_item" class="col-md-6">
-
+  <div id="project_container">
+    <div id="project_nav">
+      <div id="jstree"></div>
+    </div>
+    <div id="project_context"></div>
   </div>
 </div>
 
@@ -28,7 +28,7 @@
     var url = '/nodes/' + nodeId + '/view?embed=1'
     $.get(url, function(dataHtml) {
       // Update the DOM injecting the generate HTML into the page
-      $("#project_item").html(dataHtml);
+      $("#project_context").html(dataHtml);
       window.location.replace('#' + nodeId);
     });
 

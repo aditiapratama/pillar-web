@@ -1,4 +1,32 @@
+
+
 =text-overflow-ellipsis
 	overflow: hidden
 	white-space: nowrap
 	text-overflow: ellipsis
+
+/* Smallest, like phones on portrait.
+ **  Menu is collapsed, columns stack, no brand */
+=media-xs
+	@media (max-width: #{$screen-tablet - 1px})
+		@content
+
+/* Small but wide: phablets, iPads
+ **  Menu is collapsed, columns stack, no brand */
+=media-sm
+	@media (min-width: #{$screen-tablet}) and (max-width: #{$screen-desktop - 1px})
+		@content
+
+/* Tablets portrait.
+ **  Menu is expanded, but columns stack, brand is shown */
+=media-md
+	@media (min-width: #{$screen-desktop})
+		@content
+
+=media-lg
+	@media (min-width: #{$screen-lg-desktop})
+		@content
+
+=media-print
+	@media print
+		@content
