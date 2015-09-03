@@ -8,60 +8,10 @@
 
 {% block body %}
 <div class="container">
-  <!-- <div id="project_overview" class="col-md-9">
-    <h2>{{node.name}}</h2>
-    <p>{{node.properties.url}}</p>
-    <div class="row">
-      <div class="col-md-6">
-        {% if node.picture_thumbnail %}
-          <a href="{{node.picture_thumbnail}}" class="thumbnail">
-            <img src="{{node.picture_thumbnail}}" alt="{{node.name}}">
-          </a>
-        {% else %}
-          <p>Picture goes here</p>
-        {% endif %}
-      </div>
-      <div class="col-md-6">
-        <h4>Notes:</h4>
-        <p>
-          {% if notes %}
-            {{notes}}
-          {% else %}
-            No notes at the moment
-          {% endif %}
-        </p>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-6">
-        <p></p>
-        <p></p>
-        <p></p>
-      </div>
-      <div class="col-md-6">
-        <p></p>
-        <p>Save the children:</p>
-        <ul>
-        {% for child in children %}
-        <li>
-          <a href="{{url_for('nodes.view', node_id=child['_id'])}}">{{ child['name']}}</a>
-        </li>
-        {% endfor %}
-        </ul>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-11">
-      </div>
-      <div class="col-md-1">
-        <a class="btn btn-default btn-s" href="{{url_for('nodes.edit', node_id=node['_id'])}}"><i class="glyphicon glyphicon-edit"></i> Edit</a>
-      </div>
-    </div>
-  </div> -->
   <div id="project_nav" class="col-md-3">
     <div id="jstree"></div>
   </div>
-  <div id="project_asset" class="col-md-6">
+  <div id="project_item" class="col-md-6">
 
   </div>
 </div>
@@ -73,9 +23,16 @@
 
 <script type="text/javascript">
 
-  function displayNode(data) {
-    console.log(data);
-    // Standard atributes like name and description
+  function displayNode(nodeId) {
+    // console.log(nodeId);
+    var url = '/nodes/' + nodeId + '/view?embed=1'
+    $.get(url, function(data_html) {
+      // Update the DOM injecting the generate HTML into the page
+      $("#project_item").html(data_html);
+      window.location.replace('#' + nodeId);
+    });
+
+    /* Unused for now
     var nodeType = data.node.node_type.name;
     switch (nodeType) {
       case 'group':
@@ -90,39 +47,19 @@
       default:
         console.log('Error')
     }
+    */
   }
-
 
   function loadContent() {
     // If the loaded URL has an asset id hashed, arrange the view accordingly
     var nodeId = undefined;
     if (location.hash) {
       nodeId = location.hash.substring(1);
-      console.log(nodeId);
-
     } else {
       nodeId = '{{node._id}}';
     }
-    $.getJSON('/nodes/' + nodeId + '/view?format=json', function(data) {
-      displayNode(data);
-      // $.each(data, function(key, val) {
-      //   //$('.asset-' + key).html(val);
-      //   console.log(key, val);
-      // });
-    });
-    // Initialize jstree
-    // $('#jstree').jstree({
-    //   'core' : {
-    //     'data' : {
-    //       // 'url' : function (node) {
-    //       //   return node.id === '#' ?
-    //       //     'ajax_roots.json' :
-    //       //     'ajax_children.json';
-    //       // },
-    //       'url': '/nodes/' + nodeId + '/view?format=jstree',
-    //     }
-    //   }
-    // });
+
+    displayNode(nodeId);
 
     $('#jstree').jstree({
         'core': {
@@ -167,21 +104,17 @@
         },
         "plugins": ["types",] //, "state", "sort"
     });
-    var jstreeAPI = $('#jstree').jstree(true);
+
+    //var jstreeAPI = $('#jstree').jstree(true);
 
     $('#jstree').on("select_node.jstree", function (e, data) {
-      console.log(data);
-      var url = '/nodes/' + data.node.id + '/view?embed=1'
-      $.get(url, function(data_html) {
-        $("#project_asset").html(data_html);
-        window.location.replace('#' + data.node.id);
-      });
+      displayNode(data.node.id);
     });
 
   };
 
-  $(document).ready(function() {
-    loadContent();
-  });
+  // Initialize the page
+  loadContent();
+
 </script>
 {% endblock %}

@@ -346,7 +346,7 @@ def view(node_id):
                 assigned_users=assigned_users,
                 config=app.config)
         except TemplateNotFound:
-            template = 'nodes/edit{0}.html'.format(embed_string)
+            template = 'nodes/view.html'
             return_content = render_template(
                 template,
                 node=node,
