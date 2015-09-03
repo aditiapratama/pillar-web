@@ -26,9 +26,9 @@
   function displayNode(nodeId) {
     // console.log(nodeId);
     var url = '/nodes/' + nodeId + '/view?embed=1'
-    $.get(url, function(data_html) {
+    $.get(url, function(dataHtml) {
       // Update the DOM injecting the generate HTML into the page
-      $("#project_item").html(data_html);
+      $("#project_item").html(dataHtml);
       window.location.replace('#' + nodeId);
     });
 
