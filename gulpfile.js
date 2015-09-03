@@ -1,4 +1,5 @@
 var gulp          = require('gulp'),
+    plumber       = require('gulp-plumber'),
     sass          = require('gulp-sass'),
     sourcemaps    = require('gulp-sourcemaps'),
     autoprefixer  = require('gulp-autoprefixer'),
@@ -8,6 +9,7 @@ var gulp          = require('gulp'),
 /* CSS */
 gulp.task('styles', function() {
     gulp.src('pillar-web/src/styles/*.sass')
+        .pipe(plumber())
         .pipe(sourcemaps.init())
         .pipe(sass({
             outputStyle: 'compressed'}
