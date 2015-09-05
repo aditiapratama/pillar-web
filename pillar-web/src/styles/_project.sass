@@ -1,0 +1,61 @@
+// Flex parent of both tree-view and side-view
+#project_container
+	position: relative
+	// top: -60px
+	display: flex
+	align-items: stretch
+	// background-color: white
+	margin: 10px auto 20px auto
+	border-radius: 3px
+	overflow: hidden
+	box-shadow: 2px 2px 0 rgba(darken($color-background, 60%), .1)
+
+#project_nav
+	width: 250px
+	padding: 5px 0
+	position: relative
+	color: lighten($color-text, 10%)
+	background-color: rgba(lighten($color-text, 70%), .8)
+	border-top-left-radius: 3px
+	border-bottom-left-radius: 3px
+	border-right: 2px solid lighten($color-text, 60%)
+	-webkit-user-select: none
+	-moz-user-select: none
+	-ms-user-select: none
+	-o-user-select: none
+	user-select: none
+
+#project_context
+	background-color: white
+	width: 100%
+	min-height: 380px
+	color: $color-text
+	padding: 0 0 15px 0
+	position: relative
+	border-top-right-radius: 3px
+	border-bottom-right-radius: 3px
+
+/* Overview, Navtree, draggable split-bar */
+.project_split
+	height: 100%
+	float: right
+	position: absolute
+	right: -6px
+	width: 10px
+	z-index: 10
+	cursor: col-resize
+	-webkit-user-select: none
+	-moz-user-select: none
+	-ms-user-select: none
+	-o-user-select: none
+	user-select: none
+
+
+.project_split:before
+	content: '\f142'
+	font-family: 'FontAwesome'
+	color: lighten($color_text, 40%)
+	position: relative
+	padding: 4px 0
+	top: 50%
+	left: 30%

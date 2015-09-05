@@ -8,7 +8,7 @@ var gulp          = require('gulp'),
 
 /* CSS */
 gulp.task('styles', function() {
-    gulp.src('pillar-web/src/styles/*.sass')
+    gulp.src('pillar-web/src/styles/**/*.sass')
         .pipe(plumber())
         .pipe(sourcemaps.init())
         .pipe(sass({
@@ -34,8 +34,8 @@ gulp.task('templates', function() {
 gulp.task('watch',function() {
     livereload.listen();
 
-    gulp.watch('pillar-web/src/styles/*.sass',['styles']);
-    gulp.watch('pillar-web/src/templates/*.jade',['templates']);
+    gulp.watch('pillar-web/src/styles/**/*.sass',['styles']);
+    gulp.watch('pillar-web/src/templates/**/*.jade',['templates']);
 });
 
 // Run 'gulp' to build everything at once
