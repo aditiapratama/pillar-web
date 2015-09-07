@@ -25,7 +25,10 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 | {% block footer_scripts %}
 script(
 	type="text/javascript"
-	src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js")
+	src="//cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js")
+script(
+	type="text/javascript"
+	src="//cdnjs.cloudflare.com/ajax/libs/js-cookie/2.0.3/js.cookie.min.js")
 
 script(type="text/javascript").
 	function displayNode(nodeId) {
@@ -120,5 +123,23 @@ script(type="text/javascript").
 
 	// Initialize the page
 	loadContent();
+
+	$('.project_split').mousedown(function (e) {
+		e.preventDefault();
+
+		$(document).mousemove(function (e) {
+
+			e.preventDefault();
+			var x = e.pageX - $('#project_nav').offset().left;
+
+			if (x > 100 && x < 320 && e.pageX < ($(window).width())) {
+				$('#project_nav').css("width", x);
+			}
+		})
+	});
+
+	$(document).mouseup(function (e) {
+		$(document).unbind('mousemove');
+	});
 
 | {% endblock %}

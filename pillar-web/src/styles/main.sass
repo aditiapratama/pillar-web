@@ -29,6 +29,11 @@ a
 	padding-top: 60px
 	background-color: $color-background
 
+/* Navigation */
+.navbar-header
+	position: relative
+	z-index: 1 // to be on top of the overlay
+
 .navbar-overlay
 	position: absolute
 	top: 0
@@ -54,10 +59,10 @@ a
 		color: white
 		font:
 			family: $font-headings
-			size: 1.2em
+			size: 1.3em
 
 		&:hover
-			background-color: rgba(white, .2)
+			background-color: rgba(white, .1)
 
 	.dropdown
 		&:hover
@@ -65,25 +70,130 @@ a
 
 		&.open
 			a
-				background-color: $color-text
+				background-color: rgba(white, .2)
 
 			li a
-				font-family: $font-body
+				font:
+					family: $font-body
+					size: .9em
+				padding: 5px 15px 5px 5px
+				color: rgba($color-text, .8)
 
+				&:hover
+					color: $color-primary
 
-	ul.dropdown-menu
-		background-color: $color-text
-		border: none
-		box-shadow: 2px 2px 6px rgba(black, .2)
+				i
+					width: 35px
+					text-align: center
+
+		ul.dropdown-menu
+			background-color: white
+			border: none
+			box-shadow: 0 10px 25px rgba(black, .1)
+
+			.divider
+				background-color: rgba(black, .1)
 
 	.navbar-brand
-		height: 38px
-		width: 200px
-		padding: 0
 		margin-left: 0 !important
-		color: $color-text
+		color: white
 		text-align: left
 		font:
 			family: $font-headings
-			size: 2em
+			size: 1.4em
 			weight: 100
+
+
+/* FOOTER */
+/* Footer Navigation */
+footer
+	font-size: .75em
+	a
+		color: lighten($color-text, 25%)
+
+		&:hover
+			color: $color-primary
+
+	ul.links
+		float: left
+		padding: 0
+		margin: 0
+		list-style-type: none
+
+		li
+			padding: 0 15px 0 0
+			margin: 0
+			float: left
+
+	.credits
+		float: right
+		color: lighten($color-text, 25%)
+
+		.hop
+			padding: 0 10px
+
+#footer-navigation
+	font-size: .85em
+	margin-bottom: 5px
+	color: lighten($color-text, 20%)
+	border-top: thick solid lighten($color-text, 60%)
+	padding:
+		top: 15px
+		bottom: 15px
+
+	h4
+		color: lighten($color-text, 8%)
+		margin-bottom: 10px
+
+	ul
+		position: relative
+		margin: 0
+		padding: 0 0 10px 0
+		list-style-type: none
+
+		li
+			position: relative
+			padding: 0
+			margin: 0
+
+	a
+		color: lighten($color-text, 25%)
+
+		&:hover
+			color: $color-primary
+
+	.footer-links
+		i
+			font-size: 80%
+			position: absolute
+			left: -14px
+			top: 20%
+
+	.special
+		padding:
+			top: 10px
+			bottom: 15px
+		font-size: .9em
+		border: thin solid darken($color-background, 20%)
+		border:
+			top: none
+			bottom: none
+
+		img
+			max-width: 200px
+			opacity: .6
+
+	ul.footer-social
+		width: 100%
+		text-align:center
+		margin: 0 auto
+		display: flex
+		align-items: center
+		justify-content: space-around
+
+		li
+			display: inline-block
+			padding: 30px 0
+
+			.fa-circle-thin
+				transform: scale(1.2)
