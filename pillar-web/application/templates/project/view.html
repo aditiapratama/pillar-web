@@ -1,11 +1,13 @@
+
 {% extends 'layout.html' %}
-
-
+{% block page_title %}{{node.name}}{% endblock%}
+{% block og %}
+<meta property="og:title" content="{{node.name}}"/>
+<!-- XXX - Replace with actual url-->
+<meta property="og:url" content="https://cloud.blender.org"/>
+<meta property="og:type" content="website"/>{% endblock %}
 {% block header_items %}
-<link href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" rel="stylesheet">
-{% endblock %}
-
-
+<link href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" rel="stylesheet"/>{% endblock %}
 {% block body %}
 <div class="container">
   <div id="project_container">
@@ -15,107 +17,101 @@
     </div>
     <div id="project_context"></div>
   </div>
-</div>
-
-{% endblock %}
-
+</div>{% endblock %}
 {% block footer_scripts %}
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
-
 <script type="text/javascript">
-
   function displayNode(nodeId) {
-    // console.log(nodeId);
-    var url = '/nodes/' + nodeId + '/view?embed=1'
-    $.get(url, function(dataHtml) {
-      // Update the DOM injecting the generate HTML into the page
-      $("#project_context").html(dataHtml);
-      window.location.replace('#' + nodeId);
-    });
-
-    /* Unused for now
-    var nodeType = data.node.node_type.name;
-    switch (nodeType) {
-      case 'group':
-        console.log('preparing for group');
-        break;
-      case 'asset_video':
-        console.log('asset_video');
-        break;
-      case 'project':
-         console.log('a');
-         break;
-      default:
-        console.log('Error')
-    }
-    */
+  	// console.log(nodeId);
+  	var url = '/nodes/' + nodeId + '/view?embed=1'
+  	$.get(url, function(dataHtml) {
+  		// Update the DOM injecting the generate HTML into the page
+  		$("#project_context").html(dataHtml);
+  		window.location.replace('#' + nodeId);
+  	});
+  
+  	/* Unused for now
+  	var nodeType = data.node.node_type.name;
+  	switch (nodeType) {
+  		case 'group':
+  			console.log('preparing for group');
+  			break;
+  		case 'asset_video':
+  			console.log('asset_video');
+  			break;
+  		case 'project':
+  			 console.log('a');
+  			 break;
+  		default:
+  			console.log('Error')
+  	}
+  	*/
   }
-
+  
   function loadContent() {
-    // If the loaded URL has an asset id hashed, arrange the view accordingly
-    var nodeId = undefined;
-    if (location.hash) {
-      nodeId = location.hash.substring(1);
-    } else {
-      nodeId = '{{node._id}}';
-    }
-
-    displayNode(nodeId);
-
-    $('#jstree').jstree({
-        'core': {
-            'data': function (obj, callback) {
-                if(obj.id === '#') { //tree root
-                    $.getJSON('/nodes/' + nodeId + '/view?format=jstree', function(jsonObject) {
-                        callback.call(this, jsonObject['items']);
-                    });
-
-                } else { //normal node
-                    //console.log((obj.original.type);
-                    if (obj.original.type == 'filesystem_node') {
-                        $.getJSON(  $SCRIPT_ROOT +
-                            '/filesystem/' +
-                            {{node.id}} +
-                            '/' +
-                            obj.original.path, function( jsonObject ) {
-                              callback.call(this, jsonObject.children);
-                          });
-                    } else {
-                      $.getJSON('/nodes/' + obj.id + '/view?format=jstree&children=1', function(jsonObject) {
-                          callback.call(this, jsonObject.children);
-                      });
-                        // $.getJSON(  $SCRIPT_ROOT + "/product_tree/" + obj.id.substring(1), function( jsonObject ) {
-                        //     //console.log((jsonObject.type);
-                        //     callback.call(this, jsonObject.children);
-                        // });
-                    }
-                }
-            }
-        },
-        "types" : {
-            "#": {"valid_children": ["collection"]},
-            "chapter" : {"icon": "fa fa-folder-o"},
-            "node" : {"icon": "fa fa-folder-o"},
-            "filesystem_node" : {"icon": "fa fa-folder-o"},
-            "file" : {"icon": "fa fa-file-archive-o", "max_children": 0},
-            "filesystem_file" : {"icon": "fa fa-file-archive-o", "max_children": 0},
-            "image" : {"icon": "fa fa-picture-o", "max_children": 0},
-            "video" : {"icon": "fa fa-film", "max_children": 0},
-            "default" : {"icon": "fa fa-file-o"}
-        },
-        "plugins": ["types",] //, "state", "sort"
-    });
-
-    //var jstreeAPI = $('#jstree').jstree(true);
-
-    $('#jstree').on("select_node.jstree", function (e, data) {
-      displayNode(data.node.id);
-    });
-
+  	// If the loaded URL has an asset id hashed, arrange the view accordingly
+  	var nodeId = undefined;
+  	if (location.hash) {
+  		nodeId = location.hash.substring(1);
+  	} else {
+  		nodeId = '{{node._id}}';
+  	}
+  
+  	displayNode(nodeId);
+  
+  	$('#jstree').jstree({
+  			'core': {
+  					'data': function (obj, callback) {
+  							if(obj.id === '#') { //tree root
+  									$.getJSON('/nodes/' + nodeId + '/view?format=jstree', function(jsonObject) {
+  											callback.call(this, jsonObject['items']);
+  									});
+  
+  							} else { //normal node
+  									//console.log((obj.original.type);
+  									if (obj.original.type == 'filesystem_node') {
+  											$.getJSON(  $SCRIPT_ROOT +
+  													'/filesystem/' +
+  													{{node.id}} +
+  													'/' +
+  													obj.original.path, function( jsonObject ) {
+  														callback.call(this, jsonObject.children);
+  												});
+  									} else {
+  										$.getJSON('/nodes/' + obj.id + '/view?format=jstree&children=1', function(jsonObject) {
+  												callback.call(this, jsonObject.children);
+  										});
+  											// $.getJSON(  $SCRIPT_ROOT + "/product_tree/" + obj.id.substring(1), function( jsonObject ) {
+  											//     //console.log((jsonObject.type);
+  											//     callback.call(this, jsonObject.children);
+  											// });
+  									}
+  							}
+  					}
+  			},
+  			"types" : {
+  					"#": {"valid_children": ["collection"]},
+  					"chapter" : {"icon": "fa fa-folder-o"},
+  					"node" : {"icon": "fa fa-folder-o"},
+  					"filesystem_node" : {"icon": "fa fa-folder-o"},
+  					"file" : {"icon": "fa fa-file-archive-o", "max_children": 0},
+  					"filesystem_file" : {"icon": "fa fa-file-archive-o", "max_children": 0},
+  					"image" : {"icon": "fa fa-picture-o", "max_children": 0},
+  					"video" : {"icon": "fa fa-film", "max_children": 0},
+  					"default" : {"icon": "fa fa-file-o"}
+  			},
+  			"plugins": ["types",] //, "state", "sort"
+  	});
+  
+  	//var jstreeAPI = $('#jstree').jstree(true);
+  
+  	$('#jstree').on("select_node.jstree", function (e, data) {
+  		displayNode(data.node.id);
+  	});
+  
   };
-
+  
   // Initialize the page
   loadContent();
-
-</script>
-{% endblock %}
+  
+</script>{% endblock %}

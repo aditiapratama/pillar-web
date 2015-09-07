@@ -1,5 +1,13 @@
 | {% extends 'layout.html' %}
 
+| {% block page_title %}{{node.name}}{% endblock%}
+
+| {% block og %}
+meta(property="og:title", content="{{node.name}}")
+// XXX - Replace with actual url
+meta(property="og:url", content="https://cloud.blender.org")
+meta(property="og:type", content="website")
+| {% endblock %}
 
 | {% block header_items %}
 link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css",rel="stylesheet")
