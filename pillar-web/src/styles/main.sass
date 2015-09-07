@@ -57,12 +57,23 @@ a
 
 	li a
 		color: white
+		padding: 25px 15px 15px // overrides bs
 		font:
 			family: $font-headings
 			size: 1.3em
+		text-shadow: 1px 1px 10px rgba(black, .3)
+		border-bottom: 3px solid transparent
+		transition: background-color .1s ease-in, border-color .1s ease-in
 
 		&:hover
 			background-color: rgba(white, .1)
+			border-bottom: 3px solid $color-primary
+
+		&.active
+			border-bottom: 3px solid $color-secondary
+
+			&:hover
+				border-color: lighten($color-secondary, 5%)
 
 	.dropdown
 		&:hover
@@ -73,6 +84,7 @@ a
 				background-color: rgba(white, .2)
 
 			li a
+				border-bottom: none
 				font:
 					family: $font-body
 					size: .9em
@@ -96,8 +108,10 @@ a
 
 	.navbar-brand
 		margin-left: 0 !important
+		padding: 25px 15px 15px 0 // overrides bs
 		color: white
 		text-align: left
+		text-shadow: 0 0 10px rgba(black, .2)
 		font:
 			family: $font-headings
 			size: 1.4em
@@ -174,13 +188,11 @@ footer
 			top: 10px
 			bottom: 15px
 		font-size: .9em
-		border: thin solid darken($color-background, 20%)
-		border:
-			top: none
-			bottom: none
+		border-left: thin solid darken($color-background, 20%)
+
 
 		img
-			max-width: 200px
+			max-width: 100%
 			opacity: .6
 
 	ul.footer-social

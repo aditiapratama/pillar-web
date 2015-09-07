@@ -121,6 +121,28 @@ html(lang="en")
 		#footer-navigation
 			.container
 				.row
+					.col-md-4.col-xs-6
+						.footer-support
+							h4 Support & Feedback
+							p.
+								Let us know what you think or if you have any issues
+								just write to cloudsupport at blender dot org
+
+					.col-md-2.col-xs-6
+						ul.footer-social
+							a(href="http://twitter.com/Blender_Cloud",
+								title="Follow us on Twitter")
+								li
+									span.fa-stack.fa-2x
+										i.fa.fa-circle-thin.fa-stack-2x
+										i.fa.fa-twitter.fa-stack-1x
+							a(href="mailto:cloudsupport@blender.org"
+								title="Support Email")
+								li
+									span.fa-stack.fa-2x
+										i.fa.fa-circle-thin.fa-stack-2x
+										i.fa.fa-envelope.fa-stack-1x
+
 					.col-md-2.col-xs-6
 						h4 Blender Cloud
 						ul.footer-links
@@ -151,25 +173,10 @@ html(lang="en")
 								title="The Network of Blender Professionals")
 								li Blender Network
 
-					.col-md-5.col-xs-6.special
+					.col-md-2.col-xs-6.special
 						| With the support of the <br/> MEDIA Programme of the European Union<br/><br/>
 						img(src="https://gooseberry.blender.org/wp-content/uploads/2014/01/media_programme.png")
 
-					.col-md-3.col-xs-6
-						ul.footer-social
-							a(href="http://twitter.com/Blender_Cloud",
-								title="Follow us on Twitter")
-								li
-									span.fa-stack.fa-2x
-										i.fa.fa-circle-thin.fa-stack-2x
-										i.fa.fa-twitter.fa-stack-1x
-
-							a(href="mailto:cloudsupport@blender.org"
-								title="Support Email")
-								li
-									span.fa-stack.fa-2x
-										i.fa.fa-circle-thin.fa-stack-2x
-										i.fa.fa-envelope.fa-stack-1x
 
 		| {% endblock %}
 
