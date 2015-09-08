@@ -1,10 +1,10 @@
 function NavbarTransparent(color_txt, color_bg, startingpoint, factor) {
 
 	// Defaults
-	startingpoint = typeof startingpoint !== 'undefined' ? startingpoint : 150;
+	startingpoint = typeof startingpoint !== 'undefined' ? startingpoint : 50;
 	color_txt = typeof color_txt !== 'undefined' ? color_txt : 68;
 	color_bg = typeof color_bg !== 'undefined' ? color_bg : 255;
-	factor = typeof factor !== 'undefined' ? factor : 1.5;
+	factor = typeof factor !== 'undefined' ? factor : 6;
 
 	$(window).on("scroll", function () {
 
@@ -20,7 +20,7 @@ function NavbarTransparent(color_txt, color_bg, startingpoint, factor) {
 			color = 255;
 
 			if (color_bg > 150){
-				color = Math.min(Math.max(parseInt((color_bg - scroll)), color_txt), color_bg);
+				color = Math.min(Math.max(parseInt((color_bg - (scroll * (1 * factor)))), color_txt), color_bg);
 			};
 
 			padding_top = Math.min(Math.max(parseFloat((35 - (scroll * (0.2 * factor)))), 15), 35);
@@ -31,7 +31,7 @@ function NavbarTransparent(color_txt, color_bg, startingpoint, factor) {
 				'padding-top' : padding_top,
 				'padding-left' : padding_sides,
 				'padding-right' : padding_sides,
-				'text-shadow' : opacity
+				'text-shadow' : 'none'
 			});
 
 		} else {
@@ -41,10 +41,10 @@ function NavbarTransparent(color_txt, color_bg, startingpoint, factor) {
 				'padding-top' : '35px',
 				'padding-left' : '20px',
 				'padding-right' : '20px',
-				'text-shadow' : 'none'
+				'text-shadow' : '1px 1px 10px rgba(0,0,0,' + opacity + ')'
 			});
 		};
 	});
 };
 
-NavbarTransparent();
+NavbarTransparent(255, 68);
