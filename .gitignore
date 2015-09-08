@@ -9,6 +9,8 @@ config.py
 node_modules/
 .sass-cache/
 *.css.map
+*.js.map
 pillar-web/application/static/assets/css/main.css
+pillar-web/application/static/assets/js/tutti.min.js
 pillar-web/application/static/storage/
 pillar-web/application/templates/layout.html

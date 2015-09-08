@@ -26,12 +26,13 @@ a
 		color: $color-primary-dark
 
 .container-page
-	padding-top: 60px
+	padding-top: 80px
 	background-color: $color-background
 
 /* Navigation */
 .navbar-header
 	position: relative
+	margin: 0
 	z-index: 1 // to be on top of the overlay
 
 .navbar-overlay
@@ -57,7 +58,10 @@ a
 
 	li a
 		color: white
-		padding: 25px 15px 15px // overrides bs
+		padding:
+			top: 35px
+			left: 20px
+			right: 20px // overrides bs
 		font:
 			family: $font-headings
 			size: 1.3em
@@ -109,7 +113,11 @@ a
 
 	.navbar-brand
 		margin-left: 0 !important
-		padding: 25px 15px 15px 0 // overrides bs
+		//padding: 25px 15px 15px 0 // overrides bs
+		padding:
+			top: 35px
+			left: 20px
+			right: 20px // overrides bs
 		color: white
 		text-align: left
 		text-shadow: 0 0 10px rgba(black, .2)
