@@ -1,4 +1,5 @@
 import json
+import os
 from pillarsdk import Node
 from pillarsdk import NodeType
 from pillarsdk import User
@@ -245,6 +246,10 @@ def view(node_id):
 
     # Continue to process the node (for HTML, HTML embeded and JSON responses)
 
+    # Get node type
+    node_type = node.node_type #NodeType.find(node['node_type'], api=api)
+    template_path = node_type['name']
+
     # XXX Code to detect a node of type asset, and aggregate file data
     if node.node_type.name == 'asset':
         node_file = File.find(node.properties.file, api=api)
@@ -266,7 +271,7 @@ def view(node_id):
 
                 setattr(node, 'video_sources', json.dumps(sources))
                 setattr(node, 'file_children', node_file_children)
-                pass
+                template_path = os.path.join(template_path, asset_type)
             elif asset_type == 'image':
                 # Process image type and select image template
                 pass
@@ -280,8 +285,7 @@ def view(node_id):
     # Get comment type
     comment_type = NodeType.find_first({'where': '{"name" : "comment"}'}, api=api)
     # comment_type = comment_type['_items'][0]
-    # Get node type
-    node_type = node.node_type #NodeType.find(node['node_type'], api=api)
+
     # Get comments form
     comment_form = get_comment_form(node, comment_type)
     if comment_form.validate_on_submit():
@@ -367,7 +371,7 @@ def view(node_id):
         # the filesystem level
         try:
             return_content = render_template(
-                '{0}/view{1}.html'.format(node_type['name'], embed_string),
+                '{0}/view{1}.html'.format(template_path, embed_string),
                 node=node,
                 type_names=type_names(),
                 parent=parent,
