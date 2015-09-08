@@ -221,6 +221,9 @@ def get_node_form(node_type):
 
             # Recursive call if detects a dict
             if schema_prop['type'] == 'dict':
+                # This works if the dictionary schema is hardcoded.
+                # I we define it useing propertyschema dna valueschema, this
+                # validation pattern does not work and crahses.
                 build_form(schema_prop['schema'],
                            form_prop['schema'],
                            "{0}__".format(prop_name))

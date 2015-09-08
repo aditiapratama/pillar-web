@@ -1,3 +1,4 @@
+import json
 from pillarsdk import Node
 from pillarsdk import NodeType
 from pillarsdk import User
@@ -243,6 +244,36 @@ def view(node_id):
             return jsonify(items=jstree_build_from_node(node))
 
     # Continue to process the node (for HTML, HTML embeded and JSON responses)
+
+    # XXX Code to detect a node of type asset, and aggregate file data
+    if node.node_type.name == 'asset':
+        node_file = File.find(node.properties.file, api=api)
+        node_file_children = node_file.children(api=api)
+        setattr(node, 'file', node_file)
+        if node_file_children:
+            try:
+                asset_type = node_file.contentType.split('/')[0]
+            except AttributeError:
+                asset_type = None
+
+            if asset_type == 'video':
+                # Process video type and select video template
+                sources = []
+                for f in node_file_children._items:
+                    sources.append(dict(
+                        type=f.contentType,
+                        src=f.link))
+
+                setattr(node, 'video_sources', json.dumps(sources))
+                setattr(node, 'file_children', node_file_children)
+                pass
+            elif asset_type == 'image':
+                # Process image type and select image template
+                pass
+            else:
+                # Treat it as normal file (zip, blend, application, etc)
+                pass
+
 
     user_id = current_user.objectid
 
