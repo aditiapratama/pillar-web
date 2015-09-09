@@ -18,7 +18,7 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 	#project_container
 		#project_nav
 			.project_split
-			#jstree
+			#project_tree
 		#project_context
 | {% endblock %}
 
@@ -31,6 +31,8 @@ script(
 	src="//cdnjs.cloudflare.com/ajax/libs/js-cookie/2.0.3/js.cookie.min.js")
 
 script(type="text/javascript").
+	$('#project_nav').perfectScrollbar({suppressScrollX: true});
+
 	function displayNode(nodeId) {
 		// console.log(nodeId);
 		var url = '/nodes/' + nodeId + '/view?embed=1'
@@ -69,7 +71,7 @@ script(type="text/javascript").
 
 		displayNode(nodeId);
 
-		$('#jstree').jstree({
+		$('#project_tree').jstree({
 				'core': {
 						'data': function (obj, callback) {
 								if(obj.id === '#') { //tree root
@@ -113,9 +115,9 @@ script(type="text/javascript").
 				"plugins": ["types",] //, "state", "sort"
 		});
 
-		//var jstreeAPI = $('#jstree').jstree(true);
+		//var jstreeAPI = $('#project_tree').jstree(true);
 
-		$('#jstree').on("select_node.jstree", function (e, data) {
+		$('#project_tree').on("select_node.jstree", function (e, data) {
 			displayNode(data.node.id);
 		});
 

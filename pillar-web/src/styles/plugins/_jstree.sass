@@ -1,11 +1,19 @@
 /* jsTree overrides */
-#jstree_div
-	+media-xs
-		margin-top: 3%
-		margin-left: -8%
-
 .jstree-loading
 	padding: 0 0 0 5px
+
+.jstree-default li.jstree-loading .jstree-icon
+	left: 3px
+	background:
+		image: url('http://www.kperformer.com/images/loading-contact.gif') !important
+		position: center center
+		repeat: no-repeat
+		size: 12px 12px
+
+	/* Remove icon */
+	&:before
+		content: ''
+
 
 .jstree-default-responsive .jstree-anchor
 	+media-sm
@@ -16,7 +24,7 @@
 	max-width: 100% // Needed for ellipsis on long names
 	margin: 0 0 0 5px !important
 	padding: 2px 0
-	color: $color-text
+	color: lighten($color-text, 10%)
 	min-height: 12px !important
 	line-height: 12px !important
 	+media-xs
@@ -30,7 +38,10 @@
 	border-left: thin dotted lighten($color-text, 50%) /* Whatever after the top level */
 
 .jstree-default .jstree-node.jstree-closed
-	border-left: thin solid lighten($color-text, 30%) /* Closed Folder */
+	border-left: thin solid lighten($color-text, 50%) /* Closed Folder */
+
+.jstree-default .jstree-children .jstree-leaf /* Bottom level */
+	border-left: thin solid $color-info
 
 .jstree-default .jstree-node.jstree-closed .jstree-icon.jstree-ocl,
 .jstree-default .jstree-node.jstree-open .jstree-icon.jstree-ocl
@@ -61,9 +72,6 @@
 .jstree-default .jstree-node.jstree-leaf .jstree-icon.jstree-ocl + .jstree-anchor
 	margin-left: 5px !important
 
-.jstree-default .jstree-children .jstree-leaf /* Bottom level */
-	border-left: thin solid lighten($color-text, 30%)
-
 .jstree .jstree-open > .jstree-children
 	padding-top: 2px
 
@@ -75,6 +83,10 @@
 	white-space: nowrap
 	text-overflow: ellipsis
 	overflow: hidden
+	border-bottom: thin solid transparent
+	transition: all ease 0.1s
+
+.jstree-default li
 	transition: all ease 0.1s
 
 /* expanded item, like a folder */
@@ -82,7 +94,7 @@
 .jstree-default .jstree-open > .jstree-anchor,
 .jstree-default .jstree-open > .jstree-ocl .jstree-icon.jstree-themeicon,
 .jstree-default .jstree-open > .jstree-anchor .jstree-icon.jstree-themeicon
-	color: darken($color-primary, 25%) !important
+	color: darken($color-info, 15%) !important
 
 /* active item text */
 .jstree-default .jstree-clicked,
@@ -99,20 +111,40 @@
 /* hovered text */
 .jstree-default .jstree-hovered,
 .jstree-default .jstree-open .jstree-hovered,
-.jstree-default .jstree-open > .jstree-ocl .jstree-icon.jstree-themeicon,
-.jstree-default .jstree-open > .jstree-anchor .jstree-icon.jstree-themeicon
-	color: darken($color-primary, 15%) !important
+.jstree-default .jstree-hovered .jstree-icon.jstree-themeicon
+	color: $color-info !important
+
 
 /* active item text + icon */
 .jstree-default .jstree-clicked,
 .jstree-default .jstree-clicked > .jstree-ocl,
 .jstree-default .jstree-clicked .jstree-icon.jstree-themeicon
-	color: darken($color-primary, 25%) !important
+	color: $color-info !important
+
+.jstree-default li[aria-selected='true']
+	background-color: rgba(white, .9)
+
+	a.jstree-anchor
+		&:after
+			content: '\f105'
+			font-family: 'FontAwesome'
+			color: $color-info
+			position: absolute
+			right: 8px
+
+	li
+		a.jstree-anchor
+				&:after
+					content: ''
+
+.jstree-default li[aria-expanded='true']
+	background-color: transparent
+
 
 /* hover an active item */
 .jstree-default .jstree-clicked.jstree-hovered,
 .jstree-default .jstree-clicked.jstree-hovered .jstree-icon.jstree-themeicon
-	color: lighten($color-primary, 5%) !important
+	color: lighten($color-info, 5%) !important
 	box-shadow: none
 
 .jstree-anchor > .jstree-themeicon
@@ -127,9 +159,6 @@ i.jstree-icon.jstree-themeicon.fa.fa-picture-o
 .jstree-default .jstree-hovered .jstree-ocl
 	background-color: transparent !important
 	box-shadow: none
-
-.jstree-default .jstree-hovered .jstree-icon.jstree-themeicon
-	color: darken($color-primary, 25%) !important
 
 .jstree-default .jstree-hovered
 	box-shadow: none
@@ -154,7 +183,7 @@ i.jstree-icon.jstree-ocl
 		height: 40px !important
 
 .jstree-default .jstree-icon:empty
-	line-height: 25px
+	line-height: 24px
 
 .jstree-children .jstree-open i.jstree-icon.jstree-ocl
 	height: 28px !important

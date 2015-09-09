@@ -17,7 +17,7 @@ html(lang="en")
 		link(href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css", rel="stylesheet")
 		link(href="//netdna.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css", rel="stylesheet")
 
-		link(href='//fonts.googleapis.com/css?family=Open+Sans', rel='stylesheet', type='text/css')
+		link(href='//fonts.googleapis.com/css?family=Roboto:300', rel='stylesheet', type='text/css')
 		link(href='//fonts.googleapis.com/css?family=Oswald:300', rel='stylesheet', type='text/css')
 		link(href='//fonts.googleapis.com/css?family=Alegreya+Sans:300,500', rel='stylesheet', type='text/css')
 
@@ -51,16 +51,19 @@ html(lang="en")
 							i.fa.fa-bars
 						a.navbar-brand(
 							href="/",
-							title="Blender Cloud") Blender Cloud
+							title="Blender Cloud")
+							span Blender Cloud
 
 					nav.collapse.navbar-collapse
 						ul.nav.navbar-nav.navbar-right
 							li(class="{% if title in ['open-project', 'open_project']: %}active{% endif %}")
 								a(href="/open-project",
-									title="Browse Open Projects") Open Projects
+									title="Browse Open Projects")
+									span Open Projects
 							li(class="{% if title == 'training': %}active{% endif %}")
 								a(href="/training",
-									title="Browse Training and Tutorials") Training
+									title="Browse Training and Tutorials")
+									span Training
 
 							| {% if current_user.is_anonymous() %}
 							li
@@ -70,9 +73,10 @@ html(lang="en")
 
 							| {% if current_user.is_authenticated() %}
 							li(class="dropdown{% if title in ['profile', 'billing-address', 'pledges', 'manage-collection']: %} active{% endif %}")
-								a.dropdown-toggle(href="#", data-toggle="dropdown")
-									| {{ current_user.email }}
-									b.caret
+								a.dropdown-toggle(href="#", data-toggle="dropdown", title="{{ current_user.email }}")
+									span.fa-stack
+										i.fa.fa-circle-thin.fa-stack-2x
+										i.fa.fa-user.fa-stack-1x
 								ul.dropdown-menu
 									| {# XXX
 									| {% if current_user.has_role('admin') %}
@@ -105,13 +109,14 @@ html(lang="en")
 
 			| {% with messages = get_flashed_messages() %}
 			|		{% if messages %}
-			div
-				|	{% for message in messages %}
-				.alert.alert-success(role="alert")
-					button.close(type="button", data-dismiss="alert")
-						i.fa.fa-times-circle
-					| {{message}}
-				|	{% endfor %}
+
+			|	{% for message in messages %}
+			.alert.alert-success(role="alert")
+				button.close(type="button", data-dismiss="alert")
+					i.fa.fa-times-circle
+				| {{message}}
+			|	{% endfor %}
+
 			|		{% endif %}
 			| {% endwith %}
 
@@ -207,6 +212,7 @@ html(lang="en")
 
 		script(type="text/javascript", src="//code.jquery.com/jquery-2.1.4.min.js")
 		script(type="text/javascript", src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js")
+		script(type="text/javascript", src="//cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/0.6.5/js/min/perfect-scrollbar.jquery.min.js")
 		script(type="text/javascript", src="{{ url_for('static', filename='assets/js/tutti.min.js') }}")
 
 		| {% block footer_scripts %}{% endblock %}
