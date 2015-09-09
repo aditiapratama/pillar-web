@@ -10,6 +10,7 @@
 	overflow: hidden
 	box-shadow: 2px 2px 0 rgba(darken($color-background, 60%), .1)
 
+
 #project_nav
 	position: relative
 	// height: 100%
@@ -40,6 +41,9 @@
 	border-top-right-radius: 3px
 	border-bottom-right-radius: 3px
 
+#project_tree
+	padding: 5px 0
+
 /* Overview, Navtree, draggable split-bar */
 .project_split
 	height: 100%
@@ -55,12 +59,28 @@
 	-o-user-select: none
 	user-select: none
 
+	&:before
+		content: '\f142'
+		font-family: 'FontAwesome'
+		color: lighten($color_text, 40%)
+		position: relative
+		padding: 4px 0
+		top: 50%
+		left: 30%
 
-.project_split:before
-	content: '\f142'
-	font-family: 'FontAwesome'
-	color: lighten($color_text, 40%)
-	position: relative
-	padding: 4px 0
-	top: 50%
-	left: 30%
+section.project_context-header
+	margin: 0
+	padding: 0
+
+	img
+		width: 100%
+
+section.project_context-content
+	.project_context-title
+		padding: 20px 15px 5px 15px
+		font:
+			family: $font-headings-secondary
+			size: 2em
+	.project_context-description
+		padding: 5px 15px 20px 15px
+		width: 75%
