@@ -6,10 +6,26 @@
     <div id="flowplayer_container"></div>
   </section>
   <section class="asset-details-container">
-    <h2 class="asset-title">{{node.name}}</h2>
-    <div class="asset-description">{{node.description|safe}}</div>
-    <div class="asset-meta">{{node.file.length | filesizeformat}}</div>
+    <div class="asset-details-header">
+      <div class="asset-title">{{node.name}}</div>
+    </div>
+    <div class="asset-details-description">{{node.description|safe}}</div>
+    <div class="asset-details-meta">
+      <ul class="asset-details-meta-list">
+        <li>{{ node._created }}</li>
+        <li>
+          <label class="label label-info">{{node.properties.status}}</label>
+        </li>
+        <li class="btn-group">
+          <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-default dropdown-toggle">Download <span class="caret"></span></button>
+          <ul class="dropdown-menu">{% for child in node.file_children._items %}
+            <li><a url="{{ child.link }}" title="{{ child.length | filesizeformat }}">{{ child.size }} ({{ child.length | filesizeformat }}) {{ child.format }}</a></li>{% endfor %}
+          </ul>
+        </li>
+      </ul>
+    </div>
   </section>
+  <section class="debug">{{ node.to_dict() }}</section>
 </div>{% endblock %}
 {% block footer_scripts %}
 <script>

@@ -38,7 +38,7 @@
 	width: 100%
 	min-height: 380px
 	color: $color-text
-	padding: 0 0 15px 0
+	padding: 0
 	position: relative
 	border-top-right-radius: 3px
 	border-bottom-right-radius: 3px
@@ -102,14 +102,48 @@ section.asset-preview
 		background-color: black
 
 section.asset-details-container
-	h2.asset-title
-		padding: 20px 15px 5px 15px
-		margin: 0
 
-	.asset-description
-		padding: 5px 15px 20px 15px
-		width: 75%
+	.asset-details-header
+		display: flex
+		flex-flow: row wrap
 
-	.asset-meta
+		.asset-title
+			flex: 75%
+			margin: 0
+			padding: 20px 15px 5px 15px
+			font:
+				family: $font-headings-secondary
+				size: 2em
+
+		.asset-action
+			flex: 25%
+			padding: 20px 15px 5px 15px
+			text-align: right
+
+	.asset-details-description
 		padding: 5px 15px 20px 15px
-		width: 25%
+
+	.asset-details-meta
+		display: flex
+		align-items: center
+		padding: 20px 15px
+		border-top: thin solid $color-background
+		border-bottom: thin solid $color-background
+
+		ul.asset-details-meta-list
+			list-style-type: none
+			margin: 0
+			padding: 0
+
+			li
+				margin: 0
+				padding: 0 15px 0 0
+				line-height: 1em
+				float: left
+
+
+.debug
+	font:
+		family: monospace
+		size: .9em
+	padding: 10px 15px
