@@ -255,29 +255,32 @@ def view(node_id):
         node_file = File.find(node.properties.file, api=api)
         node_file_children = node_file.children(api=api)
         setattr(node, 'file', node_file)
-        if node_file_children:
-            try:
-                asset_type = node_file.contentType.split('/')[0]
-            except AttributeError:
-                asset_type = None
 
-            if asset_type == 'video':
-                # Process video type and select video template
-                sources = []
+        try:
+            asset_type = node_file.contentType.split('/')[0]
+        except AttributeError:
+            asset_type = None
+
+        if asset_type == 'video':
+            # Process video type and select video template
+            sources = []
+            if node_file_children:
                 for f in node_file_children._items:
                     sources.append(dict(
                         type=f.contentType,
                         src=f.link))
 
-                setattr(node, 'video_sources', json.dumps(sources))
-                setattr(node, 'file_children', node_file_children)
-                template_path = os.path.join(template_path, asset_type)
-            elif asset_type == 'image':
-                # Process image type and select image template
-                pass
-            else:
-                # Treat it as normal file (zip, blend, application, etc)
-                pass
+            setattr(node, 'video_sources', json.dumps(sources))
+            setattr(node, 'file_children', node_file_children)
+            template_path = os.path.join(template_path, asset_type)
+        elif asset_type == 'image':
+            # Process image type and select image template
+            #setattr(node, 'file_children', node_file_children)
+            print 'imAGE'
+            template_path = os.path.join(template_path, asset_type)
+        else:
+            # Treat it as normal file (zip, blend, application, etc)
+            template_path = os.path.join(template_path, asset_type)
 
 
     user_id = current_user.objectid
