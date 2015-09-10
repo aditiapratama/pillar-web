@@ -6,7 +6,7 @@ link(rel="stylesheet", href="//releases.flowplayer.org/6.0.3/skin/functional.css
 
 #asset-container
 	section.asset-preview.video
-		#flowplayer_container
+		#flowplayer_container.is-splash(style="background-image:url({{node.picture}});")
 
 	section.asset-details-container
 
@@ -14,39 +14,41 @@ link(rel="stylesheet", href="//releases.flowplayer.org/6.0.3/skin/functional.css
 			.asset-title
 				| {{node.name}}
 
-			//- .asset-action
-			//- 	button Download
-
 		.asset-details-description
 			| {{node.description|safe}}
 
 		.asset-details-meta
 
 			ul.asset-details-meta-list
-				li
-					| {{ node._created }}
-				li
-					label.label.label-info
+				li.asset-details-meta-list-item.status
 						| {{node.properties.status}}
 
-				li.btn-group
+				li.asset-details-meta-list-item
+					| {{ node._created }}
+
+				li.btn-group.asset-details-meta-list-item.download
 					button.btn.btn-default.dropdown-toggle(
 						type="button",
 						data-toggle="dropdown",
 						aria-haspopup="true",
 						aria-expanded="false")
 
-						| Download <span class="caret"></span>
+						| Download
+						i.fa.fa-angle-down
 
 					ul.dropdown-menu
 						| {% for child in node.file_children._items %}
 						li
-							a(url="{{ child.link }}",
+							a(href="{{ child.link }}",
 								title="{{ child.length | filesizeformat }}")
-								| {{ child.size }} ({{ child.length | filesizeformat }}) {{ child.format }}
+								span.length {{ child.length | filesizeformat }}
+
+								span.format {{ child.format }}
+								span.size {{ child.size }}
+
 						| {% endfor %}
 
-	section.debug
+	section.debug.hidden
 		| {{ node.to_dict() }}
 
 | {% endblock %}

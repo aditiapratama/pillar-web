@@ -54,7 +54,7 @@ $navbar-height: 80px
 
 
 .navbar-transparent
-	z-index: 1
+	z-index: 12 /* Flowplayer seems to take up to 11 */
 	border: none
 	border-width: 0
 	// text-shadow: none
@@ -125,7 +125,7 @@ $navbar-height: 80px
 
 	.dropdown
 		position: relative
-		width: 60px
+		min-width: 60px
 
 		&:hover
 			background-color: rgba(white, .4)
@@ -158,13 +158,14 @@ $navbar-height: 80px
 						width: 35px
 						text-align: center
 
-		ul.dropdown-menu
-			background-color: white
-			border: none
-			box-shadow: 0 10px 25px rgba(black, .1)
+/* Global, we want all menus to look like this */
+ul.dropdown-menu
+	background-color: white
+	border: none
+	box-shadow: 0 10px 25px rgba(black, .1)
 
-			.divider
-				background-color: rgba(black, .1)
+	.divider
+		background-color: rgba(black, .1)
 
 
 /* FOOTER */
