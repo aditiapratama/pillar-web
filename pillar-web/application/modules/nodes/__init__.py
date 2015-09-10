@@ -276,11 +276,10 @@ def view(node_id):
         elif asset_type == 'image':
             # Process image type and select image template
             #setattr(node, 'file_children', node_file_children)
-            print 'imAGE'
             template_path = os.path.join(template_path, asset_type)
         else:
             # Treat it as normal file (zip, blend, application, etc)
-            template_path = os.path.join(template_path, asset_type)
+            template_path = os.path.join(template_path, 'file')
 
 
     user_id = current_user.objectid
@@ -302,16 +301,18 @@ def view(node_id):
                 print(comment_form.errors)
     # Get previews
     if node.picture:
-        picture_node = File.find(node.picture._id + \
-                                '/?embedded={"previews":1}', api=api)
-        node['picture'] = "{0}{1}".format(SystemUtility.attract_server_endpoint_static(), picture_node.path)
-        if picture_node.previews:
-            for preview in picture_node.previews:
-                if preview.size == 'l':
-                    node['picture_thumbnail'] = "{0}{1}".format(SystemUtility.attract_server_endpoint_static(), preview.path)
-                    break
-        else:
-            node['picture_thumbnail'] = node['picture']
+        # picture_node = File.find(node.picture._id + \
+        #                         '/?embedded={"previews":1}', api=api)
+        picture_node = File.find(node.picture._id, api=api)
+        node.picture = picture_node.link
+        #node['picture'] = "{0}{1}".format(SystemUtility.attract_server_endpoint_static(), picture_node.path)
+        # if picture_node.previews:
+        #     for preview in picture_node.previews:
+        #         if preview.size == 'l':
+        #             node['picture_thumbnail'] = "{0}{1}".format(SystemUtility.attract_server_endpoint_static(), preview.path)
+        #             break
+        # else:
+        #     node['picture_thumbnail'] = node['picture']
     # Get Parent
     try:
         parent = Node.find(node['parent'], api=api)
