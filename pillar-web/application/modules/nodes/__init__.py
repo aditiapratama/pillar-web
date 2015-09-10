@@ -367,31 +367,23 @@ def view(node_id):
                 # Define the prefix for the embedded template
                 embed_string = '_embed'
 
-        # We should more simply check if the template file actually exsists on
-        # the filesystem level
-        try:
-            return_content = render_template(
-                '{0}/view{1}.html'.format(template_path, embed_string),
-                node=node,
-                type_names=type_names(),
-                parent=parent,
-                children=children,
-                comments=comments,
-                comment_form=comment_form,
-                assigned_users=assigned_users,
-                config=app.config)
-        except TemplateNotFound:
-            template = 'nodes/view.html'
-            return_content = render_template(
-                template,
-                node=node,
-                type_names=type_names(),
-                parent=parent,
-                children=children,
-                comments=comments,
-                comment_form=comment_form,
-                assigned_users=assigned_users,
-                config=app.config)
+        # Check if template exists on the filesystem
+        template_path = '{0}/view{1}.html'.format(template_path, embed_string)
+        template_path_full = os.path.join(app.config['TEMPLATES_PATH'], template_path)
+        print template_path_full
+        if not os.path.exists(template_path_full):
+            template_path = 'nodes/view.html'
+
+        return_content = render_template(template_path,
+            node=node,
+            type_names=type_names(),
+            parent=parent,
+            children=children,
+            comments=comments,
+            comment_form=comment_form,
+            assigned_users=assigned_users,
+            config=app.config)
+
 
     return return_content
 

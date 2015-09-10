@@ -32,7 +32,8 @@ filemanager = Blueprint('filemanager', __name__, static_folder='static/files')
 
 # Choose the configuration to load
 app.config.from_object(config.Development)
-
+app.config['TEMPLATES_PATH'] = '{0}/templates'.format(
+    os.path.dirname(__file__))
 
 # Login manager
 login_manager = LoginManager()
