@@ -1,0 +1,47 @@
+| {% block header_items %}
+link(rel="stylesheet", href="//releases.flowplayer.org/6.0.3/skin/functional.css")
+| {% endblock %}
+
+| {% block body %}
+
+#asset-container
+	section.asset-preview.video
+		#flowplayer_container
+
+	section.asset-details-container
+		h2.asset-title
+			{{node.name}}
+		.asset-description
+			| {{node.description|safe}}
+
+		.asset-meta
+			| {{node.file.length | filesizeformat}}
+
+| {% endblock %}
+
+| {% block footer_scripts %}
+
+script.
+	// Move the script to layout.jade to prevent using getScript everyitme
+	$.getScript("//releases.flowplayer.org/6.0.3/flowplayer.min.js", function() {
+		// select the above element as player container
+		var container = document.getElementById("flowplayer_container");
+
+		// install flowplayer into selected container
+		flowplayer(container, {
+			splash: true,
+				clip: {
+					sources: {{ node.video_sources | safe }}
+					// [
+					//   { type: "application/x-mpegurl",
+					//     src:  "//stream.flowplayer.org/functional.m3u8" },
+					//   { type: "video/webm",
+					//     src:  "//stream.flowplayer.org/functional.webm" },
+					//   { type: "video/mp4",
+					//     src:  "//stream.flowplayer.org/functional.mp4"  }
+					// ]
+				}
+		});
+	});
+
+| {% endblock %}

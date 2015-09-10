@@ -11,6 +11,7 @@
 	box-shadow: 2px 2px 0 rgba(darken($color-background, 60%), .1)
 
 
+/* Sidebar Navigation on the left */
 #project_nav
 	position: relative
 	// height: 100%
@@ -31,6 +32,7 @@
 	user-select: none
 
 
+/* Project context on the right of the navigation */
 #project_context
 	background-color: white
 	width: 100%
@@ -41,8 +43,14 @@
 	border-top-right-radius: 3px
 	border-bottom-right-radius: 3px
 
+	iframe#server_error
+		width: 100%
+		min-height: 800px
+		border: none
+
 #project_tree
 	padding: 5px 0
+
 
 /* Overview, Navtree, draggable split-bar */
 .project_split
@@ -68,12 +76,15 @@
 		top: 50%
 		left: 30%
 
+
+/* Project Context */
 section.project_context-header
 	margin: 0
 	padding: 0
 
 	img
 		width: 100%
+
 
 section.project_context-content
 	.project_context-title
@@ -84,3 +95,21 @@ section.project_context-content
 	.project_context-description
 		padding: 5px 15px 20px 15px
 		width: 75%
+
+/* */
+section.asset-preview
+	&.video
+		background-color: black
+
+section.asset-details-container
+	h2.asset-title
+		padding: 20px 15px 5px 15px
+		margin: 0
+
+	.asset-description
+		padding: 5px 15px 20px 15px
+		width: 75%
+
+	.asset-meta
+		padding: 5px 15px 20px 15px
+		width: 25%
