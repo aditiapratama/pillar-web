@@ -374,7 +374,6 @@ def view(node_id):
         # Check if template exists on the filesystem
         template_path = '{0}/view{1}.html'.format(template_path, embed_string)
         template_path_full = os.path.join(app.config['TEMPLATES_PATH'], template_path)
-        print template_path_full
         if not os.path.exists(template_path_full):
             template_path = 'nodes/view.html'
 

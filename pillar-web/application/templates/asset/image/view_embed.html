@@ -6,9 +6,9 @@
 
 {% block body %}
 <div class="col-md-12">
-  {% if node.picture_thumbnail %}
-    <a href="{{node.picture_thumbnail}}">
-      <img src="{{node.picture_thumbnail}}" alt="{{node.name}}" class="node__image_preview">
+  {% if node.picture %}
+    <a href="{{node.picture}}">
+      <img src="{{node.picture}}" alt="{{node.name}}" class="node__image_preview">
     </a>
   {% else %}
     <img src="http://placehold.it/550x224&text=Preview+Image" class="node__image_preview">
