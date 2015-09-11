@@ -304,12 +304,8 @@ def view(node_id):
     if node.picture:
         # picture_node = File.find(node.picture._id + \
         #                         '/?embedded={"previews":1}', api=api)
-        picture_node = File.find(node.picture._id, api=api)
-        picture_node_thumbnail_s = picture_node.thumbnail('s', api=api)
-        if picture_node_thumbnail_s:
-            node.picture = picture_node_thumbnail_s.link
-        else:
-            node.picture = picture_node.link
+        node.picture = File.find(node.picture._id, api=api)
+
         #node['picture'] = "{0}{1}".format(SystemUtility.attract_server_endpoint_static(), picture_node.path)
         # if picture_node.previews:
         #     for preview in picture_node.previews:
