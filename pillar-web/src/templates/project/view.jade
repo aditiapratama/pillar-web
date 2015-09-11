@@ -17,10 +17,19 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 .container
 	#project_container
 		#project_nav
+			#project_nav-header
+				span.project_nav-header-title {{ node.name }}
+
+				#project_nav-collapse-btn
+
 			.project_split
+
 			#project_tree
 		#project_context-container
-
+			#project_context-header
+				ul.breadcrumb
+					li Breadcrumb
+					li sdf
 			.project_content-loading
 
 			#project_context
@@ -42,7 +51,6 @@ script(type="text/javascript", src="//cdnjs.cloudflare.com/ajax/libs/jstree/3.2.
 script(type="text/javascript", src="//cdnjs.cloudflare.com/ajax/libs/js-cookie/2.0.3/js.cookie.min.js")
 
 script(type="text/javascript").
-	$('#project_nav').perfectScrollbar({suppressScrollX: true});
 	$('#project_context-container').perfectScrollbar({suppressScrollX: true});
 
 	// Binding for ajax event
