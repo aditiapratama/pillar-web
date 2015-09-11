@@ -302,18 +302,7 @@ def view(node_id):
                 print(comment_form.errors)
     # Get previews
     if node.picture:
-        # picture_node = File.find(node.picture._id + \
-        #                         '/?embedded={"previews":1}', api=api)
         node.picture = File.find(node.picture._id, api=api)
-
-        #node['picture'] = "{0}{1}".format(SystemUtility.attract_server_endpoint_static(), picture_node.path)
-        # if picture_node.previews:
-        #     for preview in picture_node.previews:
-        #         if preview.size == 'l':
-        #             node['picture_thumbnail'] = "{0}{1}".format(SystemUtility.attract_server_endpoint_static(), preview.path)
-        #             break
-        # else:
-        #     node['picture_thumbnail'] = node['picture']
     # Get Parent
     try:
         parent = Node.find(node['parent'], api=api)
@@ -324,34 +313,38 @@ def view(node_id):
     # Get children
     children = Node.all({
         'where': '{"parent": "%s"}' % node._id,
-        'embedded': '{"picture": 1, "user": 1}'}, api=api)
+        'embedded': '{"picture": 1, "node_type": 1}'}, api=api)
 
-    children = children.to_dict()['_items']
+    children = children._items
+    for child in children:
+        if child.picture:
+            child.picture = File.find(child.picture._id, api=api)
     # TODO this logic should be on Server:
-    AllNodeTypes = NodeType.all(api=api)
-    for child in children:
-        for ntype in AllNodeTypes['_items']:
-            if child['node_type'] == ntype['_id']:
-                child['node_type_name'] = ntype['name']
-                break
+    # AllNodeTypes = NodeType.all(api=api)
+    # for child in children:
+    #     for ntype in AllNodeTypes['_items']:
+    #         if child['node_type'] == ntype['_id']:
+    #             child['node_type_name'] = ntype['name']
+    #             break
+
     # Get Comments
-    comments = []
-    for child in children:
-        if child['node_type'] == comment_type['_id']:
-            comments.append(child)
+    # comments = []
+    # for child in children:
+    #     if child['node_type'] == comment_type['_id']:
+    #         comments.append(child)
 
     # Get comment attachments
-    for comment in comments:
-        comment['attachments'] = []
-        for attachment in comment['properties']['attachments']:
-            try:
-                attachment_file = File.find(attachment, api=api)
-            except ResourceNotFound:
-                attachment_file = None
-            comment['attachments'].append(attachment_file)
+    # for comment in comments:
+    #     comment['attachments'] = []
+    #     for attachment in comment['properties']['attachments']:
+    #         try:
+    #             attachment_file = File.find(attachment, api=api)
+    #         except ResourceNotFound:
+    #             attachment_file = None
+    #         comment['attachments'].append(attachment_file)
 
     # Get assigned users
-    assigned_users = assigned_users_to(node, node_type)
+    # assigned_users = assigned_users_to(node, node_type)
 
     if request.args.get('format'):
         if request.args.get('format') == 'json':
@@ -361,7 +354,7 @@ def view(node_id):
                 parent = parent.to_dict()
             return_content = jsonify({
                 'node': node,
-                'children': children,
+                'children': children.to_dict(),
                 'parent': parent
             })
     else:
@@ -383,9 +376,6 @@ def view(node_id):
             type_names=type_names(),
             parent=parent,
             children=children,
-            comments=comments,
-            comment_form=comment_form,
-            assigned_users=assigned_users,
             config=app.config)
 
 

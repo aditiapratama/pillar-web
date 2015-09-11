@@ -37,7 +37,7 @@
 					| {{ child.name }}
 
 		section.hidden
-			| {{ child }}
+			| {{ child.to_dict() }}
 
 		| 	{% endfor %}
 		| {% endif %}
