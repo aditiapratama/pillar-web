@@ -4,29 +4,29 @@ link(rel="stylesheet", href="//releases.flowplayer.org/6.0.3/skin/functional.css
 
 | {% block body %}
 
-#asset-container
-	section.asset-preview.video
+#node-container
+	section.node-preview.video
 		#flowplayer_container.is-splash(style="background-image:url({{node.picture}});")
 
-	section.asset-details-container
+	section.node-details-container
 
-		.asset-details-header
-			.asset-title
+		.node-details-header
+			.node-title
 				| {{node.name}}
 
-		.asset-details-description
+		.node-details-description
 			| {{node.description|safe}}
 
-		.asset-details-meta
+		.node-details-meta
 
-			ul.asset-details-meta-list
-				li.asset-details-meta-list-item.status
+			ul.node-details-meta-list
+				li.node-details-meta-list-item.status
 						| {{node.properties.status}}
 
-				li.asset-details-meta-list-item
+				li.node-details-meta-list-item
 					| {{ node._created }}
 
-				li.btn-group.asset-details-meta-list-item.download
+				li.btn-group.node-details-meta-list-item.download
 					button.btn.btn-default.dropdown-toggle(
 						type="button",
 						data-toggle="dropdown",

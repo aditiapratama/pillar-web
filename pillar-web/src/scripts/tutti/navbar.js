@@ -10,11 +10,12 @@ function NavbarTransparent(color_txt, color_bg, startingpoint, factor) {
 
 		scroll = Math.min(Math.max(parseInt(($(this).scrollTop() - startingpoint)), 0), $(this).scrollTop());
 
+		// We start with 0 opacity, and scroll to 1.0
+		opacity = ((startingpoint - $(this).scrollTop()) * (-0.5 * factor)) / 50;
+		opacity = Math.min(Math.max(parseFloat((opacity)), 0), 1.0)
+
 		if ($(this).scrollTop() > startingpoint) {
 
-			// We start with 0 opacity, and scroll to 1.0
-			opacity = ((startingpoint - $(this).scrollTop()) * (-0.5 * factor)) / 50;
-			opacity = Math.min(Math.max(parseFloat((opacity)), 0), 1.0)
 			$('.navbar-overlay').css('background-color', 'rgba(' + color_bg + ',' + color_bg + ',' + color_bg + ',' + opacity + ')');
 
 			color = 255;

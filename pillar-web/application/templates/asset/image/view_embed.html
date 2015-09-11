@@ -1,81 +1,19 @@
-{% from '_comments.html' import render_comments %}
-
-{% block header_items %}
-<link rel="stylesheet" href="//releases.flowplayer.org/6.0.3/skin/functional.css">
-{% endblock %}
-
 {% block body %}
-<div class="col-md-12">
-  {% if node.picture %}
-    <a href="{{node.picture}}">
-      <img src="{{node.picture}}" alt="{{node.name}}" class="node__image_preview">
-    </a>
-  {% else %}
-    <img src="http://placehold.it/550x224&text=Preview+Image" class="node__image_preview">
-  {% endif %}
-
-  <div id="video-asset-preview">
-     <!-- <img id="locked-video-image" class="img-responsive" src="">-->
-    <div id="flowplayer_container">
+<div id="node-container"><a href="{{node.picture}}">
+    <section class="node-preview image"><img src="{{node.picture}}"/></section></a>
+  <section class="node-details-container">
+    <div class="node-details-header">
+      <div class="node-title">{{node.name}}</div>
     </div>
-  </div>
-
-  <!-- Video Details -->
-  <div id="video-asset-details">
-    <div class="row">
-      <div class="col-lg-8 col-md-7 col-sm-6 col-xs-6 theater_mode_hide">
-        <h2 class="asset-name">{{node.name}}</h2>
-        <p class="asset-description">{{node.description}}</p>
-      </div>
-      <div class="col-lg-2 col-md-2 col-sm-4 col-xs-6 margin-top-5px theater_mode_hide">
-        <div class="duration" title="Duration">
-          <span id="asset-duration"></span> <i class="fa fa-clock-o"></i>
-        </div>
-        <div class="size" title="Size">
-          <span id="download-video-size">{{node.file.length | filesizeformat}}</span>
-        </div>
-        <div class="resolution" title="Resolution">
-          <span id="asset-res_x">
-            {{node.file.width}}
-          </span>x<span id="asset-res_y">
-            {{node.file.height}}
-          </span>
-        </div>
-      </div>
-      <div class="col-lg-2 col-md-3 col-sm-2 col-xs-12 asset-extras download border-left" title="Download">
-        <div class="dropdown pull-left theater_mode_hide">
-          <a id="download-video-dropdown" class="dropdown-toggle padding-bottom-5px" data-toggle="dropdown">
-            <i class="fa fa-caret-down fa-2x"></i><span class="sr-only">Toggle Dropdown</span>
-          </a>
-          <ul id="download-video-choices" class="dropdown-menu list-bullets-none" role="menu">Format and Resolution</ul>
-          <a id="download-video-button" href="" download><i class="fa fa-3x fa-cloud-download"></i></a>
-        </div>
-        <div class="mode_theater pull-right" title="Theater Mode"><i class="fa fa-expand fa-2x"></i></div>
-      </div>
+    <div class="node-details-description">{{node.description|safe}}</div>
+    <div class="node-details-meta">
+      <ul class="node-details-meta-list">
+        <li class="node-details-meta-list-item status">{{node.properties.status}}</li>
+        <li class="node-details-meta-list-item">{{ node._created }}</li>
+        <li class="node-details-meta-list-item image download"><a href="{{node.picture}}">
+            <button type="button" class="btn btn-default">Download</button></a></li>
+      </ul>
     </div>
-  </div>
-
-  <div class="row">
-    <div class="col-md-6">
-      <p>Status: {{node.properties.status}}</p>
-    </div>
-    <div class="col-md-6">
-      {% for child in node.file_children._items %}
-        {{ child.length | filesizeformat }}
-        {{ child.format }}
-        {{ child.size }}
-        {{ child.link }}
-      {% endfor %}
-      <hr>
-      <p>Containers:{{ node.to_dict() }}</p>
-
-
-    </div>
-  </div>
-</div>
-
-{% endblock %}
-
-{% block footer_scripts %}
-
-{% endblock %}
+  </section>
+  <section class="debug hidden">{{ node.to_dict() }}</section>
+</div>{% endblock %}

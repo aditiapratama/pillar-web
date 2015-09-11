@@ -17,17 +17,23 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 .container
 	#project_container
 		#project_nav
+			.project_nav-header
+				| {{node.name}}
 			.project_split
 			#project_tree
-		#project_context
-			section.project_context-header
-				img(src="https://cloud.blender.org/static/files/7d912f78031f2e9fe6871f5bbf9edc74.jpg")
+		#project_context-container
+			.project_content-loading
+				.spinner
+					i.fa.fa-circle-o-notch.fa-spin
+			#project_context
+				section.project_context-header
+					img(src="https://cloud.blender.org/static/files/7d912f78031f2e9fe6871f5bbf9edc74.jpg")
 
-			section.project_context-content
-				.project_context-title
-					| Track, Match, Blend 2 plus Chaos & Evolution!
-				.project_context-description.
-					Track, Match, Blend 2 is an ongoing course about how to create Visual Effects with Blender. That includes camera and object tracking, rendering and compositing 3d elements into live action footage, masking, keying and rotoscoping as well as set extensions, retouching and footage cleanup.
+				section.project_context-content
+					.project_context-title
+						| Track, Match, Blend 2 plus Chaos & Evolution!
+					.project_context-description.
+						Track, Match, Blend 2 is an ongoing course about how to create Visual Effects with Blender. That includes camera and object tracking, rendering and compositing 3d elements into live action footage, masking, keying and rotoscoping as well as set extensions, retouching and footage cleanup.
 | {% endblock %}
 
 | {% block footer_navigation %}{% endblock %}
@@ -45,15 +51,22 @@ script(type="text/javascript").
 	$('#project_nav').perfectScrollbar({suppressScrollX: true});
 	$('#project_context').perfectScrollbar({suppressScrollX: true});
 
+	// Binding for ajax event
+	$(document).bind("ajaxSend", function(){
+		$('.project_content-loading').show();
+	}).bind("ajaxComplete", function(){
+		$('.project_content-loading').hide();
+	});
+
 	container_offset = $('#project_container').offset();
 
-	function containerResize(window_height){
+	function containerResizeY(window_height){
 		container_height = window_height - container_offset.top - 15;
 		$('#project_container').css({'max-height': container_height + 'px'});
 	}
 
 	$(window).on("load resize",function(){
-		containerResize($(window).height());
+		containerResizeY($(window).height());
 	});
 
 	function displayNode(nodeId) {
@@ -63,7 +76,8 @@ script(type="text/javascript").
 			// Update the DOM injecting the generate HTML into the page
 			$('#project_context').html(dataHtml);
 			window.location.replace('#' + nodeId);
-		}).fail(function(dataResponse) {
+		})
+		.fail(function(dataResponse) {
 			$('#project_context').html($('<iframe id="server_error"/>'));
 			$('#server_error').attr('src', url);
 		});
@@ -114,10 +128,18 @@ script(type="text/javascript").
 														'/' +
 														obj.original.path, function( jsonObject ) {
 															callback.call(this, jsonObject.children);
-													});
+															$('.waiting').text('caricando');
+												})
+												.done(function(){
+													$('.waiting').text('finito');
+												});
 										} else {
 											$.getJSON('/nodes/' + obj.id + '/view?format=jstree&children=1', function(jsonObject) {
 													callback.call(this, jsonObject.children);
+													$('.waiting').text('averrr');
+											})
+											.done(function(){
+												$('.waiting').text('DPONEEE');
 											});
 												// $.getJSON(  $SCRIPT_ROOT + "/product_tree/" + obj.id.substring(1), function( jsonObject ) {
 												//     //console.log((jsonObject.type);
@@ -151,23 +173,5 @@ script(type="text/javascript").
 
 	// Initialize the page
 	loadContent();
-
-	$('.project_split').mousedown(function (e) {
-		e.preventDefault();
-
-		$(document).mousemove(function (e) {
-
-			e.preventDefault();
-			var x = e.pageX - $('#project_nav').offset().left;
-
-			if (x > 100 && x < 320 && e.pageX < ($(window).width())) {
-				$('#project_nav').css("width", x);
-			}
-		})
-	});
-
-	$(document).mouseup(function (e) {
-		$(document).unbind('mousemove');
-	});
 
 | {% endblock %}

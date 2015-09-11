@@ -16,7 +16,7 @@
 	position: relative
 	// height: 100%
 	overflow: hidden
-	width: 250px
+	width: 280px
 	max-width: 300px
 	padding: auto 0
 	position: relative
@@ -31,15 +31,23 @@
 	-o-user-select: none
 	user-select: none
 
+	.project_nav-header
+		width: 100%
+		box-shadow: 0 0 15px rgba(black, .1)
+		background-color: white
+		padding: 10px 10px 5px 10px
+		font:
+			family: $font-headings-secondary
+			size: 1.2em
 
 /* Project context on the right of the navigation */
-#project_context
-	background-color: white
-	width: 100%
+#project_context-container
+	position: relative
 	min-height: 380px
+	width: 100%
+	background-color: white
 	color: $color-text
 	padding: 0
-	position: relative
 	border-top-right-radius: 3px
 	border-bottom-right-radius: 3px
 
@@ -50,6 +58,30 @@
 
 #project_tree
 	padding: 5px 0
+
+.project_content-loading
+	position: absolute
+	top: 0
+	left: 0
+	right: 0
+	bottom: 0
+	display: flex
+	align-items: center
+	justify-content: center
+	z-index: 12
+
+	.spinner
+		border-radius: 50%
+		padding: 15px
+		background-color: rgba(white, 1)
+		width: 100px
+		height: 100px
+		display: flex
+		align-items: center
+		justify-content: center
+		box-shadow: 0 0 30px rgba(black, .1)
+		font-size: 3em
+		color: rgba($color-text, .1)
 
 
 /* Overview, Navtree, draggable split-bar */
@@ -70,7 +102,7 @@
 	&:before
 		content: '\f142'
 		font-family: 'FontAwesome'
-		color: lighten($color_text, 40%)
+		color: lighten($color-text, 40%)
 		position: relative
 		padding: 4px 0
 		top: 50%
@@ -97,38 +129,41 @@ section.project_context-content
 		width: 75%
 
 /* */
-section.asset-preview
+section.node-preview
 	&.video
 		background-color: black
 
-section.asset-details-container
+	&.image,
+	&.file
+		max-height: 600px
+		background-color: black
 
-	.asset-details-header
-		display: flex
-		flex-flow: row wrap
+		img
+			display: block
+			max-width: 100%
+			max-height: 600px
+			margin: 0 auto
 
-		.asset-title
-			flex: 75%
+
+section.node-details-container
+
+	.node-details-header
+		.node-title
 			margin: 0
 			padding: 20px 15px 5px 15px
 			font:
 				family: $font-headings-secondary
 				size: 2em
 
-		.asset-action
-			flex: 25%
-			padding: 20px 15px 5px 15px
-			text-align: right
-
-	.asset-details-description
+	.node-details-description
 		padding: 5px 15px 20px 15px
 
-	.asset-details-meta
+	.node-details-meta
 		padding: 15px
 		border-top: thin solid $color-background
 		border-bottom: thin solid $color-background
 
-		ul.asset-details-meta-list
+		ul.node-details-meta-list
 			display: flex
 			align-items: center
 
@@ -136,7 +171,7 @@ section.asset-details-container
 			margin: 0
 			padding: 0
 
-			li.asset-details-meta-list-item
+			li.node-details-meta-list-item
 				margin: 0
 				padding: 0 10px 0 0
 				line-height: 1em
@@ -166,8 +201,24 @@ section.asset-details-container
 							left: 20px
 							right: 15px
 
+						&:hover
+							color: $color-primary
+							border-color: $color-primary
+							background-color: transparent
+
+						&:focus
+							outline: none
+							box-shadow: none
+							color: $color-primary
+							border-color: $color-primary
+							background-color: $color-background
+
 						i
 							padding-left: 10px
+
+					&.image
+						button
+							padding-left: 15px
 
 					/* Download dropdown options */
 					ul.dropdown-menu
@@ -216,6 +267,54 @@ section.asset-details-container
 					&.open
 						button
 							box-shadow: none
+
+section.node-children
+	&.group
+		padding: 15px
+
+$list-node-children-item-width: 160px
+
+.list-node-children-item
+	float: left
+	margin: 10px 20px 10px 0
+	border-radius: 3px
+	color: $color-text
+	background-color: darken(white, 5%)
+	box-shadow: 2px 2px 0 rgba(darken($color-background, 60%), .1)
+	width: $list-node-children-item-width
+	overflow: hidden
+	text-overflow: ellipsis
+
+	&:hover
+		opacity: .9
+		color: darken($color-primary, 20%)
+
+	& .list-node-children-item-picture
+		display: block
+		width: $list-node-children-item-width
+		height: $list-node-children-item-width
+		background-color: darken(white, 12%)
+		position: relative
+		text-align: center
+
+		& .list-node-children-item-folder
+			position: absolute
+			top: 50%
+			transform: translateY(-50%)
+			font-size: 6em
+			color: darken(white, 25%)
+			width: $list-node-children-item-width
+
+	& .list-node-children-item-name
+		display: inline-block
+		padding: 5px 3px 0px 10px
+		font-size: .9em
+		+text-overflow-ellipsis
+		width: $list-node-children-item-width
+
+	& .list-node-children-item-icon
+		padding-right: 3px
+		color: lighten($color-text, 30%)
 
 .debug
 	font:

@@ -1,27 +1,24 @@
-{% from '_comments.html' import render_comments %}
-
-{% block header_items %}
-<link rel="stylesheet" href="//releases.flowplayer.org/6.0.3/skin/functional.css">
-{% endblock %}
-
 {% block body %}
-<div class="col-md-12">
-  {% if node.picture %}
-    <a href="{{node.picture_thumbnail}}">
-      <img src="{{node.picture}}" alt="{{node.name}}" class="node__image_preview">
-    </a>
-  {% else %}
-    <img src="http://placehold.it/550x224&text=Preview+Image" class="node__image_preview">
-  {% endif %}
-  {% for child in children %}
-    {{ child.name }}
-  {% endfor%}
-
-
-</div>
-
-{% endblock %}
-
-{% block footer_scripts %}
-
-{% endblock %}
+<div id="node-container">
+  <section class="node-details-container">
+    <div class="node-details-header">
+      <div class="node-title">{{node.name}}</div>
+    </div>
+    <div class="node-details-description">{{node.description|safe}}</div>
+  </section>
+  <section class="node-children group">
+    {% if children %}
+    	{% for child in children %}<a href="#" title="{{ child.name }}">
+      <div class="list-node-children-item">
+        <div class="list-node-children-item-picture">{% if child.picture %}<img src="{{ child.picture.path }}" class="list-node-children-item-picture"/>{% else %}
+          <div class="list-node-children-item-folder"><i class="fa fa-folder-o"></i></div>{% endif %}
+        </div>
+        <div class="list-node-children-item-name">{% if child.picture %}<i class="fa fa-folder-o"></i>{% endif %}
+          {{ child.name }}
+        </div>
+      </div></a>
+    <section class="hidden">{{ child }}</section>	{% endfor %}
+    {% endif %}
+  </section>
+  <section class="debug hidden">{{ node.to_dict() }}</section>
+</div>{% endblock %}

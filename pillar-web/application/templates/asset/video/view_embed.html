@@ -1,20 +1,20 @@
 {% block header_items %}
 <link rel="stylesheet" href="//releases.flowplayer.org/6.0.3/skin/functional.css"/>{% endblock %}
 {% block body %}
-<div id="asset-container">
-  <section class="asset-preview video">
+<div id="node-container">
+  <section class="node-preview video">
     <div id="flowplayer_container" style="background-image:url({{node.picture}});" class="is-splash"></div>
   </section>
-  <section class="asset-details-container">
-    <div class="asset-details-header">
-      <div class="asset-title">{{node.name}}</div>
+  <section class="node-details-container">
+    <div class="node-details-header">
+      <div class="node-title">{{node.name}}</div>
     </div>
-    <div class="asset-details-description">{{node.description|safe}}</div>
-    <div class="asset-details-meta">
-      <ul class="asset-details-meta-list">
-        <li class="asset-details-meta-list-item status">{{node.properties.status}}</li>
-        <li class="asset-details-meta-list-item">{{ node._created }}</li>
-        <li class="btn-group asset-details-meta-list-item download">
+    <div class="node-details-description">{{node.description|safe}}</div>
+    <div class="node-details-meta">
+      <ul class="node-details-meta-list">
+        <li class="node-details-meta-list-item status">{{node.properties.status}}</li>
+        <li class="node-details-meta-list-item">{{ node._created }}</li>
+        <li class="btn-group node-details-meta-list-item download">
           <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-default dropdown-toggle">Download<i class="fa fa-angle-down"></i></button>
           <ul class="dropdown-menu">{% for child in node.file_children._items %}
             <li><a href="{{ child.link }}" title="{{ child.length | filesizeformat }}"><span class="length">{{ child.length | filesizeformat }}</span><span class="format">{{ child.format }}</span><span class="size">{{ child.size }}</span></a></li>{% endfor %}
