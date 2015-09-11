@@ -1,12 +1,15 @@
+
 // Flex parent of both tree-view and side-view
 #project_container
-	position: relative
-	z-index: 12
 	display: flex
 	align-items: stretch
+	position: relative
+	z-index: 12
 	margin: 0 auto 25px auto
+
+	// So we have *some* page scroll, inside it uses perfectscrollbar
+	min-height: 600px
 	border-radius: 3px
-	// overflow: hidden
 	box-shadow: 2px 2px 2px rgba(darken($color-background, 60%), .1)
 
 
@@ -17,14 +20,14 @@
 	width: 280px
 	padding: auto 0
 	position: relative
-	color: rgba(white, .8)
 
-	// background-color: rgba(lighten($color-text, 70%), .9)
+	color: rgba(white, .8)
 	background-color: rgba(darken($color-background, 80%), .8)
+	border-right: thick solid darken($color-background, 75%)
 
 	border-top-left-radius: 3px
 	border-bottom-left-radius: 3px
-	border-right: 2px solid darken($color-background, 75%)
+
 	-webkit-user-select: none
 	-moz-user-select: none
 	-ms-user-select: none
@@ -100,10 +103,9 @@
 
 #project_context-container
 	position: relative
-	min-height: 380px
 	width: 100%
-	background-color: white
 	color: $color-text
+	background-color: white
 	padding: 0
 	border-top-right-radius: 3px
 	border-bottom-right-radius: 3px
@@ -195,9 +197,7 @@ section.node-preview
 			max-height: 600px
 			margin: 0 auto
 
-
 section.node-details-container
-
 	.node-details-header
 		.node-title
 			margin: 0
@@ -215,7 +215,6 @@ section.node-details-container
 		font-weight: 300
 		padding: 15px 25px
 		border-top: thin solid $color-background
-		border-bottom: thin solid $color-background
 
 		ul.node-details-meta-list
 			display: flex
@@ -248,7 +247,8 @@ section.node-details-container
 					margin-left: auto
 					padding: 0 5px 0 15px
 					cursor: default
-					color: lighten($color-text, 20%)
+					font-weight: 400
+					color: lighten($color-text, 30%)
 
 				/* Download button */
 				&.download
@@ -333,7 +333,6 @@ section.node-details-container
 										align-self: flex-end
 										margin-left: auto
 									&.size
-										float: right
 										display: inline-block
 										padding-left: 15px
 					&.open
