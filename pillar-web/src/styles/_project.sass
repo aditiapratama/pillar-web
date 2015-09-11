@@ -41,7 +41,7 @@
 			.project_nav-header-title
 				display: none
 
-			& #project_nav-collapse-btn
+			& .project_nav-collapse-btn
 				cursor: pointer
 				color: rgba(white, .25)
 				text-shadow: none
@@ -69,11 +69,7 @@
 			left: 8px
 			display: none
 
-		#project_nav-collapse-btn
-			display: block
-			cursor: pointer
-			// font-size: 1.5em
-			// width: 35px
+		.project_nav-collapse-btn
 			float: right
 			text-align: center
 			color: rgba(white, .2)
@@ -87,11 +83,21 @@
 				position: relative
 				top: 2px
 
+.project_nav-collapse-btn
+	display: block
+	cursor: pointer
+
+	i
+		font-size: 1.3em
 
 #project_tree
 	margin-top: 40px
 
 /* Project context on the right of the navigation */
+#project_context
+	&.project_nav-collapsed
+		margin-top: 35px
+
 #project_context-container
 	position: relative
 	min-height: 380px
@@ -110,11 +116,14 @@
 #project_context-header
 	width: 100%
 	box-shadow: 0 0 15px rgba(black, .1)
-	background-color: rgba(white, .9)
+	background-color: darken($color-background, 65%)
 	padding: 10px 10px 5px 10px
 	position: absolute
 	top: 0
 	left: 0
+
+	.project_nav-collapse-btn
+		color: lighten($color-text, 20%)
 
 	ul.breadcrumb
 		display: none

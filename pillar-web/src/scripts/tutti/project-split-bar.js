@@ -1,27 +1,33 @@
 
 function projectNavCollapse() {
 
-	$("#project_nav").addClass('project_nav-collapsed');
-	$("#project_tree").hide();
-	$("#project_context-header").show();
+	// $("#project_nav").addClass('project_nav-collapsed');
+	// $("#project_tree").hide();
+	$("#project_nav").hide();
 	$('.project_split').hide();
+	$("#project_context-header").show();
+
+	$("#project_context").addClass('project_nav-collapsed');
 
 	$('#project_nav').perfectScrollbar('destroy');
 
-	$('#project_nav-collapse-btn').html('<i class="fa fa-angle-double-right"></i>');
+	$('.project_nav-collapse-btn').html('<i class="fa fa-angle-double-right"></i>');
 
 };
 
 function projectNavExpand() {
 
-	$("#project_nav").removeClass('project_nav-collapsed');
-	$("#project_tree").show();
-	$("#project_context-header").hide();
+	// $("#project_nav").removeClass('project_nav-collapsed');
+	// $("#project_tree").show();
+	$("#project_nav").show();
 	$('.project_split').show();
+	$("#project_context-header").hide();
+
+	$("#project_context").removeClass('project_nav-collapsed');
 
 	$('#project_nav').perfectScrollbar({suppressScrollX: true});
 
-	$('#project_nav-collapse-btn').html('<i class="fa fa-angle-double-left"></i>');
+	$('.project_nav-collapse-btn').html('<i class="fa fa-angle-double-left"></i>');
 
 };
 
@@ -62,7 +68,7 @@ function projectNavToggle(){
 	}
 }
 
-$('.project_split, #project_nav-collapse-btn').on('click', function (e) {
+$('.project_split, .project_nav-collapse-btn').on('click', function (e) {
 	projectNavToggle();
 });
 
