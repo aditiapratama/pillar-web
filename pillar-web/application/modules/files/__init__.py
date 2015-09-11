@@ -69,7 +69,7 @@ def index():
             prop['name'] = filestorage.filename
             prop['description'] = "File {0}".format(filestorage.filename)
             prop['user'] = user
-            prop['contentType'] = filestorage.content_type
+            prop['content_type'] = filestorage.content_type
             # TODO Fix length value
             prop['length'] = filestorage.content_length
             prop['uploadDate'] = datetime.strftime(

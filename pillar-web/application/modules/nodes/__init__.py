@@ -254,10 +254,11 @@ def view(node_id):
     if node.node_type.name == 'asset':
         node_file = File.find(node.properties.file, api=api)
         node_file_children = node_file.children(api=api)
+        # Attach the file node to the asset node
         setattr(node, 'file', node_file)
 
         try:
-            asset_type = node_file.contentType.split('/')[0]
+            asset_type = node_file.content_type.split('/')[0]
         except AttributeError:
             asset_type = None
 
@@ -267,7 +268,7 @@ def view(node_id):
             if node_file_children:
                 for f in node_file_children._items:
                     sources.append(dict(
-                        type=f.contentType,
+                        type=f.content_type,
                         src=f.link))
 
             setattr(node, 'video_sources', json.dumps(sources))
@@ -304,7 +305,11 @@ def view(node_id):
         # picture_node = File.find(node.picture._id + \
         #                         '/?embedded={"previews":1}', api=api)
         picture_node = File.find(node.picture._id, api=api)
-        node.picture = picture_node.link
+        picture_node_thumbnail_s = picture_node.thumbnail('s', api=api)
+        if picture_node_thumbnail_s:
+            node.picture = picture_node_thumbnail_s.link
+        else:
+            node.picture = picture_node.link
         #node['picture'] = "{0}{1}".format(SystemUtility.attract_server_endpoint_static(), picture_node.path)
         # if picture_node.previews:
         #     for preview in picture_node.previews:
