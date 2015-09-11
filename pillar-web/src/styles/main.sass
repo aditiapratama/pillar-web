@@ -54,7 +54,7 @@ $navbar-height: 80px
 
 
 .navbar-transparent
-	z-index: 12 /* Flowplayer seems to take up to 11 */
+	z-index: 13 /* Flowplayer seems to take up to 11, project container is 12 */
 	border: none
 	border-width: 0
 	// text-shadow: none
@@ -158,6 +158,17 @@ $navbar-height: 80px
 						width: 35px
 						text-align: center
 
+.navbar-backdrop-container
+	width: 100%
+	max-width: 100%
+	position: absolute
+	top: 0
+	left: 0
+	right: 0
+	bottom: 0
+	z-index: 0
+	overflow: hidden
+
 .navbar-backdrop
 	z-index: 0
 	position: absolute
@@ -166,11 +177,14 @@ $navbar-height: 80px
 	right: 0
 	bottom: 0
 	width: 150%
-	height: 350%
-	background-size: cover
-	background-repeat: no-repeat
-	background-color: white
-	background-image: url(https://www.blender.org/wp-content/themes/bthree/assets/images/placeholder_background.jpg)
+	height: 250%
+	background:
+		image: url(https://www.blender.org/wp-content/themes/bthree/assets/images/placeholder_background.jpg)
+		size: 100% 50%
+		repeat: no-repeat
+		color: white
+		position: 50% -50%
+
 	filter: blur(20px)
 	-webkit-filter: blur(20px)
 	-moz-filter: blur(20px)

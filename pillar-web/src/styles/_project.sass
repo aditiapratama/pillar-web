@@ -2,30 +2,29 @@
 #project_container
 	position: relative
 	z-index: 12
-	// top: -60px
 	display: flex
 	align-items: stretch
-	background-color: white
-	margin: 0 auto 15px auto
+	margin: 0 auto 25px auto
 	border-radius: 3px
-	overflow: hidden
-	box-shadow: 2px 2px 0 rgba(darken($color-background, 60%), .1)
+	// overflow: hidden
+	box-shadow: 2px 2px 2px rgba(darken($color-background, 60%), .1)
 
 
 /* Sidebar Navigation on the left */
 #project_nav
 	position: relative
-	// height: 100%
 	overflow: hidden
 	width: 280px
-	max-width: 300px
 	padding: auto 0
 	position: relative
-	color: lighten($color-text, 10%)
-	background-color: rgba(lighten($color-text, 70%), .8)
+	color: rgba(white, .8)
+
+	// background-color: rgba(lighten($color-text, 70%), .9)
+	background-color: rgba(darken($color-background, 80%), .8)
+
 	border-top-left-radius: 3px
 	border-bottom-left-radius: 3px
-	border-right: 2px solid lighten($color-text, 60%)
+	border-right: 2px solid darken($color-background, 75%)
 	-webkit-user-select: none
 	-moz-user-select: none
 	-ms-user-select: none
@@ -34,37 +33,65 @@
 
 	&.project_nav-collapsed
 		width: 35px
+		border-color: darken($color-background, 75%)
 		background-color: darken($color-background, 65%)
 
+		#project_nav-header
+			background-color: transparent
+			.project_nav-header-title
+				display: none
+
+			& #project_nav-collapse-btn
+				cursor: e-resize
+				color: rgba(white, .25)
+				text-shadow: none
+
+				&:hover
+					color: rgba(white, .5)
+
+	#project_nav-header
+		position: absolute
+		width: 100%
+		box-shadow: 0 0 15px rgba(black, .4)
+		background-color: darken($color-background, 65%)
+		color: white
+		clear: both
+
 		.project_nav-header-title
+			display: inline-block
+			padding: 10px 10px 5px 10px
+
+		#project_nav-loading
+			float: right
+			padding: 8px
+			color: rgba(white, .5)
+			position: relative
+			left: 8px
 			display: none
 
-		& #project_nav-collapse-btn
-			cursor: e-resize
+		#project_nav-collapse-btn
+			display: block
+			cursor: w-resize
+			// font-size: 1.5em
+			// width: 35px
+			float: right
+			text-align: center
+			color: rgba(white, .2)
+			padding: 8px
 
-	& #project_nav-collapse-btn
-		display: block
-		cursor: w-resize
-		font-size: 1.8em
-		width: 35px
-		float: right
-		text-align: center
-		color: rgba($color-text, .2)
-		text-shadow: 1px 1px 1px rgba(white, .5)
+			&:hover
+				color: rgba(white, .4)
 
-		&:hover
-			color: rgba($color-text, .4)
+			i
+				font-size: 1.3em
+				position: relative
+				top: 2px
 
 
-#project_nav-header
-	width: 100%
-	box-shadow: 0 0 15px rgba(black, .1)
-	background-color: rgba(white, .9)
-	clear: both
 
-	.project_nav-header-title
-		display: inline-block
-		padding: 10px 10px 5px 10px
+
+#project_tree
+	margin-top: 40px
 
 /* Project context on the right of the navigation */
 #project_context-container
@@ -99,30 +126,6 @@
 
 #project_tree
 	padding: 5px 0
-
-.project_content-loading
-	position: absolute
-	top: 0
-	left: 0
-	right: 0
-	bottom: 0
-	display: flex
-	align-items: center
-	justify-content: center
-	z-index: 12
-
-	.spinner
-		border-radius: 50%
-		padding: 15px
-		background-color: rgba(white, 1)
-		width: 100px
-		height: 100px
-		display: flex
-		align-items: center
-		justify-content: center
-		box-shadow: 0 0 30px rgba(black, .1)
-		font-size: 3em
-		color: rgba($color-text, .1)
 
 
 /* Overview, Navtree, draggable split-bar */
@@ -191,16 +194,19 @@ section.node-details-container
 	.node-details-header
 		.node-title
 			margin: 0
-			padding: 20px 15px 5px 15px
+			padding: 20px 25px 5px 25px
 			font:
 				family: $font-headings-secondary
 				size: 2em
+				weight: 300
 
 	.node-details-description
-		padding: 5px 15px 20px 15px
+		padding: 5px 25px 20px 25px
+		font-weight: 300
 
 	.node-details-meta
-		padding: 15px
+		font-weight: 300
+		padding: 15px 25px
 		border-top: thin solid $color-background
 		border-bottom: thin solid $color-background
 
@@ -226,6 +232,7 @@ section.node-details-container
 					padding: 5px 15px
 					border: thin solid lighten($color-text, 40%)
 					border-radius: 3px
+					cursor: default
 
 				/* Download button */
 				&.download
@@ -254,8 +261,12 @@ section.node-details-container
 							border-color: $color-primary
 							background-color: $color-background
 
-						i
+						/* Tweaks for individual icons */
+						i.icon-dropdown-menu
 							padding-left: 10px
+
+						i.icon-download-file
+							padding-right: 5px
 
 					&.image
 						button

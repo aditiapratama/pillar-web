@@ -23,10 +23,11 @@
 				li.node-details-meta-list-item
 					| {{ node._created }}
 
-				li.node-details-meta-list-item.image.download
+				li.node-details-meta-list-item.file.download
 					a(href="{{ node.file.link }}")
 						button.btn.btn-default(type="button")
-							| Download
+							i.fa.fa-download.icon-download-file
+							|  Download
 
 	section.debug.hidden
 		| {{ node.to_dict() }}

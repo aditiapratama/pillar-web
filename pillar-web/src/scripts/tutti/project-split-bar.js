@@ -4,6 +4,7 @@ function projectNavCollapse() {
 	$("#project_nav").addClass('project_nav-collapsed');
 	$("#project_tree").hide();
 	$("#project_context-header").show();
+	$('.project_split').hide();
 
 	$('#project_nav').perfectScrollbar('destroy');
 
@@ -16,6 +17,7 @@ function projectNavExpand() {
 	$("#project_nav").removeClass('project_nav-collapsed');
 	$("#project_tree").show();
 	$("#project_context-header").hide();
+	$('.project_split').show();
 
 	$('#project_nav').perfectScrollbar({suppressScrollX: true});
 
