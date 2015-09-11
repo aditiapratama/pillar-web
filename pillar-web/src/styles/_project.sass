@@ -33,17 +33,20 @@
 	user-select: none
 
 	&.project_nav-collapsed
-		width: 40px
-		background-color: darken($color-background, 5%)
+		width: 35px
+		background-color: darken($color-background, 65%)
 
 		.project_nav-header-title
 			display: none
 
+		& #project_nav-collapse-btn
+			cursor: e-resize
+
 	& #project_nav-collapse-btn
 		display: block
-		cursor: pointer
-		font-size: 2em
-		width: 40px
+		cursor: w-resize
+		font-size: 1.8em
+		width: 35px
 		float: right
 		text-align: center
 		color: rgba($color-text, .2)
@@ -130,21 +133,21 @@
 	right: -6px
 	width: 10px
 	z-index: 10
-	cursor: col-resize
+	cursor: w-resize
 	-webkit-user-select: none
 	-moz-user-select: none
 	-ms-user-select: none
 	-o-user-select: none
 	user-select: none
 
-	&:before
-		content: '\f142'
-		font-family: 'FontAwesome'
-		color: lighten($color-text, 40%)
-		position: relative
-		padding: 4px 0
-		top: 50%
-		left: 30%
+	// &:before
+	// 	content: '\f142'
+	// 	font-family: 'FontAwesome'
+	// 	color: lighten($color-text, 40%)
+	// 	position: relative
+	// 	padding: 4px 0
+	// 	top: 50%
+	// 	left: 30%
 
 
 /* Project Context */
