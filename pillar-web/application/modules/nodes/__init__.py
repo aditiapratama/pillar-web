@@ -287,12 +287,12 @@ def view(node_id):
             template_path = os.path.join(template_path, 'file')
     # XXX The node is of type project
     elif node_type_name == 'project':
-        if node.properties.picture_1:
-            picture_1 = File.find(node.properties.picture_1, api=api)
-            node.properties.picture_1 = picture_1
-        if node.properties.picture_2:
-            picture_2 = File.find(node.properties.picture_2, api=api)
-            node.properties.picture_2 = picture_2
+        if node.properties.picture_square:
+            picture_square = File.find(node.properties.picture_square, api=api)
+            node.properties.picture_square = picture_square
+        if node.properties.picture_header:
+            picture_header = File.find(node.properties.picture_header, api=api)
+            node.properties.picture_header = picture_header
 
     # user_id = current_user.objectid
 
