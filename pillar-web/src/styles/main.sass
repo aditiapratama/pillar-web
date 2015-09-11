@@ -121,7 +121,7 @@ $navbar-height: 80px
 			weight: 100
 
 		&:hover
-			color: $color-primary
+			color: white
 
 	.dropdown
 		position: relative
@@ -159,14 +159,12 @@ $navbar-height: 80px
 						text-align: center
 
 .navbar-backdrop-container
+	display: block
+	height: 600px
 	width: 100%
-	max-width: 100%
 	position: absolute
 	top: 0
 	left: 0
-	right: 0
-	bottom: 0
-	z-index: 0
 	overflow: hidden
 
 .navbar-backdrop
@@ -177,17 +175,25 @@ $navbar-height: 80px
 	right: 0
 	bottom: 0
 	width: 150%
-	height: 250%
+	height: 400%
+	max-height: 600px
 	background:
-		image: url(https://www.blender.org/wp-content/themes/bthree/assets/images/placeholder_background.jpg)
-		size: 100% 50%
+		size: cover
 		repeat: no-repeat
 		color: white
-		position: 50% -50%
+		image: url(https://www.blender.org/wp-content/themes/bthree/assets/images/placeholder_background.jpg)
+	filter: blur(15px)
+	-webkit-filter: blur(15px)
+	-moz-filter: blur(15px)
 
-	filter: blur(20px)
-	-webkit-filter: blur(20px)
-	-moz-filter: blur(20px)
+.navbar-backdrop-overlay
+	position: absolute
+	top: 0
+	left: 0
+	width: 100%
+	height: 600px
+	background: linear-gradient(to bottom, rgba($color-background, 0) 25%, rgba($color-background,0.5) 50%, rgba($color-background,1) 100%)
+
 
 /* Global, we want all menus to look like this */
 ul.dropdown-menu
