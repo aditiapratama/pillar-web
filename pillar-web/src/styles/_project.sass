@@ -1,6 +1,7 @@
 // Flex parent of both tree-view and side-view
 #project_container
 	position: relative
+	z-index: 12
 	// top: -60px
 	display: flex
 	align-items: stretch
@@ -35,6 +36,9 @@
 		width: 40px
 		background-color: darken($color-background, 5%)
 
+		.project_nav-header-title
+			display: none
+
 	& #project_nav-collapse-btn
 		display: block
 		cursor: pointer
@@ -48,18 +52,15 @@
 		&:hover
 			color: rgba($color-text, .4)
 
-#project_tree
-	position: relative
-	margin-top: 25px
 
 #project_nav-header
 	width: 100%
 	box-shadow: 0 0 15px rgba(black, .1)
 	background-color: rgba(white, .9)
+	clear: both
 
 	.project_nav-header-title
-		display: block
-		float: left
+		display: inline-block
 		padding: 10px 10px 5px 10px
 
 /* Project context on the right of the navigation */

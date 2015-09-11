@@ -36,7 +36,7 @@ html(lang="en")
 
 		link(href="{{ url_for('static', filename='assets/ico/favicon.png') }}", rel="shortcut icon")
 
-		| {% block header_items %}{% endblock %}
+		| {% block head %}{% endblock %}
 
 		link(href="{{ url_for('static', filename='assets/css/main.css') }}", rel="stylesheet")
 
@@ -45,6 +45,11 @@ html(lang="en")
 			a(name="hop")
 			nav.navbar.navbar-transparent.navbar-fixed-top(role="navigation")
 				.navbar-overlay
+
+				| {% block header_backdrop %}
+				.navbar-backdrop
+				| {% endblock %}
+
 				.container
 					header.navbar-header
 						button.navbar-toggle(data-target=".navbar-collapse", data-toggle="collapse", type="button")
