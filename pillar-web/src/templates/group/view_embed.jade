@@ -24,7 +24,7 @@
 				.list-node-children-item-picture
 					| {% if child.picture %}
 					img.list-node-children-item-picture(
-						src="{{ child.picture.path }}")
+						src="{{ child.picture.thumbnail('b')}} ")
 					| {% else %}
 					.list-node-children-item-folder
 						i.fa.fa-folder-o

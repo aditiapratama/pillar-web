@@ -1,9 +1,9 @@
 | {% block body %}
 
 #node-container
-	a(href="{{node.picture}}")
+	a(href="#")
 		section.node-preview.image
-			img(src="{{node.picture}}")
+			img(src="{{node.picture.thumbnail('l')}}")
 
 	section.node-details-container
 
@@ -24,7 +24,7 @@
 					| {{ node._created }}
 
 				li.node-details-meta-list-item.image.download
-					a(href="{{node.picture}}")
+					a(href="{{node.file.link}}")
 						button.btn.btn-default(type="button")
 							| Download
 

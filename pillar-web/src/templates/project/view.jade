@@ -10,21 +10,19 @@ meta(property="og:type", content="website")
 | {% endblock %}
 
 | {% block header_items %}
-link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css",rel="stylesheet")
+link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css", rel="stylesheet")
 | {% endblock %}
 
 | {% block body %}
 .container
 	#project_container
 		#project_nav
-			.project_nav-header
-				| {{node.name}}
 			.project_split
 			#project_tree
 		#project_context-container
+
 			.project_content-loading
-				.spinner
-					i.fa.fa-circle-o-notch.fa-spin
+
 			#project_context
 				section.project_context-header
 					img(src="https://cloud.blender.org/static/files/7d912f78031f2e9fe6871f5bbf9edc74.jpg")
@@ -40,16 +38,12 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 | {% block footer %}{% endblock %}
 
 | {% block footer_scripts %}
-script(
-	type="text/javascript"
-	src="//cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js")
-script(
-	type="text/javascript"
-	src="//cdnjs.cloudflare.com/ajax/libs/js-cookie/2.0.3/js.cookie.min.js")
+script(type="text/javascript", src="//cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js")
+script(type="text/javascript", src="//cdnjs.cloudflare.com/ajax/libs/js-cookie/2.0.3/js.cookie.min.js")
 
 script(type="text/javascript").
 	$('#project_nav').perfectScrollbar({suppressScrollX: true});
-	$('#project_context').perfectScrollbar({suppressScrollX: true});
+	$('#project_context-container').perfectScrollbar({suppressScrollX: true});
 
 	// Binding for ajax event
 	$(document).bind("ajaxSend", function(){

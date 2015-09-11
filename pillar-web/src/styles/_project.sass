@@ -31,14 +31,6 @@
 	-o-user-select: none
 	user-select: none
 
-	.project_nav-header
-		width: 100%
-		box-shadow: 0 0 15px rgba(black, .1)
-		background-color: white
-		padding: 10px 10px 5px 10px
-		font:
-			family: $font-headings-secondary
-			size: 1.2em
 
 /* Project context on the right of the navigation */
 #project_context-container
@@ -55,6 +47,20 @@
 		width: 100%
 		min-height: 800px
 		border: none
+
+#project_context-header
+	width: 100%
+	box-shadow: 0 0 15px rgba(black, .1)
+	background-color: white
+	padding: 10px 10px 5px 10px
+	font:
+		family: $font-headings-secondary
+		size: 1.2em
+
+	ul.breadcrumb
+		padding: 0
+		margin: 0
+		background-color: transparent
 
 #project_tree
 	padding: 5px 0
