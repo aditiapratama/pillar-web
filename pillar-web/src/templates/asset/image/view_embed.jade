@@ -20,11 +20,11 @@
 				li.node-details-meta-list-item.status
 						| {{node.properties.status}}
 
-				li.node-details-meta-list-item
+				li.node-details-meta-list-item.date
 					| {{ node._created }}
 
 				li.node-details-meta-list-item.image.download
-					a(href="{{node.file.link}}")
+					a(href="{{ node.file.link }}")
 						button.btn.btn-default(type="button")
 							| Download
 
