@@ -6,7 +6,7 @@ link(rel="stylesheet", href="//releases.flowplayer.org/6.0.3/skin/functional.css
 
 #node-container
 	section.node-preview.video
-		#flowplayer_container.is-splash(style="background-image:url({{node.picture.thumbnail('l')}});")
+		#flowplayer_container.is-splash(style="background-image:url({{node.picture.thumbnail('l')}}); background-repeat:no-repeat;")
 
 	section.node-details-container
 
@@ -56,18 +56,15 @@ link(rel="stylesheet", href="//releases.flowplayer.org/6.0.3/skin/functional.css
 | {% block footer_scripts %}
 
 script.
-	// Move the script to layout.jade to prevent using getScript everyitme
-	$.getScript("//releases.flowplayer.org/6.0.3/flowplayer.min.js", function() {
-		// select the above element as player container
-		var container = document.getElementById("flowplayer_container");
-
-		// install flowplayer into selected container
-		flowplayer(container, {
-			splash: true,
-				clip: {
-					sources: {{ node.video_sources | safe }}
-				}
-		});
+	// select the above element as player container
+	var container = document.getElementById("flowplayer_container");
+	// install flowplayer into selected container
+	flowplayer(container, {
+		splash: true,
+			clip: {
+				sources: {{ node.video_sources | safe }}
+			}
 	});
+
 
 | {% endblock %}
