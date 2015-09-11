@@ -247,11 +247,15 @@ def view(node_id):
     # Continue to process the node (for HTML, HTML embeded and JSON responses)
 
     # Get node type
-    node_type = node.node_type #NodeType.find(node['node_type'], api=api)
-    template_path = node_type['name']
+    # node_type = node.node_type #NodeType.find(node['node_type'], api=api)
+    # template_path = node_type['name']
+
+    node_type_name = node.node_type.name
+    # Set the default name of the template path based on the node name
+    template_path = node_type_name
 
     # XXX Code to detect a node of type asset, and aggregate file data
-    if node.node_type.name == 'asset':
+    if node_type_name == 'asset':
         node_file = File.find(node.properties.file, api=api)
         node_file_children = node_file.children(api=api)
         # Attach the file node to the asset node
@@ -281,25 +285,32 @@ def view(node_id):
         else:
             # Treat it as normal file (zip, blend, application, etc)
             template_path = os.path.join(template_path, 'file')
+    # XXX The node is of type project
+    elif node_type_name == 'project':
+        if node.properties.picture_1:
+            picture_1 = File.find(node.properties.picture_1, api=api)
+            node.properties.picture_1 = picture_1
+        if node.properties.picture_2:
+            picture_2 = File.find(node.properties.picture_2, api=api)
+            node.properties.picture_2 = picture_2
 
-
-    user_id = current_user.objectid
+    # user_id = current_user.objectid
 
     # Get comment type
-    comment_type = NodeType.find_first({'where': '{"name" : "comment"}'}, api=api)
+    # comment_type = NodeType.find_first({'where': '{"name" : "comment"}'}, api=api)
     # comment_type = comment_type['_items'][0]
 
     # Get comments form
-    comment_form = get_comment_form(node, comment_type)
-    if comment_form.validate_on_submit():
-        if process_node_form(comment_form,
-                                node_id=None,
-                                node_type=comment_type,
-                                user=user_id):
-            node = Node.find(node_id + '/?embedded={"picture":1}', api=api)
-        else:
-            if comment_form.errors:
-                print(comment_form.errors)
+    # comment_form = get_comment_form(node, comment_type)
+    # if comment_form.validate_on_submit():
+    #     if process_node_form(comment_form,
+    #                             node_id=None,
+    #                             node_type=comment_type,
+    #                             user=user_id):
+    #         node = Node.find(node_id + '/?embedded={"picture":1}', api=api)
+    #     else:
+    #         if comment_form.errors:
+    #             print(comment_form.errors)
     # Get previews
     if node.picture:
         node.picture = File.find(node.picture._id, api=api)

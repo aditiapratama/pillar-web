@@ -32,7 +32,6 @@ def project_view(name, project):
     """
     user = UserProxy(name)
     project = user.project(project)
-    #return 'custom project view'
     return view(project._id)
 
 @app.route("/<name>/<project>/<node_id>")
