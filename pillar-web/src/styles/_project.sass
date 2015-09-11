@@ -21,7 +21,7 @@
 	padding: auto 0
 	position: relative
 
-	color: rgba(white, .8)
+	color: white
 	background-color: rgba(darken($color-background, 80%), .8)
 	border-right: thick solid darken($color-background, 75%)
 
@@ -39,18 +39,6 @@
 		border-color: darken($color-background, 75%)
 		background-color: darken($color-background, 65%)
 
-		#project_nav-header
-			background-color: transparent
-			.project_nav-header-title
-				display: none
-
-			& .project_nav-collapse-btn
-				cursor: pointer
-				color: rgba(white, .25)
-				text-shadow: none
-
-				&:hover
-					color: rgba(white, .5)
 
 	#project_nav-header
 		position: absolute
@@ -67,19 +55,16 @@
 		#project_nav-loading
 			float: right
 			padding: 8px
-			color: rgba(white, .5)
+			color: lighten($color-text, 25%)
 			position: relative
 			left: 8px
+			top: 1px
 			display: none
 
 		.project_nav-collapse-btn
 			float: right
 			text-align: center
-			color: rgba(white, .2)
 			padding: 8px
-
-			&:hover
-				color: rgba(white, .4)
 
 			i
 				font-size: 1.3em
@@ -89,6 +74,10 @@
 .project_nav-collapse-btn
 	display: block
 	cursor: pointer
+	color: lighten($color-text, 20%)
+
+	&:hover
+		color: lighten($color-text, 30%)
 
 	i
 		font-size: 1.3em
@@ -117,7 +106,6 @@
 
 #project_context-header
 	width: 100%
-	box-shadow: 0 0 15px rgba(black, .1)
 	background-color: darken($color-background, 65%)
 	padding: 10px 10px 5px 10px
 	position: absolute
@@ -183,9 +171,6 @@ section.project_context-content
 
 /* */
 section.node-preview
-	&.video
-		background-color: black
-
 	&.image,
 	&.file
 		max-height: 600px
@@ -201,7 +186,7 @@ section.node-details-container
 	.node-details-header
 		.node-title
 			margin: 0
-			padding: 20px 25px 5px 25px
+			padding: 15px 25px 5px 25px
 			font:
 				family: $font-headings-secondary
 				size: 2em
@@ -341,7 +326,7 @@ section.node-details-container
 
 section.node-children
 	&.group
-		padding: 15px
+		padding: 15px 25px
 
 $list-node-children-item-width: 160px
 
@@ -392,3 +377,6 @@ $list-node-children-item-width: 160px
 		family: monospace
 		size: .9em
 	padding: 10px 15px
+
+
+@import plugins/_flowplayer

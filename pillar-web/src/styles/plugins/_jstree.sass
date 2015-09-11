@@ -43,10 +43,10 @@ $tree-color-highlight: white
 
 .jstree-default .jstree-node.jstree-open,
 .jstree-default .jstree-node.jstree-leaf
-	border-left: thin dotted rgba($tree-color-text, .4) /* Whatever after the top level */
+	border-left: thin solid $color-text /* Whatever after the top level */
 
 .jstree-default .jstree-node.jstree-closed
-	border-left: thin solid rgba($tree-color-text, .4) /* Closed Folder */
+	border-left: thin solid lighten($color-text, 10%) /* Closed Folder */
 
 // .jstree-default .jstree-children .jstree-leaf
 // 	border-left: thin solid $tree-color-highlight
@@ -92,10 +92,10 @@ $tree-color-highlight: white
 	text-overflow: ellipsis
 	overflow: hidden
 	border-bottom: thin solid transparent
-	transition: all ease 0.1s
+	transition: none
 
 .jstree-default li
-	transition: all ease 0.1s
+	transition: none
 
 /* expanded item, like a folder */
 .jstree-default .jstree-open > .jstree-ocl,
