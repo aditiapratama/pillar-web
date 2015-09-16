@@ -1,17 +1,20 @@
 
 // Flex parent of both tree-view and side-view
 #project_container
-	display: flex
-	align-items: stretch
 	position: relative
 	z-index: 12
 	margin: 0 auto 25px auto
 
-	// So we have *some* page scroll, inside it uses perfectscrollbar
-	min-height: 600px
 	border-radius: 3px
 	box-shadow: 2px 2px 2px rgba(darken($color-background, 60%), .1)
 
+#project-flex
+	display: flex
+	align-items: stretch
+
+	width: 100%
+	// So we have *some* page scroll, inside it uses perfectscrollbar
+	min-height: 600px
 
 /* Sidebar Navigation on the left */
 #project_nav
@@ -40,36 +43,36 @@
 		background-color: darken($color-background, 65%)
 
 
-	#project_nav-header
-		position: absolute
-		width: 100%
-		box-shadow: 0 0 15px rgba(black, .4)
-		background-color: darken($color-background, 65%)
-		color: white
-		clear: both
+#project-header
+	position: relative
+	width: 100%
+	box-shadow: 0 0 15px rgba(black, .4)
+	background-color: darken($color-background, 65%)
+	color: white
+	clear: both
 
-		.project_nav-header-title
-			display: inline-block
-			padding: 10px 10px 5px 10px
+	.project-header-title
+		display: inline-block
+		padding: 10px 10px 5px 10px
 
-		#project_nav-loading
-			float: right
-			padding: 8px
-			color: lighten($color-text, 25%)
+	#project-loading
+		float: right
+		padding: 8px
+		color: lighten($color-text, 25%)
+		position: relative
+		left: 8px
+		top: 1px
+		display: none
+
+	.project_nav-collapse-btn
+		float: right
+		text-align: center
+		padding: 8px
+
+		i
+			font-size: 1.3em
 			position: relative
-			left: 8px
-			top: 1px
-			display: none
-
-		.project_nav-collapse-btn
-			float: right
-			text-align: center
-			padding: 8px
-
-			i
-				font-size: 1.3em
-				position: relative
-				top: 2px
+			top: 2px
 
 .project_nav-collapse-btn
 	display: block
@@ -121,6 +124,7 @@
 		margin: 0
 		background-color: transparent
 
+/* The actual tree */
 #project_tree
 	padding: 5px 0
 
