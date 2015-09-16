@@ -9,7 +9,7 @@ function projectNavCollapse() {
 
 	$('#project_nav').perfectScrollbar('destroy');
 
-	$('.project_nav-collapse-btn').html('<i class="fa fa-angle-double-right"></i>');
+	$('.project_nav-expand-btn').show();
 
 };
 
@@ -23,7 +23,7 @@ function projectNavExpand() {
 
 	$('#project_nav').perfectScrollbar({suppressScrollX: true});
 
-	$('.project_nav-collapse-btn').html('<i class="fa fa-angle-left"></i>');
+	$('.project_nav-expand-btn').hide();
 
 };
 
@@ -64,7 +64,7 @@ function projectNavToggle(){
 	}
 }
 
-$('.project_split, .project_nav-collapse-btn').on('click', function (e) {
+$('.project_split, .project_nav-collapse-btn, .project_nav-expand-btn').on('click', function (e) {
 	projectNavToggle();
 });
 

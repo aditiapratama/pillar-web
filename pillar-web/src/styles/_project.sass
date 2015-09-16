@@ -11,10 +11,13 @@
 #project-flex
 	display: flex
 	align-items: stretch
-
 	width: 100%
 	// So we have *some* page scroll, inside it uses perfectscrollbar
 	min-height: 600px
+
+#project-nav,
+#project_context-container
+	flex: 1 100%
 
 /* Sidebar Navigation on the left */
 #project_nav
@@ -27,8 +30,6 @@
 	color: white
 	background-color: rgba(darken($color-background, 80%), .8)
 	border-right: thick solid darken($color-background, 75%)
-
-	border-top-left-radius: 3px
 	border-bottom-left-radius: 3px
 
 	-webkit-user-select: none
@@ -44,16 +45,83 @@
 
 
 #project-header
+	display: flex
+	align-items: center
+
 	position: relative
 	width: 100%
-	box-shadow: 0 0 15px rgba(black, .4)
+	height: 40px
 	background-color: darken($color-background, 65%)
 	color: white
+
 	clear: both
+
+	border-top-left-radius: 3px
+	border-top-right-radius: 3px
+
+	ul.breadcrumb
+		padding: 0
+		margin: 0
+		background-color: transparent
+		display: inline-block
+		color: lighten($color-text, 30%)
+
+		li
+			margin: 0
+			padding: 0
+			float: left
+
+		li+li:before
+				color: lighten($color-text, 10%)
 
 	.project-header-title
 		display: inline-block
-		padding: 10px 10px 5px 10px
+		padding:
+			top: 0
+			left: 15px
+			right: 15px
+			bottom: 0
+
+	ul.project-edit-tools
+		align-self: flex-end
+		display: flex
+		align-items: stretch
+		height: 100%
+		padding: 0
+		margin:
+			top: 0
+			left: auto
+			right: 0
+			bottom: 0
+		color: lighten($color-text, 50%)
+
+		list-style-type: none
+
+		font-size: .9em
+
+		a
+			color: lighten($color-text, 50%)
+
+			&:hover
+				color: lighten($color-text, 60%)
+
+			li
+				margin: 5px
+				padding: 5px 10px
+				float: left
+				border-radius: 3px
+				border: thin solid darken($color-background, 50%)
+
+				text-transform: uppercase
+
+				i
+					padding-right: 5px
+
+				&:hover
+					background-color: darken($color-background, 60%)
+
+			// &:not(:last-of-type)
+				// border-right: thin solid darken($color-background, 50%)
 
 	#project-loading
 		float: right
@@ -64,17 +132,21 @@
 		top: 1px
 		display: none
 
-	.project_nav-collapse-btn
-		float: right
+	.project_nav-expand-btn
+		float: left
 		text-align: center
-		padding: 8px
+		padding:
+			top: 6px
+			left: 12px
+			right: 6px
 
 		i
 			font-size: 1.3em
 			position: relative
 			top: 2px
 
-.project_nav-collapse-btn
+.project_nav-collapse-btn,
+.project_nav-expand-btn
 	display: block
 	cursor: pointer
 	color: lighten($color-text, 20%)
@@ -85,21 +157,21 @@
 	i
 		font-size: 1.3em
 
-#project_tree
-	margin-top: 40px
+.project_nav-collapse-btn
+	position: absolute
+	bottom: 0
+	left: 0
+	padding: 10px
+
 
 /* Project context on the right of the navigation */
-#project_context
-	&.project_nav-collapsed
-		margin-top: 35px
-
 #project_context-container
 	position: relative
-	width: 100%
+	// width: 100%
 	color: $color-text
 	background-color: white
 	padding: 0
-	border-top-right-radius: 3px
+
 	border-bottom-right-radius: 3px
 
 	iframe#server_error
@@ -107,22 +179,6 @@
 		min-height: 800px
 		border: none
 
-#project_context-header
-	width: 100%
-	background-color: darken($color-background, 65%)
-	padding: 10px 10px 5px 10px
-	position: absolute
-	top: 0
-	left: 0
-
-	.project_nav-collapse-btn
-		color: lighten($color-text, 20%)
-
-	ul.breadcrumb
-		display: none
-		padding: 0
-		margin: 0
-		background-color: transparent
 
 /* The actual tree */
 #project_tree

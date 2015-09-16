@@ -21,19 +21,34 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 .container
 	#project_container
 		#project-header
+			.project_nav-expand-btn(title="Toggle Navigation")
+				i.fa.fa-angle-double-right
+
 			.project-header-title
 				| {{ node.name }}
 
-			.project_nav-collapse-btn(title="Toggle Navigation")
-				ul.breadcrumb
-						li Breadcrumb
-						li sdf
+			ul.breadcrumb
+				li Open Projects
+				li Extras
+				li Videos
+
+			ul.project-edit-tools
+				a(href="#")
+					li
+						i.fa.fa-plus
+						| Add Asset
+				a(href="#")
+					li
+						i.fa.fa-edit
+						| Edit
 
 			#project-loading
 				i.fa.fa-spinner.fa-spin
 		#project-flex
 			#project_nav
 				.project_split
+				.project_nav-collapse-btn(title="Toggle Navigation")
+					i.fa.fa-angle-double-left
 
 				#project_tree
 			#project_context-container
