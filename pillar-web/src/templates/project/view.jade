@@ -97,6 +97,7 @@ script(type="text/javascript").
 			// Update the DOM injecting the generate HTML into the page
 			$('#project_context').html(dataHtml);
 			window.location.replace('#' + nodeId);
+			$('.fa-edit').attr('data-node_id', nodeId);
 		})
 		.fail(function(dataResponse) {
 			$('#project_context').html($('<iframe id="server_error"/>'));
@@ -119,6 +120,25 @@ script(type="text/javascript").
 				console.log('Error')
 		}
 		*/
+	}
+
+	function editNode(nodeId) {
+		// Remove the 'n_' suffix from the id
+		if (nodeId.substring(0, 2) == 'n_') {
+			nodeId = nodeId.substr(2);
+		}
+		//console.log(nodeId);
+		var url = '/nodes/' + nodeId + '/edit?embed=1'
+		$.get(url, function(dataHtml) {
+			// Update the DOM injecting the generate HTML into the page
+			$('#project_context').html(dataHtml);
+			window.location.replace('#' + nodeId);
+		})
+		.fail(function(dataResponse) {
+			$('#project_context').html($('<iframe id="server_error"/>'));
+			$('#server_error').attr('src', url);
+		});
+
 	}
 
 	function loadContent() {
@@ -188,9 +208,16 @@ script(type="text/javascript").
 
 		var jstreeAPI = $('#project_tree').jstree(true);
 
+
 		$('#project_tree').on("select_node.jstree", function (e, data) {
 			displayNode(data.node.id);
 			jstreeAPI.toggle_node(data.node);
+		});
+
+		$('.fa-edit').click(function(e){
+			// When clicking on the edit icon, we star the edit
+			e.preventDefault;
+			editNode($(this).data('node_id'));
 		});
 
 

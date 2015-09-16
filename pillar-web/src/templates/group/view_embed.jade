@@ -52,7 +52,10 @@
 		$('a.item_icon').click(function(e){
 			// When clicking on a node preview, we load its content
 			e.preventDefault;
-			displayNode($(this).data('node_id'));
+			var nodeId = $(this).data('node_id');
+			displayNode(nodeId);
+			// Update tree with current selection
+			$('#project_tree').jstree('select_node', 'n_' + nodeId);
 		});
 
 | {% endblock %}

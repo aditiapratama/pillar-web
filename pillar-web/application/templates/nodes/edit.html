@@ -2,68 +2,7 @@
 {% from '_macros/_file_uploader.html' import render_file_uploader %}
 {% from '_macros/_file_uploader_javascript.html' import render_file_uploader_javascript %}
 
-{% block body %}
-<div class="col-md-9">
-		{% with errors = errors %}
-		{% if errors %}
-				<div>
-				{% for field in errors %}
-				<div class="alert alert-danger" role="alert">
-						<strong>{{field}}</strong>
-						{% for message in errors[field] %}
-								{{message}}|
-						{% endfor %}
-				</div>
-				{% endfor %}
-				</div>
-		{% endif %}
-		{% endwith %}
-		{% if error!="" %}
-				<div class="alert alert-danger" role="alert">
-								{{error}}
-				</div>
-		{% endif %}
-</div>
-<div class="col-md-6 col-md-push-3">
-	<form method="POST" enctype="multipart/form-data" action="{{url_for('nodes.edit', node_id=node._id)}}">
-
-			<div class="pull-left">
-				<h2>{{ node.name }}</h2>
-			</div>
-
-			<div class="pull-right">
-				<h2>
-				<input class="btn btn-default btn-success" type="submit" value="Update">
-			</h2>
-			</div>
-
-			<div class="clearfix"></div>
-			<hr/>
-
-			{% for field in form %}
-				{% if field.name == 'csrf_token' %}
-					{{ field }}
-				{% else %}
-					{% if field.type == 'HiddenField' %}
-							{{ field }}
-					{% else %}
-						<div class="form-group">
-							{{ field.label }}
-							{{ field(class='form-control') }}
-						</div>
-					{% endif %}
-				{% endif %}
-			{% endfor %}
-			<a class="btn btn-danger" href="{{url_for('nodes.delete', node_id=node._id)}}">Delete</a>
-			<div class="pull-right">
-				<a class="btn btn-default" href="#">Cancel</a>
-				<input class="btn btn-default btn-success" type="submit" value="Update {{node.node_type.name}}">
-			</div>
-		</form>
-</div>
-
-{{ render_file_uploader() }}
-{% endblock %}
+{% include 'nodes/edit_embed.html' %}
 
 {% block footer_scripts %}
 {{render_file_uploader_javascript()}}

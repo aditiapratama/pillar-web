@@ -133,8 +133,8 @@ def add(node_type_id):
 def jstree_parse_node(node, children=None):
     """Generate JStree node from node object"""
     node_type = node.node_type.name
-    if node_type == 'asset':
-        node_type = node.properties.content_type
+    # if node_type == 'asset':
+    #     node_type = node.properties.content_type
     return dict(
         id="n_{0}".format(node._id),
         text=node.name,
@@ -147,8 +147,8 @@ def jstree_get_children(node_id):
     if node_id.startswith('n_'):
         node_id = node_id.split('_')[1]
     children = Node.all({
-        'projection': '{"name":1, "parent":1, "node_type": 1, "properties": 1}',
-        'embedded': '{"node_type":1}',
+        'projection': '{"name": 1, "parent": 1, "node_type": 1}',
+        'embedded': '{"node_type": 1}',
         'where': '{"parent": "%s"}' % node_id}, api=api)
 
     children_list = []
