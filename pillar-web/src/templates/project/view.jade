@@ -72,7 +72,10 @@ script(type="text/javascript").
 
 	function displayNode(nodeId) {
 		// Remove the 'n_' suffix from the id
-		nodeId = nodeId.substr(2);
+		if (nodeId.substring(0, 2) == 'n_') {
+			nodeId = nodeId.substr(2);
+		}
+
 		//console.log(nodeId);
 		var url = '/nodes/' + nodeId + '/view?embed=1'
 		$.get(url, function(dataHtml) {
@@ -144,7 +147,7 @@ script(type="text/javascript").
 													$('.waiting').text('averrr');
 											})
 											.done(function(){
-												$('.waiting').text('DPONEEE');
+												$('.waiting').text('');
 											});
 												// $.getJSON(  $SCRIPT_ROOT + "/product_tree/" + obj.id.substring(1), function( jsonObject ) {
 												//     //console.log((jsonObject.type);
@@ -157,7 +160,7 @@ script(type="text/javascript").
 				"types" : {
 						"#": {"valid_children": ["collection"]},
 						"chapter" : {"icon": "fa fa-folder-o"},
-						"node" : {"icon": "fa fa-folder-o"},
+						"group" : {"icon": "fa fa-folder-o"},
 						"filesystem_node" : {"icon": "fa fa-folder-o"},
 						"file" : {"icon": "fa fa-file-archive-o", "max_children": 0},
 						"filesystem_file" : {"icon": "fa fa-file-archive-o", "max_children": 0},
@@ -168,11 +171,13 @@ script(type="text/javascript").
 				"plugins": ["types",] //, "state", "sort"
 		});
 
-		//var jstreeAPI = $('#project_tree').jstree(true);
+		var jstreeAPI = $('#project_tree').jstree(true);
 
 		$('#project_tree').on("select_node.jstree", function (e, data) {
 			displayNode(data.node.id);
+			jstreeAPI.toggle_node(data.node);
 		});
+
 
 	};
 
