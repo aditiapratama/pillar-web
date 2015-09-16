@@ -45,6 +45,7 @@ def type_names():
         type_names.append(str(names['name']))
     return type_names
 
+
 def assigned_users_to(node, node_type):
     api = SystemUtility.attract_api()
 
@@ -56,6 +57,7 @@ def assigned_users_to(node, node_type):
         user_node = User.find(user, api=api)
         owners.append(user_node)
     return owners
+
 
 @nodes.route("/<node_type_name>")
 @login_required
@@ -130,14 +132,17 @@ def add(node_type_id):
 
 def jstree_parse_node(node, children=None):
     """Generate JStree node from node object"""
-    n = {'id': node._id, 'text': node.name, 'type': node.node_type.name, 'children': True}
-    # if children:
-    #     n['children'] = children
-    return n
+    return dict(
+        id="n_{0}".format(node._id),
+        text=node.name,
+        type=node.node_type.name,
+        children=True)
 
 
 def jstree_get_children(node_id):
     api = SystemUtility.attract_api()
+    if node_id.startswith('n_'):
+        node_id = node_id.split('_')[1]
     children = Node.all({
         'projection': '{"name":1, "parent":1, "node_type": 1}',
         'embedded': '{"node_type":1}',
@@ -151,11 +156,12 @@ def jstree_get_children(node_id):
 
 def jstree_build_children(node):
     return dict(
-        id=node['_id'],
+        id="n_{0}".format(node['_id']),
         text=node['name'],
         type='group',
         children=jstree_get_children(node['_id'])
     )
+
 
 def jstree_build_from_node(node):
     api = SystemUtility.attract_api()
@@ -164,7 +170,7 @@ def jstree_build_from_node(node):
     #parent = Node.find(node.parent + '/?projection={"name":1, "parent":1, "node_type.name": 1}&embedded={"node_type":1}', api=api)
     try:
         parent = Node.find(node.parent, {
-            'projection': '{"name":1, "parent":1, "node_type": 1}',
+            'projection': '{"name": 1, "parent": 1, "node_type": 1}',
             'embedded': '{"node_type":1}',
             }, api=api)
     except ResourceNotFound:
@@ -391,7 +397,6 @@ def view(node_id):
 
 
     return return_content
-
 
 
 @nodes.route("/<node_id>/edit", methods=['GET', 'POST'])

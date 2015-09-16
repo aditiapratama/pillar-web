@@ -71,7 +71,9 @@ script(type="text/javascript").
 	});
 
 	function displayNode(nodeId) {
-		// console.log(nodeId);
+		// Remove the 'n_' suffix from the id
+		nodeId = nodeId.substr(2);
+		//console.log(nodeId);
 		var url = '/nodes/' + nodeId + '/view?embed=1'
 		$.get(url, function(dataHtml) {
 			// Update the DOM injecting the generate HTML into the page
@@ -135,7 +137,9 @@ script(type="text/javascript").
 													$('.waiting').text('finito');
 												});
 										} else {
-											$.getJSON('/nodes/' + obj.id + '/view?format=jstree&children=1', function(jsonObject) {
+											// Remove the 'n_' suffix from the id
+											nodeId = obj.id.substring(2);
+											$.getJSON('/nodes/' + nodeId + '/view?format=jstree&children=1', function(jsonObject) {
 													callback.call(this, jsonObject.children);
 													$('.waiting').text('averrr');
 											})
