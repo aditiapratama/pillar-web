@@ -19,7 +19,7 @@ def homepage():
     """Very minimal setup that returns the nodes index view"""
     return index()
 
-@app.route("/<name>")
+@app.route("/<name>/")
 def user_view(name):
     """View a user or organization."""
     user = UserProxy(name)
