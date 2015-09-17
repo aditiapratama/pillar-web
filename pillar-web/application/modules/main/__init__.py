@@ -24,9 +24,10 @@ def homepage():
 def user_view(name):
     """View a user or organization."""
     user = UserProxy(name)
+    projects = user.projects()
     return render_template(
         'project/index.html',
-        user=user)
+        projects=projects._items)
 
 @app.route("/<name>/<project>/")
 @login_required

@@ -5,8 +5,8 @@
 | {% block body %}
 .container
 
-| {% for p in user.projects() %}
-| {{ p.to_dict() }}
+| {% for project in projects %}
+| {{ project.to_dict() }}
 | {% endfor %}
 
 | {% endblock %}
