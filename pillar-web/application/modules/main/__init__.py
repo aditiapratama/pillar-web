@@ -25,7 +25,8 @@ def user_view(name):
     """View a user or organization."""
     user = UserProxy(name)
     return render_template(
-        'project/index.html')
+        'project/index.html',
+        user=user)
 
 @app.route("/<name>/<project>/")
 @login_required

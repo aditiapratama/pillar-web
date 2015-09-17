@@ -1,8 +1,12 @@
 | {% extends 'layout.html' %}
 
-| {% block page_title %}Prjects{% endblock%}
+| {% block page_title %}Projects{% endblock%}
 
 | {% block body %}
 .container
+
+| {% for p in user.projects() %}
+| {{ p.to_dict() }}
+| {% endfor %}
 
 | {% endblock %}
