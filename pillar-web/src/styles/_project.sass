@@ -59,28 +59,45 @@
 	border-top-left-radius: 3px
 	border-top-right-radius: 3px
 
-	ul.breadcrumb
-		padding: 0
-		margin: 0
-		background-color: transparent
-		display: inline-block
-		color: lighten($color-text, 30%)
-
-		li
-			margin: 0
-			padding: 0
-			float: left
-
-		li+li:before
-				color: lighten($color-text, 10%)
-
 	.project-header-title
+		font-weight: 500
 		display: inline-block
 		padding:
 			top: 0
 			left: 15px
 			right: 15px
 			bottom: 0
+
+	ul.breadcrumb
+		position: relative
+		padding: 0
+		margin: 0 0 0 10px
+		background-color: transparent
+		display: inline-block
+		color: lighten($color-text, 25%)
+		font-weight: 300
+
+		li
+			margin: 0
+			padding: 2px
+			float: left
+
+			&.active
+				color: lighten($color-text, 40%)
+				font-weight: 400
+
+		/* The > separating each breadcrumb */
+		li+li:before,
+		&:before
+			color: lighten($color-text, 15%)
+			content: '\f105'
+			font:
+				family: 'FontAwesome'
+
+		&:before
+			position: absolute
+			left: -13px
+			top: 2px
 
 	ul.project-edit-tools
 		align-self: flex-end
@@ -124,10 +141,10 @@
 				// border-right: thin solid darken($color-background, 50%)
 
 	#project-loading
-		float: right
+		// float: right
 		padding: 8px
 		color: lighten($color-text, 25%)
-		position: relative
+		// position: relative
 		left: 8px
 		top: 1px
 		display: none

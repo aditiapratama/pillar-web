@@ -28,9 +28,11 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 				| {{ node.name }}
 
 			ul.breadcrumb
-				li Open Projects
 				li Extras
-				li Videos
+				li.active Videos
+
+			#project-loading
+				i.fa.fa-spinner.fa-spin
 
 			ul.project-edit-tools
 				a(href="#")
@@ -42,8 +44,6 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 						i.fa.fa-edit
 						| Edit
 
-			#project-loading
-				i.fa.fa-spinner.fa-spin
 		#project-flex
 			#project_nav
 				.project_split
@@ -69,16 +69,16 @@ script(type="text/javascript").
 
 	// Binding for ajax event
 	$(document).bind("ajaxSend", function(){
-		$('#project_nav-loading').show();
+		$('#project-loading').show();
 	}).bind("ajaxComplete", function(){
-		$('#project_nav-loading').hide();
+		$('#project-loading').hide();
 	});
 
-	container_offset = $('#project_container').offset();
+	container_offset = $('#project-flex').offset();
 
 	function containerResizeY(window_height){
 		container_height = window_height - container_offset.top - 15;
-		$('#project_container').css({'max-height': container_height + 'px'});
+		$('#project-flex').css({'max-height': container_height + 'px'});
 	}
 
 	$(window).on("load resize",function(){
@@ -169,10 +169,6 @@ script(type="text/javascript").
 														'/' +
 														obj.original.path, function( jsonObject ) {
 															callback.call(this, jsonObject.children);
-															$('.waiting').text('caricando');
-												})
-												.done(function(){
-													$('.waiting').text('finito');
 												});
 										} else {
 											// Remove the 'n_' suffix from the id
@@ -180,9 +176,6 @@ script(type="text/javascript").
 											$.getJSON('/nodes/' + nodeId + '/view?format=jstree&children=1', function(jsonObject) {
 													callback.call(this, jsonObject.children);
 													$('.waiting').text('averrr');
-											})
-											.done(function(){
-												$('.waiting').text('');
 											});
 												// $.getJSON(  $SCRIPT_ROOT + "/product_tree/" + obj.id.substring(1), function( jsonObject ) {
 												//     //console.log((jsonObject.type);
