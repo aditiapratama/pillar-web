@@ -9,7 +9,8 @@ function projectNavCollapse() {
 
 	$('#project_nav').perfectScrollbar('destroy');
 
-	$('.project_nav-expand-btn').show();
+	$('.project_nav-expand-btn').toggle();
+	$('.project_nav-collapse-btn').toggle();
 
 };
 
@@ -23,7 +24,8 @@ function projectNavExpand() {
 
 	$('#project_nav').perfectScrollbar({suppressScrollX: true});
 
-	$('.project_nav-expand-btn').hide();
+	$('.project_nav-expand-btn').toggle();
+	$('.project_nav-collapse-btn').toggle();
 
 };
 

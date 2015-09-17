@@ -3,7 +3,7 @@
 #project_container
 	position: relative
 	z-index: 12
-	margin: 0 auto 25px auto
+	margin: 0 auto 15px auto
 
 	border-radius: 3px
 	box-shadow: 2px 2px 2px rgba(darken($color-background, 60%), .1)
@@ -20,10 +20,12 @@
 	flex: 1 100%
 
 /* Sidebar Navigation on the left */
+$project_nav-width: 280px
+
 #project_nav
 	position: relative
 	overflow: hidden
-	width: 280px
+	width: $project_nav-width
 	padding: auto 0
 	position: relative
 
@@ -173,10 +175,12 @@
 		font-size: 1.3em
 
 .project_nav-collapse-btn
+	display: none // Toggles via project-split-bar.js
 	position: absolute
 	bottom: 0
 	left: 0
 	padding: 10px
+	z-index: 1
 
 
 /* Project context on the right of the navigation */
@@ -202,11 +206,11 @@
 
 /* Overview, Navtree, draggable split-bar */
 .project_split
-	height: 100%
 	float: right
 	position: absolute
-	right: -6px
 	width: 10px
+	top: 0
+	bottom: 0
 	z-index: 10
 	cursor: w-resize
 	-webkit-user-select: none
