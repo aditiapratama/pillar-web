@@ -31,31 +31,31 @@ users = Blueprint('users', __name__)
 
 
 def authenticate(username, password):
-        import requests
-        import socket
-        payload = dict(
-            username=username,
-            password=password,
-            hostname=socket.gethostname())
-        try:
-            r = requests.post("{0}/u/identify".format(
-                SystemUtility.blender_id_endpoint()), data=payload)
-        except requests.exceptions.ConnectionError as e:
-            raise e
+    import requests
+    import socket
+    payload = dict(
+        username=username,
+        password=password,
+        hostname=socket.gethostname())
+    try:
+        r = requests.post("{0}/u/identify".format(
+            SystemUtility.blender_id_endpoint()), data=payload)
+    except requests.exceptions.ConnectionError as e:
+        raise e
 
-        if r.status_code == 200:
-            message = r.json()['message']
-            if 'token' in r.json():
-                authenticated = True
-                token = r.json()['token']
-            else:
-                authenticated = False
-                token = None
+    if r.status_code == 200:
+        message = r.json()['message']
+        if 'token' in r.json():
+            authenticated = True
+            token = r.json()['token']
         else:
-            message = ""
             authenticated = False
             token = None
-        return dict(authenticated=authenticated, message=message, token=token)
+    else:
+        message = ""
+        authenticated = False
+        token = None
+    return dict(authenticated=authenticated, message=message, token=token)
 
 
 @users.route("/login", methods=['GET', 'POST'])

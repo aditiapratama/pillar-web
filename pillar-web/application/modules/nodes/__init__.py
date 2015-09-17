@@ -133,8 +133,8 @@ def add(node_type_id):
 def jstree_parse_node(node, children=None):
     """Generate JStree node from node object"""
     node_type = node.node_type.name
-    # if node_type == 'asset':
-    #     node_type = node.properties.content_type
+    if node_type == 'asset':
+        node_type = node.properties.content_type
     return dict(
         id="n_{0}".format(node._id),
         text=node.name,
@@ -147,7 +147,7 @@ def jstree_get_children(node_id):
     if node_id.startswith('n_'):
         node_id = node_id.split('_')[1]
     children = Node.all({
-        'projection': '{"name": 1, "parent": 1, "node_type": 1}',
+        'projection': '{"name": 1, "parent": 1, "node_type": 1, "properties": 1}',
         'embedded': '{"node_type": 1}',
         'where': '{"parent": "%s"}' % node_id}, api=api)
 
@@ -232,6 +232,8 @@ def jstree_build_from_node(node):
 @nodes.route("/<node_id>/view")
 @login_required
 def view(node_id):
+    #import time
+    #start = time.time()
     api = SystemUtility.attract_api()
     # Get node with embedded picture data
     try:
@@ -252,7 +254,6 @@ def view(node_id):
             return jsonify(jstree_build_children(node))
         else:
             return jsonify(items=jstree_build_from_node(node))
-
     # Continue to process the node (for HTML, HTML embeded and JSON responses)
 
     # Get node type
@@ -302,7 +303,6 @@ def view(node_id):
         if node.properties.picture_header:
             picture_header = File.find(node.properties.picture_header, api=api)
             node.properties.picture_header = picture_header
-
     # user_id = current_user.objectid
 
     # Get comment type
@@ -320,6 +320,7 @@ def view(node_id):
     #     else:
     #         if comment_form.errors:
     #             print(comment_form.errors)
+
     # Get previews
     if node.picture:
         node.picture = File.find(node.picture._id, api=api)
@@ -339,6 +340,7 @@ def view(node_id):
     for child in children:
         if child.picture:
             child.picture = File.find(child.picture._id, api=api)
+
     # TODO this logic should be on Server:
     # AllNodeTypes = NodeType.all(api=api)
     # for child in children:
@@ -398,7 +400,7 @@ def view(node_id):
             children=children,
             config=app.config)
 
-
+    #print(time.time() - start)
     return return_content
 
 

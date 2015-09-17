@@ -37,7 +37,7 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 					li
 						i.fa.fa-plus
 						| Add Asset
-				a(href="#")
+				a(href="#", id="edit_item")
 					li
 						i.fa.fa-edit
 						| Edit
@@ -97,7 +97,7 @@ script(type="text/javascript").
 			// Update the DOM injecting the generate HTML into the page
 			$('#project_context').html(dataHtml);
 			window.location.replace('#' + nodeId);
-			$('.fa-edit').attr('data-node_id', nodeId);
+			$('#edit_item').attr('data-node_id', nodeId);
 		})
 		.fail(function(dataResponse) {
 			$('#project_context').html($('<iframe id="server_error"/>'));
@@ -214,7 +214,7 @@ script(type="text/javascript").
 			jstreeAPI.toggle_node(data.node);
 		});
 
-		$('.fa-edit').click(function(e){
+		$('#edit_item').click(function(e){
 			// When clicking on the edit icon, we star the edit
 			e.preventDefault;
 			editNode($(this).data('node_id'));

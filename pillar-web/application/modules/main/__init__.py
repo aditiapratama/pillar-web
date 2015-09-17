@@ -4,6 +4,7 @@ from pillarsdk.users import User
 from pillarsdk.organizations import Organization
 from pillarsdk.exceptions import ResourceNotFound
 from flask import abort
+from flask import render_template
 from flask.ext.login import login_required
 from flask.ext.login import current_user
 from application import app
@@ -23,7 +24,8 @@ def homepage():
 def user_view(name):
     """View a user or organization."""
     user = UserProxy(name)
-    return user.name
+    return render_template(
+        'project/index.html')
 
 @app.route("/<name>/<project>/")
 @login_required

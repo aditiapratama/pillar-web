@@ -14,8 +14,6 @@ from flask import redirect
 from flask import url_for
 
 from flask.ext.mail import Mail
-from flask.ext.thumbnails import Thumbnail
-from flask.ext.assets import Environment
 
 from flask.ext.login import LoginManager
 from flask.ext.login import UserMixin
@@ -128,8 +126,6 @@ class SystemUtility():
 
 # Initialized the available extensions
 mail = Mail(app)
-thumb = Thumbnail(app)
-assets = Environment(app)
 
 
 # Import controllers
