@@ -35,14 +35,18 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 				i.fa.fa-spinner.fa-spin
 
 			ul.project-edit-tools
-				a(href="#")
+				a#item_add(href="#")
 					li
 						i.fa.fa-plus
 						| Add Asset
-				a(href="#", id="edit_item")
+				a#item_edit(href="#")
 					li
 						i.fa.fa-edit
 						| Edit
+				a#item_delete(href="#")
+					li
+						i.fa.fa-trash
+						| Delete
 
 		#project-flex
 			#project_nav
@@ -97,7 +101,7 @@ script(type="text/javascript").
 			// Update the DOM injecting the generate HTML into the page
 			$('#project_context').html(dataHtml);
 			window.location.replace('#' + nodeId);
-			$('#edit_item').attr('data-node_id', nodeId);
+			$('#item_edit').attr('data-node_id', nodeId);
 		})
 		.fail(function(dataResponse) {
 			$('#project_context').html($('<iframe id="server_error"/>'));
@@ -207,7 +211,7 @@ script(type="text/javascript").
 			jstreeAPI.toggle_node(data.node);
 		});
 
-		$('#edit_item').click(function(e){
+		$('#item_edit').click(function(e){
 			// When clicking on the edit icon, we star the edit
 			e.preventDefault;
 			editNode($(this).data('node_id'));
