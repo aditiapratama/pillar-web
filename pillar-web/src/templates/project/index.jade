@@ -1,12 +1,26 @@
 | {% extends 'layout.html' %}
 
-| {% block page_title %}Projects{% endblock%}
+| {% block page_title %}{{user.name}}{% endblock%}
 
 | {% block body %}
-.container
 
-| {% for project in projects %}
-| {{ project.to_dict() }}
-| {% endfor %}
+.container
+	#project_container
+
+		#project_index-container
+
+			#project_index-header
+				.project_index-user {{user.name}}
+
+			#project_index-list-container
+				.project_index-list
+					| {% for project in projects %}
+
+					// XXX - Actual address
+					a(href="{{project.properties.url}}").project_index-list-item
+						img.item-image(src="http://placehold.it/90x90/aaaaaa/ffffff")
+						span.item-title {{project.name}}
+
+					| {% endfor %}
 
 | {% endblock %}

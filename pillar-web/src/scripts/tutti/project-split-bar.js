@@ -3,14 +3,13 @@ function projectNavCollapse() {
 
 	$("#project_nav").hide();
 	$('.project_split').hide();
-	$("#project_context-header").show();
 
 	$("#project_context").addClass('project_nav-collapsed');
 
 	$('#project_nav').perfectScrollbar('destroy');
 
-	$('.project_nav-expand-btn').toggle();
-	$('.project_nav-collapse-btn').toggle();
+	$('.project_nav-expand-btn').show();
+	$('.project_nav-collapse-btn').hide();
 
 };
 
@@ -18,14 +17,13 @@ function projectNavExpand() {
 
 	$("#project_nav").show();
 	$('.project_split').show();
-	$("#project_context-header").hide();
 
 	$("#project_context").removeAttr('class');
 
 	$('#project_nav').perfectScrollbar({suppressScrollX: true});
 
-	$('.project_nav-expand-btn').toggle();
-	$('.project_nav-collapse-btn').toggle();
+	$('.project_nav-expand-btn').hide();
+	$('.project_nav-collapse-btn').show();
 
 };
 

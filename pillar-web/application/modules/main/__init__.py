@@ -27,6 +27,7 @@ def user_view(name):
     projects = user.projects()
     return render_template(
         'project/index.html',
+        user=user,
         projects=projects._items)
 
 @app.route("/<name>/<project>/")

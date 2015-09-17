@@ -24,12 +24,19 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 			.project_nav-expand-btn(title="Toggle Navigation")
 				i.fa.fa-angle-double-right
 
-			.project-header-title
+			// XXX - Link to project organization
+			// a(href="#").project-organization
+				| {{ node.user }}
+
+			// XXX - Link to project overview
+			a(href="#").project-title
 				| {{ node.name }}
 
 			ul.breadcrumb
-				li Extras
-				li.active Videos
+				li
+					a(href="#") Extras
+				li.active
+					a(href="#") Videos
 
 			#project-loading
 				i.fa.fa-spinner.fa-spin

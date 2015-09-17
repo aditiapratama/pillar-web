@@ -1,27 +1,30 @@
+$project_nav-width: 280px
+$project_header-height: 40px
 
-// Flex parent of both tree-view and side-view
+$list-node-children-item-width: 160px
+
+/* Child of container, contains project-flex */
 #project_container
 	position: relative
 	z-index: 12
 	margin: 0 auto 15px auto
-
 	border-radius: 3px
 	box-shadow: 2px 2px 2px rgba(darken($color-background, 60%), .1)
 
+
+/* Flexible. Child of project_container, contains the nav tree + side views */
 #project-flex
 	display: flex
 	align-items: stretch
 	width: 100%
-	// So we have *some* page scroll, inside it uses perfectscrollbar
+	/* So we have *some* page scroll, inside it uses perfectscrollbar */
 	min-height: 600px
 
 #project-nav,
 #project_context-container
 	flex: 1 100%
 
-/* Sidebar Navigation on the left */
-$project_nav-width: 280px
-
+/* Container for navigation on the left */
 #project_nav
 	position: relative
 	overflow: hidden
@@ -45,14 +48,14 @@ $project_nav-width: 280px
 		border-color: darken($color-background, 75%)
 		background-color: darken($color-background, 65%)
 
-
+/* Header with name, breadcrumbs and node edit tools */
 #project-header
 	display: flex
 	align-items: center
 
 	position: relative
 	width: 100%
-	height: 40px
+	height: $project_header-height
 	background-color: darken($color-background, 65%)
 	color: white
 
@@ -61,9 +64,11 @@ $project_nav-width: 280px
 	border-top-left-radius: 3px
 	border-top-right-radius: 3px
 
-	.project-header-title
+	.project-organization,
+	.project-title
 		font-weight: 500
 		display: inline-block
+		color: white
 		padding:
 			top: 0
 			left: 15px
@@ -76,7 +81,6 @@ $project_nav-width: 280px
 		margin: 0 0 0 10px
 		background-color: transparent
 		display: inline-block
-		color: lighten($color-text, 25%)
 		font-weight: 300
 
 		li
@@ -84,9 +88,13 @@ $project_nav-width: 280px
 			padding: 2px
 			float: left
 
-			&.active
+			a
+				color: lighten($color-text, 25%)
+
+			&.active a
 				color: lighten($color-text, 40%)
 				font-weight: 400
+
 
 		/* The > separating each breadcrumb */
 		li+li:before,
@@ -143,30 +151,19 @@ $project_nav-width: 280px
 				// border-right: thin solid darken($color-background, 50%)
 
 	#project-loading
-		// float: right
 		padding: 8px
-		color: lighten($color-text, 25%)
-		// position: relative
+		color: lighten($color-text, 30%)
 		left: 8px
 		top: 1px
 		display: none
 
-	.project_nav-expand-btn
-		float: left
-		text-align: center
-		padding:
-			left: 12px
-
-		i
-			font-size: 1.3em
-			position: relative
-			top: 1px
 
 .project_nav-collapse-btn,
 .project_nav-expand-btn
-	display: block
+	display: none // Toggles via project-split-bar.js
 	cursor: pointer
 	color: lighten($color-text, 20%)
+	z-index: 1
 
 	&:hover
 		color: lighten($color-text, 30%)
@@ -175,18 +172,23 @@ $project_nav-width: 280px
 		font-size: 1.3em
 
 .project_nav-collapse-btn
-	display: none // Toggles via project-split-bar.js
 	position: absolute
 	bottom: 0
 	left: 0
 	padding: 10px
-	z-index: 1
 
+.project_nav-expand-btn
+	float: left
+	padding-left: 12px
+
+	i
+		position: relative
+		top: 1px
 
 /* Project context on the right of the navigation */
+/* Contains #project_context */
 #project_context-container
 	position: relative
-	// width: 100%
 	color: $color-text
 	background-color: white
 	padding: 0
@@ -199,17 +201,17 @@ $project_nav-width: 280px
 		border: none
 
 
-/* The actual tree */
+/* The actual navigation tree container */
 #project_tree
-	padding: 5px 0
+	padding: 5px 0 // some padding on top and bottom
 
-
-/* Overview, Navtree, draggable split-bar */
+/* Clickable bar between navtree and context view, to collapse tree */
 .project_split
 	float: right
 	position: absolute
-	width: 10px
-	top: 0
+	width: 16px
+	margin-left: -8px
+	top: $project_header-height
 	bottom: 0
 	z-index: 10
 	cursor: w-resize
@@ -219,36 +221,8 @@ $project_nav-width: 280px
 	-o-user-select: none
 	user-select: none
 
-	// &:before
-	// 	content: '\f142'
-	// 	font-family: 'FontAwesome'
-	// 	color: lighten($color-text, 40%)
-	// 	position: relative
-	// 	padding: 4px 0
-	// 	top: 50%
-	// 	left: 30%
 
-
-/* Project Context */
-section.project_context-header
-	margin: 0
-	padding: 0
-
-	img
-		width: 100%
-
-
-section.project_context-content
-	.project_context-title
-		padding: 20px 15px 5px 15px
-		font:
-			family: $font-headings-secondary
-			size: 2em
-	.project_context-description
-		padding: 5px 15px 20px 15px
-		width: 75%
-
-/* */
+/* Node Context */
 section.node-preview
 	&.image,
 	&.file
@@ -410,7 +384,6 @@ section.node-children
 	&.group
 		padding: 15px 25px
 
-$list-node-children-item-width: 160px
 
 .list-node-children-item
 	float: left
@@ -454,11 +427,72 @@ $list-node-children-item-width: 160px
 		padding-right: 3px
 		color: lighten($color-text, 30%)
 
+
+
+#project_index-container
+
+	border-radius: 3px
+
+	#project_index-header
+		display: flex
+		align-items: center
+
+		position: relative
+		width: 100%
+		background-color: darken($color-background, 65%)
+		color: white
+
+		border-top-left-radius: 3px
+		border-top-right-radius: 3px
+
+		.project_index-user
+			padding: 25px 15px 15px 15px
+			font:
+				family: $font-headings-secondary
+				size: 2.2em
+
+	#project_index-list-container
+		background-color: white
+		width: 100%
+		height: 100%
+		padding: 0
+		margin: 0
+		position: relative
+
+		.project_index-list
+			padding: 15px 0 0 0
+			margin: 0
+			clear: both
+
+			& .project_index-list-item
+				display: block
+				padding: 0
+				margin:
+					left: 15px
+					bottom: 15px
+
+				clear: both
+
+				&:after
+					// Basically same as .clearfix from bootstrap
+					clear: both
+					display: block
+					content: ' '
+
+				& .item-title
+					float: left
+					padding: 5px 15px
+					font:
+						family: $font-headings-secondary
+						size: 1.8em
+
+				& .item-image
+					float: left
+
 .debug
 	font:
 		family: monospace
 		size: .9em
 	padding: 10px 15px
-
 
 @import plugins/_flowplayer
