@@ -19,6 +19,7 @@ from wtforms.validators import DataRequired
 from wtforms.widgets import HiddenInput
 from wtforms.widgets import HTMLString
 from wtforms.widgets import Select
+from wtforms.widgets import TextInput
 
 from datetime import datetime
 from datetime import date
@@ -115,10 +116,23 @@ class FileSelect(Select):
         return HTMLString(html+button)
 
 
-class FileSelectField(SelectField):
+class FileSelectText(TextInput):
+    def __init__(self, **kwargs):
+        super(FileSelectText, self).__init__(**kwargs)
+
+    def __call__(self, field, **kwargs):
+        html =  super(FileSelectText, self).__call__(field, **kwargs)
+        button= """
+<button onclick="set_upload_parameters('{0}', {1});" style="margin-top: 5px;" type="button" class="btn btn-primary" data-toggle="modal" data-target="#fileUploaderModal">
+  Upload Files
+</button>""".format(field.id, 'false')
+        return HTMLString(html + button)
+
+
+class FileSelectField(TextField):
     def __init__(self, name, **kwargs):
         super(FileSelectField, self).__init__(name, **kwargs)
-        self.widget = FileSelect()
+        self.widget = FileSelectText()
 
 
 class FileSelectMultipleField(SelectMultipleField):
@@ -161,27 +175,30 @@ def get_node_form(node_type):
         TextField('Name', validators=[DataRequired()]))
     # Parenting
     if 'node_types' in parent_prop and len(parent_prop['node_types']) > 0:
-        select = []
-        for parent_type in parent_prop['node_types']:
-            parent_node_type = pillarsdk.NodeType.all(
-                {'where': '{"name" : "%s"}' % parent_type}, api=api)
-            nodes = Node.all({
-                'where': '{"node_type" : "%s"}' % str(
-                    parent_node_type._items[0]['_id']),
-                'max_results': 999,
-                'sort': "order"},
-                api=api)
-            for option in nodes._items:
-                select.append((str(option._id), str(option.name)))
+        # select = []
+        # for parent_type in parent_prop['node_types']:
+        #     parent_node_type = pillarsdk.NodeType.all(
+        #         {'where': '{"name" : "%s"}' % parent_type}, api=api)
+        #     nodes = Node.all({
+        #         'where': '{"node_type" : "%s"}' % str(
+        #             parent_node_type._items[0]['_id']),
+        #         'max_results': 999,
+        #         'sort': "order"},
+        #         api=api)
+        #     for option in nodes._items:
+        #         select.append((str(option._id), str(option.name)))
 
         parent_names = ""
         for parent_type in parent_prop['node_types']:
             parent_names = "{0} {1},".format(parent_names, parent_type)
 
+        # setattr(ProceduralForm,
+        #         'parent',
+        #         SelectField('Parent ({0})'.format(parent_names),
+        #                     choices=select))
         setattr(ProceduralForm,
                 'parent',
-                SelectField('Parent ({0})'.format(parent_names),
-                            choices=select))
+                TextField('Parent ({0})'.format(parent_names)))
 
     setattr(ProceduralForm,
         'description',
@@ -204,7 +221,7 @@ def get_node_form(node_type):
     #         FileField('Picture File'))
     setattr(ProceduralForm,
         'picture',
-        FileSelectField('Picture', choices=select))
+        FileSelectField('Picture'))
     setattr(ProceduralForm,
         'node_type_id',
         HiddenField(default=node_type._id))

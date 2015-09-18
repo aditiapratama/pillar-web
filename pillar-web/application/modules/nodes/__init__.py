@@ -423,7 +423,7 @@ def edit(node_id):
                 form, node_id=node_id, node_type=node_type, user=user_id):
             node = Node.find(node_id, api=api)
             flash ('Node "{0}" correctly edited'.format(node.name))
-            return redirect(url_for('nodes.index', node_type_name=node_type['name']))
+            return redirect(url_for('nodes.view', node_id=node_id, embed=1))
         else:
             error = "Server error"
             print ("Error sending data")
