@@ -18,7 +18,7 @@
 					| {% for project in projects %}
 
 					a(href="{{ url_for('project_view', name=user.url, project=project.properties.url) }}").project_index-list-item
-						img.item-image(src="http://placehold.it/90x90/aaaaaa/ffffff")
+						img.item-image(src="{{ project.properties.picture_header.thumbnail('s') }}")
 						span.item-title {{project.name}}
 						p.item-description {{project.description}}
 

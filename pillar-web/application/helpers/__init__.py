@@ -4,6 +4,7 @@ from flask import request
 from flask import abort
 from pillarsdk import Node
 from pillarsdk import NodeType
+from pillarsdk import File
 from pillarsdk.users import User
 from pillarsdk.organizations import Organization
 from application import SystemUtility
@@ -98,16 +99,21 @@ class UserProxy(object):
             user_path = 'user'
 
         # Query for the project
-        # TODO currently, this system is weak since we rely on the user property of
-        # a node when searching for a project using the user it. This allows us to
-        # find a project that belongs to an organization also by requesting the user
-        # that originally created the node. This can be fixed by introducing a 'user'
-        # property in the project node type.
+        # TODO currently, this system is weak since we rely on the user property
+        # of a node when searching for a project using the user it. This allows
+        # us to find a project that belongs to an organization also by requesting
+        # the user that originally created the node. This can be fixed by
+        # introducing a 'user' property in the project node type.
 
         projects = Node.all({
             'where': '{"node_type" : "%s", "%s": "%s"}'\
                 % (node_type._id, user_path, self._id),
             }, api=self.api)
+
+        for p in projects._items:
+            if p.properties.picture_header:
+                p.properties.picture_header = File.find(
+                    p.properties.picture_header, api=self.api)
         return projects
 
     def project(self, project_name):
