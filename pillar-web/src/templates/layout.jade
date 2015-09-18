@@ -103,12 +103,12 @@ html(lang="en")
 											| Settings
 									li.divider(role="separator")
 									li
-										a(href="/logout")
+										a(href="/users/logout")
 											i.fa.fa-power-off(title="Log Out")
 											| Log out
 							| {% else %}
 							li
-								a(href="/login")
+								a(href="/users/login")
 									i.fa.fa-sign-in(title="Sign In")
 									| Sign In
 							| {% endif %}
@@ -128,83 +128,82 @@ html(lang="en")
 
 			| {% block body %}{% endblock %}
 
-		| {% block footer_navigation %}
-		#footer-navigation
-			.container
-				.row
-					.col-md-4.col-xs-6
-						.footer-support
-							h4 Support & Feedback
-							p.
-								Let us know what you think or if you have any issues
-								just write to cloudsupport at blender dot org
+		#footer-container
+			| {% block footer_navigation %}
+			#footer-navigation
+				.container
+					.row
+						.col-md-4.col-xs-6
+							.footer-support
+								h4 Support & Feedback
+								p.
+									Let us know what you think or if you have any issues
+									just write to cloudsupport at blender dot org
 
-					.col-md-2.col-xs-6
-						ul.footer-social
-							a(href="http://twitter.com/Blender_Cloud",
-								title="Follow us on Twitter")
-								li
-									span.fa-stack.fa-2x
-										i.fa.fa-circle-thin.fa-stack-2x
-										i.fa.fa-twitter.fa-stack-1x
-							a(href="mailto:cloudsupport@blender.org"
-								title="Support Email")
-								li
-									span.fa-stack.fa-2x
-										i.fa.fa-circle-thin.fa-stack-2x
-										i.fa.fa-envelope.fa-stack-1x
+						.col-md-2.col-xs-6
+							ul.footer-social
+								a(href="http://twitter.com/Blender_Cloud",
+									title="Follow us on Twitter")
+									li
+										span.fa-stack.fa-2x
+											i.fa.fa-circle-thin.fa-stack-2x
+											i.fa.fa-twitter.fa-stack-1x
+								a(href="mailto:cloudsupport@blender.org"
+									title="Support Email")
+									li
+										span.fa-stack.fa-2x
+											i.fa.fa-circle-thin.fa-stack-2x
+											i.fa.fa-envelope.fa-stack-1x
 
-					.col-md-2.col-xs-6
-						h4 Blender Cloud
-						ul.footer-links
-							a(href="{{ url_for('homepage') }}",
-								title="Blender Cloud Home")
-								li Home
+						.col-md-2.col-xs-6
+							h4 Blender Cloud
+							ul.footer-links
+								a(href="{{ url_for('homepage') }}",
+									title="Blender Cloud Home")
+									li Home
 
-							a(href="/news",
-								title="Cloud News")
-								li News
+								a(href="/news",
+									title="Cloud News")
+									li News
 
-							a(href="http://wiki.blender.org/index.php/Org:Institute/BlenderCloud",
-								title="About Blender Cloud")
-								li About
+								a(href="http://wiki.blender.org/index.php/Org:Institute/BlenderCloud",
+									title="About Blender Cloud")
+									li About
 
-					.col-md-2.col-xs-6
-						h4 Blender
-						ul.footer-links
-							a(href="http://www.blender.org",
-								title="Blender Official Website")
-								li Blender.org
+						.col-md-2.col-xs-6
+							h4 Blender
+							ul.footer-links
+								a(href="http://www.blender.org",
+									title="Blender Official Website")
+									li Blender.org
 
-							a(href="http://www.blender.org/store",
-								title="The Official Blender Store")
-								li Blender Store
+								a(href="http://www.blender.org/store",
+									title="The Official Blender Store")
+									li Blender Store
 
-							a(href="http://www.blendernetwork.org",
-								title="The Network of Blender Professionals")
-								li Blender Network
+								a(href="http://www.blendernetwork.org",
+									title="The Network of Blender Professionals")
+									li Blender Network
 
-					.col-md-2.col-xs-6.special
-						| With the support of the <br/> MEDIA Programme of the European Union<br/><br/>
-						img(src="https://gooseberry.blender.org/wp-content/uploads/2014/01/media_programme.png")
+						.col-md-2.col-xs-6.special
+							| With the support of the <br/> MEDIA Programme of the European Union<br/><br/>
+							img(src="https://gooseberry.blender.org/wp-content/uploads/2014/01/media_programme.png")
+			| {% endblock %}
 
-
-		| {% endblock %}
-
-		| {% block footer %}
-		footer.container
-			ul.links
-				li
-					a(href="{# XXX {{url_for('terms_and_conditions')}} #}")
-						| Terms & Services, Cancellation
-				li
-					a(href="{# XXX {{url_for('privacy')}} #}")
-						| Privacy Policy
-			span.credits
-				| Blender Cloud
-				a.hop(href="#hop")
-					i.fa.fa-caret-up
-		| {% endblock %}
+			| {% block footer %}
+			footer.container
+				ul.links
+					li
+						a(href="{# XXX {{url_for('terms_and_conditions')}} #}")
+							| Terms & Services, Cancellation
+					li
+						a(href="{# XXX {{url_for('privacy')}} #}")
+							| Privacy Policy
+				span.credits
+					| Blender Cloud
+					a.hop(href="#hop")
+						i.fa.fa-caret-up
+			| {% endblock %}
 
 		| {#
 		| {% assets filters="jsmin",

@@ -4,11 +4,14 @@
 // @import attract/_main
 
 @import _project
+@import _user
 
 @import plugins/_jstree
 @import plugins/js_perfectscrollbar
 
+
 body
+	position: relative
 	font:
 		family: $font-body, sans-serif
 		size: $font-size
@@ -16,10 +19,12 @@ body
 	background-color: darken($color-background, 8%)
 	-webkit-font-smoothing: antialiased
 
+
 h1, h2, h3, h4, h5
 	font:
 		family: $font-headings-secondary
 		weight: 300
+
 
 a
 	color: $color-primary
@@ -27,11 +32,15 @@ a
 	&:hover
 		color: $color-primary-dark
 
+
 $navbar-height: 80px
+$navbar-backdrop-height: 600px
+
 
 .container-page
 	padding-top: $navbar-height
 	background-color: $color-background
+
 
 /* Navigation */
 .navbar-header
@@ -107,7 +116,6 @@ $navbar-height: 80px
 		display: flex
 		align-items: center
 		margin-left: 0 !important
-		//padding: 25px 15px 15px 0 // overrides bs
 		text-shadow: 1px 1px 0 rgba(black, .2), 1px 1px 10px rgba(black, .2)
 		padding:
 			top: 15px
@@ -159,24 +167,29 @@ $navbar-height: 80px
 						text-align: center
 
 .navbar-backdrop-container
-	display: block
-	height: 600px
+	display: flex
 	width: 100%
+	height: 100%
+	// height: $navbar-backdrop-height
 	position: absolute
 	top: 0
 	left: 0
+	right: 0
+	bottom: 0
 	overflow: hidden
 
 .navbar-backdrop
 	z-index: 0
 	position: absolute
+
 	top: -40px
 	left: -40px
 	right: 0
 	bottom: 0
+
 	width: 150%
 	height: 400%
-	max-height: 600px
+	max-height: $navbar-backdrop-height
 	background:
 		size: cover
 		repeat: no-repeat
@@ -191,9 +204,8 @@ $navbar-height: 80px
 	top: 0
 	left: 0
 	width: 100%
-	height: 600px
+	height: $navbar-backdrop-height
 	background: linear-gradient(to bottom, rgba($color-background, 0) 25%, rgba($color-background,0.5) 50%, rgba($color-background,1) 100%)
-
 
 /* Global, we want all menus to look like this */
 ul.dropdown-menu
@@ -206,6 +218,10 @@ ul.dropdown-menu
 
 
 /* FOOTER */
+#footer-container
+	position: relative
+	background-color: darken($color-background, 8%)
+
 /* Footer Navigation */
 footer
 	font-size: .75em
