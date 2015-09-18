@@ -7,20 +7,33 @@
 .container
 	#project_container
 
-		#project_index-container
+		#node_index-container
 
-			#project_index-header
-				.project_index-user {{user.name}}
-				p.project_index-description {{user.description}}
+			#node_index-header
+				#node_index-user-avatar
+					img(src="http://placehold.it/90x90")
+				#node_index-user-info
+					.node_index-user-name {{user.name}}
+					.node_index-user-description {{user.description}}
 
-			#project_index-list-container
-				.project_index-list
+			#node_index-list-container
+				.node_index-list
 					| {% for project in projects %}
 
-					a(href="{{ url_for('project_view', name=user.url, project=project.properties.url) }}").project_index-list-item
-						img.item-image(src="{{ project.properties.picture_header.thumbnail('s') }}")
-						span.item-title {{project.name}}
-						p.item-description {{project.description}}
+					.node_index-list-item
+
+						a.item-image(
+							href="{{ url_for('project_view', name=user.url, project=project.properties.url) }}")
+							img(src="{{ project.properties.picture_square.thumbnail('s') }}")
+
+						.item-info
+
+							a.item-title(
+								href="{{ url_for('project_view', name=user.url, project=project.properties.url) }}")
+								| {{project.name}}
+
+							p.item-description
+								| {{project.description|safe}}
 
 					| {% endfor %}
 
