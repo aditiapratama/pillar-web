@@ -70,6 +70,7 @@ class UserProxy(object):
             self.is_organization = True
             self.name = user.name
             self.url = user.url
+            self.description = user.description
         else:
             # Check if user exists
             user = User.find_first({
