@@ -110,10 +110,11 @@ class UserProxy(object):
                 % (node_type._id, user_path, self._id),
             }, api=self.api)
 
-        for p in projects._items:
-            if p.properties.picture_header:
-                p.properties.picture_header = File.find(
-                    p.properties.picture_header, api=self.api)
+        for project in projects._items:
+            if project.properties.picture_square:
+                # Collect the picture file object
+                project.properties.picture_square = File.find(
+                    project.properties.picture_square, api=self.api)
         return projects
 
     def project(self, project_name):
