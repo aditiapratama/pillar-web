@@ -52,9 +52,6 @@ $tree-color-highlight: white
 .jstree-default .jstree-node.jstree-closed
 	border-left: thin solid lighten($color-text, 10%) /* Closed Folder */
 
-// .jstree-default .jstree-children .jstree-leaf
-// 	border-left: thin solid $tree-color-highlight
-
 .jstree-default .jstree-node.jstree-closed .jstree-icon.jstree-ocl,
 .jstree-default .jstree-node.jstree-open .jstree-icon.jstree-ocl
 	position: absolute
@@ -70,7 +67,6 @@ $tree-color-highlight: white
 		top: 10%
 		left: 46%
 
-// .jstree-node.jstree-open, .jstree-node.jstree-closed
 
 .jstree-anchor
 	+media-xs
@@ -91,7 +87,6 @@ $tree-color-highlight: white
 	width: 100%
 	padding: 0 10px 0 20px !important
 	height: inherit !important
-	overflow: hidden
 	white-space: nowrap
 	text-overflow: ellipsis
 	overflow: hidden
@@ -112,10 +107,13 @@ $tree-color-highlight: white
 .jstree-default .jstree-clicked,
 .jstree-default .jstree-clicked > .jstree-ocl
 	background-color: transparent !important
-	border-bottom: thin solid transparent
 	border-radius: 0
 	box-shadow: none
 	margin-left: -5px !important
+
+	border-bottom: thin solid transparent
+	font-weight: 600
+	max-width: 95%
 
 .jstree-default .jstree-leaf .jstree-clicked
 	width: 100% !important
