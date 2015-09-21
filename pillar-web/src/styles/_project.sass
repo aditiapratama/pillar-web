@@ -64,17 +64,6 @@ $list-node-children-item-width: 160px
 	border-top-left-radius: 3px
 	border-top-right-radius: 3px
 
-	.project-organization,
-	.project-title
-		font-weight: 500
-		display: inline-block
-		color: white
-		padding:
-			top: 0
-			left: 15px
-			right: 15px
-			bottom: 0
-
 	ul.breadcrumb
 		position: relative
 		padding: 0
@@ -89,16 +78,16 @@ $list-node-children-item-width: 160px
 			float: left
 
 			a
-				color: lighten($color-text, 25%)
+				color: lighten($color-text, 60%)
 
-			&.active a
-				color: lighten($color-text, 40%)
-				font-weight: 400
-
+		/* Kinda special, we want to highlight the current project*/
+		.project-title
+			font-weight: 500
+			a
+				color: white
 
 		/* The > separating each breadcrumb */
-		li+li:before,
-		&:before
+		li+li:before
 			color: lighten($color-text, 15%)
 			content: '\f105'
 			font:

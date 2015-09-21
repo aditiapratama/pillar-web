@@ -24,21 +24,20 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 			.project_nav-expand-btn(title="Toggle Navigation")
 				i.fa.fa-angle-double-right
 
-			// XXX - Link to project organization
-			// a(href="#").project-organization
-				| {{ node.user }}
-
-			// XXX - Link to project overview
-			a(href="#").project-title
-				| {{ node.name }}
-
 			ul.breadcrumb
-				// XXX
-				li
+
+				li.project-organization
+					// XXX - Link to project organization
 					a(href="/bi") Blender Institute
+
+				li.project-title
+					// XXX - Link to project overview
+					a(href="#") {{ node.name }}
+
 				li
 					a(href="#") Extras
-				li.active
+
+				li
 					a(href="#") Videos
 
 			#project-loading
