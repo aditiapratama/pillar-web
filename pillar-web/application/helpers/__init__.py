@@ -112,9 +112,13 @@ class UserProxy(object):
 
         for project in projects._items:
             if project.properties.picture_square:
-                # Collect the picture file object
+                # Collect the picture square file object
                 project.properties.picture_square = File.find(
                     project.properties.picture_square, api=self.api)
+            if project.properties.picture_header:
+                # Collect the picture header file object
+                project.properties.picture_header = File.find(
+                    project.properties.picture_header, api=self.api)
         return projects
 
     def project(self, project_name):
