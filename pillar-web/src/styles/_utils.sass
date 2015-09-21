@@ -1,4 +1,12 @@
 /* Collection of mixins that can be plugged everywhere */
+
+=clearfix
+	&:after
+		// Basically same as .clearfix from bootstrap
+		clear: both
+		display: block
+		content: ' '
+
 =container-box
 	position: relative
 	background-color: white

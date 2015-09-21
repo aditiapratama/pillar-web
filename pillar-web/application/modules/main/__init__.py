@@ -26,7 +26,7 @@ def user_view(name):
     user = UserProxy(name)
     projects = user.projects()
     return render_template(
-        'project/index.html',
+        'project/index_collection.html',
         user=user,
         projects=projects._items)
 

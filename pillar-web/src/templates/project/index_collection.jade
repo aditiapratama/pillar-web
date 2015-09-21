@@ -16,14 +16,21 @@
 					.node_index-user-name {{user.name}}
 					.node_index-user-description {{user.description}}
 
-			#node_index-list-container
-				.node_index-list
+			#node_index-collection-container
+				.node_index-collection
 					| {% for project in projects %}
 
-					.node_index-list-item
+					.node_index-collection-card
 
-						a.item-image(
+
+						a.item-header(
 							href="{{ url_for('project_view', name=user.url, project=project.properties.url) }}")
+
+							img.background(src="{{ project.properties.picture_header.thumbnail('m') }}")
+
+						a.card-thumbnail(
+							href="{{ url_for('project_view', name=user.url, project=project.properties.url) }}")
+
 							img(src="{{ project.properties.picture_square.thumbnail('s') }}")
 
 						.item-info
