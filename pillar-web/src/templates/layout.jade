@@ -40,6 +40,7 @@ html(lang="en")
 		link(href="{{ url_for('static', filename='assets/css/main.css') }}", rel="stylesheet")
 
 	body.transition-none
+
 		.container-page
 			a(name="hop")
 			header.navbar-backdrop-container
@@ -47,6 +48,21 @@ html(lang="en")
 				.navbar-backdrop
 				| {% endblock %}
 				.navbar-backdrop-overlay
+
+			| {% with messages = get_flashed_messages() %}
+			|		{% if messages %}
+
+			|	{% for message in messages %}
+			// Use alert category too
+			.alert(role="alert")
+				button.close(type="button", data-dismiss="alert")
+					i.fa.fa-times
+				| {{message}}
+			|	{% endfor %}
+
+			|		{% endif %}
+			| {% endwith %}
+
 			nav.navbar.navbar-transparent.navbar-fixed-top(role="navigation")
 				.navbar-overlay
 
@@ -113,19 +129,7 @@ html(lang="en")
 									|  Sign In
 							| {% endif %}
 
-			| {% with messages = get_flashed_messages() %}
-			|		{% if messages %}
 
-			|	{% for message in messages %}
-			// Use alert category too
-			.alert(role="alert")
-				button.close(type="button", data-dismiss="alert")
-					i.fa.fa-times
-				| {{message}}
-			|	{% endfor %}
-
-			|		{% endif %}
-			| {% endwith %}
 
 			| {% block body %}{% endblock %}
 

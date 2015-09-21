@@ -40,20 +40,22 @@ $navbar-backdrop-height: 600px
 
 
 .container-page
-	padding-top: $navbar-height
 	background-color: $color-background
 
+
+.navbar-fixed-top+.container
+	padding-top: $navbar-height
+
+
 .alert
-	position: fixed
+	position: relative
 	z-index: 13
-	top: 15px
-	left: 50%
-	transform: translateX(-50%)
-	min-width: 20%
+	width: 100%
+	margin-bottom: 0
+	display: block
 	text-align: center
 	padding: 15px 20px
-	box-shadow: 0 0 25px rgba(black,.3)
-	border-radius: 3px
+	border-radius: 0
 
 	// overriden by alert types
 	color: $color-text
@@ -67,6 +69,14 @@ $navbar-backdrop-height: 600px
 
 		i
 			font-size: .6em
+
+
+/* When there's an alert, disable the fixed top */
+.alert+.navbar-fixed-top
+	position: relative
+
+	+.container
+		padding-top: 0
 
 
 /* Navigation */
