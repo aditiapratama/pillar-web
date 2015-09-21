@@ -107,19 +107,20 @@ html(lang="en")
 											i.fa.fa-power-off(title="Log Out")
 											| Log out
 							| {% else %}
-							li
+							li.nav-item-sign-in
 								a(href="/users/login")
 									i.fa.fa-sign-in(title="Sign In")
-									| Sign In
+									|  Sign In
 							| {% endif %}
 
 			| {% with messages = get_flashed_messages() %}
 			|		{% if messages %}
 
 			|	{% for message in messages %}
-			.alert.alert-success(role="alert")
+			// Use alert category too
+			.alert(role="alert")
 				button.close(type="button", data-dismiss="alert")
-					i.fa.fa-times-circle
+					i.fa.fa-times
 				| {{message}}
 			|	{% endfor %}
 

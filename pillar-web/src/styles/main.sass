@@ -43,6 +43,31 @@ $navbar-backdrop-height: 600px
 	padding-top: $navbar-height
 	background-color: $color-background
 
+.alert
+	position: fixed
+	z-index: 13
+	top: 15px
+	left: 50%
+	transform: translateX(-50%)
+	min-width: 20%
+	text-align: center
+	padding: 15px 20px
+	box-shadow: 0 0 25px rgba(black,.3)
+	border-radius: 3px
+
+	// overriden by alert types
+	color: $color-text
+	background-color: $color-background
+
+	.close
+		position: relative
+		top: -2px
+		right: -10px
+		padding: 0 10px
+
+		i
+			font-size: .6em
+
 
 /* Navigation */
 .navbar-header
@@ -112,6 +137,12 @@ $navbar-backdrop-height: 600px
 
 				&:hover
 					border-color: lighten($color-secondary, 5%)
+
+		&.nav-item-sign-in
+			i
+				padding-top: 2px
+				padding-right: 10px
+				font-size: .9em
 
 	.navbar-brand
 		height: $navbar-height
