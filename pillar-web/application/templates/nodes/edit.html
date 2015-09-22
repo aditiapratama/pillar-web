@@ -1,9 +1,0 @@
-{% extends 'layout.html' %}
-{% from '_macros/_file_uploader.html' import render_file_uploader %}
-{% from '_macros/_file_uploader_javascript.html' import render_file_uploader_javascript %}
-
-{% include 'nodes/edit_embed.html' %}
-
-{% block footer_scripts %}
-{{render_file_uploader_javascript()}}
-{% endblock %}
