@@ -5,6 +5,7 @@
 
 @import _project
 @import _user
+@import _join
 
 @import plugins/_jstree
 @import plugins/js_perfectscrollbar
@@ -356,3 +357,12 @@ footer
 
 			.fa-circle-thin
 				transform: scale(1.2)
+
+
+.btn-outline
+	background-color: transparent
+	border-width: 1px
+	transition: background-color .1s
+
+	&:focus, &:active
+		box-shadow: none

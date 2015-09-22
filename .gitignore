@@ -14,6 +14,7 @@ pillar-web/application/static/assets/css/main.css
 pillar-web/application/static/assets/js/tutti.min.js
 pillar-web/application/static/storage/
 pillar-web/application/templates/layout.html
+pillar-web/application/templates/join.html
 pillar-web/application/templates/project/
 pillar-web/application/templates/asset/file/
 pillar-web/application/templates/asset/image/

@@ -20,6 +20,14 @@ def homepage():
     """Very minimal setup that returns the nodes index view"""
     return index()
 
+
+@app.route("/join")
+def join():
+    """Join page"""
+    return render_template(
+        'join.html')
+
+
 @app.route("/<name>/")
 def user_view(name):
     """View a user or organization."""
@@ -30,6 +38,7 @@ def user_view(name):
         user=user,
         projects=projects._items)
 
+
 @app.route("/<name>/<project>/")
 @login_required
 def project_view(name, project):
@@ -38,6 +47,7 @@ def project_view(name, project):
     user = UserProxy(name)
     project = user.project(project)
     return view(project._id)
+
 
 @app.route("/<name>/<project>/<node_id>")
 def node_view(name, project, node_id):
