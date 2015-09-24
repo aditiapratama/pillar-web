@@ -1,3 +1,18 @@
+import PIL
+from PIL import Image
+import simplejson
+import traceback
+
+from flask import session
+from flask import redirect
+from flask import url_for
+from flask import flash
+from flask import abort
+from flask import send_from_directory
+from werkzeug import secure_filename
+
+#from application.controllers.admin import *
+
 import os
 # from pillarsdk import Node
 from pillarsdk import File
@@ -6,6 +21,7 @@ from pillarsdk import File
 from flask import jsonify
 from flask import Blueprint
 from flask import request
+from flask import render_template
 
 # from flask import render_template
 
@@ -34,13 +50,13 @@ def hashfile(afile, hasher, blocksize=65536):
     return hasher.hexdigest()
 
 
-@files.route("/", methods=['GET', 'POST'])
+@files.route('/', methods=['GET', 'POST'])
 @login_required
 def index():
     """Custom files entry point
     """
     rfiles = []
-    backend = app.config['FILE_STORAGE_BACKEND']
+    backend = app.config['STORAGE_BACKEND']
     api = SystemUtility.attract_api()
     user = current_user.objectid
     node_picture = File()
@@ -50,11 +66,11 @@ def index():
 
         # Save file on AttractWeb Storage
         picture_path = os.path.join(
-            app.config['FILE_STORAGE'], filestorage.filename)
+            app.config['UPLOAD_DIR'], filestorage.filename)
         filestorage.save(picture_path)
 
         picture_file_file = open(picture_path, 'rb')
-        if backend == 'attract':
+        if backend == 'pillar':
             hash_ = hashfile(picture_file_file, hashlib.md5())
             name = "{0}{1}".format(hash_,
                                    os.path.splitext(picture_path)[1])
@@ -72,20 +88,18 @@ def index():
             prop['content_type'] = filestorage.content_type
             # TODO Fix length value
             prop['length'] = filestorage.content_length
-            prop['uploadDate'] = datetime.strftime(
-                datetime.now(), RFC1123_DATE_FORMAT)
             prop['md5'] = hash_
             prop['filename'] = filestorage.filename
             prop['backend'] = backend
-            if backend in ["attract"]:
+            if backend in ["pillar"]:
                 prop['path'] = name
             node_picture.post(prop, api=api)
             prop['_id'] = node_picture['_id']
-            if backend == 'attract':
+            if backend == 'pillar':
                 node_picture.post_file(picture_path, name, api=api)
                 node_picture.build_previews(name, api=api)
 
-            url = "{0}/file_server/file/{1}".format(
+            url = "{0}/file_storage/file/{1}".format(
                 app.config['ATTRACT_SERVER_ENDPOINT'], prop['path'])
             rfiles.append( {
                 "id": prop['_id'],
@@ -97,7 +111,7 @@ def index():
                 "deleteType": "DELETE"
             })
         else:
-            url = "{0}/file_server/file/{1}".format(
+            url = "{0}/file_storage/file/{1}".format(
                 app.config['ATTRACT_SERVER_ENDPOINT'], file_check[0]['path'])
             rfiles.append( {
                 "id": file_check[0]['_id'],
@@ -109,20 +123,211 @@ def index():
                 "deleteType": "DELETE"
             })
 
-
-    # GET
-    """if False:
-        pictures = node_picture.all({'max_results': 200, 'sort': '-uploadDate'}, api=api)
-        for file_ in pictures['_items']:
-            url = "{0}/file_server/file/{1}".format(app.config['ATTRACT_SERVER_ENDPOINT'], file_['path'])
-            rfiles.append( {
-                "id": file_['_id'],
-                "name": file_['filename'],
-                "size": file_['length'],
-                "url": url,
-                "thumbnailUrl": url,
-                "deleteUrl": url,
-                "deleteType": "DELETE"
-            })"""
-
     return jsonify(dict(files=rfiles))
+
+
+@files.route('/upload')
+@login_required
+def index_upload():
+    return render_template('upload.html')
+
+
+class uploadfile():
+    def __init__(self, name, type=None, size=None, not_allowed_msg=''):
+        self.name = name
+        self.type = type
+        self.size = size
+        self.not_allowed_msg = not_allowed_msg
+        self.url = "upload/data/%s" % name
+        self.thumbnail_url = "upload/thumbnail/%s" % name
+        self.delete_url = "upload/delete/%s" % name
+        self.delete_type = "DELETE"
+        self.create_url = "upload/create/%s" % name
+
+    def is_image(self):
+        fileName, fileExtension = os.path.splitext(self.name.lower())
+
+        if fileExtension in ['.jpg', '.png', '.jpeg', '.bmp']:
+            return True
+
+        return False
+
+
+    def get_file(self):
+        if self.type != None:
+            # POST an image
+            if self.type.startswith('image'):
+                return {"name": self.name,
+                        "type": self.type,
+                        "size": self.size,
+                        "url": self.url,
+                        "thumbnailUrl": self.thumbnail_url,
+                        "deleteUrl": self.delete_url,
+                        "deleteType": self.delete_type,
+                        "createUrl": self.create_url}
+
+            # POST an normal file
+            elif self.not_allowed_msg == '':
+                return {"name": self.name,
+                        "type": self.type,
+                        "size": self.size,
+                        "url": self.url,
+                        "deleteUrl": self.delete_url,
+                        "deleteType": self.delete_type,
+                        "createUrl": self.create_url}
+
+            # File type is not allowed
+            else:
+                return {"error": self.not_allowed_msg,
+                        "name": self.name,
+                        "type": self.type,
+                        "size": self.size,}
+
+        # GET image from disk
+        elif self.is_image():
+            return {"name": self.name,
+                    "size": self.size,
+                    "url": self.url,
+                    "thumbnailUrl": self.thumbnail_url,
+                    "deleteUrl": self.delete_url,
+                    "deleteType": self.delete_type,
+                    "createUrl": self.create_url}
+
+        # GET normal file from disk
+        else:
+            return {"name": self.name,
+                    "size": self.size,
+                    "url": self.url,
+                    "deleteUrl": self.delete_url,
+                    "deleteType": self.delete_type,
+                    "createUrl": self.create_url}
+
+
+def allowed_file(filename):
+    return '.' in filename and \
+        filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
+
+
+def gen_file_name(filename):
+    """If file was exist already, rename it and return a new name
+    """
+
+    i = 1
+    while os.path.exists(os.path.join(app.config['UPLOAD_DIR'], filename)):
+        name, extension = os.path.splitext(filename)
+        filename = '%s_%s%s' % (name, str(i), extension)
+        i = i + 1
+
+    return filename
+
+
+def get_dir(directory_name): # user uploads, thumbnails
+    user_uploads = os.path.join(app.config['UPLOAD_DIR'], str(current_user.objectid))
+    if directory_name == 'uploads':
+        if not os.path.isdir(user_uploads):
+            os.makedirs(user_uploads)
+        return user_uploads
+    elif directory_name == 'thumbnails':
+        user_thumbnails = os.path.join(user_uploads, 'thumbnails')
+        if not os.path.isdir(user_thumbnails):
+            os.makedirs(user_thumbnails)
+        return user_thumbnails
+    else:
+        return None
+
+
+def create_thumbnail(image):
+    try:
+        basewidth = 80
+        img = Image.open(os.path.join(get_dir('uploads'), image))
+        wpercent = (basewidth/float(img.size[0]))
+        hsize = int((float(img.size[1])*float(wpercent)))
+        img = img.resize((basewidth,hsize), PIL.Image.ANTIALIAS)
+        img.save(os.path.join(get_dir('thumbnails'), image))
+
+        return True
+
+    except:
+        print traceback.format_exc()
+        return False
+
+
+@files.route('/upload/upload', methods=['GET', 'POST'])
+def upload():
+    if request.method == 'POST':
+        print request.files
+        file = request.files['file']
+        #pprint (vars(objectvalue))
+
+        if file:
+            filename = secure_filename(file.filename)
+            filename = gen_file_name(filename)
+            mimetype = file.content_type
+            if not allowed_file(file.filename):
+                result = uploadfile(name=filename, type=mimetype, size=0,
+                                    not_allowed_msg="Filetype not allowed")
+            else:
+                # save file to disk
+                uploaded_file_path = os.path.join(get_dir('uploads'), filename)
+                file.save(uploaded_file_path)
+
+                # create thumbnail after saving
+                if mimetype.startswith('image'):
+                    create_thumbnail(filename)
+
+                # get file size after saving
+                size = os.path.getsize(uploaded_file_path)
+
+                # return json for js call back
+                result = uploadfile(name=filename, type=mimetype, size=size)
+
+            return simplejson.dumps({"files": [result.get_file()]})
+
+    if request.method == 'GET':
+        # get all file in ./data directory
+        user_uploads = get_dir('uploads')
+        files = [f for f in os.listdir(user_uploads) if os.path.isfile(
+            os.path.join(user_uploads, f)) and f not in app.config['IGNORED_FILES']]
+
+        file_display = []
+
+        for f in files:
+            size = os.path.getsize(os.path.join(user_uploads, f))
+            file_saved = uploadfile(name=f, size=size)
+            file_display.append(file_saved.get_file())
+
+        return simplejson.dumps({"files": file_display})
+
+    return redirect(url_for('index'))
+
+
+# serve static files
+@files.route('/upload/thumbnail/<string:filename>', methods=['GET'])
+def get_thumbnail(filename):
+    return send_from_directory(get_dir('thumbnails'), filename=filename)
+
+
+@files.route('/upload/data/<string:filename>', methods=['GET'])
+def get_file(filename):
+    return send_from_directory(get_dir('uploads'), filename=filename)
+
+
+@files.route('/upload/delete/<string:filename>', methods=['DELETE'])
+def delete(filename):
+    file_path = os.path.join(get_dir('uploads'), filename)
+    file_thumb_path = os.path.join(get_dir('thumbnails'), filename)
+
+    if os.path.exists(file_path):
+        try:
+            os.remove(file_path)
+
+            if os.path.exists(file_thumb_path):
+                os.remove(file_thumb_path)
+
+            return simplejson.dumps({filename: 'True'})
+        except:
+            return simplejson.dumps({filename: 'False'})
+    else:
+        return abort(404)
+
+

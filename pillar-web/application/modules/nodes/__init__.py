@@ -528,3 +528,8 @@ def delete(node_id):
     else:
         flash('Forbidden access')
         return redirect(url_for('nodes.edit', node_id=node._id))
+
+
+
+# Import of custom modules (using the same nodes decorator)
+from application.modules.nodes.custom.assets import *
