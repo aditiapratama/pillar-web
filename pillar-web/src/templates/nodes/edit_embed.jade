@@ -1,5 +1,3 @@
-| {% from '_macros/_file_uploader.html' import render_file_uploader %}
-
 | {% block body %}
 
 | {% with errors = errors %}
@@ -59,8 +57,6 @@
 			input#submit_edit_node.btn.btn-default.btn-success(
 				data-node-id="{{node._id}}",
 				type="submit")
-
-| {{ render_file_uploader() }}
 
 script(type="text/javascript").
 	$("form").submit(function(event) {
