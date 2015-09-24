@@ -142,7 +142,7 @@ script(type="text/javascript").
 		if (nodeId.substring(0, 2) == 'n_') {
 			nodeId = nodeId.substr(2);
 		}
-		//console.log(nodeId);
+		//- console.log(nodeId);
 		var url = '/nodes/' + nodeId + '/edit?embed=1'
 		$.get(url, function(dataHtml) {
 			// Update the DOM injecting the generate HTML into the page
@@ -223,11 +223,11 @@ script(type="text/javascript").
 		});
 
 		$('#item_edit').click(function(e){
-			// When clicking on the edit icon, we star the edit
+			// When clicking on the edit icon, embed the edit
 			e.preventDefault;
-			editNode($(this).data('node_id'));
+			node_id = document.getElementById("item_edit");
+			editNode(node_id.getAttribute('data-node_id'));
 		});
-
 
 	};
 
