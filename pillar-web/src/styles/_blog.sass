@@ -1,0 +1,39 @@
+
+#blog_container
+	margin: 0 auto 15px auto
+	display: flex
+	justify-content: center
+	+container-box
+
+#blog_index-container
+	width: 75%
+	padding: 20px
+
+	.blog_index-item
+		margin: 0 auto 15px auto
+
+		.item-title
+			display: block
+			font:
+				family: $font-headings-secondary
+				size: 2.2em
+				weight: 300
+			padding: 5px 0
+
+		.item-info
+			color: lighten($color-text, 30%)
+			font-size: .9em
+
+		.item-content
+			padding: 25px 0 35px 0
+			color: $color-text
+			font:
+				family: $font-body
+				size: 1em
+				weight: 300
+
+
+
+#blog_index-sidebar
+	width: 25%
+	background-color: lighten($color-background, 5%)

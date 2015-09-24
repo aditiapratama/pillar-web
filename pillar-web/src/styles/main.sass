@@ -5,6 +5,7 @@
 
 @import _project
 @import _user
+@import _blog
 @import _join
 
 @import plugins/_jstree
@@ -39,12 +40,16 @@ a
 $navbar-height: 80px
 $navbar-backdrop-height: 600px
 
-
 .container-page
 	background-color: $color-background
 
+.page-content
+	position: relative
 
-.navbar-fixed-top+.container
+	.container-box
+		+container-box
+
+.navbar-fixed-top+.page-content
 	padding-top: $navbar-height
 
 
@@ -57,6 +62,7 @@ $navbar-backdrop-height: 600px
 	text-align: center
 	padding: 15px 20px
 	border-radius: 0
+	border-bottom: thin solid rgba(black, .1)
 
 	// overriden by alert types
 	color: $color-text
