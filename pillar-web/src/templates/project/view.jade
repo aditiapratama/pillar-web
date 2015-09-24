@@ -50,7 +50,7 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 						| Add Asset
 				a#item_edit(href="#")
 					li
-						i.fa.fa-edit
+						i.button-edit.fa.fa-edit
 						| Edit
 				a#item_delete(href="#")
 					li
@@ -152,6 +152,9 @@ script(type="text/javascript").
 		.fail(function(dataResponse) {
 			$('#project_context').html($('<iframe id="server_error"/>'));
 			$('#server_error').attr('src', url);
+		})
+		.always(function(){
+			$('.button-edit').addClass('fa-edit').removeClass('fa-spin fa-spinner');
 		});
 
 	}
@@ -223,6 +226,9 @@ script(type="text/javascript").
 		});
 
 		$('#item_edit').click(function(e){
+
+			$('.button-edit').addClass('fa-spin fa-spinner').removeClass('fa-edit');
+
 			// When clicking on the edit icon, embed the edit
 			e.preventDefault;
 			node_id = document.getElementById("item_edit");
