@@ -20,10 +20,9 @@
 | {% if error!="" %}
 .alert.alert-danger(role="alert")
 	| {{error}}
-
 | {% endif %}
 
-.col-md-12
+#node-edit-container
 	form(
 		method="POST",
 		enctype="multipart/form-data",
@@ -55,12 +54,11 @@
 		a.btn.btn-danger(href="{{url_for('nodes.delete', node_id=node._id)}}") Delete
 
 		.pull-right
-			a.btn.btn-default(href="#") Cancel
+			a#button-cancel.btn.btn-default(href="#", data-node_id='{{node._id}}') Cancel
 
 			input#submit_edit_node.btn.btn-default.btn-success(
 				data-node-id="{{node._id}}",
-				type="submit",
-				value="Update {{node.node_type.name}}")
+				type="submit")
 
 | {{ render_file_uploader() }}
 
@@ -72,6 +70,11 @@ script(type="text/javascript").
 				$('#project_context').html(dataHtml);
 			});
 		event.preventDefault();
+	});
+
+	$("#button-cancel").click(function(e) {
+		e.preventDefault();
+		displayNode($(this).data('node_id'));
 	});
 
 | {% endblock %}
