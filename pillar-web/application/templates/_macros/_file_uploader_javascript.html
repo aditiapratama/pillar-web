@@ -97,17 +97,14 @@
 <script type="text/javascript" src= "{{ url_for('static', filename='jquery-file-upload/js/main.js') }}"></script>
 
 <script type="text/javascript">
-    $( document ).ready(function() {
-        //console.log("ready");
-        $("body").on( "click", ".create", function(event) {
-            event.preventDefault();
-            $.post("{{url_for('nodes.assets_create')}}", {
-                name: $(this).attr("data-name"),
-                time: $(this).attr("data-type")})
-                .done(function( data ) {
-                    //window.location.replace("/admin/new-asset/edit/" + data.asset_id);
-                    alert( "Data Loaded: " + data.message );
-            });
+    $("body").on("click", ".create", function(event) {
+        event.preventDefault();
+        $.post("{{url_for('nodes.assets_create')}}", {
+            name: $(this).attr("data-name"),
+            type: $(this).attr("data-type")})
+            .done(function(data) {
+                window.location.replace("/nodes/" + data.asset_id + "/edit");
+                //alert( "Data Loaded: " + data.message );
         });
     });
 </script>

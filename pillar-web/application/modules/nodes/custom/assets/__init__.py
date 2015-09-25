@@ -3,6 +3,7 @@ import hashlib
 import time
 import shutil
 from flask import request
+from flask import jsonify
 from flask.ext.login import login_required
 from flask.ext.login import current_user
 from pillarsdk import Node

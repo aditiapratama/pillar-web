@@ -56,7 +56,7 @@
             <li>The maximum file size for this interface is <strong>1 GB</strong>.</li>
             <li>Only the following formats are allowed:<br/>
                 <strong class="text-uppercase">
-                    {% set formats = config['ALLOWED_EXTENSIONS']|string %}
+                    {% set formats = config.ALLOWED_EXTENSIONS|string %}
                     {{formats[5:-2]}}
                 </strong>
             </li>
