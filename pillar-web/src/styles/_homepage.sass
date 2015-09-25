@@ -1,6 +1,7 @@
 #homepage
 	display: flex
 	justify-content: space-around
+	align-items: stretch
 
 	#sidebar, #about, #updates
 		+container-box
@@ -8,12 +9,105 @@
 	#sidebar
 		width: 25%
 		background-color: white
-		padding: 15px
-		margin: 5px
+		margin: 0 5px 10px 5px
 
+		#join
+			text-align: center
+			padding: 0 15px
+			color: $color-info
+
+			/* Price '$10 per month' */
+			#price
+				position: relative
+				left: -5px
+
+				span.amount
+					margin: 0
+					padding: 0
+
+					display: flex
+					justify-content: center
+					align-items: center
+
+					font:
+						family: $font-headings
+						size: 6em
+						weight: 600
+
+					small
+						font:
+							size: .5em
+							weight: 300
+
+				span.per
+					position: relative
+					top: -10px
+					left: 10px
+
+					font:
+						size: 1em
+
+					small
+						font-size: .5em
+
+			/* Subscribe button */
+			a#subscribe
+				display: block
+				width: 100%
+				font:
+					size: 1.3em
+					family: $font-headings-secondary
+				color: $color-info
+				padding: 5px 0
+				margin: 15px 0 10px 0
+
+				border: 1px solid $color-info
+				border-radius: 999em
+
+				&:hover
+					background-color: $color-info
+					color: white
+
+			span.extra
+				display: block
+				margin: 15px auto
+				font:
+					family: $font-headings-secondary
+					size: .7em
+					weight: 400
+
+		#stats
+			padding-top: 15px
+			margin-top: 15px
+			border-top: thin solid lighten($color-text, 60%)
+			text-align: center
+
+			span.amount
+				font:
+					family: $font-headings
+					size: 4em
+					weight: 300
+
+			span.what
+				display: block
+				font:
+					family: $font-headings
+					size: 1.2em
+					weight: 300
+
+		#goals
+			padding: 0 15px
+
+			.milestone
+				border-bottom: thin solid lighten($color-text, 60%)
+				padding: 15px 0
 	#main
 		width: 75%
-		margin: 5px
+		margin: 0 5px 10px 5px
+
+		display: flex
+		flex-direction: column
+		align-items: stretch
 
 		#about
 			height: 350px
@@ -36,22 +130,23 @@
 
 				display: flex
 				flex-direction: column
-				justify-content: flex-end
+				justify-content: center
+				align-items: center
 
 				.title
+					padding-bottom: 15px
 					font:
 						family: $font-headings-secondary
 						size: 2.2em
 						weight: 300
 
 				.lead
+					text-align: center
 					max-width: 500px
 					font:
 						family: $font-body
 						size: 1.4em
 						weight: 300
 
-
 		#updates
-			background-color: white
 			padding: 15px

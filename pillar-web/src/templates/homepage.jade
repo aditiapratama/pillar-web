@@ -10,8 +10,30 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 | {% block body %}
 .container
 	#homepage.page-content
+
 		#sidebar
-			h2 Join!
+			#join
+				#price
+					span.amount
+						small $
+						| 10
+					span.per
+						|	per month
+
+				a#subscribe(href="#") Subscribe Now
+				span.extra no sign-up fee · 3 months minimum
+
+			#stats
+				span.amount 1804
+				span.what Subscribers
+
+			#goals
+				| {% for i in range(1, 5) %}
+				.milestone
+					h3 Milestone {{loop.index * 500  + 1500 }}
+					span promise to break
+				| {% endfor %}
+
 		#main
 			#about(style="background-image: url({{ url_for('static', filename='assets/img/background_join_bbb.jpg')}})")
 				.text
@@ -19,8 +41,15 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 					.lead.
 						Full access to all the Blender Institute's open projects
 						trainings, and more in one place.
+
 			#updates
-				h2 Follow the latest
+				h2 Latest Updates
+
+				| {% for i in range(1, 5) %}
+				div
+					h3 Title of the Update {{loop.index}}
+					span What's new
+				| {% endfor %}
 
 | {% endblock %}
 
