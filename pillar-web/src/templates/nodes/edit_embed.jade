@@ -21,42 +21,44 @@
 | {% endif %}
 
 #node-edit-container
-	form(
-		method="POST",
-		enctype="multipart/form-data",
-		action="{{url_for('nodes.edit', node_id=node._id)}}")
 
+	#node-edit-header
+		.node-edit-title {{node.name}}
 
-		hr
+	#node-edit-form
+		form(
+			method="POST",
+			enctype="multipart/form-data",
+			action="{{url_for('nodes.edit', node_id=node._id)}}")
 
-		| {% for field in form %}
+			| {% for field in form %}
 
-		| {% if field.name == 'csrf_token' %}
-		| {{ field }}
+			| {% if field.name == 'csrf_token' %}
+			| {{ field }}
 
-		| {% else %}
+			| {% else %}
 
-		| {% if field.type == 'HiddenField' %}
-		| {{ field }}
+			| {% if field.type == 'HiddenField' %}
+			| {{ field }}
 
-		| {% else %}
-		.form-group
-			| {{ field.label }}
-			| {{ field(class='form-control') }}
-		| {% endif %}
+			| {% else %}
+			.form-group
+				| {{ field.label }}
+				| {{ field(class='form-control') }}
+			| {% endif %}
 
-		| {% endif %}
+			| {% endif %}
 
-		| {% endfor %}
+			| {% endfor %}
 
-		a.btn.btn-danger(href="{{url_for('nodes.delete', node_id=node._id)}}") Delete
+			a.btn.btn-danger(href="{{url_for('nodes.delete', node_id=node._id)}}") Delete
 
-		.pull-right
-			a#button-cancel.btn.btn-default(href="#", data-node_id='{{node._id}}') Cancel
+			.pull-right
+				a#button-cancel.btn.btn-default(href="#", data-node_id='{{node._id}}') Cancel
 
-			input#submit_edit_node.btn.btn-default.btn-success(
-				data-node-id="{{node._id}}",
-				type="submit")
+				input#submit_edit_node.btn.btn-default.btn-success(
+					data-node-id="{{node._id}}",
+					type="submit")
 
 script(type="text/javascript").
 	$("form").submit(function(event) {

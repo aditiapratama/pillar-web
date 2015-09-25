@@ -223,15 +223,18 @@ section.node-preview
 			max-height: 600px
 			margin: 0 auto
 
+=project-node-title
+	font:
+		family: $font-headings-secondary
+		size: 2em
+		weight: 300
+
 section.node-details-container
 	.node-details-header
 		.node-title
 			margin: 0
 			padding: 15px 25px 5px 25px
-			font:
-				family: $font-headings-secondary
-				size: 2em
-				weight: 300
+			+project-node-title
 
 	.node-details-description
 		padding: 5px 25px 20px 25px
@@ -289,12 +292,12 @@ section.node-details-container
 					button
 						color: lighten($color-text, 10%)
 						border: thin solid darken($color-background, 10%)
-						border-radius: 50px
+						border-radius: 999em
 						padding:
 							left: 20px
 							right: 15px
 
-						text-transform: uppercase
+						// text-transform: uppercase
 						font-size: .9em
 
 						&:hover
@@ -572,6 +575,17 @@ section.node-children
 
 				padding: 10px 0
 
+
+#node-edit-container
+	#node-edit-header
+		padding: 20px
+
+		.node-edit-title
+			+project-node-title
+
+
+	#node-edit-form
+		padding: 20px
 
 .debug
 	font:

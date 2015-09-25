@@ -1,0 +1,24 @@
+| {% extends 'layout.html' %}
+| {% block page_title %}{% endblock %}
+
+| {% block og %}
+meta(property="og:title", content="Blender Cloud")
+meta(property="og:url", content="https://cloud.blender.org/")
+meta(property="og:image", content="https://cloud.blender.org/static/assets/img/background_join_bbb.jpg")
+| {% endblock %}
+
+| {% block body %}
+.container
+	#homepage.page-content
+		#sidebar
+			h2 Join!
+		#main
+			#about(style="background-image: url({{ url_for('static', filename='assets/img/background_join_bbb.jpg')}})")
+				.title What's this?
+			#updates
+				h2 Follow the latest
+
+| {% endblock %}
+
+| {% block footer_scripts %}
+| {% endblock %}

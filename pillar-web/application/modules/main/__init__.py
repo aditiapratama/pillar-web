@@ -17,10 +17,10 @@ from application.helpers import attach_project_pictures
 
 
 @app.route("/")
-@login_required
 def homepage():
-    """Very minimal setup that returns the nodes index view"""
-    return index()
+    """Homepage"""
+    return render_template(
+        'homepage.html')
 
 
 @app.route("/join")
