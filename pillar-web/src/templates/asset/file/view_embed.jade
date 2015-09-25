@@ -1,9 +1,12 @@
 | {% block body %}
 
 #node-container
+
+	| {% if node.picture %}
 	a(href="{{ node.picture.thumbnail('l') }}")
 		section.node-preview.file
 			img(src="{{ node.picture.thumbnail('l') }}")
+	| {% endif %}
 
 	section.node-details-container
 

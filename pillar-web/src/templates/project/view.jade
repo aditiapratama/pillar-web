@@ -46,7 +46,7 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 			ul.project-edit-tools
 				a#item_add(href="#")
 					li
-						i.fa.fa-plus
+						i.button-add.fa.fa-plus
 						| Add Asset
 				a#item_edit(href="#")
 					li
@@ -112,6 +112,7 @@ script(type="text/javascript").
 			$('#project_context').html(dataHtml);
 			window.location.replace('#' + nodeId);
 			$('#item_edit').attr('data-node_id', nodeId);
+			$('#item_add').attr('data-parent_node_id', nodeId);
 		})
 		.fail(function(dataResponse) {
 			$('#project_context').html($('<iframe id="server_error"/>'));
@@ -155,7 +156,23 @@ script(type="text/javascript").
 		.always(function(){
 			$('.button-edit').addClass('fa-edit').removeClass('fa-spin fa-spinner');
 		});
+	}
 
+	function addNode(parentId) {
+
+		//- console.log(nodeId);
+		var url = '/files/upload?embed=1'
+		$.get(url, function(dataHtml) {
+			// Update the DOM injecting the generate HTML into the page
+			$('#project_context').html(dataHtml);
+		})
+		.fail(function(dataResponse) {
+			$('#project_context').html($('<iframe id="server_error"/>'));
+			$('#server_error').attr('src', url);
+		})
+		.always(function(){
+			$('.button-add').addClass('fa-plus').removeClass('fa-spin fa-spinner');
+		});
 	}
 
 	function loadContent() {
@@ -232,6 +249,16 @@ script(type="text/javascript").
 			e.preventDefault;
 			node_id = document.getElementById("item_edit");
 			editNode(node_id.getAttribute('data-node_id'));
+		});
+
+
+		$('#item_add').click(function(e){
+
+			$('.button-add').addClass('fa-spin fa-spinner').removeClass('fa-plus');
+
+			e.preventDefault;
+			node_id = document.getElementById("item_add");
+			addNode(node_id.getAttribute('data-parent_node_id'));
 		});
 
 	};

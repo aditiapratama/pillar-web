@@ -1,4 +1,3 @@
-
 {% raw %}
 <!-- The template to display files available for upload -->
 <script id="template-upload" type="text/x-tmpl">
@@ -99,12 +98,34 @@
 <script type="text/javascript">
     $("body").on("click", ".create", function(event) {
         event.preventDefault();
+        add_button = document.getElementById("item_add");
+        var parent_id = add_button.getAttribute('data-parent_node_id');
         $.post("{{url_for('nodes.assets_create')}}", {
             name: $(this).attr("data-name"),
-            type: $(this).attr("data-type")})
+            type: $(this).attr("data-type"),
+            parent_id: parent_id})
             .done(function(data) {
-                window.location.replace("/nodes/" + data.asset_id + "/edit");
+                if (parent_id) {
+                    // We are in embedded mode and try to call the editNode function
+                    editNode(data.asset_id);
+                } else {
+                    window.location.replace("/nodes/" + data.asset_id + "/edit");
+                }
                 //alert( "Data Loaded: " + data.message );
         });
     });
+
+    // Temporary list of CSS to style the upload form
+    var cssLinks = ['/static/assets/css/blueimp/blueimp-gallery.min.css',
+        '/static/jquery-file-upload/css/jquery.fileupload.css',
+        '/static/jquery-file-upload/css/jquery.fileupload-ui.css']
+
+    $.each(cssLinks, function(index, value) {
+        // Check if the CSS is needed
+        if (!$("link[href='" + value + "']").length) {
+            $('<link href="' + value + '" rel="stylesheet">').appendTo("head");
+      }
+    });
+
+
 </script>

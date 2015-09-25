@@ -129,7 +129,10 @@ def index():
 @files.route('/upload')
 @login_required
 def index_upload():
-    return render_template('upload.html')
+    if 'embed' in request.args:
+        return render_template('upload_embed.html')
+    else:
+        return render_template('upload.html')
 
 
 class uploadfile():
@@ -138,11 +141,11 @@ class uploadfile():
         self.type = type
         self.size = size
         self.not_allowed_msg = not_allowed_msg
-        self.url = "upload/data/%s" % name
-        self.thumbnail_url = "upload/thumbnail/%s" % name
-        self.delete_url = "upload/delete/%s" % name
+        self.url = "/files/upload/data/%s" % name
+        self.thumbnail_url = "/files/upload/thumbnail/%s" % name
+        self.delete_url = "/files/upload/delete/%s" % name
         self.delete_type = "DELETE"
-        self.create_url = "upload/create/%s" % name
+        self.create_url = "/files/upload/create/%s" % name
 
     def is_image(self):
         fileName, fileExtension = os.path.splitext(self.name.lower())

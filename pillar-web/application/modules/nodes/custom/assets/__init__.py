@@ -18,6 +18,7 @@ from application import SystemUtility
 @login_required
 def assets_create():
     name = request.form['name']
+    parent_id = request.form.get('parent_id')
     # Detect filetype by extension (improve by detectin real file type)
     root, ext = os.path.splitext(name)
     if ext in ['.jpg', '.jpeg', '.png', '.tif', '.tiff']:
@@ -82,6 +83,8 @@ def assets_create():
     node_file.create(api=api)
 
     node_asset_props['properties']['file'] = node_file._id
+    if parent_id:
+        node_asset_props['parent'] = parent_id
     node_asset = Node(node_asset_props)
     node_asset.create(api=api)
 
