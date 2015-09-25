@@ -1,0 +1,596 @@
+$project_nav-width: 280px
+$project_header-height: 40px
+
+$list-node-children-item-width: 160px
+
+/* Child of container, contains project-flex */
+#project_container
+	z-index: 12
+	margin: 0 auto 15px auto
+	border-radius: 3px
+	box-shadow: 2px 2px 2px rgba(darken($color-background, 60%), .1)
+
+
+/* Flexible. Child of project_container, contains the nav tree + side views */
+#project-flex
+	display: flex
+	align-items: stretch
+	width: 100%
+	/* So we have *some* page scroll, inside it uses perfectscrollbar */
+	min-height: 600px
+
+#project-nav,
+#project_context-container
+	flex: 1 100%
+
+/* Container for navigation on the left */
+#project_nav
+	position: relative
+	overflow: hidden
+	width: $project_nav-width
+	padding: auto 0
+	position: relative
+
+	color: white
+	background-color: rgba(darken($color-background, 80%), .8)
+	border-right: thick solid darken($color-background, 75%)
+	border-bottom-left-radius: 3px
+
+	-webkit-user-select: none
+	-moz-user-select: none
+	-ms-user-select: none
+	-o-user-select: none
+	user-select: none
+
+	&.project_nav-collapsed
+		width: 35px
+		border-color: darken($color-background, 75%)
+		background-color: darken($color-background, 65%)
+
+/* Header with name, breadcrumbs and node edit tools */
+#project-header
+	display: flex
+	align-items: center
+
+	position: relative
+	width: 100%
+	height: $project_header-height
+	background-color: darken($color-background, 65%)
+	color: white
+
+	clear: both
+
+	border-top-left-radius: 3px
+	border-top-right-radius: 3px
+
+	ul.breadcrumb
+		position: relative
+		padding: 0
+		margin: 0 0 0 10px
+		background-color: transparent
+		display: inline-block
+		font-weight: 300
+
+		li
+			margin: 0
+			padding: 2px
+			float: left
+
+			a
+				color: lighten($color-text, 60%)
+
+		/* Kinda special, we want to highlight the current project*/
+		.project-title
+			font-weight: 500
+			a
+				color: white
+
+		/* The > separating each breadcrumb */
+		li+li:before
+			color: lighten($color-text, 15%)
+			content: '\f105'
+			font:
+				family: 'FontAwesome'
+
+		&:before
+			position: absolute
+			left: -13px
+			top: 2px
+
+	ul.project-edit-tools
+		align-self: flex-end
+		display: flex
+		align-items: stretch
+		height: 100%
+		padding: 0
+		margin:
+			top: 0
+			left: auto
+			right: 0
+			bottom: 0
+		color: lighten($color-text, 50%)
+
+		list-style-type: none
+
+		font-size: .9em
+
+		a
+			color: lighten($color-text, 50%)
+
+			&:hover
+				color: lighten($color-text, 60%)
+
+			li
+				margin: 5px
+				padding: 5px 15px
+				float: left
+				border-radius: 3px
+				border: thin solid darken($color-background, 50%)
+
+				text-transform: uppercase
+
+				i
+					margin-right: 5px
+
+				&:hover
+					background-color: darken($color-background, 60%)
+
+			// &:not(:last-of-type)
+				// border-right: thin solid darken($color-background, 50%)
+
+	#project-loading
+		padding: 8px
+		color: lighten($color-text, 30%)
+		left: 8px
+		top: 1px
+		display: none
+
+
+.project_nav-collapse-btn,
+.project_nav-expand-btn
+	display: none // Toggles via project-split-bar.js
+	cursor: pointer
+	color: lighten($color-text, 20%)
+	z-index: 1
+
+	&:hover
+		color: lighten($color-text, 30%)
+
+	i
+		font-size: 1.3em
+
+.project_nav-collapse-btn
+	position: absolute
+	bottom: 0
+	left: 0
+	padding: 10px
+
+.project_nav-expand-btn
+	float: left
+	padding-left: 12px
+
+	i
+		position: relative
+		top: 1px
+
+/* Project context on the right of the navigation */
+/* Contains #project_context */
+#project_context-container
+
+	+container-box
+
+	border-bottom-left-radius: 0
+	border-top-left-radius: 0
+	border-top-right-radius: 0
+
+	iframe#server_error
+		width: 100%
+		min-height: 800px
+		border: none
+
+
+/* The actual navigation tree container */
+#project_tree
+	padding: 5px 0 // some padding on top and bottom
+
+/* Clickable bar between navtree and context view, to collapse tree */
+.project_split
+	float: right
+	position: absolute
+	width: 16px
+	margin-left: -8px
+	top: $project_header-height
+	bottom: 0
+	z-index: 10
+	cursor: w-resize
+	-webkit-user-select: none
+	-moz-user-select: none
+	-ms-user-select: none
+	-o-user-select: none
+	user-select: none
+
+
+/* Node Context */
+section.node-preview
+	&.image,
+	&.file
+		max-height: 600px
+		background-color: black
+
+		img
+			display: block
+			max-width: 100%
+			max-height: 600px
+			margin: 0 auto
+
+=project-node-title
+	font:
+		family: $font-headings-secondary
+		size: 2em
+		weight: 300
+
+section.node-details-container
+	.node-details-header
+		.node-title
+			margin: 0
+			padding: 15px 25px 5px 25px
+			+project-node-title
+
+	.node-details-description
+		padding: 5px 25px 20px 25px
+		font-weight: 300
+
+	.node-details-meta
+		font-weight: 300
+		padding: 15px 25px
+		border-top: thin solid $color-background
+
+		ul.node-details-meta-list
+			display: flex
+			align-items: center
+
+			list-style-type: none
+			margin: 0
+			padding: 0
+
+			li.node-details-meta-list-item
+				margin: 0
+				padding: 0 10px 0 0
+				line-height: 1em
+				float: left
+
+				&.date
+					color: lighten($color-text, 30%)
+
+				&.status
+					margin-right: 10px
+					font-size: .9em
+					text-transform: capitalize
+					color: lighten($color-text, 30%)
+					padding: 5px 15px
+					border: thin solid lighten($color-text, 40%)
+					border-radius: 3px
+					cursor: default
+
+				&.length
+					margin-left: auto
+					padding: 0 5px 0 15px
+					cursor: default
+					font-weight: 400
+					color: lighten($color-text, 30%)
+
+				/* Download button */
+				&.download
+					align-self: flex-end
+					// margin-left: auto
+					padding: 0 0 0 15px
+
+					&.video
+						margin-left: auto
+
+					/* Actual button */
+					button
+						color: lighten($color-text, 10%)
+						border: thin solid darken($color-background, 10%)
+						border-radius: 999em
+						padding:
+							left: 20px
+							right: 15px
+
+						// text-transform: uppercase
+						font-size: .9em
+
+						&:hover
+							color: $color-primary
+							border-color: $color-primary
+							background-color: transparent
+
+						&:focus
+							outline: none
+							box-shadow: none
+							color: $color-primary
+							border-color: $color-primary
+							background-color: $color-background
+
+						/* Tweaks for individual icons */
+						i.icon-dropdown-menu
+							padding-left: 10px
+
+						i.icon-download-file
+							position: relative
+							left: -5px
+
+					&.image
+						button
+							padding-left: 15px
+
+					/* Download dropdown options */
+					ul.dropdown-menu
+						width: auto
+						min-width: 240px
+						padding: 0
+						margin: 0
+						top: initial
+						left: initial
+						right: 0
+						bottom: 35px
+						border: thin solid rgba(darken($color-background, 5%), .3)
+						border-top-left-radius: 3px
+						border-top-right-radius: 3px
+						border-bottom-left-radius: 0
+						border-bottom-right-radius: 0
+
+						li
+							padding: 0
+							text-align: right
+							clear: both
+							display: flex
+							align-items: center
+
+							a
+								padding: 10px 15px
+								width: 100%
+
+								&:hover
+									color: $color-primary
+									background-color: transparent
+
+								span
+									&.length
+										float: left
+										color: lighten($color-text, 40%)
+										padding-right: 15px
+									&.format
+										text-transform: uppercase
+										align-self: flex-end
+										margin-left: auto
+									&.size
+										display: inline-block
+										padding-left: 15px
+					&.open
+						button
+							box-shadow: none
+
+section.node-children
+	&.group
+		padding: 15px 25px
+
+
+.list-node-children-item
+	float: left
+	margin: 10px 20px 10px 0
+	border-radius: 3px
+	color: $color-text
+	background-color: darken(white, 5%)
+	box-shadow: 2px 2px 0 rgba(darken($color-background, 60%), .1)
+	width: $list-node-children-item-width
+	overflow: hidden
+	text-overflow: ellipsis
+
+	&:hover
+		opacity: .9
+		color: darken($color-primary, 20%)
+
+	& .list-node-children-item-picture
+		display: block
+		width: $list-node-children-item-width
+		height: $list-node-children-item-width
+		background-color: darken(white, 12%)
+		position: relative
+		text-align: center
+
+		& .list-node-children-item-folder
+			position: absolute
+			top: 50%
+			transform: translateY(-50%)
+			font-size: 6em
+			color: darken(white, 25%)
+			width: $list-node-children-item-width
+
+	& .list-node-children-item-name
+		display: inline-block
+		padding: 5px 3px 0px 10px
+		font-size: .9em
+		+text-overflow-ellipsis
+		width: $list-node-children-item-width
+
+	& .list-node-children-item-icon
+		padding-right: 3px
+		color: lighten($color-text, 30%)
+
+
+
+#node_index-container
+
+	border-radius: 3px
+
+	#node_index-header
+		display: flex
+		align-items: center
+
+		position: relative
+		width: 100%
+		background-color: darken($color-background, 65%)
+		color: white
+
+		border-bottom: 2px solid $color-background
+
+		border-top-left-radius: 3px
+		border-top-right-radius: 3px
+
+		#node_index-user-avatar
+			padding: 15px
+
+			img
+				border-radius: 3px
+
+		#node_index-user-info
+			.node_index-user-name
+				font:
+					family: $font-headings-secondary
+					size: 2.2em
+					weight: 300
+
+			.node_index-user-description
+				color: lighten($color-text, 60%)
+				font-weight: 300
+
+	#node_index-list-container,
+
+		background-color: white
+		width: 100%
+		height: 100%
+		padding: 0
+		margin: 0
+		position: relative
+
+		+clearfix
+
+		.node_index-list,
+		.node_index-collection
+			padding: 15px 0 0 0
+			margin: 0
+			clear: both
+
+			/* Block for each project item */
+			& .node_index-list-item
+				display: flex
+				max-width: 70%
+				padding: 0
+				margin:
+					left: 15px
+					bottom: 30px
+
+				clear: both
+
+				&:after
+					// Basically same as .clearfix from bootstrap
+					clear: both
+					display: block
+					content: ' '
+
+				& .item-info
+					width: 100%
+					padding: 0 15px
+
+				& .item-title
+					padding-bottom: 15px
+					font:
+						family: $font-headings-secondary
+						size: 1.8em
+						weight: 400
+
+				& .item-image
+					padding-top: 5px
+					img
+						width: 90px
+						height: 90px
+						border-radius: 3px
+
+#node_index-collection-container
+	background-color: white
+	height: 100%
+	width: 100%
+	padding: 15px
+
+.node_index-collection
+	display: flex
+	justify-content: space-around
+	flex-wrap: wrap
+
+
+	& .node_index-collection-card
+		position: relative
+		width: 31%
+		border: thin solid $color-background
+		border-radius: 3px
+		color: lighten($color-text, 10%)
+
+		margin: 15px 0
+
+		// XXX - just to test
+		// max-height: 300px
+		// overflow: hidden
+
+		a.item-header
+			position: relative
+			width: 100%
+			height: 100px
+			display: block
+			background-size: 100% 100%
+			border-top-left-radius: 3px
+			border-top-right-radius: 3px
+
+			overflow: hidden
+
+			img.background
+				position: absolute
+				top: 49%
+				left: 50%
+				transform: translate(-50%, -50%)
+
+		.card-thumbnail
+
+			position: absolute
+			height: 90px
+			width: 90px
+			display: block
+			top: 35px
+			left: 50%
+			transform: translateX(-50%)
+
+			img
+				display: none
+				border-radius: 3px
+
+		.item-info
+			padding: 15px
+
+			a.item-title
+				display: inline-block
+				width: 100%
+				font:
+					size: 1.5em
+					family: $font-headings-secondary
+
+				padding: 10px 0
+
+
+#node-edit-container
+	#node-edit-header
+		padding: 20px
+
+		.node-edit-title
+			+project-node-title
+
+
+	#node-edit-form
+		padding: 20px
+
+.debug
+	font:
+		family: monospace
+		size: .9em
+	padding: 10px 15px
+
+@import plugins/_flowplayer

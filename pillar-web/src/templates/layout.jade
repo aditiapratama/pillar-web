@@ -1,0 +1,228 @@
+doctype
+html(lang="en")
+	head
+		meta(charset="utf-8")
+		title {% block page_title %}Home{% endblock %} - Blender Cloud
+		meta(name="viewport", content="width=device-width, initial-scale=1.0")
+		meta(name="description", content="Blender Cloud is a web based service developed by Blender Institute that allows people to access the training videos and all the data from the past open projects.")
+		meta(name="author", content="Blender Institute")
+
+		meta(property="og:site_name", content="Blender Cloud")
+		| {% block og %}
+		meta(property="og:title", content="Blender Cloud")
+		meta(property="og:url", content="https://cloud.blender.org")
+		meta(property="og:type", content="website")
+		| {% endblock %}
+
+		link(href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css", rel="stylesheet")
+		link(href="//netdna.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css", rel="stylesheet")
+
+		link(href='//fonts.googleapis.com/css?family=Roboto:300,400', rel='stylesheet', type='text/css')
+		link(href='//fonts.googleapis.com/css?family=Oswald:300', rel='stylesheet', type='text/css')
+		link(href='//fonts.googleapis.com/css?family=Lato:300,400', rel='stylesheet', type='text/css')
+
+		//- link(href="{{ url_for('static', filename='assets/css/bootstrap-markdown.min.css') }}", rel="stylesheet")
+		//- link(href="{{ url_for('static', filename='assets/css/bootstrap-colorpicker.min.css') }}", rel="stylesheet")
+
+		//- link(href="{{ url_for('static', filename='gallery/css/blueimp-gallery.min.css') }}", rel="stylesheet")
+		//- link(href="{{ url_for('static', filename='jquery-file-upload/css/jquery.fileupload.css') }}", rel="stylesheet")
+		//- link(href="{{ url_for('static', filename='jquery-file-upload/css/jquery.fileupload-ui.css') }}", rel="stylesheet")
+
+		//- noscript
+			//- link(href="{{ url_for('static', filename='jquery-file-upload/css/jquery.fileupload-noscript.css') }}", rel="stylesheet")
+		//- noscript
+			//- link(href="{{ url_for('static', filename='jquery-file-upload/css/jquery.fileupload-ui-noscript.css') }}", rel="stylesheet")
+
+		link(href="{{ url_for('static', filename='assets/ico/favicon.png') }}", rel="shortcut icon")
+
+		| {% block head %}{% endblock %}
+
+		link(href="{{ url_for('static', filename='assets/css/main.css') }}", rel="stylesheet")
+
+	body.transition-none
+
+		.container-page
+			a(name="hop")
+			header.navbar-backdrop-container
+				| {% block header_backdrop %}
+				.navbar-backdrop
+				| {% endblock %}
+				.navbar-backdrop-overlay
+
+			| {% with messages = get_flashed_messages() %}
+			|		{% if messages %}
+
+			|	{% for message in messages %}
+			// Use alert category too
+			.alert(role="alert")
+				button.close(type="button", data-dismiss="alert")
+					i.fa.fa-times
+				| {{message}}
+			|	{% endfor %}
+
+			|		{% endif %}
+			| {% endwith %}
+
+			nav.navbar.navbar-transparent.navbar-fixed-top(role="navigation")
+				.navbar-overlay
+
+				.container
+					header.navbar-header
+						button.navbar-toggle(data-target=".navbar-collapse", data-toggle="collapse", type="button")
+							span.sr-only Toggle navigation
+							i.fa.fa-bars
+						a.navbar-brand(
+							href="/",
+							title="Blender Cloud")
+							span Blender Cloud
+
+					nav.collapse.navbar-collapse
+						ul.nav.navbar-nav.navbar-right
+							li(class="{% if title in ['open-project', 'open_project']: %}active{% endif %}")
+								a(href="/open-project",
+									title="Browse Open Projects")
+									span Open Projects
+							li(class="{% if title == 'training': %}active{% endif %}")
+								a(href="/training",
+									title="Browse Training and Tutorials")
+									span Training
+
+							| {% if current_user.is_anonymous() %}
+							li
+								a(href="https://blender.org/id/register",
+									title="Register") Register
+							| {% endif %}
+
+							| {% if current_user.is_authenticated() %}
+							li(class="dropdown{% if title in ['profile', 'billing-address', 'pledges', 'manage-collection']: %} active{% endif %}")
+								a.dropdown-toggle(href="#", data-toggle="dropdown", title="{{ current_user.email }}")
+									span.fa-stack
+										i.fa.fa-circle-thin.fa-stack-2x
+										i.fa.fa-user.fa-stack-1x
+								ul.dropdown-menu
+									| {# XXX
+									| {% if current_user.has_role('admin') %}
+									| #}
+									li
+										a(href="{# XXX {{url_for('admin.index')}} #}",
+											title="Whoosh!")
+											i.fa.fa-fighter-jet
+											| Whoosh!
+									| {# XXX
+									| {% endif %}
+									| #}
+
+									li
+										a(href="{# XXX {{url_for('user_settings.profile')}} #}"
+											title="Settings")
+											i.fa.fa-cog
+											| Settings
+									li.divider(role="separator")
+									li
+										a(href="/users/logout")
+											i.fa.fa-power-off(title="Log Out")
+											| Log out
+							| {% else %}
+							li.nav-item-sign-in
+								a(href="/users/login")
+									i.fa.fa-sign-in(title="Sign In")
+									|  Sign In
+							| {% endif %}
+
+			.page-content
+				| {% block body %}{% endblock %}
+
+		#footer-container
+			| {% block footer_navigation %}
+			#footer-navigation
+				.container
+					.row
+						.col-md-4.col-xs-6
+							.footer-support
+								h4 Support & Feedback
+								p.
+									Let us know what you think or if you have any issues
+									just write to cloudsupport at blender dot org
+
+						.col-md-2.col-xs-6
+							ul.footer-social
+								a(href="http://twitter.com/Blender_Cloud",
+									title="Follow us on Twitter")
+									li
+										span.fa-stack.fa-2x
+											i.fa.fa-circle-thin.fa-stack-2x
+											i.fa.fa-twitter.fa-stack-1x
+								a(href="mailto:cloudsupport@blender.org"
+									title="Support Email")
+									li
+										span.fa-stack.fa-2x
+											i.fa.fa-circle-thin.fa-stack-2x
+											i.fa.fa-envelope.fa-stack-1x
+
+						.col-md-2.col-xs-6
+							h4 Blender Cloud
+							ul.footer-links
+								a(href="{{ url_for('homepage') }}",
+									title="Blender Cloud Home")
+									li Home
+
+								a(href="/news",
+									title="Cloud News")
+									li News
+
+								a(href="http://wiki.blender.org/index.php/Org:Institute/BlenderCloud",
+									title="About Blender Cloud")
+									li About
+
+						.col-md-2.col-xs-6
+							h4 Blender
+							ul.footer-links
+								a(href="http://www.blender.org",
+									title="Blender Official Website")
+									li Blender.org
+
+								a(href="http://www.blender.org/store",
+									title="The Official Blender Store")
+									li Blender Store
+
+								a(href="http://www.blendernetwork.org",
+									title="The Network of Blender Professionals")
+									li Blender Network
+
+						.col-md-2.col-xs-6.special
+							| With the support of the <br/> MEDIA Programme of the European Union<br/><br/>
+							img(src="https://gooseberry.blender.org/wp-content/uploads/2014/01/media_programme.png")
+			| {% endblock %}
+
+			| {% block footer %}
+			footer.container
+				ul.links
+					li
+						a(href="{# XXX {{url_for('terms_and_conditions')}} #}")
+							| Terms & Services, Cancellation
+					li
+						a(href="{# XXX {{url_for('privacy')}} #}")
+							| Privacy Policy
+				span.credits
+					| Blender Cloud
+					a.hop(href="#hop")
+						i.fa.fa-caret-up
+			| {% endblock %}
+
+		| {#
+		| {% assets filters="jsmin",
+		|		 output="assets/packed/attract.js",
+		|		 "assets/js/bootstrap-markdown.js",
+		|		 "assets/js/markdown.js",
+		|		 "assets/js/jquery.attract.js" %}
+		script(type="text/javascript", src="{{ ASSET_URL }}")
+		| {% endassets %}
+		| #}
+
+		script(type="text/javascript", src="//code.jquery.com/jquery-2.1.4.min.js")
+		script(type="text/javascript", src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js")
+		script(type="text/javascript", src="//cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/0.6.5/js/min/perfect-scrollbar.jquery.min.js")
+		script(type="text/javascript", src="//cdnjs.cloudflare.com/ajax/libs/js-cookie/2.0.3/js.cookie.min.js")
+		script(type="text/javascript", src="{{ url_for('static', filename='assets/js/tutti.min.js') }}")
+
+		| {% block footer_scripts %}{% endblock %}

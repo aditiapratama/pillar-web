@@ -1,0 +1,242 @@
+| {% extends 'layout.html' %}
+
+| {% block page_title %}{{node.name}}{% endblock%}
+
+| {% block og %}
+meta(property="og:title", content="{{node.name}}")
+// XXX - Replace with actual url
+meta(property="og:url", content="https://cloud.blender.org")
+meta(property="og:type", content="website")
+| {% endblock %}
+
+| {% block head %}
+link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css", rel="stylesheet")
+| {% endblock %}
+
+| {% block header_backdrop %}
+.navbar-backdrop(style="background-image: url({{ node.properties.picture_header.thumbnail('l') }})")
+| {% endblock %}
+
+| {% block body %}
+.container
+	#project_container
+		#project-header
+			.project_nav-expand-btn(title="Toggle Navigation")
+				i.fa.fa-angle-double-right
+
+			ul.breadcrumb
+
+				li.project-organization
+					// XXX - Link to project organization
+					a(href="/bi") Blender Institute
+
+				li.project-title
+					// XXX - Link to project overview
+					a(href="#") {{ node.name }}
+
+				li
+					a(href="#") Extras
+
+				li
+					a(href="#") Videos
+
+			#project-loading
+				i.fa.fa-spinner.fa-spin
+
+			ul.project-edit-tools
+				a#item_add(href="#")
+					li
+						i.fa.fa-plus
+						| Add Asset
+				a#item_edit(href="#")
+					li
+						i.button-edit.fa.fa-edit
+						| Edit
+				a#item_delete(href="#")
+					li
+						i.fa.fa-trash
+						| Delete
+
+		#project-flex
+			.project_nav-collapse-btn(title="Toggle Navigation")
+				i.fa.fa-angle-double-left
+
+			#project_nav
+				#project_tree
+
+			.project_split
+
+			#project_context-container
+				#project_context
+
+| {% endblock %}
+
+| {% block footer_navigation %}{% endblock %}
+| {% block footer %}{% endblock %}
+
+| {% block footer_scripts %}
+script(type="text/javascript", src="//cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js")
+script(type="text/javascript", src="//releases.flowplayer.org/6.0.3/flowplayer.min.js")
+
+script(type="text/javascript").
+	$('#project_context-container').perfectScrollbar({suppressScrollX: true});
+
+	// Binding for ajax event
+	$(document).bind("ajaxSend", function(){
+		$('#project-loading').show();
+	}).bind("ajaxComplete", function(){
+		$('#project-loading').hide();
+	});
+
+	container_offset = $('#project-flex').offset();
+
+	function containerResizeY(window_height){
+		container_height = window_height - container_offset.top - 15;
+		$('#project-flex').css({'max-height': container_height + 'px'});
+	}
+
+	$(window).on("load resize",function(){
+		containerResizeY($(window).height());
+	});
+
+	function displayNode(nodeId) {
+		// Remove the 'n_' suffix from the id
+		if (nodeId.substring(0, 2) == 'n_') {
+			nodeId = nodeId.substr(2);
+		}
+
+		//console.log(nodeId);
+		var url = '/nodes/' + nodeId + '/view?embed=1'
+		$.get(url, function(dataHtml) {
+			// Update the DOM injecting the generate HTML into the page
+			$('#project_context').html(dataHtml);
+			window.location.replace('#' + nodeId);
+			$('#item_edit').attr('data-node_id', nodeId);
+		})
+		.fail(function(dataResponse) {
+			$('#project_context').html($('<iframe id="server_error"/>'));
+			$('#server_error').attr('src', url);
+		});
+
+		/* Unused for now
+		var nodeType = data.node.node_type.name;
+		switch (nodeType) {
+			case 'group':
+				console.log('preparing for group');
+				break;
+			case 'asset_video':
+				console.log('asset_video');
+				break;
+			case 'project':
+				 console.log('a');
+				 break;
+			default:
+				console.log('Error')
+		}
+		*/
+	}
+
+	function editNode(nodeId) {
+		// Remove the 'n_' suffix from the id
+		if (nodeId.substring(0, 2) == 'n_') {
+			nodeId = nodeId.substr(2);
+		}
+		//- console.log(nodeId);
+		var url = '/nodes/' + nodeId + '/edit?embed=1'
+		$.get(url, function(dataHtml) {
+			// Update the DOM injecting the generate HTML into the page
+			$('#project_context').html(dataHtml);
+			window.location.replace('#' + nodeId);
+		})
+		.fail(function(dataResponse) {
+			$('#project_context').html($('<iframe id="server_error"/>'));
+			$('#server_error').attr('src', url);
+		})
+		.always(function(){
+			$('.button-edit').addClass('fa-edit').removeClass('fa-spin fa-spinner');
+		});
+
+	}
+
+	function loadContent() {
+		// If the loaded URL has an asset id hashed, arrange the view accordingly
+		var nodeId = undefined;
+		if (location.hash) {
+			nodeId = location.hash.substring(1);
+		} else {
+			nodeId = '{{node._id}}';
+		}
+
+		displayNode(nodeId);
+
+		$('#project_tree').jstree({
+				'core': {
+						'data': function (obj, callback) {
+								if(obj.id === '#') { //tree root
+										$.getJSON('/nodes/' + nodeId + '/view?format=jstree', function(jsonObject) {
+												callback.call(this, jsonObject['items']);
+										});
+
+								} else { //normal node
+										//console.log((obj.original.type);
+										if (obj.original.type == 'filesystem_node') {
+												$.getJSON(  $SCRIPT_ROOT +
+														'/filesystem/' +
+														{{node.id}} +
+														'/' +
+														obj.original.path, function( jsonObject ) {
+															callback.call(this, jsonObject.children);
+												});
+										} else {
+											// Remove the 'n_' suffix from the id
+											nodeId = obj.id.substring(2);
+											$.getJSON('/nodes/' + nodeId + '/view?format=jstree&children=1', function(jsonObject) {
+													callback.call(this, jsonObject.children);
+													$('.waiting').text('averrr');
+											});
+												// $.getJSON(  $SCRIPT_ROOT + "/product_tree/" + obj.id.substring(1), function( jsonObject ) {
+												//     //console.log((jsonObject.type);
+												//     callback.call(this, jsonObject.children);
+												// });
+										}
+								}
+						}
+				},
+				"types" : {
+						"#": {"valid_children": ["collection"]},
+						"chapter" : {"icon": "fa fa-folder-o"},
+						"group" : {"icon": "fa fa-folder-o"},
+						"filesystem_node" : {"icon": "fa fa-folder-o"},
+						"file" : {"icon": "fa fa-file-archive-o", "max_children": 0},
+						"filesystem_file" : {"icon": "fa fa-file-archive-o", "max_children": 0},
+						"image" : {"icon": "fa fa-picture-o", "max_children": 0},
+						"video" : {"icon": "fa fa-film", "max_children": 0},
+						"default" : {"icon": "fa fa-file-o"}
+				},
+				"plugins": ["types",] //, "state", "sort"
+		});
+
+		var jstreeAPI = $('#project_tree').jstree(true);
+
+
+		$('#project_tree').on("select_node.jstree", function (e, data) {
+			displayNode(data.node.id);
+			jstreeAPI.toggle_node(data.node);
+		});
+
+		$('#item_edit').click(function(e){
+
+			$('.button-edit').addClass('fa-spin fa-spinner').removeClass('fa-edit');
+
+			// When clicking on the edit icon, embed the edit
+			e.preventDefault;
+			node_id = document.getElementById("item_edit");
+			editNode(node_id.getAttribute('data-node_id'));
+		});
+
+	};
+
+	// Initialize the page
+	loadContent();
+
+| {% endblock %}

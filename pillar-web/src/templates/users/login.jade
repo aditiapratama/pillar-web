@@ -1,0 +1,20 @@
+| {% extends 'layout.html' %}
+
+| {% block body %}
+.container
+	#login-container
+		.login-title Login
+
+		.login-form
+			form(method="POST", action="{{url_for('users.login')}}")
+				.form-group
+					| {{ form.email.label }}
+					| {{ form.email(class='form-control') }}
+
+				.form-group
+					| {{ form.password.label }}
+					| {{ form.password(class='form-control') }}
+
+				input.btn.btn-default(type="submit",value="Login")
+
+| {% endblock %}

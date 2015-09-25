@@ -1,0 +1,375 @@
+@import _normalize
+@import _config
+@import _utils
+// @import attract/_main
+
+@import _project
+@import _user
+@import _blog
+@import _join
+@import _homepage
+
+@import plugins/_jstree
+@import plugins/js_perfectscrollbar
+
+
+html
+	-webkit-font-smoothing: antialiased
+	-moz-osx-font-smoothing: grayscale
+
+body
+	position: relative
+	font:
+		family: $font-body, sans-serif
+		size: $font-size
+	color: $color-text
+	background-color: darken($color-background, 8%)
+
+h1, h2, h3, h4, h5
+	font:
+		family: $font-headings-secondary
+		weight: 300
+
+
+a
+	color: $color-primary
+
+	&:hover
+		color: $color-primary-dark
+
+
+$navbar-height: 80px
+$navbar-backdrop-height: 600px
+
+.container-page
+	background-color: $color-background
+
+.page-content
+	position: relative
+
+	.container-box
+		+container-box
+
+.navbar-fixed-top+.page-content
+	padding-top: $navbar-height
+
+
+.alert
+	position: relative
+	z-index: 13
+	width: 100%
+	margin-bottom: 0
+	display: block
+	text-align: center
+	padding: 15px 20px
+	border-radius: 0
+	border-bottom: thin solid rgba(black, .1)
+
+	// overriden by alert types
+	color: $color-text
+	background-color: $color-background
+
+	.close
+		position: relative
+		top: -2px
+		right: -10px
+		padding: 0 10px
+
+		i
+			font-size: .6em
+
+
+/* When there's an alert, disable the fixed top */
+.alert+.navbar-fixed-top
+	position: relative
+
+	&+.container
+		padding-top: 0
+
+
+/* Navigation */
+.navbar-header
+	position: relative
+	margin: 0
+	z-index: 1 // to be on top of the overlay
+	height: 100%
+
+
+.navbar-overlay
+	position: absolute
+	top: 0
+	left: 0
+	right: 0
+	bottom: 0
+	z-index: 0
+	width: 100%
+	height: 100%
+	background-color: rgba(96,96,96,0)
+
+
+.navbar-transparent
+	z-index: 13 /* Flowplayer seems to take up to 11, project container is 12 */
+	border: none
+	border-width: 0
+	// text-shadow: none
+	// box-shadow: 0 5px 10px rgba(black, .05)
+	// background: $color-background
+	display: flex
+	align-items: center
+
+	width: 100%
+	background:
+		color: transparent
+		image: url(https://www.blender.org/wp-content/themes/bthree/assets_shared/images/background_gradient_strip_top.png)
+		repeat: repeat-x
+		size: 100% 100% // 'contain' gives a black-line appearing for a few seconds in webkit when scrolling
+
+	nav
+		margin-left: auto
+		margin-right: 0
+
+		.navbar-nav
+			margin-right: 0
+
+	li
+		a
+			color: white
+			height: $navbar-height
+			display: flex
+			align-items: center
+
+			font:
+				family: $font-headings
+				size: 1.3em
+			border-bottom: 3px solid transparent
+			text-shadow: 1px 1px 0 rgba(black, .2), 1px 1px 10px rgba(black, .2)
+			transition: background-color .1s ease-in, border-color .1s ease-in
+
+
+			&:hover
+				background-color: rgba(white, .4)
+				border-bottom: 3px solid $color-primary
+
+			&.active
+				border-bottom: 3px solid $color-secondary
+
+				&:hover
+					border-color: lighten($color-secondary, 5%)
+
+		&.nav-item-sign-in
+			i
+				padding-top: 2px
+				padding-right: 10px
+				font-size: .9em
+
+	.navbar-brand
+		height: $navbar-height
+		display: flex
+		align-items: center
+		margin-left: 0 !important
+		text-shadow: 1px 1px 0 rgba(black, .2), 1px 1px 10px rgba(black, .2)
+		padding:
+			top: 15px
+			left: 15px
+			right: 20px // overrides bs
+		color: white
+		text-align: left
+		font:
+			family: $font-headings
+			size: 1.4em
+			weight: 100
+
+		&:hover
+			color: white
+
+	.dropdown
+		position: relative
+		min-width: 60px
+
+		&:hover
+			background-color: rgba(white, .4)
+
+		span.fa-stack
+			position: absolute
+			top: 50%
+			left: 50%
+			transform: translate(-50%, -50%)
+
+		&.open
+			a
+				background-color: rgba(white, .3)
+				text-shadow: none
+
+			li
+				a
+					height: initial
+					border-bottom: none
+					font:
+						family: $font-body
+						size: .9em
+					padding: 5px 15px 5px 5px
+					color: rgba($color-text, .8)
+
+					&:hover
+						color: $color-primary
+
+					i
+						width: 35px
+						text-align: center
+
+.navbar-backdrop-container
+	display: flex
+	width: 100%
+	height: 100%
+	// height: $navbar-backdrop-height
+	position: absolute
+	top: 0
+	left: 0
+	right: 0
+	bottom: 0
+	overflow: hidden
+
+.navbar-backdrop
+	z-index: 0
+	position: absolute
+
+	top: -40px
+	left: -40px
+	right: 0
+	bottom: 0
+
+	width: 150%
+	height: 400%
+	max-height: $navbar-backdrop-height
+	background:
+		size: cover
+		repeat: no-repeat
+		color: white
+		image: url(https://www.blender.org/wp-content/themes/bthree/assets/images/placeholder_background.jpg)
+	filter: blur(15px)
+	-webkit-filter: blur(15px)
+	-moz-filter: blur(15px)
+
+.navbar-backdrop-overlay
+	position: absolute
+	top: 0
+	left: 0
+	width: 100%
+	height: $navbar-backdrop-height
+	background: linear-gradient(to bottom, rgba($color-background, 0) 25%, rgba($color-background,0.5) 50%, rgba($color-background,1) 100%)
+
+/* Global, we want all menus to look like this */
+ul.dropdown-menu
+	background-color: white
+	border: none
+	box-shadow: 0 10px 25px rgba(black, .1)
+
+	.divider
+		background-color: rgba(black, .1)
+
+
+/* FOOTER */
+#footer-container
+	position: relative
+	background-color: darken($color-background, 8%)
+
+/* Footer Navigation */
+footer
+	font-size: .75em
+	padding: 0 0 10px 0
+	a
+		color: lighten($color-text, 25%)
+
+		&:hover
+			color: $color-primary
+
+	ul.links
+		float: left
+		padding: 0
+		margin: 0
+		list-style-type: none
+
+		li
+			padding: 0 15px 0 0
+			margin: 0
+			float: left
+
+	.credits
+		float: right
+		color: lighten($color-text, 25%)
+
+		.hop
+			padding: 0 10px
+
+#footer-navigation
+	font-size: .85em
+	margin-bottom: 5px
+	color: lighten($color-text, 30%)
+	border-top: thick solid lighten($color-text, 60%)
+	padding:
+		top: 15px
+		bottom: 15px
+
+	h4
+		color: lighten($color-text, 8%)
+		margin-bottom: 10px
+
+	ul
+		position: relative
+		margin: 0
+		padding: 0 0 10px 0
+		list-style-type: none
+
+		li
+			position: relative
+			padding: 0
+			margin: 0
+
+	a
+		color: lighten($color-text, 35%)
+
+		&:hover
+			color: $color-primary
+
+	.footer-links
+		i
+			font-size: 80%
+			position: absolute
+			left: -14px
+			top: 20%
+
+	.special
+		padding:
+			top: 10px
+			bottom: 15px
+		font-size: .9em
+		border-left: thin solid darken($color-background, 20%)
+
+
+		img
+			max-width: 100%
+			opacity: .6
+
+	ul.footer-social
+		width: 100%
+		text-align:center
+		margin: 0 auto
+		display: flex
+		align-items: center
+		justify-content: space-around
+
+		li
+			display: inline-block
+			padding: 30px 0
+
+			.fa-circle-thin
+				transform: scale(1.2)
+
+
+.btn-outline
+	background-color: transparent
+	border-width: 1px
+	transition: background-color .1s
+
+	&:focus, &:active
+		box-shadow: none

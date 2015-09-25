@@ -1,0 +1,78 @@
+| {% block body %}
+
+| {% with errors = errors %}
+| {% if errors %}
+
+| {% for field in errors %}
+.alert.alert-danger(role="alert")
+	strong {{field}}
+	| {% for message in errors[field] %}
+	| {{message}}|
+	| {% endfor %}
+
+| {% endfor %}
+
+| {% endif %}
+| {% endwith %}
+
+| {% if error!="" %}
+.alert.alert-danger(role="alert")
+	| {{error}}
+| {% endif %}
+
+#node-edit-container
+
+	#node-edit-header
+		.node-edit-title {{node.name}}
+
+	#node-edit-form
+		form(
+			method="POST",
+			enctype="multipart/form-data",
+			action="{{url_for('nodes.edit', node_id=node._id)}}")
+
+			| {% for field in form %}
+
+			| {% if field.name == 'csrf_token' %}
+			| {{ field }}
+
+			| {% else %}
+
+			| {% if field.type == 'HiddenField' %}
+			| {{ field }}
+
+			| {% else %}
+			.form-group
+				| {{ field.label }}
+				| {{ field(class='form-control') }}
+			| {% endif %}
+
+			| {% endif %}
+
+			| {% endfor %}
+
+			a.btn.btn-danger(href="{{url_for('nodes.delete', node_id=node._id)}}") Delete
+
+			.pull-right
+				a#button-cancel.btn.btn-default(href="#", data-node_id='{{node._id}}') Cancel
+
+				input#submit_edit_node.btn.btn-default.btn-success(
+					data-node-id="{{node._id}}",
+					type="submit")
+
+script(type="text/javascript").
+	$("form").submit(function(event) {
+		$.post("{{url_for('nodes.edit', node_id=node._id)}}",
+			$(this).serialize(),
+			function(dataHtml){
+				$('#project_context').html(dataHtml);
+			});
+		event.preventDefault();
+	});
+
+	$("#button-cancel").click(function(e) {
+		e.preventDefault();
+		displayNode($(this).data('node_id'));
+	});
+
+| {% endblock %}

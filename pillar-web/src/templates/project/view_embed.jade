@@ -1,0 +1,32 @@
+| {% block body %}
+
+#node-container
+	a(href="{{ node.properties.picture_header.thumbnail('l') }}")
+		section.node-preview.file
+			img(src="{{ node.properties.picture_header.thumbnail('l') }}")
+
+	section.node-details-container
+
+		.node-details-header
+			.node-title
+				| {{node.name}}
+				// XXX link to user/organization
+				// small by {{ node.user }}
+
+		.node-details-description
+			| {{node.description|safe}}
+
+		.node-details-meta
+
+			ul.node-details-meta-list
+				li.node-details-meta-list-item.status
+						| {{node.properties.status}}
+
+				li.node-details-meta-list-item.date
+					| {{ node._created }}
+
+	section.debug.hidden
+		| {{ node.to_dict() }}
+
+| {% endblock %}
+

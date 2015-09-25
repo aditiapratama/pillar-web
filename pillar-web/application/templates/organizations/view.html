@@ -1,0 +1,55 @@
+{% extends 'layout.html' %}
+{% from '_comments.html' import render_comments %}
+
+{% block body %}
+<div class="col-md-9">
+  <h2>{{node.name}}</h2>
+  <p>{{node.description}}</p>
+  <div class="row">
+    <div class="col-md-6">
+      {% if node.picture_thumbnail %}
+        <a href="{{node.picture_thumbnail}}" class="thumbnail">
+          <img src="{{node.picture_thumbnail}}" alt="{{node.name}}">
+        </a>
+      {% else %}
+        <p>Picture goes here</p>
+      {% endif %}
+    </div>
+    <div class="col-md-6">
+      <h4>Notes:</h4>
+      <p>
+        {% if notes %}
+          {{notes}}
+        {% else %}
+          No notes at the moment
+        {% endif %}
+      </p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <p></p>
+      <p></p>
+      <p></p>
+    </div>
+    <div class="col-md-6">
+      <p></p>
+      <p>Scenes:</p>
+      <ul>
+      {% for child in children %}
+      <li><a href="{{url_for('nodes.view', node_id=child['_id'])}}">{{ child['name']}}</a></li>
+      {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-11">
+    </div>
+    <div class="col-md-1">
+      <a class="btn btn-default btn-s" href="{{url_for('nodes.edit', node_id=node['_id'])}}"><i class="glyphicon glyphicon-edit"></i> Edit</a>
+    </div>
+  </div>
+  {{ render_comments(comments, comment_form, node) }}
+</div>
+
+{% endblock %}

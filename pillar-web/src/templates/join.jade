@@ -1,0 +1,133 @@
+| {% extends 'layout.html' %}
+| {% block page_title %}Join{% endblock %}
+
+| {% block og %}
+meta(property="og:title", content="Join the Blender Cloud")
+meta(property="og:url", content="https://cloud.blender.org/join")
+meta(property="og:image", content="https://cloud.blender.org/static/assets/img/background_join_bbb.jpg")
+| {% endblock %}
+
+| {% block body %}
+.join
+
+	.slide.image.main(
+		style="background-image: url({{ url_for('static', filename='assets/img/background_join_bbb.jpg')}})")
+		.gradient
+		.overlay
+			h1 Your Blender Backstage Pass
+			h2.
+				Full access to all the Blender Institute's open projects
+				trainings, and more in one place
+			a(href="https://store.blender.org/product/membership/")
+				h4
+					button.btn.btn-default.btn-outline
+						| Join the Cloud
+
+	.slide.icons
+		.join__points_item
+			span.join__points_item-icon
+				i.fa.fa-folder-open-o
+
+			span.join__points_item-title
+				| Inside Projects
+
+			span.join__points_item-description
+				| Browse all the project files as they're made plus extra art, animatics, and Gooseberry content not found elsewhere.
+
+		.join__points_item
+			span.join__points_item-icon
+				i.fa.fa-film
+
+			span.join__points_item-title
+				| All Open Movies
+
+			span.join__points_item-description
+				| You'll find everything you'd find on each open movie's DVD...plus access to the project repositories and other extras!
+
+		.join__points_item
+			span.join__points_item-icon
+				i.fa.fa-bullseye
+
+			span.join__points_item-title
+				| Hours of Training
+
+			span.join__points_item-description
+				| Build your Blender skills with the lessons from the Blender training DVDs plus special tutorials from the open movies.
+
+		.join__points_item
+			span.join__points_item-icon
+				i.fa.fa-comments-o
+
+			span.join__points_item-title
+				| Support the Team
+
+			span.join__points_item-description
+				| Help make Blender's open projects possible, and later you'll also be able to share your own ideas and work.
+
+
+	.slide.image(
+		style="background-image: url({{ url_for('static', filename='assets/img/background_join_tos.jpg')}})")
+		.gradient.right
+		.lead.right
+			h1 Create Your Own Films
+			p.
+				Download scripts, models, rigs, textures, and everything else you need to recreate each of our films (or make your own).
+
+
+	.slide.image(
+		style="background-image: url({{ url_for('static', filename='assets/img/background_join_andyusingblender.jpg')}})")
+		.gradient.left
+		.lead.left
+			h1 Learn from the Experts
+			p.
+				Whether you're a Blender beginner or an advanced animator, the techniques you'll pick up in the 70+ hours of trainings & tutorials will help you improve.
+
+
+	.slide.image(
+		style="background-image: url({{ url_for('static', filename='assets/img/background_join_gooseberry.jpg')}})")
+		.gradient.right
+		.lead.right
+			h1 Watch Gooseberry Unfold
+			p.
+				Get your hands on <a href="http://gooseberry.blender.org">Project Gooseberry</a>'s art and other assets the moment they're made, learning about the animation process directly from the studio team members as they work.
+
+
+	.slide.image(
+		style="background-image: url({{ url_for('static', filename='assets/img/background_join_peoplecodingblender.jpg')}})")
+		.gradient.left
+		.lead.left
+			h1 Future Features
+			p.
+				Your support will help us build a better Cloud where you will also be able to participate in our open content creation process.
+
+	.slide.image.main(
+		style="background-image: url({{ url_for('static', filename='assets/img/background_join_bbb_frankite.jpg')}})")
+		.gradient
+		.overlay
+			h1 Break Down Barriers
+			h2.
+				We believe open content creation will lead to a fairer, more sustainable future where makers and viewers can interact directly. Help us prove this.
+
+
+	.slide.subscribe
+		.box
+			h2 Get Your Backstage Pass
+			ul
+				li Just 10 USD per month
+				li Prepay for a set number of months or set up a monthly subscription
+				li Join for 8+ months for a credit in the Cosmos Laundromat pilot film
+				li Cancel anytime
+				li
+					a(href="mailto:cloudsupport@blender.org") Contact us
+					|  to discuss team membership packages
+
+			a.subscribe(href="/subscribe")
+				button.btn.btn-outline.subscribe
+					| Subscribe Now
+					i.fa.fa-angle-right
+
+
+| {% endblock %}
+
+| {% block footer_scripts %}
+| {% endblock %}

@@ -1,0 +1,49 @@
+| {% extends 'layout.html' %}
+
+| {% block body %}
+
+.container
+	#project_container
+
+		#node_index-container
+
+			#node_index-header
+				| {% if user %}
+				#node_index-user-avatar
+					img(src="http://placehold.it/90x90")
+				#node_index-user-info
+					.node_index-user-name {{user.name}}
+					.node_index-user-description {{user.description}}
+				| {% endif %}
+
+			#node_index-collection-container
+				.node_index-collection
+					| {% for project in projects %}
+
+					.node_index-collection-card
+
+
+						a.item-header(
+							href="{{ url_for('project_view', name='bi', project=project.properties.url) }}")
+
+							img.background(src="{{ project.properties.picture_header.thumbnail('m') }}")
+
+						a.card-thumbnail(
+							href="{{ url_for('project_view', name='bi', project=project.properties.url) }}")
+
+							img(src="{{ project.properties.picture_square.thumbnail('s') }}")
+
+						.item-info
+
+							a.item-title(
+								href="{{ url_for('project_view', name='bi', project=project.properties.url) }}")
+								| {{project.name}}
+
+							p.item-description
+								// XXX - We should use a shorter description here
+								| {{project.properties.summary|safe}}
+
+					| {% endfor %}
+
+| {% endblock %}
+u

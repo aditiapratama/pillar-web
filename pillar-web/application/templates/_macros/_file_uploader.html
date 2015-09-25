@@ -1,0 +1,22 @@
+{% macro render_file_uploader() %}
+
+<div class="modal fade" id="fileUploaderModal" tabindex="-1" role="dialog" aria-labelledby="fileUploaderModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title">Upload file</h4>
+			</div>
+			<div class="modal-body">
+				{% include '_macros/include _file_uploader_form.html' %}
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<!--<button type="button" class="btn btn-primary">Select file</button>-->
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+{% endmacro %}

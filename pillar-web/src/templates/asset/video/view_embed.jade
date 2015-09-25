@@ -1,0 +1,70 @@
+| {% block head %}
+link(rel="stylesheet", href="//releases.flowplayer.org/6.0.3/skin/functional.css")
+| {% endblock %}
+
+| {% block body %}
+
+#node-container
+	section.node-preview.video
+		#flowplayer_container.is-splash(style="background-image:url({{node.picture.thumbnail('l')}}); background-repeat:no-repeat;")
+
+	section.node-details-container
+
+		.node-details-header
+			.node-title
+				| {{node.name}}
+
+		.node-details-description
+			| {{node.description|safe}}
+
+		.node-details-meta
+
+			ul.node-details-meta-list
+				li.node-details-meta-list-item.status
+						| {{node.properties.status}}
+
+				li.node-details-meta-list-item.date
+					| {{ node._created }}
+
+				li.btn-group.node-details-meta-list-item.video.download
+					button.btn.btn-default.dropdown-toggle(
+						type="button",
+						data-toggle="dropdown",
+						aria-haspopup="true",
+						aria-expanded="false")
+
+						| Download
+						i.fa.fa-angle-down.icon-dropdown-menu
+
+					ul.dropdown-menu
+						| {% for child in node.file_children._items %}
+						li
+							a(href="{{ child.link }}",
+								title="Download this video format")
+								span.length {{ child.length | filesizeformat }}
+
+								span.format {{ child.format }}
+								span.size {{ child.size }}
+
+						| {% endfor %}
+
+	section.debug.hidden
+		| {{ node.to_dict() }}
+
+| {% endblock %}
+
+| {% block footer_scripts %}
+
+script.
+	// select the above element as player container
+	var container = document.getElementById("flowplayer_container");
+	// install flowplayer into selected container
+	flowplayer(container, {
+		splash: true,
+			clip: {
+				sources: {{ node.video_sources | safe }}
+			}
+	});
+
+
+| {% endblock %}
