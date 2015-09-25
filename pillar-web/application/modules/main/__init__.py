@@ -1,6 +1,7 @@
 from pillarsdk import Node
 from pillarsdk import NodeType
 from pillarsdk.users import User
+from pillarsdk import File
 from pillarsdk.organizations import Organization
 from pillarsdk.exceptions import ResourceNotFound
 from flask import abort
@@ -12,6 +13,7 @@ from application import SystemUtility
 from application.modules.nodes import index
 from application.modules.nodes import view
 from application.helpers import UserProxy
+from application.helpers import attach_project_pictures
 
 
 @app.route("/")
@@ -61,3 +63,38 @@ def node_view(name, project, node_id):
     except ResourceNotFound:
         return abort(404)
     return node.name
+
+
+def get_projects(category):
+    """Utility to get projects based on category. Should be moved on the API
+    and improved with more extensive filtering capabilities.
+    """
+    api = SystemUtility.attract_api()
+    node_type = NodeType.find_first({
+        'where': '{"name" : "project"}',
+        'projection': '{"name": 1}'
+        }, api=api)
+    projects = Node.all({
+        'where': '{"node_type" : "%s", \
+            "properties.category": "%s"}' % (node_type._id, category),
+        'embedded': '{"picture":1}',
+        }, api=api)
+    for project in projects._items:
+        attach_project_pictures(project, api)
+    return projects
+
+
+@app.route("/open-projects")
+def open_projects():
+    projects = get_projects('film')
+    return render_template(
+        'project/index_collection.html',
+        projects=projects._items)
+
+
+@app.route("/training")
+def training():
+    projects = get_projects('training')
+    return render_template(
+        'project/index_collection.html',
+        projects=projects._items)

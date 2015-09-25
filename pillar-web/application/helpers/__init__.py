@@ -56,6 +56,22 @@ def percentage(items, total):
     return float(items) * 100 / float(total)
 
 
+def attach_project_pictures(project, api):
+    """Utility function that queries for file objects referenced in picture
+    header and square. In eve we currently can't embed objects in nested
+    properties, this is the reason why this exists.
+    This function should be moved in the API, attached to a new Project object.
+    """
+    if project.properties.picture_square:
+        # Collect the picture square file object
+        project.properties.picture_square = File.find(
+            project.properties.picture_square, api=api)
+    if project.properties.picture_header:
+        # Collect the picture header file object
+        project.properties.picture_header = File.find(
+            project.properties.picture_header, api=api)
+
+
 class UserProxy(object):
     """This class looks up a username and matches it either to an organization
     or to than an actual user and returns the basic information.
@@ -111,14 +127,8 @@ class UserProxy(object):
             }, api=self.api)
 
         for project in projects._items:
-            if project.properties.picture_square:
-                # Collect the picture square file object
-                project.properties.picture_square = File.find(
-                    project.properties.picture_square, api=self.api)
-            if project.properties.picture_header:
-                # Collect the picture header file object
-                project.properties.picture_header = File.find(
-                    project.properties.picture_header, api=self.api)
+            attach_project_pictures(project, self.api)
+
         return projects
 
     def project(self, project_name):
