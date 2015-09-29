@@ -46,8 +46,8 @@ html(lang="en")
 			header.navbar-backdrop-container
 				| {% block header_backdrop %}
 				.navbar-backdrop
-				| {% endblock %}
 				.navbar-backdrop-overlay
+				| {% endblock %}
 
 			| {% with messages = get_flashed_messages() %}
 			|		{% if messages %}

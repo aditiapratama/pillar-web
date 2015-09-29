@@ -7,49 +7,124 @@ meta(property="og:url", content="https://cloud.blender.org/")
 meta(property="og:image", content="https://cloud.blender.org/static/assets/img/background_join_bbb.jpg")
 | {% endblock %}
 
+| {% block header_backdrop %}
+.homepage.navbar-backdrop(style="background-image: url({{ url_for('static', filename='assets/img/background_join_bbb.jpg')}})")
+.homepage.navbar-backdrop-overlay
+| {% endblock %}
+
 | {% block body %}
 .container
+
 	#homepage.page-content
 
-		#sidebar
-			#join
-				#price
-					span.amount
-						small $
-						| 10
-					span.per
-						|	per month
+		#header
+			.text
+				.title Your Blender Backstage Pass
+				.lead.
+					Full access to all the Blender Institute's open projects
+					trainings, and more in one place. <a href="{{ url_for('join') }}">Learn more.</a>
 
-				a#subscribe(href="#") Subscribe Now
-				span.extra no sign-up fee · 3 months minimum
+		#content
+			#sidebar
 
-			#stats
-				span.amount 1804
-				span.what Subscribers
+				section#join
+					#price
+						span.amount
+							small $
+							| 10
+						span.per
+							|	per month
 
-			#goals
-				| {% for i in range(1, 5) %}
-				.milestone
-					h3 Milestone {{loop.index * 500  + 1500 }}
-					span promise to break
-				| {% endfor %}
+					a#subscribe(href="#") Subscribe Now
+					span.extra no sign-up fee - cancel anytime <br/> 3 months minimum
 
-		#main
-			#about(style="background-image: url({{ url_for('static', filename='assets/img/background_join_bbb.jpg')}})")
-				.text
-					.title Your Blender Backstage Pass
-					.lead.
-						Full access to all the Blender Institute's open projects
-						trainings, and more in one place.
 
-			#updates
-				h2 Latest Updates
+				section#stats
+					span.amount 1804
+					span.what Subscribers
 
-				| {% for i in range(1, 5) %}
-				div
-					h3 Title of the Update {{loop.index}}
-					span What's new
-				| {% endfor %}
+
+				section#goals
+
+					.milestone-item
+						.milestone-item-title &check;All Open Movies + Training
+						.milestone-item-content.
+							All 5 open-movies, plus all the training
+							ever produced by Blender Institute.
+
+					.milestone-item
+						.milestone-item-title &check;Cosmos Laundromat
+						.milestone-item-content.
+							Depressing Sheep
+
+					.milestone-item
+						.milestone-item-title Glass Half
+						.milestone-item-content.
+							NPR Rendering
+
+					.milestone-item
+						.milestone-item-title Caminandes 3
+						.milestone-item-content.
+							Cuteness Overload
+
+					.milestone-item
+						.milestone-item-title Assets Libraries
+						.milestone-item-content.
+							Textures, Shaders, etc.
+
+					.milestone-item
+						.milestone-item-title Shot Management
+						.milestone-item-content.
+							Attract, basically.
+
+					.milestone-item
+						.milestone-item-title More films.
+						.milestone-item-content.
+							We have lined up shitloads of content for 2016.
+
+					.milestone-item
+						.milestone-item-title More films.
+						.milestone-item-content.
+							We have lined up shitloads of content for 2016.
+
+			#main
+
+				section#links
+					#links-container
+						a.links-item.open_projects(href="{{ url_for('open_projects') }}")
+							img.header(src="{{ url_for('static', filename='assets/img/frontpage_link_openprojects.jpg') }}")
+							span.bar
+							span.title Open Projects
+
+							p.content Browse the entire production trees of all the open-movie projects
+
+						a.links-item.training(href="{{ url_for('training') }}")
+							img.header(src="{{ url_for('static', filename='assets/img/frontpage_link_training.jpg') }}")
+							span.bar
+							span.title Training
+
+							p.content Watch and learn from more than 100 hours of educational material
+
+
+						//
+							a.links-item
+								img.header(src="{{ url_for('static', filename='assets/img/frontpage_link_assets.jpg') }}")
+								span.title Assets
+
+							p.content Some text about ths estufsd
+
+				section#updates
+					h2.section-title Latest Updates
+
+					| {% for i in range(1, 8) %}
+					.update-list-item
+						.update-list-item-title
+							h4 Title of the Update {{loop.index}}
+							span.update-list-item-when
+								| {{loop.index * 6.66 | round | int }} mins ago
+						//- span.update-list-item-content.
+						//- 	Sed elementum eros nec lectus euismod hendrerit. In non laoreet libero, sed facilisis justo.
+					| {% endfor %}
 
 | {% endblock %}
 
