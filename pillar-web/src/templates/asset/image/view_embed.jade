@@ -1,9 +1,12 @@
 | {% block body %}
 
 #node-container
-	a(href="#")
+
+	| {% if node.picture %}
+	a(href="{{ node.picture.thumbnail('l') }}")
 		section.node-preview.image
-			img(src="{{node.picture.thumbnail('l')}}")
+			img(src="{{ node.picture.thumbnail('l') }}")
+	| {% endif %}
 
 	section.node-details-container
 
@@ -26,10 +29,10 @@
 				li.node-details-meta-list-item.image.download
 					a(href="{{ node.file.link }}")
 						button.btn.btn-default(type="button")
-							| Download
+							i.fa.fa-download.icon-download-file
+							|  Download
 
-	section.debug.hidden
-		| {{ node.to_dict() }}
+		include ../_comments.jade
 
 | {% endblock %}
 

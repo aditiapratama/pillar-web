@@ -1,0 +1,38 @@
+
+#comments-container
+	h3 Comments (14)
+
+	#comments-list
+		| {% for c in range(0, 5) %}
+
+		| {% set mod = (loop.index == 2) %}
+		| {% set reply = (loop.index > 3) %}
+
+		.comment-container(class="{% if mod %}is-team{% endif %} {% if reply %}is-reply{% endif %}")
+
+			.comment-header
+				.comment-avatar
+					img(src="http://placehold.it/40x40")
+
+				.comment-author
+					| Author Number {{loop.index}}
+
+				| {% if mod %}
+				.comment-badge.badge-team team
+				| {% endif %}
+
+				.comment-time {{ 13 * loop.index }} mins ago
+
+			.comment-content.
+				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris consequat pellentesque consectetur. Aenean urna lacus, sagittis sit amet convallis ac, convallis id tellus. Morbi porta aliquet vulputate. Donec lacinia nec turpis quis rhoncus. Cras viverra viverra turpis, vel vulputate augue luctus id. Suspendisse cursus pellentesque scelerisque. Fusce vel velit eu orci convallis vestibulum.
+
+			.comment-meta
+				.comment-rating
+					.comment-rating-value {{ 3 * loop.index }}
+
+					.comment-rating-up
+					.comment-rating-down
+
+				.comment-reply reply
+
+		| {% endfor %}

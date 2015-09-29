@@ -109,17 +109,17 @@ $list-node-children-item-width: 148px
 			left: auto
 			right: 0
 			bottom: 0
-		color: lighten($color-text, 50%)
+		color: $color-text-dark-hint
 
 		list-style-type: none
 
 		font-size: .9em
 
 		a
-			color: lighten($color-text, 50%)
+			color: $color-text-light-primary
 
 			&:hover
-				color: lighten($color-text, 60%)
+				color: $color-text-light
 
 			li
 				margin: 5px
@@ -141,7 +141,7 @@ $list-node-children-item-width: 148px
 
 	#project-loading
 		padding: 8px
-		color: lighten($color-text, 30%)
+		color: $color-text-light-secondary
 		left: 8px
 		top: 1px
 		display: none
@@ -151,11 +151,11 @@ $list-node-children-item-width: 148px
 .project_nav-expand-btn
 	display: none // Toggles via project-split-bar.js
 	cursor: pointer
-	color: lighten($color-text, 20%)
+	color: $color-text-light-hint
 	z-index: 1
 
 	&:hover
-		color: lighten($color-text, 30%)
+		color: $color-text-light-secondary
 
 	i
 		font-size: 1.3em
@@ -261,15 +261,15 @@ section.node-details-container
 				float: left
 
 				&.date
-					color: lighten($color-text, 30%)
+					color: $color-text-dark-primary
 
 				&.status
 					margin-right: 10px
 					font-size: .9em
 					text-transform: capitalize
-					color: lighten($color-text, 30%)
+					color: $color-text-dark-primary
 					padding: 5px 15px
-					border: thin solid lighten($color-text, 40%)
+					border: thin solid $color-text-dark-hint
 					border-radius: 3px
 					cursor: default
 
@@ -278,7 +278,7 @@ section.node-details-container
 					padding: 0 5px 0 15px
 					cursor: default
 					font-weight: 400
-					color: lighten($color-text, 30%)
+					color: $color-text-dark-hint
 
 				/* Download button */
 				&.download
@@ -286,19 +286,18 @@ section.node-details-container
 					// margin-left: auto
 					padding: 0 0 0 15px
 
-					&.video
+					&.video, &.image
 						margin-left: auto
 
 					/* Actual button */
 					button
-						color: lighten($color-text, 10%)
-						border: thin solid darken($color-background, 10%)
+						color: $color-text-dark-primary
+						border: thin solid $color-text-dark-secondary
 						border-radius: 999em
 						padding:
 							left: 20px
 							right: 15px
 
-						// text-transform: uppercase
 						font-size: .9em
 
 						&:hover
@@ -321,9 +320,6 @@ section.node-details-container
 							position: relative
 							left: -5px
 
-					&.image
-						button
-							padding-left: 15px
 
 					/* Download dropdown options */
 					ul.dropdown-menu
@@ -359,7 +355,7 @@ section.node-details-container
 								span
 									&.length
 										float: left
-										color: lighten($color-text, 40%)
+										color: $color-text-dark-hint
 										padding-right: 15px
 									&.format
 										text-transform: uppercase
@@ -381,7 +377,7 @@ section.node-children
 	float: left
 	margin: 10px 20px 10px 0
 	border-radius: 3px
-	color: $color-text
+	color: $color-text-dark
 	background-color: darken(white, 5%)
 	box-shadow: 2px 2px 0 rgba(darken($color-background, 60%), .1)
 	width: $list-node-children-item-width
@@ -417,7 +413,7 @@ section.node-children
 
 	& .list-node-children-item-icon
 		padding-right: 3px
-		color: lighten($color-text, 30%)
+		color: $color-text-dark-hint
 
 
 

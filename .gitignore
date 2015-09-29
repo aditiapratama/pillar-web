@@ -18,9 +18,12 @@ pillar-web/application/templates/layout.html
 pillar-web/application/templates/join.html
 pillar-web/application/templates/homepage.html
 pillar-web/application/templates/project/
+
 pillar-web/application/templates/asset/file/
 pillar-web/application/templates/asset/image/
 pillar-web/application/templates/asset/video/
+pillar-web/application/templates/asset/_comments.html
+
 pillar-web/application/templates/group/
 pillar-web/application/templates/blog/
 pillar-web/application/templates/nodes/edit.html
