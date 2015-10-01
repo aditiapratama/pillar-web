@@ -1,10 +1,29 @@
 
 #comments-container
-	h3 Comments (14)
 
-	#comments-list
+	section#comments-header
+
+		h3 Comments
+			// XXX use actual comments count
+			span (14)
+
+	section#comments-list
+
+		.comment-reply-container
+			.comment-reply-avatar
+				// XXX Use actual avatar
+				img(src="http://placehold.it/40x40")
+
+			.comment-reply-form
+				.comment-reply-field
+					textarea
+				.comment-reply-submit
+					button.btn.btn-outline(type="button") Post Comment
+
+		| {# Each individual comment #}
 		| {% for c in range(0, 5) %}
 
+		// placeholder numbers for style
 		| {% set mod = (loop.index == 2) %}
 		| {% set reply = (loop.index > 3) %}
 
@@ -12,6 +31,7 @@
 
 			.comment-header
 				.comment-avatar
+					// XXX Use actual avatar
 					img(src="http://placehold.it/40x40")
 
 				.comment-author

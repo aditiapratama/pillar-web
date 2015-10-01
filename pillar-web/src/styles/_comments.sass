@@ -1,19 +1,19 @@
 #comments-container
 	padding: 0 25px
 
-	/* Each comment on the list*/
-	.comment-container
-		display: flex
-		flex-direction: column
+	#comments-header
+		h3
+			span
+				padding-left: 5px
+				font-size: .9em
+				color: $color-text-dark-secondary
 
-		padding: 25px 0
-
-		/* Header containing author, time, and badges if any*/
-		.comment-header
+	#comments-list
+		.comment-reply-container
 			display: flex
-			align-items: center
+			padding: 25px 0
 
-			.comment-avatar
+			.comment-reply-avatar
 				padding-right: 10px
 
 				img
@@ -21,100 +21,138 @@
 					width: 20px
 					height: 20px
 
-			.comment-author
-				position: relative
-				top: 1px
-				color: $color-text-dark
-				font:
-					weight: 600
+			.comment-reply-form
+				width: 100%
 
-			.comment-time
-				padding-left: 10px
-				margin-left: 10px
-				color: $color-text-dark-hint
+				.comment-reply-field
+					textarea
+						width: 100%
 
-				&:before
-					content: '·'
-					position: relative
-					left: -10px
-					font-weight: 600
+				.comment-reply-submit
+					text-align: right
+					button
+						margin-top: 5px
+						+button-rounded
 
-		/* The actual comment body */
-		.comment-content
-			padding: 10px 0 0 30px
-			color: $color-text-dark-primary
+						color: $color-success
+						border-color: $color-success
 
-		/* Rating, and actions such as reply */
-		.comment-meta
+
+
+		/* Each comment on the list*/
+		.comment-container
 			display: flex
-			align-items: center
-			padding: 5px 0 0 30px
-			color: $color-text-dark-secondary
+			flex-direction: column
 
-			/* Small container for rating buttons and value */
-			.comment-rating
+			padding: 25px 0
+
+			/* Header containing author, time, and badges if any*/
+			.comment-header
 				display: flex
 				align-items: center
 
-				.comment-rating-value
-					padding-right: 15px
+				.comment-avatar
+					padding-right: 10px
 
-				.comment-rating-up,
-				.comment-rating-down
-					font-family: 'FontAwesome'
-					height: 25px
-					width: 25px
-					cursor: pointer
+					img
+						border-radius: 3px
+						width: 20px
+						height: 20px
 
-					&:hover
-						color: $color-text-dark
-
-				.comment-rating-up:before
-					content: '\f106'
-
-				.comment-rating-down:before
-					content: '\f107'
-
-			/* Reply button */
-			.comment-reply
-				padding-left: 10px
-				color: $color-text-dark-hint
-
-				&:before
-					content: '·'
+				.comment-author
 					position: relative
-					left: -10px
-					font-weight: 600
+					top: 1px
+					color: $color-text-dark
+					font:
+						weight: 600
 
-		/* Mouse over the comment container */
-		&:hover
-			// .comment-reply
-			// 	visibility: visible
+				.comment-time
+					padding-left: 10px
+					margin-left: 10px
+					color: $color-text-dark-hint
 
-		.comment-badge
-			display: inline-block
-			border: 1px solid $color-text-dark-hint
-			color: $color-text-dark-hint
-			padding: 1px 4px
-			margin: 0 5px 0 15px
-			border-radius: 3px
-			font:
-				size: .7em
-				weight: 400
-			text-transform: uppercase
+					&:before
+						content: '·'
+						position: relative
+						left: -10px
+						font-weight: 600
 
-			&.badge-team
-				border-color: $color-info
-				color: $color-info
+			/* The actual comment body */
+			.comment-content
+				padding: 10px 0 0 30px
+				color: $color-text-dark-primary
 
-		&.is-reply
-			margin-left: 30px
-			padding:
-				top: 0
-				left: 15px
-			border-left: 2px solid lighten($color-text-dark-hint, 20%)
+			/* Rating, and actions such as reply */
+			.comment-meta
+				display: flex
+				align-items: center
+				padding: 5px 0 0 30px
+				color: $color-text-dark-secondary
+
+				/* Small container for rating buttons and value */
+				.comment-rating
+					display: flex
+					align-items: center
+
+					.comment-rating-value
+						padding-right: 15px
+
+					.comment-rating-up,
+					.comment-rating-down
+						font-family: 'FontAwesome'
+						height: 25px
+						width: 25px
+						cursor: pointer
+
+						&:hover
+							color: $color-text-dark
+
+					.comment-rating-up:before
+						content: '\f106'
+
+					.comment-rating-down:before
+						content: '\f107'
+
+				/* Reply button */
+				.comment-reply
+					padding-left: 10px
+					color: $color-text-dark-hint
+
+					&:before
+						content: '·'
+						position: relative
+						left: -10px
+						font-weight: 600
+
+			/* Mouse over the comment container */
+			&:hover
+				// .comment-reply
+				// 	visibility: visible
+
+			.comment-badge
+				display: inline-block
+				border: 1px solid $color-text-dark-hint
+				color: $color-text-dark-hint
+				padding: 1px 4px
+				margin: 0 5px 0 15px
+				border-radius: 3px
+				font:
+					size: .7em
+					weight: 400
+				text-transform: uppercase
+
+				&.badge-team
+					border-color: $color-info
+					color: $color-info
+
+			&.is-reply
+				margin-left: 30px
+				padding:
+					top: 0
+					left: 15px
+				border-left: 2px solid lighten($color-text-dark-hint, 20%)
 
 
-		&.is-team
-			.comment-author
-				color: $color-info
+			&.is-team
+				.comment-author
+					color: $color-info
