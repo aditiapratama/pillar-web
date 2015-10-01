@@ -1,7 +1,7 @@
 $project_nav-width: 280px
 $project_header-height: 40px
 
-$list-node-children-item-width: 148px
+$list-node-children-item-width: 160px
 
 /* Child of container, contains project-flex */
 #project_container
@@ -200,7 +200,7 @@ $list-node-children-item-width: 148px
 	position: absolute
 	width: 16px
 	margin-left: -8px
-	top: $project_header-height
+	top: 0 // $project_header-height
 	bottom: 0
 	z-index: 10
 	cursor: w-resize
@@ -234,16 +234,16 @@ section.node-details-container
 	.node-details-header
 		.node-title
 			margin: 0
-			padding: 15px 25px 5px 25px
+			padding: 15px 20px 5px 20px
 			+project-node-title
 
 	.node-details-description
-		padding: 5px 25px 20px 25px
+		padding: 5px 20px 20px 20px
 		font-weight: 300
 
 	.node-details-meta
 		font-weight: 300
-		padding: 15px 25px
+		padding: 15px 20px
 		border-top: thin solid $color-background
 
 		ul.node-details-meta-list
@@ -370,12 +370,14 @@ section.node-details-container
 
 section.node-children
 	&.group
-		padding: 15px 25px
+		padding: 15px 0 15px 20px
+
+		+clearfix
 
 
 .list-node-children-item
 	float: left
-	margin: 10px 20px 10px 0
+	margin: 10px 15px 10px 0
 	border-radius: 3px
 	color: $color-text-dark
 	background-color: darken(white, 5%)
@@ -383,37 +385,61 @@ section.node-children
 	width: $list-node-children-item-width
 	overflow: hidden
 	text-overflow: ellipsis
+	transition: opacity .1s ease-in-out
 
 	&:hover
 		opacity: .9
 		color: darken($color-primary, 20%)
 
-	& .list-node-children-item-picture
-		display: block
+	& .list-node-children-item-thumbnail
+		display: flex
+		align-items: center
+		justify-content: center
+
 		width: $list-node-children-item-width
 		height: $list-node-children-item-width
-		background-color: darken(white, 12%)
+		background-color: $color-info
 		position: relative
-		text-align: center
 
-		& .list-node-children-item-folder
-			position: absolute
-			top: 50%
-			transform: translateY(-50%)
-			font-size: 6em
-			color: darken(white, 25%)
+		img
 			width: $list-node-children-item-width
 
-	& .list-node-children-item-name
-		display: inline-block
-		padding: 5px 3px 0px 10px
-		font-size: .9em
-		+text-overflow-ellipsis
-		width: $list-node-children-item-width
+		& .list-node-children-item-thumbnail-icon
+			position: absolute
+			top: 50%
+			left: 50%
+			transform: translate(-50%, -50%)
+			font-size: 4em
+			color: $color-text-light-hint
+			// width: $list-node-children-item-width
 
-	& .list-node-children-item-icon
-		padding-right: 3px
-		color: $color-text-dark-hint
+	& .list-node-children-item-name
+		z-index: 1
+		position: relative
+
+		display: flex
+		align-items: center
+		background-color: darken(white, 5%)
+
+		padding:
+			top: 5px
+			bottom: 5px
+		font-size: .9em
+		width: $list-node-children-item-width
+		max-width: $list-node-children-item-width
+
+		i
+			color: $color-text-dark-secondary
+			padding:
+				left: 10px
+				right: 3px
+			font-size: .9em
+
+		span
+			padding:
+				left: 5px
+				right: 3px
+			+text-overflow-ellipsis
 
 
 
@@ -524,10 +550,6 @@ section.node-children
 		color: lighten($color-text, 10%)
 
 		margin: 15px 0
-
-		// XXX - just to test
-		// max-height: 300px
-		// overflow: hidden
 
 		a.item-header
 			position: relative

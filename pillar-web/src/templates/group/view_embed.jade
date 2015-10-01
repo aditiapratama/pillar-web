@@ -21,32 +21,40 @@
 
 		a(href="#", data-node_id="{{ child._id }}", title="{{ child.name }}", class="item_icon")
 			.list-node-children-item
-				.list-node-children-item-picture
+				.list-node-children-item-thumbnail
+
 					| {% if child.picture %}
-					img.list-node-children-item-picture(
+					img(
 						src="{{ child.picture.thumbnail('b')}} ")
-					| {% else %}
-					.list-node-children-item-folder
-						i.fa.fa-folder-o
 					| {% endif %}
+
+					.list-node-children-item-thumbnail-icon
+						| {% if child.properties.content_type %}
+
+						| {% if child.properties.content_type == 'video' %}
+						i.fa.fa-play-circle
+						| {% endif %}
+
+						| {% else %}
+						i.fa.fa-folder-o
+						| {% endif %}
 
 				.list-node-children-item-name
-					| {% if child.picture %}
+
+					| {% if child.properties.content_type == 'video' %}
+					i.fa.fa-film
+					| {% elif child.properties.content_type == 'image' %}
+					i.fa.fa-picture-o
+					| {% elif child.properties.content_type == 'file' %}
+					i.fa.fa-file-zip-o
+					| {% else %}
 					i.fa.fa-folder-o
 					| {% endif %}
-					| {{ child.name }}
 
-		section.hidden
-			| {{ child.to_dict() }}
+					span {{ child.name }}
 
 		| 	{% endfor %}
 		| {% endif %}
-
-
-
-	section.debug.hidden
-		| {{ node.to_dict() }}
-
 
 	script.
 		$('a.item_icon').click(function(e){
