@@ -10,7 +10,7 @@
 			#node_index-header
 				| {% if user %}
 				#node_index-user-avatar
-					img(src="http://placehold.it/90x90")
+					img(src="{{ user.gravatar }}")
 				#node_index-user-info
 					.node_index-user-name {{user.name}}
 					.node_index-user-description {{user.description}}

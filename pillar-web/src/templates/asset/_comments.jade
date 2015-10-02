@@ -1,37 +1,37 @@
 
 #comments-container
 
-	section#comments-header
-
-		h3 Comments
-			// XXX use actual comments count
-			span (14)
-
 	section#comments-list
 
 		.comment-reply-container
 
-			.comment-header
-				.comment-avatar
-					// XXX Use actual avatar
-					img(src="http://placehold.it/40x40")
-
-				.comment-author
-					| Commenting as
-					span.author-name Dude name
-
-				.comment-rules
-					a(href="https://guides.github.com/features/mastering-markdown/") Markdown supported
+			.comment-reply-avatar
+				// XXX Use actual avatar
+				img(src="http://placehold.it/40x40")
 
 			.comment-reply-form
-
 				.comment-reply-field
 					textarea(placeholder="Join the conversation...")#comment_field
-					.comment-reply-preview.
-						ESA!! :D
+					.comment-reply-preview
 
-				.comment-reply-submit
-					button.btn.btn-outline(type="button") Post Comment
+				.comment-reply-meta
+					.comment-details
+						.comment-rules
+							a(href="https://guides.github.com/features/mastering-markdown/") markdown supported
+
+						.comment-author
+							| commenting as
+							span.author-name Dude name
+
+					button.comment-submit.btn.btn-outline(type="button") Post Comment
+
+
+		section#comments-header
+
+			h3 Comments
+				// XXX use actual comments count
+				span (14)
+
 
 		| {# Each individual comment #}
 		| {% for c in range(0, 5) %}
@@ -77,10 +77,19 @@ script.
 	var convert = new Markdown.getSanitizingConverter().makeHtml;
 
 	$(function() {
-		var $textarea = $('textarea'),
+		var $textarea = $('.comment-reply-field textarea'),
+				$container = $('.comment-reply-form'),
 				$preview = $('.comment-reply-preview');
+
 		$textarea.keyup(function() {
 			$preview.html(convert($textarea.val()));
+
+			if ($textarea.val()) {
+				$container.addClass('filled');
+			} else {
+				$container.removeClass('filled');
+			};
+
 		}).trigger('keyup');
 	});
 

@@ -1,3 +1,5 @@
+import hashlib, urllib
+
 from math import ceil
 from flask import url_for
 from flask import request
@@ -72,6 +74,13 @@ def attach_project_pictures(project, api):
             project.properties.picture_header, api=api)
 
 
+def gravatar(email, size=64, consider_settings=True):
+    parameters = {'s':str(size), 'd':'mm'}
+    return "https://www.gravatar.com/avatar/" + \
+        hashlib.md5(str(email)).hexdigest() + \
+        "?" + urllib.urlencode(parameters)
+
+
 class UserProxy(object):
     """This class looks up a username and matches it either to an organization
     or to than an actual user and returns the basic information.
@@ -83,11 +92,13 @@ class UserProxy(object):
         user = Organization.find_first({
             'where': '{"url" : "%s"}' % (name),
             }, api=self.api)
+
         if user:
             self.is_organization = True
             self.name = user.name
             self.url = user.url
             self.description = user.description
+            self.gravatar = gravatar(user.email)
         else:
             # Check if user exists
             user = User.find_first({
@@ -99,6 +110,8 @@ class UserProxy(object):
                 self.url = user.username
             else: return abort(404)
         self._id = user._id
+
+
 
     def projects(self):
         """Get list of project for the user"""
