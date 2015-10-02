@@ -9,6 +9,7 @@ var gulp          = require('gulp'),
     rename        = require('gulp-rename'),
     livereload    = require('gulp-livereload');
 
+
 /* CSS */
 gulp.task('styles', function() {
     gulp.src('pillar-web/src/styles/**/*.sass')
@@ -23,6 +24,7 @@ gulp.task('styles', function() {
         .pipe(livereload());
 });
 
+
 /* Templates - Jade */
 gulp.task('templates', function() {
     gulp.src('pillar-web/src/templates/**/*.jade')
@@ -32,6 +34,7 @@ gulp.task('templates', function() {
         .pipe(gulp.dest('pillar-web/application/templates/'))
         .pipe(livereload());
 });
+
 
 /* Individual Uglified Scripts */
 gulp.task('scripts', function() {
@@ -44,9 +47,10 @@ gulp.task('scripts', function() {
         .pipe(livereload());
 });
 
+
 /* Collection of scripts in src/scripts/tutti/ to merge into tutti.min.js */
-/* Since it's always loaded, it's for functions that we want site-wide */
-gulp.task('scripts_concat', function() {
+/* Since it's always loaded, it's only for functions that we want site-wide */
+gulp.task('scripts_concat_tutti', function() {
     gulp.src('pillar-web/src/scripts/tutti/**/*.js')
         .pipe(sourcemaps.init())
         .pipe(concat("tutti.min.js"))
@@ -56,6 +60,16 @@ gulp.task('scripts_concat', function() {
         .pipe(livereload());
 });
 
+gulp.task('scripts_concat_markdown', function() {
+    gulp.src('pillar-web/src/scripts/markdown/*.js')
+        .pipe(sourcemaps.init())
+        .pipe(concat("markdown.min.js"))
+        .pipe(uglify())
+        .pipe(gulp.dest('pillar-web/application/static/assets/js/'))
+        .pipe(livereload());
+});
+
+
 // While developing, run 'gulp watch'
 gulp.task('watch',function() {
     livereload.listen();
@@ -63,8 +77,10 @@ gulp.task('watch',function() {
     gulp.watch('pillar-web/src/styles/**/*.sass',['styles']);
     gulp.watch('pillar-web/src/templates/**/*.jade',['templates']);
     gulp.watch('pillar-web/src/scripts/*.js',['scripts']);
-    gulp.watch('pillar-web/src/scripts/tutti/**/*.js',['scripts_concat']);
+    gulp.watch('pillar-web/src/scripts/tutti/**/*.js',['scripts_concat_tutti']);
+    gulp.watch('pillar-web/src/scripts/markdown/**/*.js',['scripts_concat_markdown']);
 });
 
+
 // Run 'gulp' to build everything at once
-gulp.task('default', ['styles', 'templates', 'scripts', 'scripts_concat']);
+gulp.task('default', ['styles', 'templates', 'scripts', 'scripts_concat_tutti', 'scripts_concat_markdown']);

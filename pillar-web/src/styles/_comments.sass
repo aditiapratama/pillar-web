@@ -9,38 +9,9 @@
 				color: $color-text-dark-secondary
 
 	#comments-list
-		.comment-reply-container
-			display: flex
-			padding: 25px 0
-
-			.comment-reply-avatar
-				padding-right: 10px
-
-				img
-					border-radius: 3px
-					width: 20px
-					height: 20px
-
-			.comment-reply-form
-				width: 100%
-
-				.comment-reply-field
-					textarea
-						width: 100%
-
-				.comment-reply-submit
-					text-align: right
-					button
-						margin-top: 5px
-						+button-rounded
-
-						color: $color-success
-						border-color: $color-success
-
-
-
 		/* Each comment on the list*/
-		.comment-container
+		.comment-container,
+		.comment-reply-container
 			display: flex
 			flex-direction: column
 
@@ -78,9 +49,13 @@
 						font-weight: 600
 
 			/* The actual comment body */
-			.comment-content
+			.comment-content,
+			.comment-reply-form
 				padding: 10px 0 0 30px
 				color: $color-text-dark-primary
+
+				h1, h2, h3, h4, h5, h6
+					font-weight: 500
 
 			/* Rating, and actions such as reply */
 			.comment-meta
@@ -156,3 +131,69 @@
 			&.is-team
 				.comment-author
 					color: $color-info
+
+
+		.comment-reply-container
+			.comment-header
+				.comment-author
+					color: $color-text-dark
+					font:
+						weight: 300
+
+					.author-name
+						padding-left: 3px
+						font:
+							weight: 600
+
+				.comment-rules
+					margin-left: auto
+					font-size: .9em
+
+			.comment-reply-form
+				.comment-reply-field
+					position: relative
+					textarea
+						width: 100%
+						border: 1px solid darken($color-background, 10%)
+						border-radius: 3px
+
+					textarea
+						margin: 5px auto
+						padding: 10px
+						color: $color-text-dark-primary
+
+					.comment-reply-preview
+						margin: 0 auto 5px auto
+						padding: 5px 10px 10px 10px
+						color: $color-text-dark-secondary
+						transition: all 150ms ease-in-out
+
+						&:after
+							content: 'Live Preview'
+							position: absolute
+							bottom: -40px
+							font-size: .9em
+							color: $color-text-dark-hint
+							transition: color 150ms ease-in-out
+
+					.comment-reply-preview:empty
+						color: transparent
+						margin: 0 auto
+						padding: 0 10px
+
+						&:after
+							content: ''
+							color: transparent
+
+				.comment-reply-submit
+					text-align: right
+					button
+						margin-top: 5px
+						+button-rounded
+
+						color: $color-success
+						border-color: $color-success
+
+
+
+// @import plugins/_ckeditor

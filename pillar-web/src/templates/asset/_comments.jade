@@ -10,13 +10,26 @@
 	section#comments-list
 
 		.comment-reply-container
-			.comment-reply-avatar
-				// XXX Use actual avatar
-				img(src="http://placehold.it/40x40")
+
+			.comment-header
+				.comment-avatar
+					// XXX Use actual avatar
+					img(src="http://placehold.it/40x40")
+
+				.comment-author
+					| Commenting as
+					span.author-name Dude name
+
+				.comment-rules
+					a(href="https://guides.github.com/features/mastering-markdown/") Markdown Supported
 
 			.comment-reply-form
+
 				.comment-reply-field
-					textarea
+					textarea(placeholder="Join the conversation...")#comment_field
+					.comment-reply-preview.
+						ESA!! :D
+
 				.comment-reply-submit
 					button.btn.btn-outline(type="button") Post Comment
 
@@ -43,8 +56,7 @@
 
 				.comment-time {{ 13 * loop.index }} mins ago
 
-			.comment-content.
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris consequat pellentesque consectetur. Aenean urna lacus, sagittis sit amet convallis ac, convallis id tellus. Morbi porta aliquet vulputate. Donec lacinia nec turpis quis rhoncus. Cras viverra viverra turpis, vel vulputate augue luctus id. Suspendisse cursus pellentesque scelerisque. Fusce vel velit eu orci convallis vestibulum.
+			.comment-content # AWESOME
 
 			.comment-meta
 				.comment-rating
@@ -56,3 +68,25 @@
 				.comment-reply reply
 
 		| {% endfor %}
+
+| {% block footer_scripts %}
+script(type="text/javascript", src="{{ url_for('static', filename='assets/js/markdown.min.js') }}")
+script(type="text/javascript", src="//cdn.rawgit.com/showdownjs/showdown/1.2.3/dist/showdown.min.js")
+
+script.
+	var convert = new Markdown.getSanitizingConverter().makeHtml;
+
+	$(function() {
+		var $textarea = $('textarea'),
+				$preview = $('.comment-reply-preview');
+		$textarea.keyup(function() {
+			$preview.html(convert($textarea.val()));
+		}).trigger('keyup');
+	});
+
+	/* Convert markdown for each comment */
+	$('.comment-content').each(function(i){
+		$(this).html(convert($(this).text()));
+	});
+
+| {% endblock %}
