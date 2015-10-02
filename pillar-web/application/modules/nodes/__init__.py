@@ -22,6 +22,7 @@ from datetime import datetime
 from application.modules.nodes.forms import get_node_form
 from application.modules.nodes.forms import get_comment_form
 from application.modules.nodes.forms import process_node_form
+from application.modules.nodes.custom.storage import StorageNode
 from application.helpers import Pagination
 
 from application import app
@@ -201,7 +202,7 @@ def jstree_build_from_node(node):
         node_dict = {
             'id': node['id'],
             'text': node['text'],
-            'type': 'chapter',
+            'type': node['type'],
             'children': True
         }
         if len(open_nodes) > 1:
@@ -241,6 +242,8 @@ def view(node_id):
     except ResourceNotFound:
         return abort(404)
 
+    node_type_name = node.node_type.name
+
     # JsTree functionality.
     # This return a lightweight version of the node, to be used by JsTree in the
     # frontend. We have two possible cases:
@@ -251,16 +254,25 @@ def view(node_id):
 
     if request.args.get('format') and request.args.get('format') == 'jstree':
         if request.args.get('children') == '1':
-            return jsonify(jstree_build_children(node))
+            if node_type_name == 'storage':
+                storage = StorageNode(node)
+                # Check if we specify a path within the storage
+                path = request.args.get('path')
+                # Generate the storage listing
+                listing = storage.browse(path)
+                # Inject the current node id in the response, so that JsTree can
+                # expose the storage_node property and use it for further queries
+                listing['storage_node'] = node._id
+                if 'children' in listing:
+                    for child in listing['children']:
+                        child['storage_node'] = node._id
+                return jsonify(listing)
+            else:
+                return jsonify(jstree_build_children(node))
         else:
             return jsonify(items=jstree_build_from_node(node))
     # Continue to process the node (for HTML, HTML embeded and JSON responses)
 
-    # Get node type
-    # node_type = node.node_type #NodeType.find(node['node_type'], api=api)
-    # template_path = node_type['name']
-
-    node_type_name = node.node_type.name
     # Set the default name of the template path based on the node name
     template_path = node_type_name
 
@@ -303,6 +315,12 @@ def view(node_id):
         if node.properties.picture_header:
             picture_header = File.find(node.properties.picture_header, api=api)
             node.properties.picture_header = picture_header
+    elif node_type_name == 'storage':
+        st = StorageNode(node)
+        path = request.args.get('path')
+        listing = storage.browse(path)
+        return ""
+
     # user_id = current_user.objectid
 
     # Get comment type

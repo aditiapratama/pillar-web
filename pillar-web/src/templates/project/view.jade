@@ -100,42 +100,37 @@ script(type="text/javascript").
 		containerResizeY($(window).height());
 	});
 
-	function displayNode(nodeId) {
-		// Remove the 'n_' suffix from the id
-		if (nodeId.substring(0, 2) == 'n_') {
-			nodeId = nodeId.substr(2);
-		}
-
-		//console.log(nodeId);
-		var url = '/nodes/' + nodeId + '/view?embed=1'
+	function loadNodeContent(url, nodeId) {
 		$.get(url, function(dataHtml) {
 			// Update the DOM injecting the generate HTML into the page
 			$('#project_context').html(dataHtml);
-			window.location.replace('#' + nodeId);
-			$('#item_edit').attr('data-node_id', nodeId);
-			$('#item_add').attr('data-parent_node_id', nodeId);
+			// If a nodeId is specified, update the interface for editing and deletion
+			if (typeof(nodeId) != 'undefined') {
+				$('#item_edit').attr('data-node_id', nodeId);
+				window.location.replace('#' + nodeId);
+				$('#item_add').attr('data-parent_node_id', nodeId);
+			};
+
 		})
 		.fail(function(dataResponse) {
 			$('#project_context').html($('<iframe id="server_error"/>'));
 			$('#server_error').attr('src', url);
 		});
+	}
 
-		/* Unused for now
-		var nodeType = data.node.node_type.name;
-		switch (nodeType) {
-			case 'group':
-				console.log('preparing for group');
-				break;
-			case 'asset_video':
-				console.log('asset_video');
-				break;
-			case 'project':
-				 console.log('a');
-				 break;
-			default:
-				console.log('Error')
+	function displayStorage(node) {
+		var url = '/nodes/' + node.original.storage_node + '/view?embed=1&path=' + node.original.path;
+		loadNodeContent(url);
+	}
+
+	function displayNode(nodeId) {
+		// Remove the 'n_' suffix from the id
+		if (nodeId.substring(0, 2) == 'n_') {
+			nodeId = nodeId.substr(2);
 		}
-		*/
+		//console.log(nodeId);
+		var url = '/nodes/' + nodeId + '/view?embed=1'
+		loadNodeContent(url);
 	}
 
 	function editNode(nodeId) {
@@ -196,15 +191,11 @@ script(type="text/javascript").
 										});
 
 								} else { //normal node
-										//console.log((obj.original.type);
-										if (obj.original.type == 'filesystem_node') {
-												$.getJSON(  $SCRIPT_ROOT +
-														'/filesystem/' +
-														{{node.id}} +
-														'/' +
-														obj.original.path, function( jsonObject ) {
-															callback.call(this, jsonObject.children);
-												});
+										if (obj.original.type == 'group_storage') {
+											nodeId = obj.original.storage_node;
+											$.getJSON('/nodes/' + nodeId + '/view?format=jstree&children=1&path=' + obj.original.path, function(jsonObject) {
+												callback.call(this, jsonObject.children);
+											});
 										} else {
 											// Remove the 'n_' suffix from the id
 											nodeId = obj.id.substring(2);
@@ -212,10 +203,6 @@ script(type="text/javascript").
 													callback.call(this, jsonObject.children);
 													$('.waiting').text('averrr');
 											});
-												// $.getJSON(  $SCRIPT_ROOT + "/product_tree/" + obj.id.substring(1), function( jsonObject ) {
-												//     //console.log((jsonObject.type);
-												//     callback.call(this, jsonObject.children);
-												// });
 										}
 								}
 						}
@@ -224,6 +211,7 @@ script(type="text/javascript").
 						"#": {"valid_children": ["collection"]},
 						"chapter" : {"icon": "fa fa-folder-o"},
 						"group" : {"icon": "fa fa-folder-o"},
+						"group_storage" : {"icon": "fa fa-folder-o"},
 						"filesystem_node" : {"icon": "fa fa-folder-o"},
 						"file" : {"icon": "fa fa-file-archive-o", "max_children": 0},
 						"filesystem_file" : {"icon": "fa fa-file-archive-o", "max_children": 0},
@@ -238,7 +226,11 @@ script(type="text/javascript").
 
 
 		$('#project_tree').on("select_node.jstree", function (e, data) {
-			displayNode(data.node.id);
+			if (typeof(data.node.original.path) === 'undefined') {
+				displayNode(data.node.id);
+			} else {
+				displayStorage(data.node);
+			}
 			jstreeAPI.toggle_node(data.node);
 		});
 
