@@ -21,7 +21,7 @@
 					span.author-name Dude name
 
 				.comment-rules
-					a(href="https://guides.github.com/features/mastering-markdown/") Markdown Supported
+					a(href="https://guides.github.com/features/mastering-markdown/") Markdown supported
 
 			.comment-reply-form
 
@@ -56,7 +56,7 @@
 
 				.comment-time {{ 13 * loop.index }} mins ago
 
-			.comment-content # AWESOME
+			.comment-content # AWSOM
 
 			.comment-meta
 				.comment-rating
@@ -69,7 +69,7 @@
 
 		| {% endfor %}
 
-| {% block footer_scripts %}
+| {% block comment_scripts %}
 script(type="text/javascript", src="{{ url_for('static', filename='assets/js/markdown.min.js') }}")
 script(type="text/javascript", src="//cdn.rawgit.com/showdownjs/showdown/1.2.3/dist/showdown.min.js")
 

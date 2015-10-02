@@ -48,14 +48,20 @@
 						left: -10px
 						font-weight: 600
 
-			/* The actual comment body */
+			/* The actual comment body. */
+			/* Here we style both the preview comment and posted comments */
 			.comment-content,
 			.comment-reply-form
 				padding: 10px 0 0 30px
 				color: $color-text-dark-primary
+				line-height: 1.5em
 
 				h1, h2, h3, h4, h5, h6
 					font-weight: 500
+
+				blockquote
+					font-size: 1em
+					color: $color-text-dark-secondary
 
 			/* Rating, and actions such as reply */
 			.comment-meta
@@ -98,11 +104,6 @@
 						position: relative
 						left: -10px
 						font-weight: 600
-
-			/* Mouse over the comment container */
-			&:hover
-				// .comment-reply
-				// 	visibility: visible
 
 			.comment-badge
 				display: inline-block
@@ -152,20 +153,31 @@
 			.comment-reply-form
 				.comment-reply-field
 					position: relative
-					textarea
-						width: 100%
-						border: 1px solid darken($color-background, 10%)
-						border-radius: 3px
 
 					textarea
+						width: 100%
+
+						line-height: 1.5em
+						border: 1px solid darken($color-background, 10%)
+						border-radius: 3px
 						margin: 5px auto
 						padding: 10px
-						color: $color-text-dark-primary
+						color: $color-text-dark
+
+						transition: all 300ms ease-in-out
+
+						&:empty
+							height: 45px
+
+						&:focus
+							height: 120px
+							border: 1px solid $color-success
+							outline: none
 
 					.comment-reply-preview
 						margin: 0 auto 5px auto
 						padding: 5px 10px 10px 10px
-						color: $color-text-dark-secondary
+						color: $color-text-dark-primary
 						transition: all 150ms ease-in-out
 
 						&:after
