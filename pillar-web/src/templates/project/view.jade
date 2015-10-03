@@ -118,8 +118,8 @@ script(type="text/javascript").
 		});
 	}
 
-	function displayStorage(node) {
-		var url = '/nodes/' + node.original.storage_node + '/view?embed=1&path=' + node.original.path;
+	function displayStorage(storageNodeId, path) {
+		var url = '/nodes/' + storageNodeId + '/view?embed=1&path=' + path;
 		loadNodeContent(url);
 	}
 
@@ -229,7 +229,7 @@ script(type="text/javascript").
 			if (typeof(data.node.original.path) === 'undefined') {
 				displayNode(data.node.id);
 			} else {
-				displayStorage(data.node);
+				displayStorage(data.node.original.storage_node, data.node.original.path);
 			}
 			jstreeAPI.toggle_node(data.node);
 		});

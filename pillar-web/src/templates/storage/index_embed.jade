@@ -1,0 +1,63 @@
+| {% block body %}
+
+#node-container
+	//- a(href="{{node.picture}}")
+	//- 	section.node-preview.file
+	//- 		img(src="{{node.picture}}")
+
+	section.node-details-container
+
+		.node-details-header
+			.node-title
+				| {{node.name}}
+
+		//- .node-details-description
+		//- 	| {{node.description|safe}}
+
+	section.node-children.group
+
+		| {% if node.children %}
+		| 	{% for child in node.children %}
+
+		a(href="#", data-node_id="{{ node._id }}" data-path="{{ child['path'] }}", title="{{ child['name'] }}", class="item_icon")
+			.list-node-children-item
+				.list-node-children-item-thumbnail
+
+					//- | {% if child.picture %}
+					//- img(
+					//- 	src="{{ child.picture.thumbnail('b')}} ")
+					//- | {% endif %}
+
+					.list-node-children-item-thumbnail-icon
+						| {% if child['content_type'] == 'video' %}
+						i.fa.fa-film
+						| {% elif child['content_type'] == 'image' %}
+						i.fa.fa-picture-o
+						| {% elif child['content_type'] == 'file' %}
+						i.fa.fa-file-zip-o
+						| {% elif child['content_type'] == 'binary' %}
+						i.fa.fa-file-zip-o
+						| {% else %}
+						i.fa.fa-folder-o
+						| {% endif %}
+
+				.list-node-children-item-name
+
+					span {{ child['name'] }}
+
+		| 	{% endfor %}
+		| {% endif %}
+
+	script.
+		$('a.item_icon').click(function(e){
+			// When clicking on a node preview, we load its content
+			e.preventDefault;
+			var nodeId = $(this).data('node_id');
+			var path = $(this).data('path');
+			displayStorage(nodeId, path);
+			// Update tree with current selection
+			//$('#project_tree').jstree('select_node', 'n_' + nodeId);
+		});
+
+| {% endblock %}
+

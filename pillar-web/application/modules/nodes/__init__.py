@@ -275,6 +275,9 @@ def view(node_id):
 
     # Set the default name of the template path based on the node name
     template_path = node_type_name
+    # Set the default action for a template. By default is view and we override
+    # it only if we are working storage nodes, where an 'index' is also possible
+    template_action = 'view'
 
     # XXX Code to detect a node of type asset, and aggregate file data
     if node_type_name == 'asset':
@@ -316,28 +319,23 @@ def view(node_id):
             picture_header = File.find(node.properties.picture_header, api=api)
             node.properties.picture_header = picture_header
     elif node_type_name == 'storage':
-        st = StorageNode(node)
+        storage = StorageNode(node)
         path = request.args.get('path')
         listing = storage.browse(path)
-        return ""
-
-    # user_id = current_user.objectid
-
-    # Get comment type
-    # comment_type = NodeType.find_first({'where': '{"name" : "comment"}'}, api=api)
-    # comment_type = comment_type['_items'][0]
-
-    # Get comments form
-    # comment_form = get_comment_form(node, comment_type)
-    # if comment_form.validate_on_submit():
-    #     if process_node_form(comment_form,
-    #                             node_id=None,
-    #                             node_type=comment_type,
-    #                             user=user_id):
-    #         node = Node.find(node_id + '/?embedded={"picture":1}', api=api)
-    #     else:
-    #         if comment_form.errors:
-    #             print(comment_form.errors)
+        node.name = listing['name']
+        listing['storage_node'] = node._id
+        # If the item has children we are working with a group
+        if 'children' in listing:
+            for child in listing['children']:
+                child['storage_node'] = node._id
+                child['name'] = child['text']
+                child['content_type'] = os.path.dirname(child['type'])
+            node.children = listing['children']
+            template_action = 'index'
+        else:
+            node.status = 'published'
+            node.length = listing['size']
+            node.download_link = listing['signed_url']
 
     # Get previews
     if node.picture:
@@ -359,33 +357,6 @@ def view(node_id):
         if child.picture:
             child.picture = File.find(child.picture._id, api=api)
 
-    # TODO this logic should be on Server:
-    # AllNodeTypes = NodeType.all(api=api)
-    # for child in children:
-    #     for ntype in AllNodeTypes['_items']:
-    #         if child['node_type'] == ntype['_id']:
-    #             child['node_type_name'] = ntype['name']
-    #             break
-
-    # Get Comments
-    # comments = []
-    # for child in children:
-    #     if child['node_type'] == comment_type['_id']:
-    #         comments.append(child)
-
-    # Get comment attachments
-    # for comment in comments:
-    #     comment['attachments'] = []
-    #     for attachment in comment['properties']['attachments']:
-    #         try:
-    #             attachment_file = File.find(attachment, api=api)
-    #         except ResourceNotFound:
-    #             attachment_file = None
-    #         comment['attachments'].append(attachment_file)
-
-    # Get assigned users
-    # assigned_users = assigned_users_to(node, node_type)
-
     if request.args.get('format'):
         if request.args.get('format') == 'json':
             node = node.to_dict()
@@ -406,10 +377,12 @@ def view(node_id):
                 embed_string = '_embed'
 
         # Check if template exists on the filesystem
-        template_path = '{0}/view{1}.html'.format(template_path, embed_string)
-        template_path_full = os.path.join(app.config['TEMPLATES_PATH'], template_path)
+        template_path = '{0}/{1}{2}.html'.format(template_path,
+                                                template_action, embed_string)
+        template_path_full = os.path.join(app.config['TEMPLATES_PATH'],
+                                        template_path)
         if not os.path.exists(template_path_full):
-            template_path = 'nodes/view.html'
+            return "Missing template"
 
         return_content = render_template(template_path,
             node=node,

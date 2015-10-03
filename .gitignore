@@ -31,3 +31,6 @@ pillar-web/application/templates/asset/_comments.html
 
 pillar-web/application/templates/nodes/edit.html
 pillar-web/application/templates/nodes/edit_embed.html
+
+pillar-web/application/templates/storage/index_embed.html
+pillar-web/application/templates/storage/view_embed.html
