@@ -30,6 +30,13 @@ def join():
         'join.html')
 
 
+@app.route("/stats")
+def stats():
+    """Stats page"""
+    return render_template(
+        'stats.html')
+
+
 @app.route("/<name>/")
 def user_view(name):
     """View a user or organization."""

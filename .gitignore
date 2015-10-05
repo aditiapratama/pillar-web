@@ -18,6 +18,7 @@ pillar-web/application/static/uploads/
 pillar-web/application/templates/layout.html
 pillar-web/application/templates/homepage.html
 pillar-web/application/templates/join.html
+pillar-web/application/templates/stats.html
 
 pillar-web/application/templates/project/
 pillar-web/application/templates/group/
