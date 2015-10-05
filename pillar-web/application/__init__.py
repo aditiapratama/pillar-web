@@ -139,6 +139,7 @@ from application.modules.files import files
 from application.modules.organizations import organizations
 from application.modules.nodes.custom import shots
 from application.modules.nodes.custom import tasks
+from application.modules.nodes.custom import comments
 
 # Pagination global to use un jinja template
 app.jinja_env.globals['url_for_other_page'] = url_for_other_page

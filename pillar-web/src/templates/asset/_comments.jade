@@ -98,4 +98,13 @@ script.
 		$(this).html(convert($(this).text()));
 	});
 
+	$('.comment-submit').click(function(e){
+		console.log('form');
+		$.post("{{url_for('nodes.comments_create')}}",
+			{'content': $('#comment_field').val()},
+			function(data){
+				console.log(data);
+		});
+	});
+
 | {% endblock %}
