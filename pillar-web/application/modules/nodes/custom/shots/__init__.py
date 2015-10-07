@@ -84,7 +84,7 @@ def shots_index():
             # This is an address on the Attract server, so it should be built
             # entirely here
             data['picture'] = "{0}/file_server/file/{1}".format(
-                app.config['ATTRACT_SERVER_ENDPOINT'], node.picture.path)
+                app.config['PILLAR_SERVER_ENDPOINT'], node.picture.path)
             # Get previews
             picture_node = File.find(node.picture['_id'] + \
                                     '/?embedded={"previews":1}', api=api)
@@ -92,7 +92,7 @@ def shots_index():
             if picture_node.previews:
                 for preview in picture_node.previews:
                     if preview.size == 'm':
-                        data['picture_thumbnail'] = app.config['ATTRACT_SERVER_ENDPOINT'] + "/file_server/file/" + preview.path
+                        data['picture_thumbnail'] = app.config['PILLAR_SERVER_ENDPOINT'] + "/file_server/file/" + preview.path
                         break
             else:
                 data['picture_thumbnail'] = data['picture']

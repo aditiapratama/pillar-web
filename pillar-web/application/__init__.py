@@ -97,7 +97,7 @@ class SystemUtility():
         is defined, we will use the one from the config object.
         """
         return os.environ.get(
-            'ATTRACT_SERVER_ENDPOINT', app.config['ATTRACT_SERVER_ENDPOINT'])
+            'PILLAR_SERVER_ENDPOINT', app.config['PILLAR_SERVER_ENDPOINT'])
 
     @staticmethod
     def attract_server_endpoint_static():

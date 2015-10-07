@@ -11,7 +11,7 @@ class Config(object):
 
 class Development(Config):
     SECRET_KEY=''
-    ATTRACT_SERVER_ENDPOINT = 'http://127.0.0.1:5000'
+    PILLAR_SERVER_ENDPOINT = 'http://127.0.0.1:5000'
     HOST='0.0.0.0'
     PORT=5001
     DEBUG=True

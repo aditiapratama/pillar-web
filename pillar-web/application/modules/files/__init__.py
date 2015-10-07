@@ -100,7 +100,7 @@ def index():
                 node_picture.build_previews(name, api=api)
 
             url = "{0}/file_storage/file/{1}".format(
-                app.config['ATTRACT_SERVER_ENDPOINT'], prop['path'])
+                app.config['PILLAR_SERVER_ENDPOINT'], prop['path'])
             rfiles.append( {
                 "id": prop['_id'],
                 "name": prop['filename'],
@@ -112,7 +112,7 @@ def index():
             })
         else:
             url = "{0}/file_storage/file/{1}".format(
-                app.config['ATTRACT_SERVER_ENDPOINT'], file_check[0]['path'])
+                app.config['PILLAR_SERVER_ENDPOINT'], file_check[0]['path'])
             rfiles.append( {
                 "id": file_check[0]['_id'],
                 "name": file_check[0]['filename'],
