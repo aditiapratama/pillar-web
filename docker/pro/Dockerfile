@@ -18,6 +18,7 @@ RUN mkdir /data \
 && mkdir /data/dev/pillar-web \
 && mkdir /data/dev/pillar-python-sdk \
 && mkdir /data/www \
+&& mkdir /storage \
 && mkdir /storage/shared \
 && mkdir /storage/pillar-web \
 && mkdir /storage/pillar-web/uploads \
