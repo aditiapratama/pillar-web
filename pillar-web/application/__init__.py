@@ -25,9 +25,6 @@ app = Flask(__name__,
     template_folder='templates',
     static_folder='static')
 
-# Filemanager used by Flask-Admin extension
-filemanager = Blueprint('filemanager', __name__, static_folder='static/files')
-
 # Choose the configuration to load
 app.config.from_object(config.Development)
 app.config['TEMPLATES_PATH'] = '{0}/templates'.format(
@@ -145,7 +142,6 @@ from application.modules.nodes.custom import comments
 app.jinja_env.globals['url_for_other_page'] = url_for_other_page
 
 # Register blueprints for the imported controllers
-app.register_blueprint(filemanager)
 app.register_blueprint(node_types, url_prefix='/node-types')
 app.register_blueprint(nodes, url_prefix='/nodes')
 app.register_blueprint(users, url_prefix='/users')
