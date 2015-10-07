@@ -42,6 +42,6 @@ VOLUME /storage/pillar-web/storage
 
 EXPOSE 5001
 
-ADD 000-default.conf /etc/apache2/sites-available/000-default.conf
+ADD 000-default.conf /etc/apache2/sites-enabled/000-default.conf
 
 CMD ["/usr/sbin/apache2", "-D", "FOREGROUND"]
