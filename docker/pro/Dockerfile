@@ -13,16 +13,21 @@ vim \
 apache2-mpm-event \
 libapache2-mod-wsgi
 
-RUN mkdir /data \
-&& mkdir /data/dev \
-&& mkdir /data/dev/pillar-web \
-&& mkdir /data/dev/pillar-python-sdk \
-&& mkdir /data/www \
-&& mkdir /storage \
-&& mkdir /storage/shared \
-&& mkdir /storage/pillar-web \
-&& mkdir /storage/pillar-web/uploads \
-&& mkdir /storage/pillar-web/storage
+RUN mkdir -p /data/dev/pillar-web \
+&& mkdir -p /data/dev/pillar-python-sdk \
+&& mkdir -p /data/www \
+&& mkdir -p /storage/shared \
+&& mkdir -p /storage/pillar-web/uploads \
+&& mkdir -p /storage/pillar-web/storage
+
+ENV APACHE_RUN_USER www-data
+ENV APACHE_RUN_GROUP www-data
+ENV APACHE_LOG_DIR /var/log/apache2
+ENV APACHE_PID_FILE /var/run/apache2.pid
+ENV APACHE_RUN_DIR /var/run/apache2
+ENV APACHE_LOCK_DIR /var/lock/apache2
+
+RUN mkdir -p $APACHE_RUN_DIR $APACHE_LOCK_DIR $APACHE_LOG_DIR
 
 RUN git clone https://github.com/armadillica/pillar-web.git /data/www/pillar-web
 #RUN git clone https://github.com/armadillica/pillar-python-sdk.git /data/www/
