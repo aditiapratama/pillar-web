@@ -106,11 +106,12 @@ class SystemUtility():
 
     @staticmethod
     def attract_api():
+        token = current_user.id if current_user.is_authenticated() else None
         api = Api(
             endpoint=SystemUtility.attract_server_endpoint(),
             username=None,
             password=None,
-            token=current_user.id
+            token=token
         )
         return api
 

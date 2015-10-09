@@ -1,6 +1,7 @@
 import time
 from flask import request
 from flask import jsonify
+from flask import render_template
 from flask.ext.login import login_required
 from flask.ext.login import current_user
 from pillarsdk import Node
@@ -45,7 +46,7 @@ def comments_create():
         content=node_asset.properties.content)
 
 
-@nodes.route("/comments/index.json")
+@nodes.route("/comments/")
 @login_required
 def comments_index():
     parent_id = request.args.get('parent_id')
@@ -68,6 +69,7 @@ def comments_index():
         replies = Node.all({
             'where': '{"node_type" : "%s", "parent": "%s"}' % (node_type._id, comment._id),
             'embedded': '{"user":1}'}, api=api)
+        replies = replies._list
         comments.append(
             dict(_id=comment._id,
                 gravatar=gravatar(comment.user.email),
@@ -79,8 +81,16 @@ def comments_index():
                 is_reply=is_reply,
                 is_own=is_own,
                 is_team=False,
-                replies=replies._list))
-    return jsonify(items=comments)
+                replies=replies))
+
+    if request.args.get('format'):
+        if request.args.get('format') == 'json':
+            return_content = jsonify(items=comments)
+    else:
+        return_content = render_template('asset/_comments.html',
+            parent_id=parent_id,
+            comments=comments)
+    return return_content
 
 
 @nodes.route("/comments/<comment_id>/rate/<int:rating>")

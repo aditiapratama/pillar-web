@@ -11,7 +11,7 @@
 
 			.comment-reply-form
 				.comment-reply-field
-					textarea(placeholder="Join the conversation...", data-parent_id="{{ node._id }}")#comment_field
+					textarea(placeholder="Join the conversation...", data-parent_id="{{ parent_id }}")#comment_field
 					.comment-reply-preview
 
 				.comment-reply-meta
@@ -30,37 +30,37 @@
 
 			h3 Comments
 				// XXX use actual comments count
-				span (14)
+				span ({{ comments|length }})
 
 
 		| {# Each individual comment #}
-		| {% for c in range(0, 5) %}
+		| {% for comment in comments %}
 
 		// placeholder numbers for style
-		| {% set mod = (loop.index == 2) %}
-		| {% set reply = (loop.index > 3) %}
+		//- | {% set mod = (loop.index == 2) %}
+		//- | {% set reply = (loop.index > 3) %}
 
-		.comment-container(class="{% if mod %}is-team{% endif %} {% if reply %}is-reply{% endif %}")
+		.comment-container(class="{% if comment['is_team'] %}is-team{% endif %} {% if comment['is_reply'] %}is-reply{% endif %}")
 
 			.comment-header
 				.comment-avatar
 					// XXX Use actual avatar
-					img(src="http://placehold.it/40x40")
+					img(src="{{comment['gravatar']}}")
 
 				.comment-author
-					| Author Number {{loop.index}}
+					| {{comment['author']}}
 
-				| {% if mod %}
+				| {% if comment['is_team'] %}
 				.comment-badge.badge-team team
 				| {% endif %}
 
-				.comment-time {{ 13 * loop.index }} mins ago
+				.comment-time {{comment['time_published']}}
 
-			.comment-content # AWSOM
+			.comment-content {{comment['content']}}
 
 			.comment-meta
 				.comment-rating
-					.comment-rating-value {{ 3 * loop.index }}
+					.comment-rating-value {{comment['rating_up']}}
 
 					.comment-rating-up
 					.comment-rating-down
