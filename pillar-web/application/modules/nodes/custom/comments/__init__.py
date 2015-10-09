@@ -46,6 +46,28 @@ def comments_create():
         content=node_asset.properties.content)
 
 
+def format_comment(comment, is_reply=False, is_team=False, replies=None):
+    """Format a comment node into a simpler dictionary.
+
+    :param comment: the comment object
+    :param is_reply: True if the comment is a reply to another comment
+    :param is_team: True if the author belongs to the group that owns the node
+    :param replies: list of replies (formatted with this function)
+    """
+    is_own = current_user.objectid == comment.user._id
+    return dict(_id=comment._id,
+        gravatar=gravatar(comment.user.email),
+        time_published=comment._created,
+        rating_up=comment.properties.rating_positive,
+        rating_down=comment.properties.rating_negative,
+        author=comment.user.username,
+        content=comment.properties.content,
+        is_reply=is_reply,
+        is_own=is_own,
+        is_team=is_team,
+        replies=replies)
+
+
 @nodes.route("/comments/")
 @login_required
 def comments_index():
@@ -61,27 +83,18 @@ def comments_index():
 
     comments = []
     for comment in nodes._items:
-        is_own = False
-        if current_user.objectid == comment.user._id:
-            is_own = True
-        is_reply = False
+
         # Query for first level children (comment replies)
         replies = Node.all({
             'where': '{"node_type" : "%s", "parent": "%s"}' % (node_type._id, comment._id),
             'embedded': '{"user":1}'}, api=api)
-        replies = replies._list
+        replies = replies._items if replies._items else None
+
+        if replies:
+            replies = [format_comment(reply, is_reply=True) for reply in replies]
+
         comments.append(
-            dict(_id=comment._id,
-                gravatar=gravatar(comment.user.email),
-                time_published=comment._created,
-                rating_up=comment.properties.rating_positive,
-                rating_down=comment.properties.rating_negative,
-                author=comment.user.username,
-                content=comment.properties.content,
-                is_reply=is_reply,
-                is_own=is_own,
-                is_team=False,
-                replies=replies))
+            format_comment(comment, is_reply=False, replies=replies))
 
     if request.args.get('format'):
         if request.args.get('format') == 'json':
