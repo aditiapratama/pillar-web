@@ -224,18 +224,12 @@ script.
 			// Collect parent_id
 			var commentField = document.getElementById('comment_field');
 			parent_id = commentField.getAttribute('data-parent_id');
-			//- parent_id = $('#comment_field').data('parent_id');
 
 			$.post("{{url_for('nodes.comments_create')}}",
 
 				// Submit content and parent_id for comment creation
-				{'content': $('#comment_field').val(), 'parent_id': parent_id},
-				function(data){
-
-					// Append the new comment to the thread
-					console.log(data);
-
-			})
+				{'content': $('#comment_field').val(), 'parent_id': parent_id}
+			)
 			.done(function(){
 
 				// Load the comments
@@ -260,5 +254,7 @@ script.
 		};
 
 	});
+
+
 
 | {% endblock %}
