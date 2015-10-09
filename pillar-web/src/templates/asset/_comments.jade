@@ -34,51 +34,127 @@
 
 		section#comments-list-header
 
-			| {% if comments %}
-
 			h3 Comments
-				span ({{ comments|length }})
 
-			| {% for comment in comments %}
+			#comments-list-items
 
-			.comment-container(
-				data-node_id="{{ comment['_id'] }}",
-				class="{% if comment['is_team'] %}is-team{% endif %}{% if comment['is_reply'] %}is-reply{% endif %}")
+			script#comment-template(type="text/x-handlebars-template")
+				| {% raw %}
 
-				.comment-header
-					.comment-avatar
-						img(src="{{ comment['gravatar'] }}")
+				| {{#list items }}
+				.comment-container(
+					data-node_id="{{ _id }}",
+					class="{{#if is_team}}is-team{{/if}}{{#if is_reply}}is-reply{{else}}is-first{{/if}}")
 
-					.comment-author
-						| {{comment['author']}}
+					.comment-header
+						.comment-avatar
+							img(src="{{ gravatar }}")
 
-					| {% if comment['is_team'] %}
-					.comment-badge.badge-team team
-					| {% endif %}
+						.comment-author
+							| {{ author }}
 
-					.comment-time {{comment['time_published']}}
+						| {{#if is_team}}
+						.comment-badge.badge-team team
+						| {{/if}}
 
-				.comment-content {{comment['content']}}
+						.comment-time {{ time_published }}
 
-				.comment-meta
-					.comment-rating
-						.comment-rating-value {{comment['rating_up']}}
+					.comment-content {{{ content }}}
 
-						.comment-rating-up
-						.comment-rating-down
+					.comment-meta
+						.comment-rating
+							.comment-rating-value {{ rating_up }}
 
-					.comment-action-reply reply
+							.comment-rating-up
+							.comment-rating-down
 
-			| {% endfor %}
+						.comment-action-reply reply
 
-			| {% endif %}
+				| {{/list}}
+				| {% endraw %}
+
+
+			// TODO
+				script#comments-list-template(type="text/x-handlebars-template")
+					| {% raw %}
+
+					| {{#list items }}
+					| {{/list}}
+
+					| {% endraw %}
+
+
+
 
 | {% block comment_scripts %}
 script(type="text/javascript", src="{{ url_for('static', filename='assets/js/markdown.min.js') }}")
 script(type="text/javascript", src="//cdn.rawgit.com/showdownjs/showdown/1.2.3/dist/showdown.min.js")
 
+
 script.
+	// Markdown initialization
 	var convert = new Markdown.getSanitizingConverter().makeHtml;
+
+	// Define the template for handlebars
+	var source = $("#comment-template").html();
+	var template = Handlebars.compile(source);
+
+
+	// Register the helper for generating the comments list
+	Handlebars.registerHelper('list', function(context, options) {
+		var ret = "";
+
+		// Loop through all first-level comments
+		for(var i=0, j=context.length; i<j; i++) {
+
+			/* Convert Markdown for each comment */
+			context[i]['content'] = convert(context[i]['content']);
+
+			// Append compiled comment to return string
+			ret = ret + options.fn(context[i]);
+
+			// Search for replies to the current comment
+			if (context[i]['replies']) {
+
+				var replies = context[i]['replies'];
+				var compiled_replies = "";
+
+				// Loop through replies
+				for(var r=0, t=replies.length; r<t; r++) {
+
+					// Append compiled replies
+					compiled_replies = compiled_replies + options.fn(replies[r]);
+
+				}
+
+				// Append replies list to the return string
+				ret = ret + compiled_replies;
+
+			}
+		}
+
+		return ret;
+	});
+
+	// Helper for the if/else statement
+	Handlebars.registerHelper('if', function(conditional, options) {
+		if(conditional) {
+			return options.fn(this);
+		} else {
+			return options.inverse(this);
+		}
+	});
+
+
+	// Get the comments list in JSON
+	$.getJSON( "{{url_for('nodes.comments_index')}}?parent_id={{ parent_id }}&format=json", function( data ) {
+
+		// Format using handlebars template
+		var comments = template(data);
+		$('#comments-list-items').html(comments);
+	});
+
+
 
 	$(function() {
 		var $textarea = $('.comment-reply-field textarea'),
@@ -97,19 +173,22 @@ script.
 		}).trigger('keyup');
 	});
 
-	/* Convert Markdown for each comment */
-	$('.comment-content').each(function(i){
-		$(this).html(convert($(this).text()));
-	});
-
 
 	/* Reply */
-	$('.comment-action-reply').click(function(){
+	$('body').on('click', '.comment-action-reply', function(){
 
 		parentDiv = $(this).closest('.comment-container');
+		parentDivFirst = $(this).parent().parent().siblings('.is-first');
+
 
 		// Get the id of the comment
-		parentNodeId = parentDiv.data('node_id');
+		if (parentDiv.hasClass('is-reply')) {
+			parentNodeId = parentDivFirst.data('node_id');
+			console.log(parentDivFirst);
+		} else {
+			parentNodeId = parentDiv.data('node_id');
+			console.log(parentDiv);
+		}
 
 
 		// Set it as parent_id of the textarea field
@@ -122,6 +201,7 @@ script.
 		commentForm = $('.comment-reply-container').detach();
 		parentDiv.after(commentForm);
 	});
+
 
 
 	/* Cancel Reply */

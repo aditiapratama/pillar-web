@@ -72,37 +72,40 @@ def format_comment(comment, is_reply=False, is_team=False, replies=None):
 @login_required
 def comments_index():
     parent_id = request.args.get('parent_id')
-    api = SystemUtility.attract_api()
-    node_type = NodeType.find_first({
-        'where': '{"name" : "comment"}',
-        }, api=api)
-
-    nodes = Node.all({
-        'where': '{"node_type" : "%s", "parent": "%s"}' % (node_type._id, parent_id),
-        'embedded': '{"user":1}'}, api=api)
-
-    comments = []
-    for comment in nodes._items:
-
-        # Query for first level children (comment replies)
-        replies = Node.all({
-            'where': '{"node_type" : "%s", "parent": "%s"}' % (node_type._id, comment._id),
-            'embedded': '{"user":1}'}, api=api)
-        replies = replies._items if replies._items else None
-
-        if replies:
-            replies = [format_comment(reply, is_reply=True) for reply in replies]
-
-        comments.append(
-            format_comment(comment, is_reply=False, replies=replies))
 
     if request.args.get('format'):
+
+        # Get data only if we format it
+        api = SystemUtility.attract_api()
+        node_type = NodeType.find_first({
+            'where': '{"name" : "comment"}',
+            }, api=api)
+
+        nodes = Node.all({
+            'where': '{"node_type" : "%s", "parent": "%s"}' % (node_type._id, parent_id),
+            'embedded': '{"user":1}'}, api=api)
+
+        comments = []
+        for comment in nodes._items:
+
+            # Query for first level children (comment replies)
+            replies = Node.all({
+                'where': '{"node_type" : "%s", "parent": "%s"}' % (node_type._id, comment._id),
+                'embedded': '{"user":1}'}, api=api)
+            replies = replies._items if replies._items else None
+
+            if replies:
+                replies = [format_comment(reply, is_reply=True) for reply in replies]
+
+            comments.append(
+                format_comment(comment, is_reply=False, replies=replies))
+
         if request.args.get('format') == 'json':
             return_content = jsonify(items=comments)
     else:
+        # Data will be requested via javascript
         return_content = render_template('asset/_comments.html',
-            parent_id=parent_id,
-            comments=comments)
+            parent_id=parent_id)
     return return_content
 
 
