@@ -4,7 +4,7 @@
 
 	border-top: 1px solid $color-background
 
-	#comments-header
+	#comments-list-header
 		h3
 			padding: 15px 0 0
 			margin: 0
@@ -15,6 +15,7 @@
 				color: $color-text-dark-secondary
 
 	#comments-list
+
 		/* Each comment on the list*/
 		.comment-container,
 		.comment-reply-container
@@ -22,6 +23,7 @@
 			flex-direction: column
 
 			padding: 25px 0
+			transition: background-color 150ms ease-in-out
 
 			/* Header containing author, time, and badges if any*/
 			.comment-header
@@ -101,9 +103,13 @@
 						content: '\f107'
 
 				/* Reply button */
-				.comment-reply
+				.comment-action-reply
 					padding-left: 10px
 					color: $color-text-dark-hint
+					cursor: pointer
+
+					&:hover
+						color: $color-primary
 
 					&:before
 						content: '·'
@@ -134,11 +140,13 @@
 					left: 15px
 				border-left: 2px solid lighten($color-text-dark-hint, 20%)
 
-
 			&.is-team
 				.comment-author
 					color: $color-info
 
+			&.is-replying
+				// background-color: $color-background
+				// border-left: 2px solid lighten($color-text-dark-hint, 20%)
 
 		.comment-reply-container
 			// It's flex, like the others, but different direction
@@ -243,12 +251,38 @@
 								color: $color-text-dark-hint
 
 
-					button.comment-submit
+					button.comment-action-submit
 						margin-left: auto
 						+button-rounded
 
 						color: $color-success
 						border-color: $color-success
+
+						&.button-field-error
+							color: $color-danger
+							border-color: $color-danger
+
+							pointer-events: none
+
+							&:focus
+								background-color: transparent
+
+							i
+								animation:
+									name: spin-once
+									duration: 3s
+									delay: 0
+									fill-mode: forwards
+
+					button.comment-action-cancel
+						visibility: hidden
+						margin-left: auto
+						margin-right: 15px
+						padding:
+							left: 15px
+							right: 15px
+
+						+button-rounded
 
 				&.filled
 					.comment-reply-field
@@ -257,5 +291,16 @@
 					.comment-reply-meta
 						.comment-details
 							opacity: 1
+
+
+		/* Style the comment container when we're replying */
+		.comment-container + .comment-reply-container
+			margin-left: 30px
+			padding-top: 0
+
+			.comment-reply-form
+				.comment-reply-meta
+					button.comment-action-cancel
+						visibility: visible
 
 // @import plugins/_ckeditor

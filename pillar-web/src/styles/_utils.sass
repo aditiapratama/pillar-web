@@ -25,12 +25,14 @@
 		color: $color-primary
 		border: thin solid $color-primary
 
-	&:focus
+	&:active, &:focus
 		outline: none
 		box-shadow: none
-		color: $color-primary
-		border-color: $color-primary
-		background-color: $color-background
+		border-color: $color-primary-dark
+
+	&:active
+		color: white
+		background-color: $color-primary
 
 =container-box
 	position: relative
@@ -68,3 +70,9 @@
 =media-print
 	@media print
 		@content
+
+@keyframes spin-once
+	from
+		transform: rotate(0deg)
+	to
+		transform: rotate(360deg)

@@ -7,11 +7,15 @@
 
 			.comment-reply-avatar
 				// XXX Use actual avatar
-				img(src="http://placehold.it/40x40")
+				img(src="{{ current_user.gravatar }}")
 
 			.comment-reply-form
+
 				.comment-reply-field
-					textarea(placeholder="Join the conversation...", data-parent_id="{{ parent_id }}")#comment_field
+					textarea(
+						id="comment_field",
+						data-parent_id="{{ parent_id }}",
+						placeholder="Join the conversation...",)
 					.comment-reply-preview
 
 				.comment-reply-meta
@@ -21,53 +25,53 @@
 
 						.comment-author
 							| commenting as
-							span.author-name Dude name
+							span.author-name {{ current_user.username }}
 
-					button.comment-submit.btn.btn-outline(type="button") Post Comment
+					button.comment-action-cancel.btn.btn-outline(type="button")
+						i.fa.fa-times
+					button.comment-action-submit.btn.btn-outline(type="button")
+						| Post Comment
 
+		section#comments-list-header
 
-		section#comments-header
+			| {% if comments %}
 
 			h3 Comments
-				// XXX use actual comments count
 				span ({{ comments|length }})
 
+			| {% for comment in comments %}
 
-		| {# Each individual comment #}
-		| {% for comment in comments %}
+			.comment-container(
+				data-node_id="{{ comment['_id'] }}",
+				class="{% if comment['is_team'] %}is-team{% endif %}{% if comment['is_reply'] %}is-reply{% endif %}")
 
-		// placeholder numbers for style
-		//- | {% set mod = (loop.index == 2) %}
-		//- | {% set reply = (loop.index > 3) %}
+				.comment-header
+					.comment-avatar
+						img(src="{{ comment['gravatar'] }}")
 
-		.comment-container(class="{% if comment['is_team'] %}is-team{% endif %} {% if comment['is_reply'] %}is-reply{% endif %}")
+					.comment-author
+						| {{comment['author']}}
 
-			.comment-header
-				.comment-avatar
-					// XXX Use actual avatar
-					img(src="{{comment['gravatar']}}")
+					| {% if comment['is_team'] %}
+					.comment-badge.badge-team team
+					| {% endif %}
 
-				.comment-author
-					| {{comment['author']}}
+					.comment-time {{comment['time_published']}}
 
-				| {% if comment['is_team'] %}
-				.comment-badge.badge-team team
-				| {% endif %}
+				.comment-content {{comment['content']}}
 
-				.comment-time {{comment['time_published']}}
+				.comment-meta
+					.comment-rating
+						.comment-rating-value {{comment['rating_up']}}
 
-			.comment-content {{comment['content']}}
+						.comment-rating-up
+						.comment-rating-down
 
-			.comment-meta
-				.comment-rating
-					.comment-rating-value {{comment['rating_up']}}
+					.comment-action-reply reply
 
-					.comment-rating-up
-					.comment-rating-down
+			| {% endfor %}
 
-				.comment-reply reply
-
-		| {% endfor %}
+			| {% endif %}
 
 | {% block comment_scripts %}
 script(type="text/javascript", src="{{ url_for('static', filename='assets/js/markdown.min.js') }}")
@@ -93,27 +97,88 @@ script.
 		}).trigger('keyup');
 	});
 
-	/* Convert markdown for each comment */
+	/* Convert Markdown for each comment */
 	$('.comment-content').each(function(i){
 		$(this).html(convert($(this).text()));
 	});
 
-	$('.comment-reply').click(function(e){
-		e.preventDefault();
-		commentForm = $('.comment-reply-container').detach();
-		$(this).parent().parent().after(commentForm);
-		});
 
-	$('.comment-submit').click(function(e){
-		// Collect parent_id
-		parent_id = $('#comment_field').data('parent_id');
-		$.post("{{url_for('nodes.comments_create')}}",
-			// Submit content and parent_id for comment creation
-			{'content': $('#comment_field').val(), 'parent_id': parent_id},
-			function(data){
-				// Append the new comment to the thread
-				console.log(data);
-		});
+	/* Reply */
+	$('.comment-action-reply').click(function(){
+
+		parentDiv = $(this).closest('.comment-container');
+
+		// Get the id of the comment
+		parentNodeId = parentDiv.data('node_id');
+
+
+		// Set it as parent_id of the textarea field
+		var commentField = document.getElementById('comment_field');
+		commentField.setAttribute('data-parent_id', parentNodeId);
+
+		parentDiv.addClass('is-replying');
+
+
+		commentForm = $('.comment-reply-container').detach();
+		parentDiv.after(commentForm);
+	});
+
+
+	/* Cancel Reply */
+	$('.comment-action-cancel').click(function(){
+		$('.comment-reply-container').detach().prependTo('#comments-list');
+	});
+
+
+	/* Submit */
+	$('.comment-action-submit').click(function(e){
+
+		$this = $(this);
+		$this.html('<i class="fa fa-spin fa-spinner"></i> Posting...');
+
+		var $textarea = $('.comment-reply-field textarea');
+
+		// If there's content in the field
+		if ($textarea.val()) {
+
+			// Collect parent_id
+			var commentField = document.getElementById('comment_field');
+			parent_id = commentField.getAttribute('data-parent_id');
+			//- parent_id = $('#comment_field').data('parent_id');
+
+			$.post("{{url_for('nodes.comments_create')}}",
+
+				// Submit content and parent_id for comment creation
+				{'content': $('#comment_field').val(), 'parent_id': parent_id},
+				function(data){
+
+					// Append the new comment to the thread
+					console.log(data);
+
+			})
+			.done(function(){
+
+				// Load the comments
+				var url = "{{url_for('nodes.comments_index')}}?parent_id={{ parent_id }}";
+
+				$.get(url, function(dataHtml) {
+					// Update the DOM injecting the generate HTML into the page
+					$('#comments-container').replaceWith(dataHtml);
+				})
+			});
+
+		} else {
+
+			$this.html('<i class="fa fa-spin fa-circle-o-notch"></i> Write something...');
+			$this.addClass('button-field-error');
+
+			setTimeout(function(){
+				$this.html('Post Comment');
+				$this.removeClass('button-field-error');
+			}, 3000);
+
+		};
+
 	});
 
 | {% endblock %}
