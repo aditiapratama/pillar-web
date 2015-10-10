@@ -55,6 +55,14 @@ def format_comment(comment, is_reply=False, is_team=False, replies=None):
     :param replies: list of replies (formatted with this function)
     """
     is_own = current_user.objectid == comment.user._id
+    is_rated = False
+    is_rated_positive = None
+    if comment.properties.ratings:
+        for rating in comment.properties.ratings:
+            if rating.user == current_user.objectid:
+                is_rated = True
+                is_rated_positive = rating.is_positive
+                continue
     return dict(_id=comment._id,
         gravatar=gravatar(comment.user.email),
         time_published=comment._created,
@@ -64,6 +72,8 @@ def format_comment(comment, is_reply=False, is_team=False, replies=None):
         content=comment.properties.content,
         is_reply=is_reply,
         is_own=is_own,
+        is_rated=is_rated,
+        is_rated_positive=is_rated_positive,
         is_team=is_team,
         replies=replies)
 
