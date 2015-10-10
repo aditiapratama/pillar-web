@@ -119,9 +119,9 @@ def comments_index():
     return return_content
 
 
-@nodes.route("/comments/<comment_id>/rate/<int:rating>")
+@nodes.route("/comments/<comment_id>/rate", methods=['POST'])
 @login_required
-def comments_rate(comment_id, rating):
+def comments_rate(comment_id):
     """Comment rating function
 
     :param comment_id: the comment id
@@ -130,7 +130,8 @@ def comments_rate(comment_id, rating):
     :type rating: int
 
     """
-    rating_is_positive = False if rating == 0 else True
+
+    rating_is_positive = False if request.form['is_positive'] == False else True
 
     api = SystemUtility.attract_api()
     comment = Node.find(comment_id, api=api)
