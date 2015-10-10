@@ -7,10 +7,10 @@
 		display: block
 		content: ' '
 
-=button-rounded
+@mixin button-rounded($mixin-button-rounded-color)
 	opacity: .9
-	color: $color-text-dark-primary
-	border: thin solid $color-text-dark-secondary
+	color: $mixin-button-rounded-color
+	border: thin solid $mixin-button-rounded-color
 	border-radius: 999em
 	background-color: transparent
 	transition: all 100ms ease-in-out
@@ -22,17 +22,17 @@
 	&:hover
 		opacity: 1
 		cursor: pointer
-		color: $color-primary
-		border: thin solid $color-primary
+		color: $mixin-button-rounded-color
+		border: thin solid $mixin-button-rounded-color
 
 	&:active, &:focus
 		outline: none
 		box-shadow: none
-		border-color: $color-primary-dark
+		border-color: $mixin-button-rounded-color
 
 	&:active
 		color: white
-		background-color: $color-primary
+		background-color: $mixin-button-rounded-color
 
 =container-box
 	position: relative

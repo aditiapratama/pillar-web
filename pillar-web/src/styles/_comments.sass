@@ -179,11 +179,12 @@
 						height: 45px
 
 						line-height: 1.5em
-						border: 1px solid darken($color-background, 10%)
+						border: 1px solid $color-background-dark
 						border-radius: 3px
 						margin: 0 auto 5px auto
 						padding: 10px
 						color: $color-text-dark
+						resize: none
 
 						transition: all 300ms ease-in-out
 
@@ -195,7 +196,7 @@
 					.comment-reply-preview
 						margin: 0 auto 5px auto
 						padding: 5px 10px 10px 10px
-						color: $color-text-dark-primary
+						color: $color-text-dark-secondary
 						transition: all 150ms ease-in-out
 
 						&:after
@@ -258,19 +259,14 @@
 
 					button.comment-action-submit
 						margin-left: auto
-						+button-rounded
+						min-width: 200px
 
-						color: $color-success
-						border-color: $color-success
+						@include button-rounded($color-success)
 
 						&.button-field-error
-							color: $color-danger
-							border-color: $color-danger
+							@include button-rounded($color-danger)
 
 							pointer-events: none
-
-							&:focus
-								background-color: transparent
 
 							i
 								animation:
@@ -280,14 +276,14 @@
 									fill-mode: forwards
 
 					button.comment-action-cancel
-						visibility: hidden
+						display: none
 						margin-left: auto
 						margin-right: 15px
 						padding:
 							left: 15px
 							right: 15px
 
-						+button-rounded
+						@include button-rounded($color-background-dark)
 
 				&.filled
 					.comment-reply-field
@@ -306,6 +302,6 @@
 			.comment-reply-form
 				.comment-reply-meta
 					button.comment-action-cancel
-						visibility: visible
+						display: inline-block
 
 // @import plugins/_ckeditor

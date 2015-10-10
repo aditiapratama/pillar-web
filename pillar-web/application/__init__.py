@@ -55,6 +55,7 @@ def load_user(userid):
         login_user = userClass(userid)
         login_user.email = user['email']
         login_user.objectid = user['_id']
+        login_user.username = user['username']
         login_user.permissions = user['computed_permissions']
         login_user.gravatar = gravatar(user['email'])
         try:
@@ -74,6 +75,7 @@ class userClass(UserMixin):
     def __init__(self, token):
         # We store the Token instead of ID
         self.id = token
+        self.username = None
         self.first_name = None
         self.last_name = None
         self.objectid = None
