@@ -36,6 +36,7 @@ $list-node-children-item-width: 160px
 	overflow: hidden
 	width: $project_nav-width
 	padding: auto 0
+	margin-bottom: $project_footer-height
 	position: relative
 
 	color: white
@@ -216,7 +217,7 @@ $list-node-children-item-width: 160px
 
 /* The actual navigation tree container */
 #project_tree
-	padding: 5px 0 $project_footer-height 0 // some padding on top and bottom of jstree
+	padding: 5px 0 // some padding on top and bottom of jstree
 
 /* Clickable bar between navtree and context view, to collapse tree */
 .project_split
@@ -421,7 +422,7 @@ section.node-children
 
 		width: $list-node-children-item-width
 		height: $list-node-children-item-width
-		background-color: $color-info
+		background-color: lighten($color-background-nav, 60%)
 		position: relative
 
 		img
@@ -434,7 +435,6 @@ section.node-children
 			transform: translate(-50%, -50%)
 			font-size: 4em
 			color: $color-text-light-hint
-			// width: $list-node-children-item-width
 
 	& .list-node-children-item-name
 		z-index: 1
@@ -476,10 +476,7 @@ section.node-children
 
 		position: relative
 		width: 100%
-		// background-color: darken($color-background, 65%)
 		color: white
-
-		// border-bottom: 2px solid $color-background
 
 		border-top-left-radius: 3px
 		border-top-right-radius: 3px

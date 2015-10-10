@@ -47,10 +47,10 @@ $tree-color-highlight: white
 
 .jstree-default .jstree-node.jstree-open,
 .jstree-default .jstree-node.jstree-leaf
-	border-left: thin solid $color-text /* Whatever after the top level */
+	border-left: 2px solid $color-background-nav /* Whatever after the top level */
 
 .jstree-default .jstree-node.jstree-closed
-	border-left: thin solid lighten($color-text, 10%) /* Closed Folder */
+	border-left: 2px solid lighten($color-background-nav, 4%) /* Closed Folder */
 
 .jstree-default .jstree-node.jstree-closed .jstree-icon.jstree-ocl,
 .jstree-default .jstree-node.jstree-open .jstree-icon.jstree-ocl
@@ -131,7 +131,7 @@ $tree-color-highlight: white
 	color: $tree-color-highlight !important
 
 .jstree-default li[aria-selected='true']
-	background-color: rgba($color-background, .2)
+	background-color: $color-background-nav
 
 	a.jstree-anchor
 		&:after
