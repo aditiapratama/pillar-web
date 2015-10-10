@@ -130,11 +130,11 @@ def comments_rate(comment_id):
     :type rating: int
 
     """
-
-    rating_is_positive = False if request.form['is_positive'] == False else True
+    rating_is_positive = False if request.form['is_positive'] == 'false' else True
 
     api = SystemUtility.attract_api()
     comment = Node.find(comment_id, api=api)
+
     # Check if comment has been rated
     user_comment_rating = None
     if comment.properties.ratings:
@@ -174,7 +174,7 @@ def comments_rate(comment_id):
                                     # Hardcoded to default (auto valid)
                                     weight=3)
         if not comment.properties.ratings:
-            comment.properties['ratings'] = []
+            comment.properties.ratings = []
         comment.properties.ratings.append(user_comment_rating)
         if rating_is_positive:
             comment.properties.rating_positive += 1

@@ -257,7 +257,7 @@ script.
 		var nodeId = $(this).parent().parent().parent().data('node_id');
 		var url = "/nodes/comments/" + nodeId + "/rate";
 		var is_positive = true;
-		if ($(this).hasClass('down')) {is_positive: false};
+		if ($(this).hasClass('down')) {is_positive = false};
 		$.post(url, {'is_positive': is_positive});
 	});
 
