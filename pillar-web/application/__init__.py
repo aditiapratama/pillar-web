@@ -14,11 +14,11 @@ from flask import redirect
 from flask import url_for
 
 from flask.ext.mail import Mail
-
 from flask.ext.login import LoginManager
 from flask.ext.login import UserMixin
 from flask.ext.login import current_user
 
+from helpers import gravatar
 
 # Initialize the Flask all object
 app = Flask(__name__,
@@ -56,6 +56,7 @@ def load_user(userid):
         login_user.email = user['email']
         login_user.objectid = user['_id']
         login_user.permissions = user['computed_permissions']
+        login_user.gravatar = gravatar(user['email'])
         try:
             login_user.first_name = user['first_name']
         except KeyError:
@@ -77,6 +78,8 @@ class userClass(UserMixin):
         self.last_name = None
         self.objectid = None
         self.permissions = None
+        self.gravatar = None
+        self.email = None
 
 
 class SystemUtility():

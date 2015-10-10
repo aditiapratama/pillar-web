@@ -12,7 +12,7 @@ from application import app
 from application import SystemUtility
 from application.modules.nodes import index
 from application.modules.nodes import view
-from application.helpers import UserProxy
+from application.modules.users.model import UserProxy
 from application.helpers import attach_project_pictures
 
 
