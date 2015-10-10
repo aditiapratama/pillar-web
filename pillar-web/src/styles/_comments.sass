@@ -83,8 +83,22 @@
 					display: flex
 					align-items: center
 
+					&.rated
+						color: $color-text-dark-secondary
+
+						.down
+							color: $color-downvote
+
+
+					&.rated.positive
+						color: $color-upvote
+
+						.down
+							color: $color-text-dark-secondary
+
 					.comment-rating-value
 						padding-right: 15px
+						color: $color-text-dark-secondary
 
 					.comment-rating-action
 						font-family: 'FontAwesome'
@@ -92,14 +106,17 @@
 						width: 25px
 						cursor: pointer
 
+					.comment-rating-action.up
 						&:hover
-							color: $color-text-dark
+							color: $color-upvote
+						&:before
+							content: '\f106'
 
-					.comment-rating-action.up:before
-						content: '\f106'
-
-					.comment-rating-action.down:before
-						content: '\f107'
+					.comment-rating-action.down
+						&:hover
+							color: $color-downvote
+						&:before
+							content: '\f107'
 
 				/* Reply button */
 				.comment-action-reply
@@ -109,6 +126,9 @@
 
 					&:hover
 						color: $color-primary
+
+						&:before
+							color: $color-text-dark-hint
 
 					&:before
 						content: '·'
@@ -193,27 +213,36 @@
 							border: 1px solid $color-success
 							outline: none
 
+						&.field-error
+							border-color: $color-danger
+
 					.comment-reply-preview
+						position: relative
 						margin: 0 auto 5px auto
 						padding: 5px 10px 10px 10px
-						color: $color-text-dark-secondary
+						color: $color-text-dark-primary
 						transition: all 150ms ease-in-out
 
-						&:after
+						&:before
 							content: 'Live Preview'
 							// white-space: pre
 							position: absolute
-							bottom: -33px
+							top: -28px
 							font-size: .9em
 							color: $color-text-dark-hint
 							transition: color 150ms ease-in-out
+
+							+media-md
+								visibility: visible
+							+media-sm
+								visibility: hidden
 
 					.comment-reply-preview:empty
 						color: transparent
 						margin: 0 auto
 						padding: 0 10px
 
-						&:after
+						&:before
 							content: ''
 							color: transparent
 
@@ -246,12 +275,12 @@
 									weight: 600
 
 						.comment-rules
-							padding-right: 10px
-							margin-right: 10px
+							padding-right: 8px
+							margin-right: 8px
 							&:after
 								content: "·"
 								position: relative
-								right: -10px
+								right: -8px
 
 							a
 								color: $color-text-dark-hint
@@ -283,7 +312,7 @@
 							left: 15px
 							right: 15px
 
-						@include button-rounded($color-background-dark)
+						@include button-rounded($color-text-dark-secondary)
 
 				&.filled
 					.comment-reply-field

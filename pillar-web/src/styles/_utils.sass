@@ -7,6 +7,25 @@
 		display: block
 		content: ' '
 
+=container-behavior
+	width: 100%
+
+	+media-lg
+		width: 1170px
+
+		margin-left: auto
+		margin-right: auto
+		padding-right: 15px
+		padding-left: 15px
+		box-sizing: border-box
+
+		&:before, &:after
+			display: table
+			content: " "
+
+		&:after
+			clear: both
+
 @mixin button-rounded($mixin-button-rounded-color)
 	opacity: .9
 	color: $mixin-button-rounded-color
@@ -33,6 +52,7 @@
 	&:active
 		color: white
 		background-color: $mixin-button-rounded-color
+
 
 =container-box
 	position: relative

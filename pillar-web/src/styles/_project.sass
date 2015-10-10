@@ -6,14 +6,16 @@ $list-node-children-item-width: 160px
 /* Child of container, contains project-flex */
 #project_container
 	z-index: 12
-	// margin: 0 auto 15px auto
 	margin: 0 auto
-	// border-radius: 3px
-	border-top-left-radius: 3px
-	border-top-right-radius: 3px
+	border-radius: 0
 
-	box-shadow: 2px 2px 2px rgba(darken($color-background, 60%), .1)
+	+container-behavior
 
+	+media-lg
+		padding: 0
+		border-top-left-radius: 3px
+		border-top-right-radius: 3px
+		box-shadow: 2px 2px 2px rgba(darken($color-background, 60%), .1)
 
 /* Flexible. Child of project_container, contains the nav tree + side views */
 #project-flex
@@ -39,7 +41,6 @@ $list-node-children-item-width: 160px
 	color: white
 	background-color: rgba(darken($color-background, 80%), .8)
 	border-right: thick solid darken($color-background, 75%)
-	// border-bottom-left-radius: 3px
 
 	-webkit-user-select: none
 	-moz-user-select: none
@@ -65,8 +66,10 @@ $list-node-children-item-width: 160px
 
 	clear: both
 
-	border-top-left-radius: 3px
-	border-top-right-radius: 3px
+
+	+media-lg
+		border-top-left-radius: 3px
+		border-top-right-radius: 3px
 
 	ul.breadcrumb
 		position: relative

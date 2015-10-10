@@ -16,21 +16,23 @@
 						id="comment_field",
 						data-parent_id="{{ parent_id }}",
 						placeholder="Join the conversation...",)
+
+					.comment-reply-meta
+						.comment-details
+							.comment-rules
+								a(href="https://guides.github.com/features/mastering-markdown/") markdown ready
+
+							.comment-author
+								| commenting as
+								span.author-name {{ current_user.username }}
+
+						button.comment-action-cancel.btn.btn-outline(type="button")
+							i.fa.fa-times
+						button.comment-action-submit.btn.btn-outline(type="button")
+							| Post Comment
+
 					.comment-reply-preview
 
-				.comment-reply-meta
-					.comment-details
-						.comment-rules
-							a(href="https://guides.github.com/features/mastering-markdown/") markdown supported
-
-						.comment-author
-							| commenting as
-							span.author-name {{ current_user.username }}
-
-					button.comment-action-cancel.btn.btn-outline(type="button")
-						i.fa.fa-times
-					button.comment-action-submit.btn.btn-outline(type="button")
-						| Post Comment
 
 		section#comments-list-header
 
@@ -60,11 +62,12 @@
 					.comment-content {{{ content }}}
 
 					.comment-meta
-						.comment-rating
+						.comment-rating(
+							class="{{#if is_rated}}rated{{/if}}{{#if is_rated_positive}} positive{{/if}}")
 							.comment-rating-value {{ rating_up }}
 
-							.comment-rating-action.up
-							.comment-rating-action.down
+							.comment-rating-action.up(title="Upvote comment")
+							.comment-rating-action.down(title="Downvote comment")
 
 						.comment-action-reply reply
 
@@ -215,7 +218,7 @@ script.
 
 		var $textarea = $('.comment-reply-field textarea');
 
-		// If there's content in the field
+		// Check if there's actual content in the textarea
 		if ($textarea.val()) {
 
 			// Collect parent_id
@@ -228,10 +231,8 @@ script.
 				{'content': $('#comment_field').val(), 'parent_id': parent_id}
 			)
 			.done(function(){
-
 				// Load the comments
 				var url = "{{url_for('nodes.comments_index')}}?parent_id={{ parent_id }}";
-
 				$.get(url, function(dataHtml) {
 					// Update the DOM injecting the generate HTML into the page
 					$('#comments-container').replaceWith(dataHtml);
@@ -239,13 +240,15 @@ script.
 			});
 
 		} else {
-
+			// No content in the textarea
 			$this.html('<i class="fa fa-spin fa-circle-o-notch"></i> Write something...');
 			$this.addClass('button-field-error');
+			$textarea.addClass('field-error')
 
 			setTimeout(function(){
 				$this.html('Post Comment');
 				$this.removeClass('button-field-error');
+				$textarea.removeClass('field-error');
 			}, 3000);
 
 		};

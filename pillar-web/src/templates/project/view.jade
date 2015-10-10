@@ -19,56 +19,56 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 | {% endblock %}
 
 | {% block body %}
-.container
-	#project_container
-		#project-header
-			.project_nav-expand-btn(title="Toggle Navigation")
-				i.fa.fa-angle-double-right
 
-			ul.breadcrumb
+#project_container
+	#project-header
+		.project_nav-expand-btn(title="Toggle Navigation")
+			i.fa.fa-angle-double-right
 
-				li.project-organization
-					// XXX - Link to project organization
-					a(href="/bi") Blender Institute
+		ul.breadcrumb
 
-				li.project-title
-					// XXX - Link to project overview
-					a(href="#") {{ node.name }}
+			li.project-organization
+				// XXX - Link to project organization
+				a(href="/bi") Blender Institute
 
+			li.project-title
+				// XXX - Link to project overview
+				a(href="#") {{ node.name }}
+
+			li
+				a(href="#") Extras
+
+			li
+				a(href="#") Videos
+
+		#project-loading
+			i.fa.fa-spinner.fa-spin
+
+		ul.project-edit-tools
+			a#item_add(href="#")
 				li
-					a(href="#") Extras
-
+					i.button-add.fa.fa-plus
+					| Add Asset
+			a#item_edit(href="#")
 				li
-					a(href="#") Videos
+					i.button-edit.fa.fa-edit
+					| Edit
+			a#item_delete(href="#")
+				li
+					i.fa.fa-trash
+					| Delete
 
-			#project-loading
-				i.fa.fa-spinner.fa-spin
+	#project-flex
+		.project_nav-collapse-btn(title="Toggle Navigation")
+			i.fa.fa-angle-double-left
 
-			ul.project-edit-tools
-				a#item_add(href="#")
-					li
-						i.button-add.fa.fa-plus
-						| Add Asset
-				a#item_edit(href="#")
-					li
-						i.button-edit.fa.fa-edit
-						| Edit
-				a#item_delete(href="#")
-					li
-						i.fa.fa-trash
-						| Delete
+		#project_nav
+			#project_tree
 
-		#project-flex
-			.project_nav-collapse-btn(title="Toggle Navigation")
-				i.fa.fa-angle-double-left
+		.project_split
 
-			#project_nav
-				#project_tree
-
-			.project_split
-
-			#project_context-container
-				#project_context
+		#project_context-container
+			#project_context
 
 | {% endblock %}
 

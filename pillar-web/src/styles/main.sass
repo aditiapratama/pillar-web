@@ -40,7 +40,7 @@ a
 		color: $color-primary-dark
 
 
-$navbar-height: 80px
+$navbar-height: 70px
 $navbar-backdrop-height: 600px
 
 .container-page
@@ -90,12 +90,11 @@ $navbar-backdrop-height: 600px
 
 
 /* Navigation */
-.navbar-header
+header.navbar-header
 	position: relative
 	margin: 0
 	z-index: 1 // to be on top of the overlay
 	height: 100%
-
 
 .navbar-overlay
 	position: absolute
@@ -124,7 +123,8 @@ $navbar-backdrop-height: 600px
 		height: 50px
 		text-shadow: none
 
-
+.navbar-container
+	+container-behavior
 
 
 .navbar-transparent
@@ -162,6 +162,8 @@ $navbar-backdrop-height: 600px
 			text-shadow: 1px 1px 0 rgba(black, .2), 1px 1px 10px rgba(black, .2)
 			transition: background-color 150ms ease-in, border-color 150ms ease-in, height 150ms ease-in
 
+			padding-top: 10px
+			padding-bottom: 10px
 
 			&:hover
 				background-color: rgba(white, .4)
