@@ -17,33 +17,32 @@
 
 		#node_index-collection-container
 			.node_index-collection
+
 				| {% for project in projects %}
-
-				.node_index-collection-card
-
-
-					a.item-header(
-						href="{{ url_for('project_view', name='bi', project=project.properties.url) }}")
-
-						.overlay
-						img.background(src="{{ project.properties.picture_header.thumbnail('l') }}")
-
-					a.card-thumbnail(
-						href="{{ url_for('project_view', name='bi', project=project.properties.url) }}")
-
-						img.thumb(src="{{ project.properties.picture_square.thumbnail('m') }}")
-
-					.item-info
-
-						a.item-title(
+				.node_index-collection-card-container
+					.node_index-collection-card
+						a.item-header(
 							href="{{ url_for('project_view', name='bi', project=project.properties.url) }}")
-							| {{project.name}}
+
+							.overlay
+							img.background(src="{{ project.properties.picture_header.thumbnail('l') }}")
+
+						a.card-thumbnail(
+							href="{{ url_for('project_view', name='bi', project=project.properties.url) }}")
+
+							img.thumb(src="{{ project.properties.picture_square.thumbnail('m') }}")
+
+						.item-info
+
+							a.item-title(
+								href="{{ url_for('project_view', name='bi', project=project.properties.url) }}")
+								| {{project.name}}
 
 
-						| {% if project.properties.summary %}
-						p.item-description
-							| {{project.properties.summary|safe}}
-						| {% endif %}
+							| {% if project.properties.summary %}
+							p.item-description
+								| {{project.properties.summary|safe}}
+							| {% endif %}
 
 				| {% endfor %}
 
