@@ -25,12 +25,13 @@
 					a.item-header(
 						href="{{ url_for('project_view', name='bi', project=project.properties.url) }}")
 
-						img.background(src="{{ project.properties.picture_header.thumbnail('m') }}")
+						.overlay
+						img.background(src="{{ project.properties.picture_header.thumbnail('l') }}")
 
 					a.card-thumbnail(
 						href="{{ url_for('project_view', name='bi', project=project.properties.url) }}")
 
-						img(src="{{ project.properties.picture_square.thumbnail('s') }}")
+						img.thumb(src="{{ project.properties.picture_square.thumbnail('m') }}")
 
 					.item-info
 
@@ -38,8 +39,11 @@
 							href="{{ url_for('project_view', name='bi', project=project.properties.url) }}")
 							| {{project.name}}
 
+
+						| {% if project.properties.summary %}
 						p.item-description
 							| {{project.properties.summary|safe}}
+						| {% endif %}
 
 				| {% endfor %}
 

@@ -240,7 +240,7 @@ $list-node-children-item-width: 160px
 section.node-preview
 	&.image,
 	&.file
-		max-height: 600px
+		max-height: 500px
 		background-color: black
 
 		+media-sm
@@ -248,12 +248,12 @@ section.node-preview
 		+media-md
 			max-height: 400px
 		+media-lg
-			max-height: 600px
+			max-height: 500px
 
 		img
 			display: block
 			max-width: 100%
-			max-height: 600px
+			max-height: 500px
 			margin: 0 auto
 
 			+media-sm
@@ -261,7 +261,7 @@ section.node-preview
 			+media-md
 				max-height: 400px
 			+media-lg
-				max-height: 600px
+				max-height: 500px
 
 =project-node-title
 	font:
@@ -556,20 +556,30 @@ section.node-children
 	width: 100%
 	padding: 15px
 
+	+media-lg
+		border-radius: 3px
+
 .node_index-collection
 	display: flex
-	justify-content: space-around
 	flex-wrap: wrap
+	justify-content: flex-start
 
 
 	& .node_index-collection-card
 		position: relative
-		width: 31%
-		background-color: white
+		width: 30%
 		border-radius: 3px
+		overflow: hidden
+		background-color: white
 		color: lighten($color-text, 10%)
+		box-shadow: 0 0 30px rgba(black, .2)
 
-		margin: 15px 0
+		margin:
+			top: 15px
+			bottom: 15px
+			left: 15px
+			right: 15px
+
 
 		a.item-header
 			position: relative
@@ -577,16 +587,22 @@ section.node-children
 			height: 100px
 			display: block
 			background-size: 100% 100%
-			border-top-left-radius: 3px
-			border-top-right-radius: 3px
+
 
 			overflow: hidden
 
-			img.background
+			.overlay
 				position: absolute
-				top: 49%
-				left: 50%
-				transform: translate(-50%, -50%)
+				top: 0
+				left: 0
+				right: 0
+				bottom: 0
+				width: 100%
+				height: 100px
+				background: linear-gradient(to bottom, transparent 0%, rgba( black , .6) 100%)
+
+			img.background
+				width: 100%
 
 		.card-thumbnail
 
@@ -597,22 +613,43 @@ section.node-children
 			top: 35px
 			left: 50%
 			transform: translateX(-50%)
+			background-color: white
+			border-radius: 3px
+			overflow: hidden
+			padding: 3px
 
-			img
-				display: none
+			&:hover
+				img.thumb
+					opacity: .9
+
+			img.thumb
+				width: 100%
 				border-radius: 3px
+				transition: opacity 150ms ease-in-out
+
 
 		.item-info
 			padding: 15px
+			background-color: white
+			border-bottom-left-radius: 3px
+			border-bottom-right-radius: 3px
 
 			a.item-title
 				display: inline-block
 				width: 100%
+				padding: 25px 0 10px 0
+				color: $color-text-dark-primary
+				text-align: center
 				font:
-					size: 1.5em
+					size: 1.6em
 					family: $font-headings-secondary
+					weight: 300
 
-				padding: 10px 0
+				transition: color 150ms ease-in-out
+
+				&:hover
+					text-decoration: none
+					color: $color-primary
 
 
 #node-edit-container
