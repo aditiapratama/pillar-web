@@ -1,8 +1,10 @@
 #comments-container
 	margin-top: 15px
 	padding: 15px 20px
-
+	position: relative
 	border-top: 1px solid $color-background
+
+	min-height: 170px
 
 	#comments-list-header
 		h3
@@ -13,6 +15,28 @@
 				padding-left: 5px
 				font-size: .9em
 				color: $color-text-dark-secondary
+
+
+	#comments-list-items-loading
+		font-size: 2.5em
+		color: $color-background-dark
+		text-align: center
+		position: relative
+		top: 25px
+		left: 50%
+		transform: translateX(-50%);
+
+	#comments-list-items
+		position: relative
+
+		.nocomments
+			color: $color-text-dark-hint
+			text-align: center
+			cursor: default
+			padding: 8px 0
+
+		#comments-list-items-loading
+			position: absolute
 
 	#comments-list
 

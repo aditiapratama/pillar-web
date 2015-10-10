@@ -36,6 +36,8 @@
 							|  Download
 
 		#comments-container
+			#comments-list-items-loading
+				i.fa.fa-spin.fa-circle-o-notch
 
 script(type="text/javascript").
 	var url = "{{url_for('nodes.comments_index')}}?parent_id={{node._id}}"

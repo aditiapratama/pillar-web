@@ -37,6 +37,8 @@
 		section#comments-list-header
 
 			#comments-list-items
+				#comments-list-items-loading
+					i.fa.fa-spin.fa-circle-o-notch
 
 			script#comment-template(type="text/x-handlebars-template")
 				| {% raw %}
@@ -88,8 +90,6 @@
 
 
 | {% block comment_scripts %}
-script(type="text/javascript", src="{{ url_for('static', filename='assets/js/markdown.min.js') }}")
-script(type="text/javascript", src="//cdn.rawgit.com/showdownjs/showdown/1.2.3/dist/showdown.min.js")
 script(type="text/javascript", src="{{ url_for('static', filename='assets/js/comments.min.js') }}")
 
 script.
@@ -97,7 +97,12 @@ script.
 	$.getJSON( "{{url_for('nodes.comments_index')}}?parent_id={{ parent_id }}&format=json", function( data ) {
 		// Format using handlebars template
 		var comments = template(data);
-		$('#comments-list-items').html(comments);
+
+		if (comments && comments.trim() !="") {
+			$('#comments-list-items').html(comments);
+		} else {
+			$('#comments-list-items').html('<div class="nocomments">No comments... yet!</div>');
+		}
 	});
 
 
