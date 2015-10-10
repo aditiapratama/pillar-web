@@ -1,5 +1,5 @@
 $project_nav-width: 280px
-$project_header-height: 40px
+$project_header-height: 50px
 
 $list-node-children-item-width: 160px
 
@@ -12,10 +12,8 @@ $list-node-children-item-width: 160px
 	+container-behavior
 
 	+media-lg
-		padding: 0
-		border-top-left-radius: 3px
-		border-top-right-radius: 3px
-		box-shadow: 2px 2px 2px rgba(darken($color-background, 60%), .1)
+		padding-bottom: 15px
+		border-radius: 3px
 
 /* Flexible. Child of project_container, contains the nav tree + side views */
 #project-flex
@@ -39,14 +37,17 @@ $list-node-children-item-width: 160px
 	position: relative
 
 	color: white
-	background-color: rgba(darken($color-background, 80%), .8)
-	border-right: thick solid darken($color-background, 75%)
+	background-color: rgba($color-background-nav, .8)
+	border-right: thick solid lighten($color-background-nav, 5%)
 
 	-webkit-user-select: none
 	-moz-user-select: none
 	-ms-user-select: none
 	-o-user-select: none
 	user-select: none
+
+	+media-lg
+		border-bottom-left-radius: 3px
 
 	&.project_nav-collapsed
 		width: 35px
@@ -61,7 +62,7 @@ $list-node-children-item-width: 160px
 	position: relative
 	width: 100%
 	height: $project_header-height
-	background-color: darken($color-background, 65%)
+	background-color: $color-background-nav
 	color: white
 
 	clear: both
@@ -108,13 +109,13 @@ $list-node-children-item-width: 160px
 	ul.project-edit-tools
 		align-self: flex-end
 		display: flex
-		align-items: stretch
+		align-items: center
 		height: 100%
 		padding: 0
 		margin:
 			top: 0
 			left: auto
-			right: 0
+			right: 5px
 			bottom: 0
 		color: $color-text-dark-hint
 
@@ -186,6 +187,9 @@ $list-node-children-item-width: 160px
 #project_context-container
 	position: relative
 	background-color: white
+
+	+media-lg
+		border-bottom-right-radius: 3px
 
 	iframe#server_error
 		width: 100%
@@ -441,10 +445,10 @@ section.node-children
 
 		position: relative
 		width: 100%
-		background-color: darken($color-background, 65%)
+		// background-color: darken($color-background, 65%)
 		color: white
 
-		border-bottom: 2px solid $color-background
+		// border-bottom: 2px solid $color-background
 
 		border-top-left-radius: 3px
 		border-top-right-radius: 3px
@@ -519,7 +523,7 @@ section.node-children
 						border-radius: 3px
 
 #node_index-collection-container
-	background-color: white
+	background-color: $color-background-nav
 	height: 100%
 	width: 100%
 	padding: 15px
@@ -533,7 +537,7 @@ section.node-children
 	& .node_index-collection-card
 		position: relative
 		width: 31%
-		border: thin solid $color-background
+		background-color: white
 		border-radius: 3px
 		color: lighten($color-text, 10%)
 

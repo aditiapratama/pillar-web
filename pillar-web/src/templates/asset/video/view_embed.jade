@@ -52,10 +52,9 @@ link(rel="stylesheet", href="//releases.flowplayer.org/6.0.3/skin/functional.css
 
 | {% block footer_scripts %}
 
-script.
-	// select the above element as player container
+script(type="text/javascript").
 	var container = document.getElementById("flowplayer_container");
-	// install flowplayer into selected container
+
 	flowplayer(container, {
 		splash: true,
 			clip: {
@@ -63,5 +62,10 @@ script.
 			}
 	});
 
+	var url = "{{url_for('nodes.comments_index')}}?parent_id={{node._id}}"
+	$.get(url, function(dataHtml) {
+		// Update the DOM injecting the generate HTML into the page
+		$('#comments-container').replaceWith(dataHtml);
+	})
 
 | {% endblock %}

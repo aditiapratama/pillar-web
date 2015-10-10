@@ -4,37 +4,36 @@
 
 | {% block body %}
 
-.container
-	#project_container
+#project_container
 
-		#node_index-container
+	#node_index-container
 
-			#node_index-header
-				#node_index-user-avatar
-					img(src="http://placehold.it/90x90")
-				#node_index-user-info
-					.node_index-user-name {{user.name}}
-					.node_index-user-description {{user.description}}
+		#node_index-header
+			#node_index-user-avatar
+				img(src="http://placehold.it/90x90")
+			#node_index-user-info
+				.node_index-user-name {{user.name}}
+				.node_index-user-description {{user.description}}
 
-			#node_index-list-container
-				.node_index-list
-					| {% for project in projects %}
+		#node_index-list-container
+			.node_index-list
+				| {% for project in projects %}
 
-					.node_index-list-item
+				.node_index-list-item
 
-						a.item-image(
+					a.item-image(
+						href="{{ url_for('project_view', name=user.url, project=project.properties.url) }}")
+						img(src="{{ project.properties.picture_square.thumbnail('s') }}")
+
+					.item-info
+
+						a.item-title(
 							href="{{ url_for('project_view', name=user.url, project=project.properties.url) }}")
-							img(src="{{ project.properties.picture_square.thumbnail('s') }}")
+							| {{project.name}}
 
-						.item-info
+						p.item-description
+							| {{project.properties.summary|safe}}
 
-							a.item-title(
-								href="{{ url_for('project_view', name=user.url, project=project.properties.url) }}")
-								| {{project.name}}
-
-							p.item-description
-								| {{project.properties.summary|safe}}
-
-					| {% endfor %}
+				| {% endfor %}
 
 | {% endblock %}
