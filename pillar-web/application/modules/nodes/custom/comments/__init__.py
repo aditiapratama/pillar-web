@@ -154,7 +154,7 @@ def comments_rate(comment_id):
             else:
                 comment.properties.rating_negative -= 1
             comment.update(api=api)
-            return_data = dict(is_positive=rating_is_positive)
+            return_data = dict(is_positive=rating_is_positive, is_rated=False)
         else:
             # If the rating differs from the current, update its value. In this
             # case we make sure we update the existing global rating values as well
@@ -166,7 +166,7 @@ def comments_rate(comment_id):
                 comment.properties.rating_negative += 1
                 comment.properties.rating_positive -= 1
             comment.update(api=api)
-            return_data = dict(is_positive=rating_is_positive)
+            return_data = dict(is_positive=rating_is_positive, is_rated=True)
     else:
         # Create rating for current user
         user_comment_rating = dict(user=current_user.objectid,
@@ -181,7 +181,7 @@ def comments_rate(comment_id):
         else:
             comment.properties.rating_negative += 1
         comment.update(api=api)
-        return_data = dict(is_positive=rating_is_positive)
+        return_data = dict(is_positive=rating_is_positive, is_rated=True)
 
     return jsonify(status='success', data=return_data)
 
