@@ -92,12 +92,16 @@ html(lang="en")
 									title="Register") Register
 							| {% endif %}
 
+
 							| {% if current_user.is_authenticated() %}
+
 							li(class="dropdown{% if title in ['profile', 'billing-address', 'pledges', 'manage-collection']: %} active{% endif %}")
 								a.dropdown-toggle(href="#", data-toggle="dropdown", title="{{ current_user.email }}")
-									span.fa-stack
-										i.fa.fa-circle-thin.fa-stack-2x
-										i.fa.fa-user.fa-stack-1x
+									img.gravatar(src="{{ current_user.gravatar }}")
+
+									//- span.fa-stack
+									//- 	i.fa.fa-circle-thin.fa-stack-2x
+									//- 	i.fa.fa-user.fa-stack-1x
 								ul.dropdown-menu
 									| {# XXX
 									| {% if current_user.has_role('admin') %}
@@ -121,7 +125,9 @@ html(lang="en")
 										a(href="/users/logout")
 											i.fa.fa-power-off(title="Log Out")
 											| Log out
+
 							| {% else %}
+
 							li.nav-item-sign-in
 								a(href="/users/login")
 									i.fa.fa-sign-in(title="Sign In")

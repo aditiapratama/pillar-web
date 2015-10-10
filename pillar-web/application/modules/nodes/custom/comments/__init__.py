@@ -154,7 +154,7 @@ def comments_rate(comment_id):
             else:
                 comment.properties.rating_negative -= 1
             comment.update(api=api)
-            return_data = dict(is_positive=rating_is_positive, is_rated=False,
+            return_data = dict(is_rated=False,
                                 rating_up=comment.properties.rating_positive)
         else:
             # If the rating differs from the current, update its value. In this

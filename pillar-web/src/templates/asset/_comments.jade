@@ -64,7 +64,7 @@
 					.comment-meta
 						.comment-rating(
 							class="{{#if is_rated}}rated{{/if}}{{#if is_rated_positive}} positive{{/if}}")
-							.comment-rating-value {{ rating_up }}
+							.comment-rating-value(title="Number of upvotes") {{ rating_up }}
 
 							.comment-rating-action.up(title="Upvote comment")
 							.comment-rating-action.down(title="Downvote comment")
@@ -257,13 +257,38 @@ script.
 
 	/* Rate */
 	$('body').on('click', '.comment-rating-action', function(){
-		var nodeId = $(this).parent().parent().parent().data('node_id');
+
+		var $this = $(this);
+		var nodeId = $this.parent().parent().parent().data('node_id');
 		var url = "/nodes/comments/" + nodeId + "/rate";
 		var is_positive = true;
-		if ($(this).hasClass('down')) {is_positive = false};
-		$.post(url, {'is_positive': is_positive});
+		var parentDiv = $this.parent();
+
+
+		if ($this.hasClass('down')) {
+			is_positive = false;
+		};
+
+		$.post(url, {'is_positive': is_positive}
+		).done(function(data){
+
+			// Add/remove styles for rated statuses
+			if (data['data']['is_rated']){
+
+				parentDiv.addClass('rated');
+
+				if (data['data']['is_positive']){
+					parentDiv.addClass('positive');
+				} else {
+					parentDiv.removeClass('positive');
+				};
+
+			} else {
+				parentDiv.removeClass('rated');
+			};
+
+			$this.siblings('.comment-rating-value').text(data['data']['rating_up']);
+		});
 	});
-
-
 
 | {% endblock %}

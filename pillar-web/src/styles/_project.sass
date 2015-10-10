@@ -129,6 +129,7 @@ $list-node-children-item-width: 160px
 			&:hover
 				color: $color-text-light
 
+
 			li
 				margin: 5px
 				padding: 5px 15px
@@ -144,6 +145,9 @@ $list-node-children-item-width: 160px
 				&:hover
 					background-color: darken($color-background, 60%)
 
+			&#item_delete
+				li i
+					margin-right: 0
 			// &:not(:last-of-type)
 				// border-right: thin solid darken($color-background, 50%)
 
@@ -225,11 +229,25 @@ section.node-preview
 		max-height: 600px
 		background-color: black
 
+		+media-sm
+			max-height: 300px
+		+media-md
+			max-height: 400px
+		+media-lg
+			max-height: 600px
+
 		img
 			display: block
 			max-width: 100%
 			max-height: 600px
 			margin: 0 auto
+
+			+media-sm
+				max-height: 300px
+			+media-md
+				max-height: 400px
+			+media-lg
+				max-height: 600px
 
 =project-node-title
 	font:
