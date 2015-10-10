@@ -73,7 +73,10 @@ html(lang="en")
 						a.navbar-brand(
 							href="/",
 							title="Blender Cloud")
-							span Blender Cloud
+							span.app-logo
+								i.bf-cloud
+							span.app-name
+								| Blender Cloud
 
 					nav.collapse.navbar-collapse
 						ul.nav.navbar-nav.navbar-right
@@ -99,9 +102,6 @@ html(lang="en")
 								a.dropdown-toggle(href="#", data-toggle="dropdown", title="{{ current_user.email }}")
 									img.gravatar(src="{{ current_user.gravatar }}")
 
-									//- span.fa-stack
-									//- 	i.fa.fa-circle-thin.fa-stack-2x
-									//- 	i.fa.fa-user.fa-stack-1x
 								ul.dropdown-menu
 									| {# XXX
 									| {% if current_user.has_role('admin') %}

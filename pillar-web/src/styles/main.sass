@@ -10,6 +10,7 @@
 @import _join
 @import _homepage
 @import _stats
+@import _font-borg
 
 @import plugins/_jstree
 @import plugins/js_perfectscrollbar
@@ -162,8 +163,11 @@ header.navbar-header
 			text-shadow: 1px 1px 0 rgba(black, .2), 1px 1px 10px rgba(black, .2)
 			transition: background-color 150ms ease-in, border-color 150ms ease-in, height 150ms ease-in
 
-			padding-top: 10px
-			padding-bottom: 10px
+			padding:
+				top: 5px
+				bottom: 5px
+				left: 20px
+				right: 20px
 
 			&:hover
 				background-color: rgba(white, .4)
@@ -195,7 +199,7 @@ header.navbar-header
 		margin-left: 0 !important
 		text-shadow: 1px 1px 0 rgba(black, .2), 1px 1px 10px rgba(black, .2)
 		padding:
-			top: 15px
+			top: 10px
 			left: 15px
 			right: 20px // overrides bs
 		color: white
@@ -207,6 +211,14 @@ header.navbar-header
 
 		&:hover
 			color: white
+
+		span.app-logo
+			font-size: 1.5em
+
+		span.app-name
+			padding:
+				top: 6px
+				left: 10px
 
 	.dropdown
 		position: relative
