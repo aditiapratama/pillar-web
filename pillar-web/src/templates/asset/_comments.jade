@@ -177,31 +177,30 @@ script.
 	/* Reply */
 	$('body').on('click', '.comment-action-reply', function(){
 
+		// container of the comment we are replying to
 		parentDiv = $(this).closest('.comment-container');
-		parentDivFirst = $(this).parent().parent().siblings('.is-first');
 
+		// container of the first-level comment in the thread
+		parentDivFirst = $(this).parent().parent().siblings('.is-first');
 
 		// Get the id of the comment
 		if (parentDiv.hasClass('is-reply')) {
 			parentNodeId = parentDivFirst.data('node_id');
-			console.log(parentDivFirst);
 		} else {
 			parentNodeId = parentDiv.data('node_id');
-			console.log(parentDiv);
 		}
 
-
-		// Set it as parent_id of the textarea field
+		// Get the textarea and set its parent_id data
 		var commentField = document.getElementById('comment_field');
 		commentField.setAttribute('data-parent_id', parentNodeId);
 
+		// Add class for styling
 		parentDiv.addClass('is-replying');
 
-
+		// Move comment-reply container field after the parent container
 		commentForm = $('.comment-reply-container').detach();
 		parentDiv.after(commentForm);
 	});
-
 
 
 	/* Cancel Reply */

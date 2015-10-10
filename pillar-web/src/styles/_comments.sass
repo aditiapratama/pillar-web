@@ -148,6 +148,12 @@
 				// background-color: $color-background
 				// border-left: 2px solid lighten($color-text-dark-hint, 20%)
 
+			&.is-replying.is-first+.comment-reply-container
+				margin-left: 30px
+
+			&.is-replying+.comment-reply-container
+				margin-left: 60px
+
 		.comment-reply-container
 			// It's flex, like the others, but different direction
 			flex-direction: row
