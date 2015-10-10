@@ -32,6 +32,8 @@
 							i.fa.fa-download.icon-download-file
 							|  Download
 
+		#comments-container
+
 script(type="text/javascript").
 	var url = "{{url_for('nodes.comments_index')}}?parent_id={{node._id}}"
 	$.get(url, function(dataHtml) {
