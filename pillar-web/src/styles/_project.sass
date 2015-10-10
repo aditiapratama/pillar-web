@@ -1,5 +1,6 @@
 $project_nav-width: 280px
 $project_header-height: 50px
+$project_footer-height: 30px
 
 $list-node-children-item-width: 160px
 
@@ -37,8 +38,8 @@ $list-node-children-item-width: 160px
 	position: relative
 
 	color: white
-	background-color: rgba($color-background-nav, .8)
-	border-right: thick solid lighten($color-background-nav, 5%)
+	background-color: rgba($color-background-nav, .9)
+	border-right: thick solid lighten($color-background-nav, 10%)
 
 	-webkit-user-select: none
 	-moz-user-select: none
@@ -47,7 +48,7 @@ $list-node-children-item-width: 160px
 	user-select: none
 
 	+media-lg
-		border-bottom-left-radius: 3px
+		// border-bottom-left-radius: 3px
 
 	&.project_nav-collapsed
 		width: 35px
@@ -55,19 +56,30 @@ $list-node-children-item-width: 160px
 		background-color: darken($color-background, 65%)
 
 /* Header with name, breadcrumbs and node edit tools */
-#project-header
+#project-header,
+#project_nav-footer
 	display: flex
 	align-items: center
 
 	position: relative
-	width: 100%
-	height: $project_header-height
 	background-color: $color-background-nav
 	color: white
 
+#project_nav-footer
+	height: $project_footer-height
+	width: $project_nav-width
+
+	position: absolute
+	left: 0
+	bottom: 0
+
+	+media-lg
+		border-bottom-left-radius: 3px
+
+#project-header
+	height: $project_header-height
+	width: 100%
 	clear: both
-
-
 	+media-lg
 		border-top-left-radius: 3px
 		border-top-right-radius: 3px
@@ -176,7 +188,7 @@ $list-node-children-item-width: 160px
 	position: absolute
 	bottom: 0
 	left: 0
-	padding: 10px
+	padding: 5px 10px
 
 .project_nav-expand-btn
 	float: left
@@ -203,7 +215,7 @@ $list-node-children-item-width: 160px
 
 /* The actual navigation tree container */
 #project_tree
-	padding: 5px 0 // some padding on top and bottom
+	padding: 5px 0 $project_footer-height 0 // some padding on top and bottom of jstree
 
 /* Clickable bar between navtree and context view, to collapse tree */
 .project_split
