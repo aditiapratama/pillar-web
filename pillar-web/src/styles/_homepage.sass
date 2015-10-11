@@ -11,6 +11,7 @@
 
 	#header
 		height: 550px
+		// height: 486px
 
 		background:
 			size: 100% 100%
@@ -25,7 +26,7 @@
 			border-radius: 3px
 			color: white
 
-			text-shadow: 1px 1px 1px rgba(black,.8), 0 0 30px rgba(black,.6)
+			text-shadow: 1px 1px 1px rgba(black,.9), 0 0 30px rgba(black,.7)
 
 			display: flex
 			flex-direction: column
@@ -33,7 +34,7 @@
 			align-items: center
 
 			.title
-				padding-bottom: 15px
+				padding-bottom: 25px
 				font:
 					family: $font-headings-secondary
 					size: 3.5em
@@ -62,9 +63,12 @@
 
 
 					@include button-rounded($color-text-light)
+					opacity: 1
 
 					&.get-started
 						@include button-rounded-filled($color-primary)
+
+						opacity: 1
 
 	#content
 		display: flex
@@ -230,12 +234,13 @@
 	left: 0
 	// filter: blur(10px)
 	filter: blur(0)
-	max-height: 700px
+	max-height: 800px
 
 .homepage.navbar-backdrop-overlay
-	height: 700px
+	height: 800px
 	top: -40px
-	background: linear-gradient(to bottom, rgba(black, 0) 0%, rgba(black, 0) 25%, rgba(black,.5) 90%, rgba(black,.5) 100%)
+	// background: linear-gradient(to bottom, rgba(black, 0) 0%, rgba(black, 0) 25%, rgba(black,.6) 90%, rgba(black,.5) 100%)
+	background: linear-gradient(to bottom, rgba(black, .5) 0%, rgba(black, .3) 40%, rgba(black, .4) 70%, rgba($color-background,.6) 90%, $color-background 100%)
 
 section#homepage.links
 	height: initial
@@ -252,10 +257,19 @@ section#homepage.links
 		align-items: stretch
 		margin: 0
 
+		+media-sm
+			margin: 0
+		+media-sm
+			margin: 0 10px
+		+media-md
+			margin: 0 20px
+		+media-lg
+			margin: 0
+
 		.links-item
 			width: 100%
 			height: 100%
-			margin: 0 5px
+			margin: 0 10px
 			border-radius: 3px
 			color: white
 			background-color: $color-background-nav
@@ -266,7 +280,7 @@ section#homepage.links
 
 			position: relative
 
-			&:hover
+			&:hover, &:active, &:focus
 				text-decoration: none
 
 				img.header
@@ -323,11 +337,18 @@ section#homepage.links
 				span.bar
 					background-color: $color-training
 
+			&.upnext
+				.title
+					color: $color-upvote
+				span.bar
+					background-color: $color-upvote
 
-section#homepage.bullets
-	padding: 75px 0
-	border-top: 5px solid $color-background
-	+container-box
+
+section#homepage.bullets,
+section#homepage.supported-by
+	padding: 80px 0
+	border-top: 5px solid $color-background-dark
+	background-color: white
 
 	h1
 		text-align: center
@@ -364,6 +385,19 @@ section#homepage.bullets
 				font:
 					weight: 400
 					size: 1.2em
+
+
+section#homepage.supported-by
+	background-color: $color-background
+	padding: 50px 0
+
+
+	display: flex
+	align-items: center
+	justify-content: center
+
+	img.logos
+		padding: 100px 0
 
 
 section#homepage.get-started

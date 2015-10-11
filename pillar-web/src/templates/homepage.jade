@@ -121,16 +121,16 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 					p.content Full production data and tutorials from all open movies, for you to use freely.
 
 
-				a.links-item
+				a.links-item.upnext(href="#")
 					img.header(src="{{ url_for('static', filename='assets/img/frontpage_link_assets.jpg') }}")
 					span.bar
-					span.title Bright Future
+					span.title Up Next
 
 					p.content Assets library, shot management, project management, and more. We've got big plans.
 
 section#homepage.bullets
 
-	h1 What's Next
+	h1 Up Next
 
 	.bullets-list
 		.bullets-list-item
@@ -172,6 +172,14 @@ section#homepage.bullets
 			.bullets-list-item-title Blender Development
 			.bullets-list-item-content.
 				Blender Institute will host the core team working on the 2.8 Workflow project.
+
+
+section#homepage.supported-by
+
+	//- h1 Supported by
+
+	img.logos(src="{{ url_for('static', filename='assets/img/support_logos.png') }}")
+
 
 section#homepage.get-started
 
