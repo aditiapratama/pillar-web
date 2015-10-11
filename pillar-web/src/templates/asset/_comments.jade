@@ -2,7 +2,7 @@
 #comments-container
 
 	section#comments-list
-
+		| {% if current_user.is_authenticated() %}
 		.comment-reply-container
 
 			.comment-reply-avatar
@@ -32,7 +32,7 @@
 							| Post Comment
 
 					.comment-reply-preview
-
+		| {% endif %}
 
 		section#comments-list-header
 
