@@ -6,6 +6,7 @@ from pillarsdk.users import User
 from pillarsdk.organizations import Organization
 from application import SystemUtility
 from application.helpers import gravatar
+from application.helpers import attach_project_pictures
 
 
 class UserProxy(object):
