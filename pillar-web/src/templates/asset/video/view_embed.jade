@@ -5,6 +5,8 @@ link(rel="stylesheet", href="//releases.flowplayer.org/6.0.3/skin/functional.css
 | {% block body %}
 
 #node-container
+	a(name="{{node._id}}")
+
 	section.node-preview.video
 		#flowplayer_container.is-splash(style="background-image:url({{node.picture.thumbnail('l')}}); background-repeat:no-repeat;")
 
