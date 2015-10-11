@@ -153,7 +153,9 @@ def jstree_get_children(node_id):
 
     children_list = []
     for child in children._items:
-        children_list.append(jstree_parse_node(child))
+        # Skip nodes of type comment
+        if child.node_type.name != 'comment':
+            children_list.append(jstree_parse_node(child))
     return children_list
 
 
