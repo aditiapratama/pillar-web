@@ -7,10 +7,6 @@ meta(property="og:url", content="https://cloud.blender.org/")
 meta(property="og:image", content="https://cloud.blender.org/static/assets/img/background_join_bbb.jpg")
 | {% endblock %}
 
-| {% block head %}
-link(href="//code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css", rel="stylesheet")
-| {% endblock %}
-
 | {% block header_backdrop %}
 .homepage.navbar-backdrop(
 	style="background-image: url({{ url_for('static', filename='assets/img/background_join_bbb.jpg')}})")
@@ -23,7 +19,7 @@ link(href="//code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css", rel="
 #homepage.page-content
 	#header
 		.text
-			.title Your online studio
+			.title Your online animation studio
 			.lead.
 				Full access to the Blender Institute's film projects and training,
 				to support Blender development and build an open production platform.

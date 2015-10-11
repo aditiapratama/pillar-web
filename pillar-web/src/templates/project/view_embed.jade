@@ -1,9 +1,8 @@
 | {% block body %}
 
 #node-container
-	a(href="{{ node.properties.picture_header.thumbnail('l') }}")
-		section.node-preview.file
-			img(src="{{ node.properties.picture_header.thumbnail('l') }}")
+	section.node-preview.file
+		img(src="{{ node.properties.picture_header.thumbnail('l') }}")
 
 	section.node-details-container
 
