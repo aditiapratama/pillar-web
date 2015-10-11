@@ -56,7 +56,7 @@ def load_user(userid):
         login_user.email = user['email']
         login_user.objectid = user['_id']
         login_user.username = user['username']
-        login_user.permissions = user['computed_permissions']
+        #login_user.permissions = user['computed_permissions']
         login_user.gravatar = gravatar(user['email'])
         try:
             login_user.first_name = user['first_name']
@@ -79,7 +79,7 @@ class userClass(UserMixin):
         self.first_name = None
         self.last_name = None
         self.objectid = None
-        self.permissions = None
+        #self.permissions = None
         self.gravatar = None
         self.email = None
 
