@@ -16,6 +16,7 @@
 @import plugins/js_perfectscrollbar
 
 
+
 html
 	-webkit-font-smoothing: antialiased
 	-moz-osx-font-smoothing: grayscale
@@ -43,6 +44,7 @@ a
 
 $navbar-height: 70px
 $navbar-backdrop-height: 600px
+
 
 .container-page
 	background-color: $color-background
@@ -281,6 +283,7 @@ header.navbar-header
 	max-height: $navbar-backdrop-height
 	background:
 		size: cover
+		position: 50% 50%
 		repeat: no-repeat
 		color: white
 		image: url(https://www.blender.org/wp-content/themes/bthree/assets/images/placeholder_background.jpg)
@@ -411,3 +414,7 @@ footer
 
 	&:focus, &:active
 		box-shadow: none
+
+
+.material-icons
+	font-size: 1em // reset, since default is 24px

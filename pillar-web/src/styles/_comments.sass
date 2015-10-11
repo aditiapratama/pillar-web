@@ -316,17 +316,34 @@
 
 						@include button-rounded($color-success)
 
+						&.submitting
+							background: linear-gradient(to left, transparent 50%, #7AC29A 50%)
+							background-size: 200% 100%
+							color: white
+							animation:
+								name: background-fill-left-right
+								duration: .5s
+								delay: 0
+								fill-mode: forwards
+								iteration-count: 1
+								timing-function: ease-out
+
+
 						&.button-field-error
 							@include button-rounded($color-danger)
 
 							pointer-events: none
 
 							i
-								animation:
-									name: spin-once
-									duration: 2.5s
-									delay: 0
-									fill-mode: forwards
+								position: relative
+								bottom: -1px
+								right: 3px
+
+								// animation:
+								// 	name: spin-once
+								// 	duration: 2.5s
+								// 	delay: 0
+								// 	fill-mode: forwards
 
 					button.comment-action-cancel
 						display: none

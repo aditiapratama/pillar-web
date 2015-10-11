@@ -26,33 +26,56 @@
 		&:after
 			clear: both
 
-@mixin button-rounded($mixin-button-rounded-color)
+@mixin button-rounded($mixin-color)
 	opacity: .9
-	color: $mixin-button-rounded-color
-	border: thin solid $mixin-button-rounded-color
-	border-radius: 999em
-	background-color: transparent
-	transition: all 100ms ease-in-out
-
 	padding:
 		left: 25px
 		right: 25px
 
+	color: $mixin-color
+	border: thin solid $mixin-color
+	border-radius: 999em
+	background-color: transparent
+	transition: color 350ms ease-out, border 150ms ease-in-out, opacity 150ms ease-in-out, background-color 150ms ease-in-out
+	text-shadow: none
+
 	&:hover
 		opacity: 1
 		cursor: pointer
-		color: $mixin-button-rounded-color
-		border: thin solid $mixin-button-rounded-color
+		color: $mixin-color
+		border: thin solid $mixin-color
+		background-color: rgba($mixin-color, .2)
 
 	&:active, &:focus
 		outline: none
 		box-shadow: none
-		border-color: $mixin-button-rounded-color
+		border-color: $mixin-color
 
-	&:active
+
+@mixin button-rounded-filled($mixin-color)
+	opacity: .9
+	padding:
+		left: 25px
+		right: 25px
+	color: white
+	border: thin solid $mixin-color
+	border-radius: 999em
+	background-color: $mixin-color
+	text-shadow: none
+
+	transition: color 350ms ease-out, border 150ms ease-in-out, opacity 150ms ease-in-out
+
+
+	&:hover
+		opacity: 1
+		cursor: pointer
 		color: white
-		background-color: $mixin-button-rounded-color
+		background-color: lighten($mixin-color, 5%)
 
+	&:active, &:focus
+		outline: none
+		box-shadow: none
+		border-color: lighten($mixin-color, 5%)
 
 =container-box
 	position: relative
@@ -96,3 +119,9 @@
 		transform: rotate(0deg)
 	to
 		transform: rotate(360deg)
+
+@keyframes background-fill-left-right
+	from
+		background-position: right bottom
+	to
+		background-position: left bottom

@@ -30,23 +30,23 @@
 						| {% if child.properties.content_type %}
 
 						| {% if child.properties.content_type == 'video' %}
-						i.fa.fa-play-circle
+						i.zmdi.zmdi-play-circle-outline
 						| {% endif %}
 
 						| {% else %}
-						i.fa.fa-folder-o
+						i.zmdi.zmdi-folder-outline
 						| {% endif %}
 
 				.list-node-children-item-name
 
 					| {% if child.properties.content_type == 'video' %}
-					i.fa.fa-film
+					i.zmdi.zmdi-movie
 					| {% elif child.properties.content_type == 'image' %}
-					i.fa.fa-picture-o
+					i.zmdi.zmdi-image-o
 					| {% elif child.properties.content_type == 'file' %}
-					i.fa.fa-file-zip-o
+					i.zmdi.zmdi-file
 					| {% else %}
-					i.fa.fa-folder-o
+					i.zmdi.zmdi-folder-outline
 					| {% endif %}
 
 					span {{ child.name }}

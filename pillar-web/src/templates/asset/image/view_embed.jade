@@ -1,8 +1,6 @@
 | {% block body %}
 
 #node-container
-	a(name="{{node._id}}")
-
 	| {% if node.picture %}
 	a(href="{{ node.picture.thumbnail('l') }}")
 		section.node-preview.image

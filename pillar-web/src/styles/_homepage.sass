@@ -1,3 +1,4 @@
+
 #homepage
 	display: flex
 	flex-direction: column
@@ -5,8 +6,11 @@
 	align-items: stretch
 	align-content: center
 
+	&.page-content
+		+container-behavior
+
 	#header
-		height: 350px
+		height: 550px
 
 		background:
 			size: 100% 100%
@@ -38,15 +42,35 @@
 
 			.lead
 				text-align: center
-				max-width: 580px
+				max-width: 700px
 				font:
 					size: 1.6em
 					weight: 400
+
+			.buttons
+				display: flex
+				justify-content: space-around
+				margin: 25px auto
+
+				width: 100%
+				max-width: 450px
+
+				a
+					min-width: 200px
+					font-size: 1.5em
+					padding: 10px 25px
+
+
+					@include button-rounded($color-text-light)
+
+					&.get-started
+						@include button-rounded-filled($color-primary)
 
 	#content
 		display: flex
 		justify-content: space-around
 		align-items: stretch
+		margin-bottom: 15px
 
 		#sidebar, #updates
 			+container-box
@@ -163,95 +187,8 @@
 
 					.milestone-item-content
 						color: lighten($color-text, 5%)
-		#main
-			width: 75%
-			margin: 0 5px 10px 5px
 
-			display: flex
-			flex-direction: column
-			align-items: stretch
-
-			#links
-				height: initial
-				padding: 0
-				margin-bottom: 10px
-
-				#links-container
-					display: flex
-					justify-content: space-around
-					align-items: stretch
-					margin: 0
-
-					.links-item
-						width: 100%
-						height: 100%
-						margin: 0 5px
-						border-radius: 3px
-						background-color: white
-						box-shadow: 0 0 15px rgba(black, .1)
-
-						text-align: center
-						overflow: hidden
-
-						position: relative
-
-						&:hover
-							text-decoration: none
-
-							img.header
-								opacity: .9
-
-						img.header
-							opacity: 1
-							z-index: 0
-							// transform: scale(1.2)
-							// filter: blur(4px)
-
-							border-top-left-radius: 3px
-							border-top-right-radius: 3px
-							width: 100%
-							position: relative
-							top: 0
-							left: 0
-							right: 0
-							bottom: 0
-							transition: opacity 100ms ease-in-out
-
-						.title
-							display: block
-							text-transform: uppercase
-							width: 100%
-							position: relative
-
-							padding: 10px 5px
-
-							font:
-								family: $font-headings-secondary
-								size: 1.5em
-								weight: 500
-
-						.content
-							color: lighten($color-text, 10%)
-							padding: 0 30px 10px
-
-						span.bar
-							height: 4px
-							width: 100%
-							display: block
-
-						&.open_projects
-							.title
-								color: $color-open_projects
-							span.bar
-								background-color: $color-open_projects
-
-						&.training
-							.title
-								color: $color-training
-							span.bar
-								background-color: $color-training
-
-			#updates
+			section#updates
 				padding: 15px
 
 				.section-title
@@ -286,15 +223,167 @@
 					.update-list-item-content
 						color: lighten($color-text, 10%)
 
+
+
 .homepage.navbar-backdrop
 	width: 105%
 	left: 0
 	// filter: blur(10px)
 	filter: blur(0)
+	max-height: 700px
 
 .homepage.navbar-backdrop-overlay
+	height: 700px
 	top: -40px
-	// background: linear-gradient(to bottom, rgba($color-background, 0) 25%, rgba($color-background,0.5) 50%, rgba($color-background,0.9) 75%, rgba($color-background,1) 90%)
-	// background: linear-gradient(to bottom, rgba(black, 0) 0%, rgba(black, 0) 25%, rgba(black,.4) 90%, rgba(black,.5) 100%)
-	background: linear-gradient(to bottom, rgba(black, .3) 0%, rgba(black, .3) 75%, rgba($color-background,.8) 92%, rgba($color-background,.9) 95%)
-	// border-bottom: thick solid darken($color-background, 5%)
+	background: linear-gradient(to bottom, rgba(black, 0) 0%, rgba(black, 0) 25%, rgba(black,.5) 90%, rgba(black,.5) 100%)
+
+section#homepage.links
+	height: initial
+	padding: 0
+	margin-bottom: 45px
+
+	display: flex
+	flex-direction: column
+	align-items: stretch
+
+	#links-container
+		display: flex
+		justify-content: space-around
+		align-items: stretch
+		margin: 0
+
+		.links-item
+			width: 100%
+			height: 100%
+			margin: 0 5px
+			border-radius: 3px
+			color: white
+			background-color: $color-background-nav
+			box-shadow: 0 0 15px rgba(black, .1)
+
+			text-align: center
+			overflow: hidden
+
+			position: relative
+
+			&:hover
+				text-decoration: none
+
+				img.header
+					opacity: .9
+
+			img.header
+				opacity: 1
+				z-index: 0
+				// transform: scale(1.2)
+				// filter: blur(4px)
+
+				border-top-left-radius: 3px
+				border-top-right-radius: 3px
+				width: 100%
+				position: relative
+				top: 0
+				left: 0
+				right: 0
+				bottom: 0
+				transition: opacity 100ms ease-in-out
+
+			.title
+				display: block
+				text-transform: uppercase
+				width: 100%
+				position: relative
+
+				padding: 10px 5px
+
+				font:
+					family: $font-headings-secondary
+					size: 1.5em
+					weight: 500
+
+			.content
+				color: $color-text-light
+				padding: 0 30px 10px
+
+			span.bar
+				height: 4px
+				width: 100%
+				display: block
+				background-color: $color-background-dark
+
+			&.open_projects
+				.title
+					color: $color-open_projects
+				span.bar
+					background-color: $color-open_projects
+
+			&.training
+				.title
+					color: $color-training
+				span.bar
+					background-color: $color-training
+
+
+section#homepage.bullets
+	padding: 75px 0
+	border-top: 5px solid $color-background
+	+container-box
+
+	h1
+		text-align: center
+		font-size: 2.8em
+		margin:
+			top: 0
+			bottom: 30px
+		padding: 0
+		color: $color-info
+
+	.bullets-list
+		display: flex
+		justify-content: space-around
+
+		flex-flow: row wrap
+		+container-behavior
+
+		.bullets-list-item
+			padding: 20px 25px
+			width: 25%
+			float: left
+			margin: 10px auto
+
+			line-height: 1.6em
+
+			font:
+				size: 1.1em
+				weight: 300
+
+
+			&-title
+				padding: 0 0 10px 0
+				color: $color-background-nav
+				font:
+					weight: 400
+					size: 1.2em
+
+
+section#homepage.get-started
+	background-color: $color-background-nav
+	color: white
+
+	display: flex
+	align-items: center
+	justify-content: center
+
+	min-height: 500px
+
+	h2
+		font-size: 2em
+		margin: 15px auto 50px
+
+
+	a.get-started
+		@include button-rounded-filled($color-primary)
+
+		padding: 15px 50px
+		font-size: 1.5em
+

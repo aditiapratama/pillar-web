@@ -110,12 +110,14 @@ script.
 	$('.comment-action-submit').click(function(e){
 
 		$this = $(this);
-		$this.html('<i class="fa fa-spin fa-spinner"></i> Posting...');
 
 		var $textarea = $('.comment-reply-field textarea');
 
 		// Check if there's actual content in the textarea
 		if ($textarea.val()) {
+
+			$this.addClass('submitting');
+			$this.html('<i class="fa fa-spin fa-spinner"></i> Posting...');
 
 			// Collect parent_id
 			var commentField = document.getElementById('comment_field');
@@ -137,9 +139,9 @@ script.
 
 		} else {
 			// No content in the textarea
-			$this.html("<i class='fa fa-spin fa-circle-o-notch'></i> Don't be shy...");
 			$this.addClass('button-field-error');
 			$textarea.addClass('field-error')
+			$this.html("<i class='zmdi zmdi-comment-alert'></i> Say something...");
 
 			setTimeout(function(){
 				$this.html('Post Comment');

@@ -47,15 +47,15 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 		ul.project-edit-tools
 			a#item_add(href="#")
 				li
-					i.button-add.fa.fa-plus
+					i.button-add.zmdi.zmdi-collection-plus
 					| Add Asset
 			a#item_edit(href="#")
 				li
-					i.button-edit.fa.fa-edit
+					i.button-edit.zmdi.zmdi-edit
 					| Edit
 			a#item_delete(href="#")
 				li
-					i.fa.fa-trash
+					i.zmdi.zmdi-delete
 
 	#project-flex
 
@@ -159,7 +159,7 @@ script(type="text/javascript").
 			$('#server_error').attr('src', url);
 		})
 		.always(function(){
-			$('.button-edit').addClass('fa-edit').removeClass('fa-spin fa-spinner');
+			$('.button-edit').addClass('zmdi zmdi-edit').removeClass('fa fa-spin fa-spinner');
 		});
 	}
 
@@ -176,7 +176,7 @@ script(type="text/javascript").
 			$('#server_error').attr('src', url);
 		})
 		.always(function(){
-			$('.button-add').addClass('fa-plus').removeClass('fa-spin fa-spinner');
+			$('.button-add').addClass('zmdi zmdi-collection-plus').removeClass('fa fa-spin fa-spinner');
 		});
 	}
 
@@ -218,15 +218,15 @@ script(type="text/javascript").
 				},
 				"types" : {
 						"#": {"valid_children": ["collection"]},
-						"chapter" : {"icon": "fa fa-folder-o"},
-						"group" : {"icon": "fa fa-folder-o"},
-						"group_storage" : {"icon": "fa fa-folder-o"},
-						"filesystem_node" : {"icon": "fa fa-folder-o"},
-						"file" : {"icon": "fa fa-file-archive-o", "max_children": 0},
-						"filesystem_file" : {"icon": "fa fa-file-archive-o", "max_children": 0},
-						"image" : {"icon": "fa fa-picture-o", "max_children": 0},
-						"video" : {"icon": "fa fa-film", "max_children": 0},
-						"default" : {"icon": "fa fa-file-o"}
+						"chapter" : {"icon": "zmdi zmdi-folder-outline"},
+						"group" : {"icon": "zmdi zmdi-folder-outline"},
+						"group_storage" : {"icon": "zmdi zmdi-folder-outline"},
+						"filesystem_node" : {"icon": "zmdi zmdi-folder-outline"},
+						"file" : {"icon": "zmdi zmdi-file", "max_children": 0},
+						"filesystem_file" : {"icon": "zmdi zmdi-file", "max_children": 0},
+						"image" : {"icon": "zmdi zmdi-image-o", "max_children": 0},
+						"video" : {"icon": "zmdi zmdi-movie", "max_children": 0},
+						"default" : {"icon": "zmdi zmdi-file"}
 				},
 				"plugins": ["types",] //, "state", "sort"
 		});
@@ -245,7 +245,7 @@ script(type="text/javascript").
 
 		$('#item_edit').click(function(e){
 
-			$('.button-edit').addClass('fa-spin fa-spinner').removeClass('fa-edit');
+			$('.button-edit').addClass('fa fa-spin fa-spinner').removeClass('zmdi zmdi-edit');
 
 			// When clicking on the edit icon, embed the edit
 			e.preventDefault;
@@ -256,7 +256,7 @@ script(type="text/javascript").
 
 		$('#item_add').click(function(e){
 
-			$('.button-add').addClass('fa-spin fa-spinner').removeClass('fa-plus');
+			$('.button-add').addClass('fa fa-spin fa-spinner').removeClass('zmdi zmdi-collection-plus');
 
 			e.preventDefault;
 			node_id = document.getElementById("item_add");

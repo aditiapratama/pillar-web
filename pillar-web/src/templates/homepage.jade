@@ -1,5 +1,5 @@
 | {% extends 'layout.html' %}
-| {% block page_title %}{% endblock %}
+| {% block page_title %}Welcome{% endblock %}
 
 | {% block og %}
 meta(property="og:title", content="Blender Cloud")
@@ -8,24 +8,32 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 | {% endblock %}
 
 | {% block header_backdrop %}
-.homepage.navbar-backdrop(style="background-image: url({{ url_for('static', filename='assets/img/background_join_bbb.jpg')}})")
+.homepage.navbar-backdrop(
+	style="background-image: url({{ url_for('static', filename='assets/img/background_join_bbb.jpg')}})")
+//
+	style="background-image: url({{ url_for('static', filename='assets/img/background_join_bbb.jpg')}})")
 .homepage.navbar-backdrop-overlay
 | {% endblock %}
 
 | {% block body %}
-.container
+#homepage.page-content
+	#header
+		.text
+			.title Your online studio
+			.lead.
+				Full access to the Blender Institute's film projects and training,
+				to support Blender development and build an open production platform.
 
-	#homepage.page-content
+			.buttons
+				a.btn.btn-default.btn-outline.get-started(href="{{ url_for('join') }}")
+					| Get Started
 
-		#header
-			.text
-				.title Your online studio
-				.lead.
-					Full access to the Blender Institute's film projects and training,
-					to support Blender development and build an open production platform. <a href="{{ url_for('join') }}">JOIN.</a>
+				a.btn.btn-default.btn-outline.learn-more
+					| Learn More
 
-		#content
-			#sidebar
+	#content
+		//
+			#sidebar.hidden
 
 				section#join
 					#price
@@ -41,7 +49,6 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 
 
 				section#goals
-
 					.milestone-item
 						.milestone-item-title &check; 8 Open Movies
 						.milestone-item-content.
@@ -51,7 +58,7 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 					.milestone-item
 						.milestone-item-title &check; 11 Training titles
 						.milestone-item-content.
-							Learn from the masters - production quality 
+							Learn from the masters - production quality
 							training videos by 3d professionals.
 
 					.milestone-item
@@ -94,32 +101,87 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 						.milestone-item-content.
 							Blender Institute will host the core team working on the 2.8 Workflow project.
 
-			#main
 
-				section#links
-					#links-container
-						a.links-item.open_projects(href="{{ url_for('open_projects') }}")
-							img.header(src="{{ url_for('static', filename='assets/img/frontpage_link_openprojects.jpg') }}")
-							span.bar
-							span.title Open Projects
+		section#homepage.links
+			#links-container
 
-							p.content Browse the entire production trees of all the open-movie projects
-
-						a.links-item.training(href="{{ url_for('training') }}")
-							img.header(src="{{ url_for('static', filename='assets/img/frontpage_link_training.jpg') }}")
-							span.bar
-							span.title Training
-
-							p.content Watch and learn from more than 100 hours of educational material
+				a.links-item.training(href="{{ url_for('training') }}")
+					img.header(src="{{ url_for('static', filename='assets/img/frontpage_link_training.jpg') }}")
+					span.bar
+					span.title Training
+					p.content.
+						Learn from the masters - production quality
+						training videos by 3d professionals.
 
 
-						//
-							a.links-item
-								img.header(src="{{ url_for('static', filename='assets/img/frontpage_link_assets.jpg') }}")
-								span.title Assets
+				a.links-item.open_projects(href="{{ url_for('open_projects') }}")
+					img.header(src="{{ url_for('static', filename='assets/img/frontpage_link_openprojects.jpg') }}")
+					span.bar
+					span.title Open Movies
+					p.content Full production data and tutorials from all open movies, for you to use freely.
 
-							p.content Some text about ths estufsd
 
+				a.links-item
+					img.header(src="{{ url_for('static', filename='assets/img/frontpage_link_assets.jpg') }}")
+					span.bar
+					span.title Bright Future
+
+					p.content Assets library, shot management, project management, and more. We've got big plans.
+
+section#homepage.bullets
+
+	h1 What's Next
+
+	.bullets-list
+		.bullets-list-item
+			.bullets-list-item-title Glass Half
+			.bullets-list-item-content.
+				In this fun cartoon short we explore NPR Rendering and motion graphics production.
+
+		.bullets-list-item
+			.bullets-list-item-title Character Department
+			.bullets-list-item-content.
+				Oct '15: A new section around the Blenrig character rigging tool, many tutorials and ready to use characters.
+		.bullets-list-item
+			.bullets-list-item-title Caminandes Xmas edition
+			.bullets-list-item-content.
+				Dec '15: The Llama is back! And we'll pick up work on Cycles, Asset managing and Shot Management.
+
+
+		.bullets-list-item
+			.bullets-list-item-title Asset Libraries
+			.bullets-list-item-content.
+				Dec '15: A huge public domain Texture Library and a CC-BY Character Library, ready to animate.
+
+		.bullets-list-item
+			.bullets-list-item-title Shot Management
+			.bullets-list-item-content.
+				Q1 '16: Attract shot management tool available for subscribers.
+
+		.bullets-list-item
+			.bullets-list-item-title Project Management
+			.bullets-list-item-content.
+				Q3 '16: Versioning and storage available for subscribers.
+
+		.bullets-list-item
+			.bullets-list-item-title Cosmos Laundromat: 2nd Cycle
+			.bullets-list-item-content.
+				Production of the 2nd Cycle for Cosmos Laundromat will start when we hit the 4k member bullets-list. (read more)
+
+		.bullets-list-item
+			.bullets-list-item-title Blender Development
+			.bullets-list-item-content.
+				Blender Institute will host the core team working on the 2.8 Workflow project.
+
+section#homepage.get-started
+
+	h2 Only $10 per month.
+
+	a.btn.btn-default.btn-outline.get-started(href="{{ url_for('join') }}")
+		| Get started now
+
+#homepage.page-content
+			//
 				section#updates
 					h2.section-title Latest Updates
 

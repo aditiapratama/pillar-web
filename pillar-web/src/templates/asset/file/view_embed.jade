@@ -1,8 +1,6 @@
 | {% block body %}
 
 #node-container
-	a(name="{{node._id}}")
-
 	| {% if node.picture %}
 	a(href="{{ node.picture.thumbnail('l') }}")
 		section.node-preview.file
@@ -33,8 +31,8 @@
 				li.node-details-meta-list-item.file.download
 					a(href="{{ node.file.link }}")
 						button.btn.btn-default(type="button")
-							i.fa.fa-download.icon-download-file
-							|  Download
+							i.zmdi.zmdi-download.icon-download-file
+							| Download
 
 		#comments-container
 			#comments-list-items-loading
