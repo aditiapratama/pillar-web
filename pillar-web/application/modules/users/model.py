@@ -79,6 +79,7 @@ class UserProxy(object):
             }, api=self.api)
         if not node_type: return abort(404)
 
+
         # Define key for querying for the project
         if self.is_organization:
             user_path = 'properties.organization'

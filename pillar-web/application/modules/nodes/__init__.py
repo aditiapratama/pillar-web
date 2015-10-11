@@ -61,7 +61,6 @@ def assigned_users_to(node, node_type):
 
 
 @nodes.route("/<node_type_name>")
-@login_required
 def index(node_type_name=""):
     """Generic function to list all nodes
     """
@@ -231,7 +230,6 @@ def jstree_build_from_node(node):
 
 
 @nodes.route("/<node_id>/view")
-@login_required
 def view(node_id):
     #import time
     #start = time.time()

@@ -49,7 +49,6 @@ def user_view(name):
 
 
 @app.route("/<name>/<project>/")
-@login_required
 def project_view(name, project):
     """Entry point to view a project.
     """

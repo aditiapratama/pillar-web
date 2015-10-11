@@ -79,7 +79,6 @@ def format_comment(comment, is_reply=False, is_team=False, replies=None):
 
 
 @nodes.route("/comments/")
-@login_required
 def comments_index():
     parent_id = request.args.get('parent_id')
 
