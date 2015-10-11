@@ -6,7 +6,8 @@ link(rel="stylesheet", href="//releases.flowplayer.org/6.0.3/skin/functional.css
 
 #node-container
 	section.node-preview.video
-		#flowplayer_container.is-splash(style="background-image:url({{node.picture.thumbnail('l')}}); background-repeat:no-repeat;")
+		#flowplayer_container.is-splash(
+			style="{% if node.picture %}background-image:url({{node.picture.thumbnail('l')}}); background-repeat:no-repeat; {% endif %}")
 
 	section.node-details-container
 
@@ -59,6 +60,7 @@ script(type="text/javascript").
 	var container = document.getElementById("flowplayer_container");
 
 	flowplayer(container, {
+		key: "{{config.FLOWPLAYER_KEY}}",
 		splash: true,
 			clip: {
 				sources: {{ node.video_sources | safe }}
