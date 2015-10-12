@@ -1,11 +1,13 @@
 | {% block body %}
 
 #node-container
+
 	| {% if node.picture %}
 	a(href="{{ node.picture.thumbnail('l') }}")
 		section.node-preview.image
 			img(src="{{ node.picture.thumbnail('l') }}")
 	| {% endif %}
+
 
 	section.node-details-container
 
@@ -28,7 +30,7 @@
 				li.node-details-meta-list-item.image.download
 					a(href="{{ node.file.link }}")
 						button.btn.btn-default(type="button")
-							|  Download
+							| Download
 
 		#comments-container
 			#comments-list-items-loading

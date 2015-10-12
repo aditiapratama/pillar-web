@@ -1,9 +1,6 @@
 | {% block body %}
 
 #node-container
-	//- a(href="{{node.picture}}")
-	//- 	section.node-preview.file
-	//- 		img(src="{{node.picture}}")
 
 	section.node-details-container
 
@@ -11,8 +8,6 @@
 			.node-title
 				| {{node.name}}
 
-		//- .node-details-description
-		//- 	| {{node.description|safe}}
 
 	section.node-children.group
 
@@ -23,22 +18,17 @@
 			.list-node-children-item
 				.list-node-children-item-thumbnail
 
-					//- | {% if child.picture %}
-					//- img(
-					//- 	src="{{ child.picture.thumbnail('b')}} ")
-					//- | {% endif %}
-
 					.list-node-children-item-thumbnail-icon
 						| {% if child['content_type'] == 'video' %}
-						i.fa.fa-film
+						i.ion-ios-film-outline
 						| {% elif child['content_type'] == 'image' %}
-						i.fa.fa-picture-o
+						i.ion-image
 						| {% elif child['content_type'] == 'file' %}
-						i.fa.fa-file-zip-o
+						i.ion-document-text
 						| {% elif child['content_type'] == 'binary' %}
-						i.fa.fa-file-zip-o
+						i.ion-document
 						| {% else %}
-						i.fa.fa-folder-o
+						i.ion-android-folder
 						| {% endif %}
 
 				.list-node-children-item-name

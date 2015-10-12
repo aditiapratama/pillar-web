@@ -1,11 +1,13 @@
 | {% block body %}
 
 #node-container
+
 	| {% if node.picture %}
 	a(href="{{ node.picture.thumbnail('l') }}")
 		section.node-preview.file
 			img(src="{{ node.picture.thumbnail('l') }}")
 	| {% endif %}
+
 
 	section.node-details-container
 
@@ -33,9 +35,11 @@
 						button.btn.btn-default(type="button")
 							| Download
 
+
 		#comments-container
 			#comments-list-items-loading
 				i.ion-load-c
+
 
 script(type="text/javascript").
 	var url = "{{url_for('nodes.comments_index')}}?parent_id={{node._id}}"
