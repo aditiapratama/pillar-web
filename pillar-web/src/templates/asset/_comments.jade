@@ -6,7 +6,6 @@
 		.comment-reply-container
 
 			.comment-reply-avatar
-				// XXX Use actual avatar
 				img(src="{{ current_user.gravatar }}")
 
 			.comment-reply-form
@@ -20,14 +19,17 @@
 					.comment-reply-meta
 						.comment-details
 							.comment-rules
-								a(href="https://guides.github.com/features/mastering-markdown/") markdown ready
+								a(
+									title="Markdown Supported"
+									href="https://guides.github.com/features/mastering-markdown/")
+									i.ion-social-markdown
 
 							.comment-author
 								| commenting as
 								span.author-name {{ current_user.username }}
 
 						button.comment-action-cancel.btn.btn-outline(type="button")
-							i.fa.fa-times
+							i.ion-ios-close-empty
 						button.comment-action-submit.btn.btn-outline(type="button")
 							| Post Comment
 
@@ -35,10 +37,9 @@
 		| {% endif %}
 
 		section#comments-list-header
-
 			#comments-list-items
 				#comments-list-items-loading
-					i.fa.fa-spin.fa-circle-o-notch
+					i.ion-load-c
 
 			script#comment-template(type="text/x-handlebars-template")
 				| {% raw %}
@@ -76,8 +77,18 @@
 				| {{/list}}
 				| {% endraw %}
 
+			script#comments-empty-template(type="text/x-handlebars-template")
+				.nocomments
+					| No comments... yet!
 
-			// TODO
+					| {% if not current_user.is_authenticated() %}
+					|  ·
+					a(href="{{ url_for('users.login') }}")  Sign in
+					|  to comment.
+					| {% endif %}
+
+			| {# Build the list using individual
+			//
 				script#comments-list-template(type="text/x-handlebars-template")
 					| {% raw %}
 
@@ -85,6 +96,7 @@
 					| {{/list}}
 
 					| {% endraw %}
+			| #}
 
 
 
@@ -101,7 +113,7 @@ script.
 		if (comments && comments.trim() !="") {
 			$('#comments-list-items').html(comments);
 		} else {
-			$('#comments-list-items').html('<div class="nocomments">No comments... yet!</div>');
+			$('#comments-list-items').html(Handlebars.compile($('#comments-empty-template').html()));
 		}
 	});
 
@@ -117,7 +129,7 @@ script.
 		if ($textarea.val()) {
 
 			$this.addClass('submitting');
-			$this.html('<i class="fa fa-spin fa-spinner"></i> Posting...');
+			$this.html('<i class="ion-load-c"></i> Posting...');
 
 			// Collect parent_id
 			var commentField = document.getElementById('comment_field');
@@ -141,7 +153,7 @@ script.
 			// No content in the textarea
 			$this.addClass('button-field-error');
 			$textarea.addClass('field-error')
-			$this.html("<i class='zmdi zmdi-comment-alert'></i> Say something...");
+			$this.html("<i class='ion-android-happy'></i> Say something...");
 
 			setTimeout(function(){
 				$this.html('Post Comment');

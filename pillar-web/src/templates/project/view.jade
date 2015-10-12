@@ -23,7 +23,7 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 #project_container
 	#project-header
 		.project_nav-expand-btn(title="Toggle Navigation")
-			i.fa.fa-angle-double-right
+			i.ion-ios-arrow-right
 
 		ul.breadcrumb
 
@@ -42,7 +42,7 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 				a(href="#") Videos
 
 		#project-loading
-			i.fa.fa-spinner.fa-spin
+			i.ion-load-c
 
 		ul.project-edit-tools
 			a#item_add(href="#")
@@ -64,7 +64,7 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 
 		#project_nav-footer
 			.project_nav-collapse-btn(title="Toggle Navigation")
-				i.fa.fa-angle-double-left
+				i.ion-ios-arrow-left
 
 		.project_split
 
@@ -87,9 +87,9 @@ script(type="text/javascript").
 
 	// Binding for ajax event
 	$(document).bind("ajaxSend", function(){
-		$('#project-loading').show();
+		$('#project-loading').fadeIn(100);
 	}).bind("ajaxComplete", function(){
-		$('#project-loading').hide();
+		$('#project-loading').fadeOut();
 	});
 
 	container_offset = $('#project-flex').offset();

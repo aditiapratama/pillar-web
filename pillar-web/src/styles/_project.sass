@@ -166,11 +166,15 @@ $list-node-children-item-width: 160px
 				// border-right: thin solid darken($color-background, 50%)
 
 	#project-loading
-		padding: 8px
-		color: $color-text-light-secondary
-		left: 8px
-		top: 1px
+		position: relative
+		color: $color-text-light-primary
+		left: 15px
 		display: none
+
+		i
+			+spin
+			position: relative
+			top: 2px
 
 
 .project_nav-collapse-btn,
@@ -327,12 +331,15 @@ section.node-details-container
 					&.video, &.image
 						margin-left: auto
 
+
 					/* Actual button */
 					button
 						@include button-rounded($color-text-dark-primary)
+						position: relative
+
 						padding:
-							left: 20px
-							right: 15px
+							left: 25px
+							right: 25px
 
 						font-size: .9em
 
@@ -340,10 +347,10 @@ section.node-details-container
 						i.icon-dropdown-menu
 							padding-left: 10px
 
-						i.icon-download-file
-							position: relative
-							left: -5px
-
+					/* Videos have dropdown caret, so paddit 5px less */
+					&.video.download
+						button
+							padding-right: 20px
 
 					/* Download dropdown options */
 					ul.dropdown-menu

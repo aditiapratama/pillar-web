@@ -28,10 +28,11 @@
 				li.node-details-meta-list-item.image.download
 					a(href="{{ node.file.link }}")
 						button.btn.btn-default(type="button")
-							i.fa.fa-download.icon-download-file
 							|  Download
 
 		#comments-container
+			#comments-list-items-loading
+				i.ion-load-c
 
 script(type="text/javascript").
 	var url = "{{url_for('nodes.comments_index')}}?parent_id={{node._id}}"

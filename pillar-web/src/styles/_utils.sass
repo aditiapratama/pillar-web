@@ -46,7 +46,7 @@
 		cursor: pointer
 		color: $mixin-color
 		border: thin solid $mixin-color
-		background-color: rgba($mixin-color, .2)
+		background-color: rgba($mixin-color, .1)
 
 	&:active, &:focus
 		outline: none
@@ -117,11 +117,37 @@
 	@media print
 		@content
 
+
+=spin
+	animation:
+		name: spin-once
+		duration: 1s
+		delay: 0
+		fill-mode: forwards
+		iteration-count: infinite
+		timing-function: linear
+
+=pulse
+	animation:
+		name: pulse
+		duration: 1s
+		delay: 0
+		fill-mode: forwards
+		iteration-count: infinite
+
 @keyframes spin-once
 	from
 		transform: rotate(0deg)
 	to
 		transform: rotate(360deg)
+
+@keyframes pulse
+	0
+		opacity: 1
+	50%
+		opacity: 0
+	100%
+		opacity: 1
 
 @keyframes background-fill-left-right
 	from

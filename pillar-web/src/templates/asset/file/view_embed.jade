@@ -31,12 +31,11 @@
 				li.node-details-meta-list-item.file.download
 					a(href="{{ node.file.link }}")
 						button.btn.btn-default(type="button")
-							i.zmdi.zmdi-download.icon-download-file
 							| Download
 
 		#comments-container
 			#comments-list-items-loading
-				i.fa.fa-spin.fa-circle-o-notch
+				i.ion-load-c
 
 script(type="text/javascript").
 	var url = "{{url_for('nodes.comments_index')}}?parent_id={{node._id}}"

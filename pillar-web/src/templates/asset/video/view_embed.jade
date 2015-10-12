@@ -33,9 +33,8 @@ link(rel="stylesheet", href="//releases.flowplayer.org/6.0.3/skin/functional.css
 						data-toggle="dropdown",
 						aria-haspopup="true",
 						aria-expanded="false")
-
 						| Download
-						i.fa.fa-angle-down.icon-dropdown-menu
+						i.ion-ios-arrow-down.icon-dropdown-menu
 
 					ul.dropdown-menu
 						| {% for child in node.file_children._items %}
@@ -50,6 +49,8 @@ link(rel="stylesheet", href="//releases.flowplayer.org/6.0.3/skin/functional.css
 						| {% endfor %}
 
 		#comments-container
+			#comments-list-items-loading
+				i.ion-load-c
 
 
 | {% endblock %}

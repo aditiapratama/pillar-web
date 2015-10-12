@@ -23,13 +23,6 @@ html(lang="en")
 		link(href='//cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.1.2/css/material-design-iconic-font.min.css', rel='stylesheet')
 		link(href="//code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css", rel="stylesheet")
 
-
-		//- link(href="{{ url_for('static', filename='assets/css/bootstrap-colorpicker.min.css') }}", rel="stylesheet")
-
-		//- link(href="{{ url_for('static', filename='gallery/css/blueimp-gallery.min.css') }}", rel="stylesheet")
-		//- link(href="{{ url_for('static', filename='jquery-file-upload/css/jquery.fileupload.css') }}", rel="stylesheet")
-		//- link(href="{{ url_for('static', filename='jquery-file-upload/css/jquery.fileupload-ui.css') }}", rel="stylesheet")
-
 		//- noscript
 			//- link(href="{{ url_for('static', filename='jquery-file-upload/css/jquery.fileupload-noscript.css') }}", rel="stylesheet")
 		//- noscript
@@ -58,7 +51,7 @@ html(lang="en")
 			// XXX - Use alert category too
 			.alert(role="alert")
 				button.close(type="button", data-dismiss="alert")
-					i.fa.fa-times
+					i.ion-ios-close-empty
 				| {{message}}
 			|	{% endfor %}
 
@@ -72,7 +65,7 @@ html(lang="en")
 					header.navbar-header
 						button.navbar-toggle(data-target=".navbar-collapse", data-toggle="collapse", type="button")
 							span.sr-only Toggle navigation
-							i.fa.fa-bars
+							i.ion-navicon
 						a.navbar-brand(
 							href="/",
 							title="Blender Cloud")
@@ -112,21 +105,21 @@ html(lang="en")
 									li
 										a(href="{# XXX {{url_for('admin.index')}} #}",
 											title="Whoosh!")
-											i.fa.fa-fighter-jet
+											i.ion-jet
 											| Whoosh!
 									| {# XXX
 									| {% endif %}
 									| #}
 
 									li
-										a(href="{# XXX {{url_for('user_settings.profile')}} #}"
+										a(href="{{url_for('users.profile')}}"
 											title="Settings")
-											i.fa.fa-cog
+											i.ion-ios-gear-outline
 											| Settings
 									li.divider(role="separator")
 									li
 										a(href="/users/logout")
-											i.fa.fa-power-off(title="Log Out")
+											i.ion-log-out(title="Log Out")
 											| Log out
 
 							| {% else %}
@@ -154,18 +147,14 @@ html(lang="en")
 
 						.col-md-2.col-xs-6
 							ul.footer-social
-								a(href="http://twitter.com/Blender_Cloud",
+								a(href="https://twitter.com/Blender_Cloud",
 									title="Follow us on Twitter")
 									li
-										span.fa-stack.fa-2x
-											i.fa.fa-circle-thin.fa-stack-2x
-											i.fa.fa-twitter.fa-stack-1x
+										i.ion-social-twitter-outline
 								a(href="mailto:cloudsupport@blender.org"
 									title="Support Email")
 									li
-										span.fa-stack.fa-2x
-											i.fa.fa-circle-thin.fa-stack-2x
-											i.fa.fa-envelope.fa-stack-1x
+										i.ion-ios-email-outline
 
 						.col-md-2.col-xs-6
 							h4 Blender Cloud

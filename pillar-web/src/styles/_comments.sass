@@ -18,13 +18,19 @@
 
 
 	#comments-list-items-loading
-		font-size: 2.5em
-		color: $color-background-dark
+		font-size: 3em
+		color: $color-background
 		text-align: center
 		position: relative
 		top: 25px
 		left: 50%
-		transform: translateX(-50%);
+		transform: translateX(-50%)
+		+spin
+
+		i
+			position: relative
+			top: 2px
+
 
 	#comments-list-items
 		position: relative
@@ -309,6 +315,14 @@
 							a
 								color: $color-text-dark-hint
 
+								&:hover
+									color: $color-primary
+
+								i
+									font-size: 1.5em
+									position: relative
+									top: 2px
+
 
 					button.comment-action-submit
 						margin-left: auto
@@ -328,6 +342,11 @@
 								iteration-count: 1
 								timing-function: ease-out
 
+							i
+								+spin
+								position: relative
+								right: 4px
+
 
 						&.button-field-error
 							@include button-rounded($color-danger)
@@ -336,14 +355,7 @@
 
 							i
 								position: relative
-								bottom: -1px
-								right: 3px
-
-								// animation:
-								// 	name: spin-once
-								// 	duration: 2.5s
-								// 	delay: 0
-								// 	fill-mode: forwards
+								right: 2px
 
 					button.comment-action-cancel
 						display: none
