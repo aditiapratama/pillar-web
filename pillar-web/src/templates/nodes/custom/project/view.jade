@@ -46,13 +46,21 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 
 		ul.project-edit-tools
 			a#item_add(href="#")
-				li
-					i.button-add.zmdi.zmdi-collection-plus
+				li.button-add
+					i.button-add-icon.zmdi.zmdi-collection-plus
 					| Add Asset
 			a#item_edit(href="#")
-				li
-					i.button-edit.zmdi.zmdi-edit
+				li.button-edit
+					i.button-edit-icon.zmdi.zmdi-edit
 					| Edit
+			a#item_cancel(href="#")
+				li.button-cancel
+					i.button-cancel-icon.ion-close-round
+					| Cancel
+			a#item_save(href="#")
+				li.button-save
+					i.button-save-icon.ion-checkmark-round
+					| Save Changes
 			//- a#item_delete(href="#")
 			//- 	li
 			//- 		i.zmdi.zmdi-delete
@@ -159,7 +167,7 @@ script(type="text/javascript").
 			$('#server_error').attr('src', url);
 		})
 		.always(function(){
-			$('.button-edit').addClass('zmdi zmdi-edit').removeClass('ion-load-c spin');
+			$('.button-edit-icon').addClass('zmdi zmdi-edit').removeClass('ion-load-c spin');
 		});
 	}
 
@@ -176,7 +184,7 @@ script(type="text/javascript").
 			$('#server_error').attr('src', url);
 		})
 		.always(function(){
-			$('.button-add').addClass('zmdi zmdi-collection-plus').removeClass('ion-load-c spin');
+			$('.button-add-icon').addClass('zmdi zmdi-collection-plus').removeClass('ion-load-c spin');
 		});
 	}
 
@@ -245,7 +253,7 @@ script(type="text/javascript").
 
 		$('#item_edit').click(function(e){
 
-			$('.button-edit').addClass('ion-load-c spin').removeClass('zmdi zmdi-edit');
+			$('.button-edit-icon').addClass('ion-load-c spin').removeClass('zmdi zmdi-edit');
 
 			// When clicking on the edit icon, embed the edit
 			e.preventDefault;
@@ -256,7 +264,7 @@ script(type="text/javascript").
 
 		$('#item_add').click(function(e){
 
-			$('.button-add').addClass('ion-load-c spin').removeClass('zmdi zmdi-collection-plus');
+			$('.button-add-icon').addClass('ion-load-c spin').removeClass('zmdi zmdi-collection-plus');
 
 			e.preventDefault;
 			node_id = document.getElementById("item_add");
