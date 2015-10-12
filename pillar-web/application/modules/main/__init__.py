@@ -43,7 +43,7 @@ def user_view(name):
     user = UserProxy(name)
     projects = user.projects()
     return render_template(
-        'project/index_collection.html',
+        'nodes/custom/project/index_collection.html',
         user=user,
         projects=projects._items)
 
@@ -94,7 +94,7 @@ def get_projects(category):
 def open_projects():
     projects = get_projects('film')
     return render_template(
-        'project/index_collection.html',
+        'nodes/custom/project/index_collection.html',
         projects=projects._items)
 
 
@@ -102,5 +102,5 @@ def open_projects():
 def training():
     projects = get_projects('training')
     return render_template(
-        'project/index_collection.html',
+        'nodes/custom/project/index_collection.html',
         projects=projects._items)

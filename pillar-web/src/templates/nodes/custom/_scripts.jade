@@ -1,0 +1,15 @@
+script(type="text/javascript").
+	var url = "{{url_for('nodes.comments_index')}}?parent_id={{node._id}}"
+	$.get(url, function(dataHtml) {
+		// Update the DOM injecting the generate HTML into the page
+		$('#comments-container').replaceWith(dataHtml);
+	})
+
+	{% if node.has_method('PUT') %}
+		$('#item_edit').attr('data-node_id', '{{node._id}}');
+		$('#item_add').attr('data-parent_node_id', '{{parent._id}}');
+
+		$('#item_add, #item_edit').show();
+	{% else %}
+		$('#item_add, #item_edit').hide();
+	{% endif %}

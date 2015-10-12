@@ -113,7 +113,7 @@ def comments_index():
             return_content = jsonify(items=comments)
     else:
         # Data will be requested via javascript
-        return_content = render_template('asset/_comments.html',
+        return_content = render_template('nodes/custom/_comments.html',
             parent_id=parent_id)
     return return_content
 

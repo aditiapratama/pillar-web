@@ -70,10 +70,6 @@ script(type="text/javascript").
 			}
 	});
 
-	var url = "{{url_for('nodes.comments_index')}}?parent_id={{node._id}}"
-	$.get(url, function(dataHtml) {
-		// Update the DOM injecting the generate HTML into the page
-		$('#comments-container').replaceWith(dataHtml);
-	})
+include ../../_scripts
 
 | {% endblock %}

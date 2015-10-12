@@ -274,7 +274,7 @@ def view(node_id):
     # Continue to process the node (for HTML, HTML embeded and JSON responses)
 
     # Set the default name of the template path based on the node name
-    template_path = node_type_name
+    template_path = os.path.join('nodes', 'custom', node_type_name)
     # Set the default action for a template. By default is view and we override
     # it only if we are working storage nodes, where an 'index' is also possible
     template_action = 'view'

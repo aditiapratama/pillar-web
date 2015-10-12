@@ -10,6 +10,7 @@ node_modules/
 .sass-cache/
 *.css.map
 *.js.map
+
 pillar-web/application/static/assets/css/main.css
 pillar-web/application/static/assets/js/*.min.js
 pillar-web/application/static/storage/
@@ -21,17 +22,10 @@ pillar-web/application/templates/join.html
 pillar-web/application/templates/stats.html
 
 pillar-web/application/templates/project/
-pillar-web/application/templates/group/
 pillar-web/application/templates/blog/
 
-pillar-web/application/templates/asset/file/
-pillar-web/application/templates/asset/image/
-pillar-web/application/templates/asset/video/
-pillar-web/application/templates/asset/_comments.html
-
+pillar-web/application/templates/nodes/custom/
 
 pillar-web/application/templates/nodes/edit.html
 pillar-web/application/templates/nodes/edit_embed.html
 
-pillar-web/application/templates/storage/index_embed.html
-pillar-web/application/templates/storage/view_embed.html

@@ -31,7 +31,7 @@
 					| {{ node.file.length | filesizeformat }}
 
 				li.node-details-meta-list-item.file.download
-					a(href="{{ node.file.link }}")
+					a(href="{% if node.has_method('GET') %}{{ node.file.link }}{% else %}{{ url_for('join') }}{% endif %}")
 						button.btn.btn-default(type="button")
 							| Download
 
@@ -41,12 +41,7 @@
 				i.ion-load-c
 
 
-script(type="text/javascript").
-	var url = "{{url_for('nodes.comments_index')}}?parent_id={{node._id}}"
-	$.get(url, function(dataHtml) {
-		// Update the DOM injecting the generate HTML into the page
-		$('#comments-container').replaceWith(dataHtml);
-	})
+include ../../_scripts
 
 | {% endblock %}
 

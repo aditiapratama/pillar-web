@@ -53,9 +53,9 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 				li
 					i.button-edit.zmdi.zmdi-edit
 					| Edit
-			a#item_delete(href="#")
-				li
-					i.zmdi.zmdi-delete
+			//- a#item_delete(href="#")
+			//- 	li
+			//- 		i.zmdi.zmdi-delete
 
 	#project-flex
 
@@ -115,9 +115,9 @@ script(type="text/javascript").
 			$('#project_context').html(dataHtml);
 			// If a nodeId is specified, update the interface for editing and deletion
 			if (typeof(nodeId) != 'undefined') {
-				$('#item_edit').attr('data-node_id', nodeId);
+
 				window.location.replace('#' + nodeId);
-				$('#item_add').attr('data-parent_node_id', nodeId);
+
 			};
 
 		})
