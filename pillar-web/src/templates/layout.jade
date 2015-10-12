@@ -55,7 +55,7 @@ html(lang="en")
 			|		{% if messages %}
 
 			|	{% for message in messages %}
-			// Use alert category too
+			// XXX - Use alert category too
 			.alert(role="alert")
 				button.close(type="button", data-dismiss="alert")
 					i.fa.fa-times
@@ -133,7 +133,7 @@ html(lang="en")
 
 							li.nav-item-sign-in
 								a(href="/users/login")
-									i.fa.fa-sign-in(title="Sign In")
+									i.ion-log-in(title="Sign In")
 									|  Sign In
 							| {% endif %}
 

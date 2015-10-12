@@ -159,8 +159,10 @@ header.navbar-header
 			align-items: center
 
 			font:
-				family: $font-headings
-				size: 1.3em
+				family: $font-headings-secondary
+				size: 1em
+				weight: 400
+			text-transform: uppercase
 			border-bottom: 3px solid transparent
 			text-shadow: 1px 1px 0 rgba(black, .2), 1px 1px 10px rgba(black, .2)
 			transition: all 150ms ease-in-out
@@ -173,7 +175,7 @@ header.navbar-header
 
 			&:hover
 				background-color: rgba($color-background-nav, .4)
-				border-bottom: 3px solid lighten($color-background-nav, 5%)
+				border-bottom: 3px solid lighten($color-background-nav, 15%)
 
 			&.active
 				border-bottom: 3px solid $color-secondary
@@ -183,9 +185,8 @@ header.navbar-header
 
 		&.nav-item-sign-in
 			i
-				padding-top: 2px
-				padding-right: 10px
-				font-size: .9em
+				padding-right: 6px
+				font-size: 1.1em
 
 		img.gravatar
 			border-radius: 999em
@@ -201,7 +202,7 @@ header.navbar-header
 		margin-left: 0 !important
 		text-shadow: 1px 1px 0 rgba(black, .2), 1px 1px 10px rgba(black, .2)
 		padding:
-			top: 8px
+			top: 4px
 			left: 15px
 			right: 20px // overrides bs
 		color: white
@@ -211,15 +212,12 @@ header.navbar-header
 			size: 1.4em
 			weight: 100
 
-		&:hover
-			color: white
-
 		span.app-logo
 			font-size: 1.5em
 
 		span.app-name
 			padding:
-				top: 6px
+				top: 8px
 				left: 10px
 
 	.dropdown
