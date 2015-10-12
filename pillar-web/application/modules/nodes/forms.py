@@ -198,7 +198,7 @@ def get_node_form(node_type):
         #                     choices=select))
         setattr(ProceduralForm,
                 'parent',
-                TextField('Parent ({0})'.format(parent_names)))
+                HiddenField('Parent ({0})'.format(parent_names)))
 
     setattr(ProceduralForm,
         'description',
