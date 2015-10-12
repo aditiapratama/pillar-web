@@ -6,6 +6,7 @@ html(lang="en")
 		meta(name="viewport", content="width=device-width, initial-scale=1.0")
 		meta(name="description", content="Blender Cloud is a web based service developed by Blender Institute that allows people to access the training videos and all the data from the past open projects.")
 		meta(name="author", content="Blender Institute")
+		meta(name="theme-color", content="#3e92aa")
 
 		meta(property="og:site_name", content="Blender Cloud")
 		| {% block og %}
@@ -18,7 +19,6 @@ html(lang="en")
 		link(href="//netdna.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css", rel="stylesheet")
 
 		link(href='//fonts.googleapis.com/css?family=Roboto:300,400', rel='stylesheet', type='text/css')
-		link(href='//fonts.googleapis.com/css?family=Oswald:300', rel='stylesheet', type='text/css')
 		link(href='//fonts.googleapis.com/css?family=Lato:300,400', rel='stylesheet', type='text/css')
 		link(href='//cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.1.2/css/material-design-iconic-font.min.css', rel='stylesheet')
 		link(href="//code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css", rel="stylesheet")
@@ -29,6 +29,7 @@ html(lang="en")
 			//- link(href="{{ url_for('static', filename='jquery-file-upload/css/jquery.fileupload-ui-noscript.css') }}", rel="stylesheet")
 
 		link(href="{{ url_for('static', filename='assets/ico/favicon.png') }}", rel="shortcut icon")
+		link(href="{{ url_for('static', filename='assets/ico/apple-touch-icon-precomposed.png') }}", rel="icon apple-touch-icon-precomposed", sizes="192x192")
 
 		| {% block head %}{% endblock %}
 
@@ -72,7 +73,7 @@ html(lang="en")
 							span.app-logo
 								i.bf-cloud
 							span.app-name
-								| Blender Cloud
+								img(src="{{ url_for('static', filename='assets/img/blendercloud_logo_header.png') }}")
 
 					nav.collapse.navbar-collapse
 						ul.nav.navbar-nav.navbar-right
