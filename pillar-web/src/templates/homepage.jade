@@ -19,10 +19,11 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 #homepage.page-content
 	#header
 		.text
-			.title Your online animation studio
+			.lead 
+				h1 Your Online Animation Studio
 			.lead.
-				Full access to the Blender Institute's film projects and training,
-				to support Blender development and build an open production platform.
+				We make film, we build a production pipeline, and we share everything.
+				Get full access to the Blender Institute's Open Projects and training material.
 
 			.buttons
 				a.btn.btn-default.btn-outline.get-started(href="{{ url_for('join') }}")
@@ -192,7 +193,7 @@ section#homepage.bullets
 
 section#homepage.supported-by
 
-	h1 Supported by
+	h1 Our Open Projects were supported by
 
 	img.logos(src="{{ url_for('static', filename='assets/img/support_logos.png') }}")
 
