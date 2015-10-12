@@ -127,6 +127,11 @@
 		iteration-count: infinite
 		timing-function: linear
 
+=spin-once
+	+spin
+	animation:
+		iteration-count: 1
+
 =pulse
 	animation:
 		name: pulse
@@ -134,6 +139,10 @@
 		delay: 0
 		fill-mode: forwards
 		iteration-count: infinite
+
+.spin
+	position: relative
+	+spin
 
 @keyframes spin-once
 	from
@@ -154,3 +163,4 @@
 		background-position: right bottom
 	to
 		background-position: left bottom
+

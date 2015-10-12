@@ -70,6 +70,8 @@ script(type="text/javascript").
 		event.preventDefault();
 	});
 
+	$("#item_add").hide();
+
 	$("#button-cancel").click(function(e) {
 		e.preventDefault();
 		displayNode($(this).data('node_id'));

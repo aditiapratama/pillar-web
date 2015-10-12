@@ -151,6 +151,8 @@ $list-node-children-item-width: 160px
 				border-radius: 3px
 				border: thin solid darken($color-background, 50%)
 
+				text-align: center
+
 				text-transform: uppercase
 
 				i
@@ -158,6 +160,14 @@ $list-node-children-item-width: 160px
 
 				&:hover
 					background-color: darken($color-background, 60%)
+
+			&#item_add,
+			&#item_edit
+				li
+					min-width: 80px
+
+					i
+						margin-right: 10px
 
 			&#item_delete
 				li i
