@@ -1,9 +1,8 @@
 script(type="text/javascript").
+
+	/* Convert Markdown */
 	var convert = new Markdown.getSanitizingConverter().makeHtml;
-
 	$('.node-details-description').html(convert($('.node-details-description').text()));
-
-	//- console.log($('.node-details-description').text());
 
 	var url = "{{url_for('nodes.comments_index')}}?parent_id={{node._id}}"
 	$.get(url, function(dataHtml) {
