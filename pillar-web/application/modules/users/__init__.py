@@ -44,29 +44,24 @@ def authenticate(username, password):
         raise e
 
     if r.status_code == 200:
-        message = r.json()['message']
-        if 'token' in r.json():
-            authenticated = True
-            token = r.json()['token']
-        else:
-            authenticated = False
-            token = None
+        response = r.json()
     else:
-        message = ""
-        authenticated = False
-        token = None
-    return dict(authenticated=authenticated, message=message, token=token)
+        response = None
+    return response
 
 
 @users.route("/login", methods=['GET', 'POST'])
 def login():
     form = UserLoginForm()
     if form.validate_on_submit():
-        token = authenticate(form.email.data, form.password.data)['token']
-        if token:
-            user = userClass(token)
+        auth = authenticate(form.email.data, form.password.data)
+        if auth and auth['status'] == 'success':
+            user = userClass(auth['data']['token'])
             login_user(user)
             flash('Welcome {0}!'.format(form.email.data))
+            return redirect('/')
+        elif auth:
+            flash('{0}'.format(auth['data']))
             return redirect('/')
     return render_template('users/login.html', form=form)
 
