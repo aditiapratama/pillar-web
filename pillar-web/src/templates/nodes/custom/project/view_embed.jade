@@ -12,17 +12,45 @@
 				// XXX link to user/organization
 				// small by {{ node.user }}
 
+			.node-title-details
+				.date {{ node._created }}
+
+				//- | {% if node.properties.status %}
+				.status {{node.properties.status}}
+				//- | {% endif %}
+
 		.node-details-description
 			| {{node.description}}
 
-		.node-details-meta
+		.node-extra
+			.node-updates
+				h3 Latest Updates
+				ul.node-updates-list
+					| {% for i in range(0, 5) %}
+					li.node-updates-list-item
+						//- a.image(href="")
+						//- 	img(src="{{ node.properties.picture_header.thumbnail('s') }}")
+						.info
+							a.title(href="") Update Name
+							span.details
+								span.when {{loop.index * 19}} mins ago by
+								span.who This Other Guy
+					| {% endfor %}
 
-			ul.node-details-meta-list
-				li.node-details-meta-list-item.status
-						| {{node.properties.status}}
+			.node-featured
+				h3 Featured Assets
+				ul.node-featured-list
+					| {% for i in range(0, 8) %}
+					li.node-featured-list-item
+						a.image(href="")
+							img(src="{{ node.properties.picture_header.thumbnail('s') }}")
+						.info
+							a.title(href="") Featured Name
+							span.details
+								span.when {{loop.index * 76}} mins ago by
+								span.who This Guy
+					| {% endfor %}
 
-				li.node-details-meta-list-item.date
-					| {{ node._created }}
 
 	section.debug.hidden
 		| {{ node.to_dict() }}
