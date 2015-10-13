@@ -80,6 +80,16 @@
 		box-shadow: none
 		border-color: lighten($mixin-color, 5%)
 
+
+@mixin overlay($from-color, $from-percentage, $to-color, $to-percentage)
+	position: absolute
+	top: 0
+	left: 0
+	right: 0
+	bottom: 0
+	background: linear-gradient(to bottom, $from-color $from-percentage, $to-color $to-percentage)
+
+
 =container-box
 	position: relative
 	background-color: white
@@ -116,7 +126,6 @@
 =media-print
 	@media print
 		@content
-
 
 =spin
 	animation:

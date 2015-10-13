@@ -2,20 +2,15 @@
 
 #node-container
 
-	| {% if node.picture %}
 	section.node-preview.group
+		| {% if node.picture %}
 		img.backdrop(src="{{ node.picture.thumbnail('l') }}")
+		.overlay
+		| {% endif %}
 		.node-title
 			| {{node.name}}
-	| {% endif %}
 
 	section.node-details-container.group
-
-		| {% if not node.picture %}
-		.node-details-header
-			.node-title
-				| {{node.name}}
-		| {% endif %}
 
 		| {% if node.description %}
 		.node-details-description

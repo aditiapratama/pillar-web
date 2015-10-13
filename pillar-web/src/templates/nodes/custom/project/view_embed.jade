@@ -2,15 +2,16 @@
 
 #node-container
 	section.node-preview.project
-		img(src="{{ node.properties.picture_header.thumbnail('l') }}")
+		img.backdrop(src="{{ node.properties.picture_header.thumbnail('l') }}")
+		.overlay
+		.node-title
+			| {{node.name}}
 
 	section.node-details-container.project
 
 		.node-details-header
-			.node-title
-				| {{node.name}}
-				// XXX link to user/organization
-				// small by {{ node.user }}
+			// XXX link to user/organization
+			// small by {{ node.user }}
 
 			.node-title-details
 				.date {{ node._created }}
@@ -40,10 +41,10 @@
 			.node-featured
 				h3 Featured Assets
 				ul.node-featured-list
-					| {% for i in range(0, 8) %}
+					| {% for i in range(0, 4) %}
 					li.node-featured-list-item
 						a.image(href="")
-							img(src="{{ node.properties.picture_header.thumbnail('s') }}")
+							img(src="{{ node.properties.picture_header.thumbnail('m') }}")
 						.info
 							a.title(href="") Featured Name
 							span.details

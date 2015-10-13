@@ -274,12 +274,12 @@ section.node-preview
 	&.image,
 	&.file,
 		max-height: 500px
-		background-color: black
+		background-color: $color-background-nav
 
 		+media-sm
 			max-height: 300px
 		+media-md
-			max-height: 400px
+			max-height: 420px
 		+media-lg
 			max-height: 500px
 
@@ -292,35 +292,48 @@ section.node-preview
 			+media-sm
 				max-height: 300px
 			+media-md
-				max-height: 400px
+				max-height: 420px
 			+media-lg
 				max-height: 500px
 
-	&.group
+	&.video
+		background-color: black
+
+	&.group, &.project
 		background-color: $color-background-nav
-		height: 140px
 		position: relative
 		overflow: hidden
-		margin-bottom: 15px
 
 		.backdrop
-			position: absolute
-			top: 50%
-			left: 50%
-			transform: translate(-50%, -50%)
 			width: 100%
-			opacity: .25
 			z-index: 0
 
+		.overlay
+			@include overlay(transparent, 80%, rgba(black, .5), 100%)
+			width: 100%
+			height: 100%
+			z-index: 2
+
+
 		.node-title
+			+project-node-title
 			position: absolute
 			z-index: 2
 			color: white
 			left: 20px
 			bottom: 10px
-			+project-node-title
+			font-size: 2.5em
+			text-shadow: 1px 1px 1px rgba(black, .5)
 
+	&.group
+		height: 132px
 
+		.backdrop
+			opacity: .25
+			position: absolute
+			top: 50%
+			left: 50%
+			transform: translate(-50%, -50%)
 
 
 
@@ -354,6 +367,7 @@ section.node-details-container
 				border-radius: 3px
 				cursor: default
 
+
 	.node-details-description
 		padding: 5px 20px 25px 20px
 		font:
@@ -364,9 +378,15 @@ section.node-details-container
 
 	&.group, &.project
 		.node-details-description
-			padding: 10px 20px 25px 20px
+			padding: 15px 20px 25px 20px
 			max-width: 65%
 
+		.node-details-header
+			width: 35%
+			float: right
+	&.group
+		.node-details-description
+			padding: 15px 20px 5px 20px
 
 	.node-extra
 		display: flex
@@ -435,12 +455,24 @@ section.node-details-container
 				&.node-featured-list
 
 					li
-						width: 25%
+						width: 50%
 						float: left
 						border: none
+						padding-right: 20px
 
 						.image
 							max-width: 100%
+							width: 100%
+							min-height: 80px
+							overflow: hidden
+							position: relative
+
+							img
+								position: absolute
+								width: 100%
+								top: 50%
+								left: 50%
+								transform: translate(-50%, -50%)
 
 						.info
 							padding: 5px 10px 0 0
@@ -578,7 +610,7 @@ section.node-details-container
 
 section.node-children
 	&.group
-		padding: 0 0 25px 20px
+		padding: 10px 0 25px 20px
 
 		+clearfix
 
@@ -796,14 +828,10 @@ section.node-children
 			overflow: hidden
 
 			.overlay
-				position: absolute
-				top: 0
-				left: 0
-				right: 0
-				bottom: 0
 				width: 100%
 				height: 100px
-				background: linear-gradient(to bottom, transparent 0%, rgba( black , .6) 100%)
+				@include overlay(transparent, 0%, rgba(black, .6), 100%)
+
 
 			img.background
 				width: 100%
