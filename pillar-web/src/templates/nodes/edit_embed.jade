@@ -59,31 +59,27 @@
 				type="submit")
 
 script(type="text/javascript").
-	$("form").submit(function(event) {
+	$("form").submit(function(e) {
 		$.post("{{url_for('nodes.edit', node_id=node._id)}}",
 			$(this).serialize(),
 			function(dataHtml){
 				$('#project_context').html(dataHtml);
 			});
-		event.preventDefault();
-	});
 
-	$("#item_add, #item_edit").hide();
-	$("#item_save, #item_cancel").show();
+			e.preventDefault();
+	});
 
 	$('#item_save').click(function(e){
 		e.preventDefault();
-		$("#node-edit-form").submit();
 
+		$("#node-edit-form").submit();
 		displayNode('{{node._id}}');
-		$(this).hide();
-		$("#item_cancel, #item_save").hide();
 	});
 
 	$("#item_cancel").click(function(e) {
 		e.preventDefault();
+
 		displayNode('{{node._id}}');
-		$("#item_cancel, #item_save").hide();
 	});
 
 | {% endblock %}

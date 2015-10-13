@@ -148,6 +148,8 @@ script(type="text/javascript").
 		//console.log(nodeId);
 		var url = '/nodes/' + nodeId + '/view?embed=1'
 		loadNodeContent(url, nodeId);
+
+		$("#item_save, #item_cancel").hide();
 	}
 
 	function editNode(nodeId) {
@@ -161,6 +163,9 @@ script(type="text/javascript").
 			// Update the DOM injecting the generate HTML into the page
 			$('#project_context').html(dataHtml);
 			window.location.replace('#' + nodeId);
+
+			$("#item_add, #item_edit").hide();
+			$("#item_save, #item_cancel").show();
 		})
 		.fail(function(dataResponse) {
 			$('#project_context').html($('<iframe id="server_error"/>'));
