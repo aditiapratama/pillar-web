@@ -15,6 +15,7 @@ from flask import redirect
 from flask import url_for
 from flask import request
 from flask import jsonify
+from flask import session
 
 from datetime import datetime
 
@@ -382,15 +383,43 @@ def view(node_id):
         if not os.path.exists(template_path_full):
             return "Missing template"
 
+
         return_content = render_template(template_path,
             node=node,
             type_names=type_names(),
             parent=parent,
             children=children,
             config=app.config)
+        #return_content = make_response(render_template_response)
+        if node_type_name == 'project':
+            session['current_project_id'] = node._id
+            #return_content.set_cookie('current_project_id', value=node._id)
 
     #print(time.time() - start)
     return return_content
+
+
+def project_update_nodes_list(project_id, node_id, list_name='latest'):
+    """Update the project node with the latest edited or favorited node.
+    The list value can be 'latest' or 'featured' and it will determined where
+    the node reference will be placed in.
+    """
+    api = SystemUtility.attract_api()
+    project = Node.find(project_id, api=api)
+    if list_name == 'latest':
+        nodes_list = project.properties.nodes_latest
+    else:
+        nodes_list = project.properties.nodes_featured
+
+    if not nodes_list:
+        node_list_name = 'nodes_' + list_name
+        project.properties[node_list_name] = []
+        nodes_list = project.properties[node_list_name]
+    elif len(nodes_list) > 10:
+        nodes_list.pop(0)
+
+    nodes_list.append(node_id)
+    project.update(api=api)
 
 
 @nodes.route("/<node_id>/edit", methods=['GET', 'POST'])
@@ -410,7 +439,9 @@ def edit(node_id):
     if form.validate_on_submit():
         if process_node_form(
                 form, node_id=node_id, node_type=node_type, user=user_id):
-            node = Node.find(node_id, api=api)
+            #node = Node.find(node_id, api=api)
+            if 'current_project_id' in session:
+                project_update_nodes_list(session['current_project_id'], node_id)
             return redirect(url_for('nodes.view', node_id=node_id, embed=1))
         else:
             error = "Server error"
