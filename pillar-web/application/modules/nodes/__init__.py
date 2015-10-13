@@ -12,7 +12,6 @@ from flask import abort
 from flask import Blueprint
 from flask import render_template
 from flask import redirect
-from flask import flash
 from flask import url_for
 from flask import request
 from flask import jsonify
@@ -119,7 +118,6 @@ def add(node_type_id):
     user_id = current_user.objectid
     if form.validate_on_submit():
         if process_node_form(form, node_type=ntype, user=user_id):
-            flash('Node correctly added')
             return redirect(url_for('nodes.index', node_type_name=ntype['name']))
     else:
         print form.errors
@@ -413,7 +411,6 @@ def edit(node_id):
         if process_node_form(
                 form, node_id=node_id, node_type=node_type, user=user_id):
             node = Node.find(node_id, api=api)
-            flash ('Node "{0}" correctly edited'.format(node.name))
             return redirect(url_for('nodes.view', node_id=node_id, embed=1))
         else:
             error = "Server error"
@@ -513,11 +510,9 @@ def delete(node_id):
         forbidden = True
 
     if not forbidden:
-        flash('Node "{0}" correctly deleted'.format(name))
         # print (node_type['name'])
         return redirect(url_for('nodes.index', node_type_name=node_type['name']))
     else:
-        flash('Forbidden access')
         return redirect(url_for('nodes.edit', node_id=node._id))
 
 

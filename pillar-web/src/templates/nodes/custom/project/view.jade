@@ -93,15 +93,19 @@ script(type="text/javascript", src="//cdnjs.cloudflare.com/ajax/libs/handlebars.
 script(type="text/javascript").
 
 	function loadNodeContent(url, nodeId) {
+
 		$.get(url, function(dataHtml) {
+
+			$("#node-edit-form").unbind( "submit" );
+			$("#item_save").unbind( "click" );
+			$("#item_cancel").unbind( "click" );
 
 			// Update the DOM injecting the generate HTML into the page
 			$('#project_context').html(dataHtml);
+
 			// If a nodeId is specified, update the interface for editing and deletion
 			if (typeof(nodeId) != 'undefined') {
-
 				window.location.replace('#' + nodeId);
-
 			};
 
 		})
@@ -132,6 +136,7 @@ script(type="text/javascript").
 
 
 	function editNode(nodeId) {
+
 		// Remove the 'n_' suffix from the id
 		if (nodeId.substring(0, 2) == 'n_') {
 			nodeId = nodeId.substr(2);
@@ -175,7 +180,9 @@ script(type="text/javascript").
 	}
 
 
+	/* Loaded once, on page load */
 	function loadContent() {
+
 		// If the loaded URL has an asset id hashed, arrange the view accordingly
 		var nodeId = undefined;
 		if (location.hash) {
@@ -268,9 +275,9 @@ script(type="text/javascript").
 
 	// Binding for ajax event
 	$(document).bind("ajaxSend", function(){
-		$('#project-loading').fadeIn(100);
+		$('#project-loading').show();
 	}).bind("ajaxComplete", function(){
-		$('#project-loading').fadeOut();
+		$('#project-loading').hide();
 	});
 
 	container_offset = $('#project-flex').offset();

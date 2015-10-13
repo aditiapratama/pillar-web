@@ -100,26 +100,34 @@ script.
 	});
 
 script(type="text/javascript").
-	$("form").submit(function(e) {
+
+	$("#node-edit-form").unbind( "submit" );
+	$("#item_save").unbind( "click" );
+	$("#item_cancel").unbind( "click" );
+
+	$("#node-edit-form").submit(function(e) {
+		e.preventDefault();
+
 		$.post("{{url_for('nodes.edit', node_id=node._id)}}",
 			$(this).serialize(),
 			function(dataHtml){
 				$('#project_context').html(dataHtml);
 			});
 
-			e.preventDefault();
 	});
 
 	$('#item_save').click(function(e){
-		e.preventDefault();
 
 		$("#node-edit-form").submit();
-		displayNode('{{node._id}}');
+		$("#item_save, #item_cancel").hide();
 
-		$('#project_tree').jstree("refresh");
+		// Don't refresh whole tree, causes additional displayNode() to be called
+		//- $('#project_tree').jstree("refresh");
+		// XXX only refresh individual node
 		//- $('#project_tree').jstree().refresh_node($('#n_{{node._id}}'));
-		//- console.log("{{node._id}}");
 	});
+
+	//- console.log($._data($(elementSelector)[0], "events"));
 
 	$("#item_cancel").click(function(e) {
 		e.preventDefault();
