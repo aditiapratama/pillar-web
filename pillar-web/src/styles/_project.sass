@@ -328,7 +328,8 @@ section.node-details-container
 
 	.node-details-description
 		padding: 5px 20px 20px 20px
-		font-weight: 300
+		font-weight: 400
+		max-width: 65%
 
 	.node-extra
 		display: flex
@@ -344,6 +345,7 @@ section.node-details-container
 			ul
 				padding: 0
 				margin: 0 0 25px 0
+				+clearfix
 
 				li
 					list-style: none
@@ -394,11 +396,11 @@ section.node-details-container
 					padding-right: 25px
 
 				&.node-featured-list
-					padding-right: 25px
 
 					li
 						width: 25%
 						float: left
+						border: none
 
 						.image
 							max-width: 100%
