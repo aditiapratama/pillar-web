@@ -1,6 +1,8 @@
 import pillarsdk
 from pillarsdk import Node
 
+from flask import url_for
+
 from flask_wtf import Form
 from wtforms import FieldList
 from wtforms import FormField
@@ -110,22 +112,28 @@ class FileSelect(Select):
         else:
             multiple_value = 'false';
         button= """
-<button onclick="set_upload_parameters('{0}', {1});" style="margin-top: 5px;" type="button" class="btn btn-primary" data-toggle="modal" data-target="#fileUploaderModal">
-  Upload Files
-</button>""".format(field.id, multiple_value)
-        return HTMLString(html+button)
+
+        <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modal-default">
+          Upload file
+        </button>""".format(field.id, multiple_value)
+        return HTMLString(html + button)
 
 
-class FileSelectText(TextInput):
+class FileSelectText(HiddenInput):
     def __init__(self, **kwargs):
         super(FileSelectText, self).__init__(**kwargs)
 
     def __call__(self, field, **kwargs):
         html =  super(FileSelectText, self).__call__(field, **kwargs)
         button= """
-<button onclick="set_upload_parameters('{0}', {1});" style="margin-top: 5px;" type="button" class="btn btn-primary" data-toggle="modal" data-target="#fileUploaderModal">
-  Upload Files
-</button>""".format(field.id, 'false')
+        <input id="fileupload" type="file" name="file" data-url="{0}">
+        <div class="picture-progress">
+          <div class="picture-progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+          </div>
+        </div>""".format(url_for('files.upload'))
+        # <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modal-default">
+        #   Upload file!
+        # </button>"""
         return HTMLString(html + button)
 
 

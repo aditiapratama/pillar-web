@@ -1,7 +1,14 @@
+import os
+import hashlib
+import time
+import shutil
 import PIL
 from PIL import Image
 import simplejson
 import traceback
+from datetime import datetime
+
+from pillarsdk import File
 
 from flask import session
 from flask import redirect
@@ -9,6 +16,7 @@ from flask import url_for
 from flask import flash
 from flask import abort
 from flask import send_from_directory
+from flask import jsonify
 from werkzeug import secure_filename
 
 #from application.controllers.admin import *
@@ -32,14 +40,12 @@ from application import SystemUtility
 from flask.ext.login import current_user
 from flask.ext.login import login_required
 
-from datetime import datetime
 
 # Name of the Blueprint
 files = Blueprint('files', __name__)
 
 RFC1123_DATE_FORMAT = '%a, %d %b %Y %H:%M:%S GMT'
 
-import hashlib
 
 
 def hashfile(afile, hasher, blocksize=65536):
@@ -258,21 +264,20 @@ def create_thumbnail(image):
 @files.route('/upload/upload', methods=['GET', 'POST'])
 def upload():
     if request.method == 'POST':
-        print request.files
-        file = request.files['file']
+        file_object = request.files['file']
         #pprint (vars(objectvalue))
 
-        if file:
-            filename = secure_filename(file.filename)
+        if file_object:
+            filename = secure_filename(file_object.filename)
             filename = gen_file_name(filename)
-            mimetype = file.content_type
-            if not allowed_file(file.filename):
+            mimetype = file_object.content_type
+            if not allowed_file(file_object.filename):
                 result = uploadfile(name=filename, type=mimetype, size=0,
                                     not_allowed_msg="Filetype not allowed")
             else:
                 # save file to disk
                 uploaded_file_path = os.path.join(get_dir('uploads'), filename)
-                file.save(uploaded_file_path)
+                file_object.save(uploaded_file_path)
 
                 # create thumbnail after saving
                 if mimetype.startswith('image'):
@@ -332,5 +337,47 @@ def delete(filename):
             return simplejson.dumps({filename: 'False'})
     else:
         return abort(404)
+
+
+@files.route('/create', methods=['POST'])
+def create():
+    name = request.form['name']
+    size = request.form['size']
+    content_type = request.form['type']
+    root, ext = os.path.splitext(name)
+     # Hash name based on file name, user id and current timestamp
+    hash_name = name + str(current_user.objectid) + str(round(time.time()))
+    link = hashlib.sha1(hash_name).hexdigest()
+    link = os.path.join(link[:2], link + ext)
+
+    src_dir_path = os.path.join(app.config['UPLOAD_DIR'], str(current_user.objectid))
+
+    # Move the file in designated location
+    destination_dir = os.path.join(app.config['SHARED_DIR'], link[:2])
+    if not os.path.isdir(destination_dir):
+        os.makedirs(destination_dir)
+    # (TODO) Check if filename already exsits
+    src_file_path = os.path.join(src_dir_path, name)
+    dst_file_path = os.path.join(destination_dir, link[3:])
+    # (TODO) Thread this operation
+
+    shutil.copy(src_file_path, dst_file_path)
+
+    api = SystemUtility.attract_api()
+    node_file = File({
+        'name': link,
+        'filename': name,
+        'user': current_user.objectid,
+        'backend': 'cdnsun',
+        'md5': '',
+        'content_type': content_type,
+        'length': size
+        })
+    node_file.create(api=api)
+    thumbnail = node_file.thumbnail_file('s', api=api)
+
+    return jsonify(status='success', data=dict(id=node_file._id,
+                                                link=thumbnail.link))
+
 
 

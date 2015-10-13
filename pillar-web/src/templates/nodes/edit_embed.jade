@@ -58,6 +58,47 @@
 				data-node-id="{{node._id}}",
 				type="submit")
 
+
+script(type='text/javascript', src="{{ url_for('static', filename='jquery-file-upload/js/vendor/jquery.ui.widget.js') }}")
+script(type='text/javascript', src="{{ url_for('static', filename='jquery-file-upload/js/jquery.iframe-transport.js') }}")
+script(type='text/javascript', src="{{ url_for('static', filename='jquery-file-upload/js/jquery.fileupload.js') }}")
+
+script.
+	$(function () {
+		$('#fileupload').fileupload({
+			dataType: 'json',
+			acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
+			formData: {},
+			done: function (e, data) {
+				$.each(data.result.files, function (index, file) {
+					$('<p/>').text(file.name).appendTo(document.body);
+				});
+			},
+			progressall: function (e, data) {
+				// Update progressbar during upload
+				var progress = parseInt(data.loaded / data.total * 100, 10);
+				$('.picture-progress-bar').css(
+						'width',
+						progress + '%'
+				);
+			},
+			done: function (e, data) {
+				$('.picture-progress-bar').hide();
+				// Get the first file upload result (we only need one)
+				var file_data = data.result.files[0]
+				// Create a file object on the server and retrieve its id
+				$.post("{{url_for('files.create')}}",
+					{name : file_data.name, size: file_data.size, type: file_data.type})
+					.done(function(data) {
+					if (data.status === 'success') {
+						// If successful, add id to the picture hidden field
+						$("#picture").val(data.data.id);
+					}
+				});
+			}
+		});
+	});
+
 script(type="text/javascript").
 	$("form").submit(function(e) {
 		$.post("{{url_for('nodes.edit', node_id=node._id)}}",
