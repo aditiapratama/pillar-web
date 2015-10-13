@@ -264,9 +264,15 @@ $list-node-children-item-width: 160px
 
 
 /* Node Context */
+=project-node-title
+	font:
+		family: $font-headings
+		size: 2em
+		weight: 300
+
 section.node-preview
 	&.image,
-	&.file
+	&.file,
 		max-height: 500px
 		background-color: black
 
@@ -290,11 +296,33 @@ section.node-preview
 			+media-lg
 				max-height: 500px
 
-=project-node-title
-	font:
-		family: $font-headings
-		size: 2em
-		weight: 300
+	&.group
+		background-color: $color-background-nav
+		height: 140px
+		position: relative
+		overflow: hidden
+		margin-bottom: 15px
+
+		.backdrop
+			position: absolute
+			top: 50%
+			left: 50%
+			transform: translate(-50%, -50%)
+			width: 100%
+			opacity: .25
+			z-index: 0
+
+		.node-title
+			position: absolute
+			z-index: 2
+			color: white
+			left: 20px
+			bottom: 10px
+			+project-node-title
+
+
+
+
 
 section.node-details-container
 	.node-details-header
@@ -327,9 +355,18 @@ section.node-details-container
 				cursor: default
 
 	.node-details-description
-		padding: 5px 20px 20px 20px
-		font-weight: 400
-		max-width: 65%
+		padding: 5px 20px 25px 20px
+		font:
+			family: $font-body
+			weight: 300
+			size: 1.1em
+		color: $color-text-dark
+
+	&.group, &.project
+		.node-details-description
+			padding: 10px 20px 25px 20px
+			max-width: 65%
+
 
 	.node-extra
 		display: flex
@@ -541,7 +578,7 @@ section.node-details-container
 
 section.node-children
 	&.group
-		padding: 15px 0 15px 20px
+		padding: 0 0 25px 20px
 
 		+clearfix
 

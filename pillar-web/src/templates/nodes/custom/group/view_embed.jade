@@ -3,15 +3,19 @@
 #node-container
 
 	| {% if node.picture %}
-	section.node-preview.image
-		img(src="{{ node.picture.thumbnail('l') }}")
+	section.node-preview.group
+		img.backdrop(src="{{ node.picture.thumbnail('l') }}")
+		.node-title
+			| {{node.name}}
 	| {% endif %}
 
-	section.node-details-container
+	section.node-details-container.group
 
+		| {% if not node.picture %}
 		.node-details-header
 			.node-title
 				| {{node.name}}
+		| {% endif %}
 
 		| {% if node.description %}
 		.node-details-description
