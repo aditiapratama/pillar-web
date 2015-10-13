@@ -23,7 +23,9 @@
 #node-edit-container
 
 	#node-edit-header
-		.node-edit-title {{node.name}}
+		.node-edit-title
+			| Editing:
+			span {{node.name}}
 
 	form(
 		id="node-edit-form",
@@ -42,9 +44,11 @@
 		| {{ field }}
 
 		| {% else %}
-		.form-group
+
+		.form-group(class="{{field.name}}")
 			| {{ field.label }}
 			| {{ field(class='form-control') }}
+
 		| {% endif %}
 
 		| {% endif %}
@@ -63,11 +67,38 @@ script(type='text/javascript', src="{{ url_for('static', filename='jquery-file-u
 script(type='text/javascript', src="{{ url_for('static', filename='jquery-file-upload/js/jquery.iframe-transport.js') }}")
 script(type='text/javascript', src="{{ url_for('static', filename='jquery-file-upload/js/jquery.fileupload.js') }}")
 
-script.
+script(type="text/javascript").
+
+	var convert = new Markdown.getSanitizingConverter().makeHtml;
+
+	/* Build the markdown preview when typing in textarea */
+	$(function() {
+		var $textarea = $('.form-group textarea'),
+				$preview = $('<div class="node-edit-form-md-preview" />').insertAfter($textarea);
+
+		$textarea.keyup(function() {
+			// Convert markdown
+			$preview.html(convert($textarea.val()));
+		}).trigger('keyup');
+	});
+
+
+	$(function() {
+		var $namefield = $('.form-group.name input'),
+				$name = $('.node-edit-title span');
+
+		$namefield.keyup(function() {
+			$name.html($namefield.val());
+		}).trigger('keyup');
+	});
+
+
 	$(function () {
 		$('#fileupload').fileupload({
 			dataType: 'json',
 			acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
+			replaceFileInput:false,
+			fileInput: $("input:file"),
 			formData: {},
 			done: function (e, data) {
 				$.each(data.result.files, function (index, file) {
@@ -83,7 +114,7 @@ script.
 				);
 			},
 			done: function (e, data) {
-				$('.picture-progress-bar').hide();
+				//- $('.picture-progress-bar').hide();
 				// Get the first file upload result (we only need one)
 				var file_data = data.result.files[0]
 				// Create a file object on the server and retrieve its id
@@ -98,8 +129,6 @@ script.
 			}
 		});
 	});
-
-script(type="text/javascript").
 
 	$("#node-edit-form").unbind( "submit" );
 	$("#item_save").unbind( "click" );

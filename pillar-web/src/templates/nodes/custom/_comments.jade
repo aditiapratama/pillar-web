@@ -69,8 +69,8 @@
 							class="{{#if is_rated}}rated{{/if}}{{#if is_rated_positive}} positive{{/if}}")
 							.comment-rating-value(title="Number of upvotes") {{ rating_up }}
 
-							.comment-rating-action.up(title="Upvote comment")
-							.comment-rating-action.down(title="Downvote comment")
+							.comment-action-rating.up(title="Upvote comment")
+							.comment-action-rating.down(title="Downvote comment")
 
 						.comment-action-reply reply
 
@@ -102,9 +102,87 @@
 
 
 | {% block comment_scripts %}
-script(type="text/javascript", src="{{ url_for('static', filename='assets/js/comments.min.js') }}")
 
 script.
+	// Markdown initialization
+	var convert = new Markdown.getSanitizingConverter().makeHtml;
+
+	// Define the template for handlebars
+	var source = $("#comment-template").html();
+	var template = Handlebars.compile(source);
+
+
+	// Register the helper for generating the comments list
+	Handlebars.registerHelper('list', function(context, options) {
+		var ret = "";
+
+		// Loop through all first-level comments
+		for(var i=0, j=context.length; i<j; i++) {
+
+			// Convert Markdown for each comment
+			context[i]['content'] = convert(context[i]['content']);
+
+			// Append compiled comment to return string
+			ret = ret + options.fn(context[i]);
+
+			// Search for replies to the current comment
+			if (context[i]['replies']) {
+
+				var replies = context[i]['replies'];
+				var compiled_replies = "";
+
+				// Loop through replies
+				for(var r=0, t=replies.length; r<t; r++) {
+
+					// Convert Markdown for each comment
+					replies[r]['content'] = convert(replies[r]['content']);
+
+					// Append compiled replies
+					compiled_replies = compiled_replies + options.fn(replies[r]);
+
+				}
+
+				// Append replies list to the return string
+				ret = ret + compiled_replies;
+
+			}
+		}
+
+		return ret;
+	});
+
+	// Helper for the if/else statement
+	Handlebars.registerHelper('if', function(conditional, options) {
+		if(conditional) {
+			return options.fn(this);
+		} else {
+			return options.inverse(this);
+		}
+	});
+
+
+	/* Build the markdown preview when typing in textarea */
+	$(function() {
+		var $textarea = $('.comment-reply-field textarea'),
+				$container = $('.comment-reply-form'),
+				$preview = $('.comment-reply-preview');
+
+		// As we type in the textarea
+		$textarea.keyup(function() {
+
+			// Convert markdown
+			$preview.html(convert($textarea.val()));
+
+			// While we are at it, style when empty
+			if ($textarea.val()) {
+				$container.addClass('filled');
+			} else {
+				$container.removeClass('filled');
+			};
+
+		}).trigger('keyup');
+	});
+
 
 	// Get the comments list in JSON
 	$.getJSON( "{{url_for('nodes.comments_index')}}?parent_id={{ parent_id }}&format=json", function( data ) {

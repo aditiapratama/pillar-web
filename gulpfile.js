@@ -60,10 +60,10 @@ gulp.task('scripts_concat_tutti', function() {
         .pipe(livereload());
 });
 
-gulp.task('scripts_concat_comments', function() {
-    gulp.src('pillar-web/src/scripts/comments/*.js')
+gulp.task('scripts_concat_markdown', function() {
+    gulp.src('pillar-web/src/scripts/markdown/**/*.js')
         .pipe(sourcemaps.init())
-        .pipe(concat("comments.min.js"))
+        .pipe(concat("markdown.min.js"))
         .pipe(uglify())
         .pipe(gulp.dest('pillar-web/application/static/assets/js/'))
         .pipe(livereload());
@@ -78,9 +78,9 @@ gulp.task('watch',function() {
     gulp.watch('pillar-web/src/templates/**/*.jade',['templates']);
     gulp.watch('pillar-web/src/scripts/*.js',['scripts']);
     gulp.watch('pillar-web/src/scripts/tutti/**/*.js',['scripts_concat_tutti']);
-    gulp.watch('pillar-web/src/scripts/comments/**/*.js',['scripts_concat_comments']);
+    gulp.watch('pillar-web/src/scripts/markdown/**/*.js',['scripts_concat_markdown']);
 });
 
 
 // Run 'gulp' to build everything at once
-gulp.task('default', ['styles', 'templates', 'scripts', 'scripts_concat_tutti', 'scripts_concat_comments']);
+gulp.task('default', ['styles', 'templates', 'scripts', 'scripts_concat_tutti', 'scripts_concat_markdown']);

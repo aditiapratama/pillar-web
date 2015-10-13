@@ -164,7 +164,8 @@ $list-node-children-item-width: 160px
 
 				&.button-save
 					border-color: $color-success
-					color: $color-success
+					background-color: $color-success
+					color: white
 
 			&#item_save,
 			&#item_cancel
@@ -703,14 +704,121 @@ section.node-children
 
 #node-edit-container
 	#node-edit-header
-		padding: 20px
+		padding: 20px 20px 10px 20px
 
 		.node-edit-title
 			+project-node-title
+			color: $color-info
+
+			span
+				padding-left: 5px
+				color: $color-text-dark-primary
 
 
 	#node-edit-form
 		padding: 20px
+
+		.form-group
+			font-family: $font-body
+
+			input, textarea, select
+				color: $color-text-dark
+				box-shadow: none
+				font-family: $font-body
+				border-radius: 3px
+
+				&:focus
+					border-color: $color-info
+					box-shadow: none
+
+				&#fileupload
+					color: $color-info
+
+			select
+				text-transform: capitalize
+
+
+
+		.form-group
+			position: relative
+			margin: 0 auto 30px auto
+
+			label
+				color: $color-text-dark
+				font-family: $font-body
+				font-weight: 300
+
+		.form-group.picture
+			.picture-progress-bar
+				margin-top: 5px
+				background-color: $color-success
+				height: 5px
+				min-width: 0
+				border-radius: 3px
+
+		.form-group.description
+			position: relative
+
+			textarea
+				width: 100%
+				min-height: 100px
+
+				line-height: 1.5em
+				border: 1px solid $color-background-dark
+				border-radius: 3px
+				margin: 0 auto 10px auto
+				padding: 10px
+				color: $color-text-dark
+
+				transition: all 300ms ease-in-out
+
+
+				&:focus
+					border: 1px solid $color-info
+					outline: none
+
+				&.field-error
+					border-color: $color-danger
+
+			.node-edit-form-md-preview
+				border-top: 1px solid $color-background
+				border-bottom: 1px solid $color-background
+				position: relative
+				margin: 40px auto 25px auto
+				padding: 10px 10px 25px 10px
+				color: $color-text-dark-primary
+				cursor: default
+				transition: all 150ms ease-in-out
+
+				&:before
+					content: 'Live Preview:'
+					position: absolute
+					top: -25px
+					font-size: .9em
+					color: $color-text-dark-secondary
+					transition: color 150ms ease-in-out
+
+				&:after
+					content: 'Markdown Supported'
+					position: absolute
+					top: -25px
+					right: 0
+					font-size: .9em
+					color: $color-text-dark-hint
+					transition: color 150ms ease-in-out
+
+			.node-edit-form-md-preview:empty
+				color: transparent
+				margin: 0 auto
+				padding: 0 10px
+
+				&:before
+					content: ''
+					color: transparent
+
+
+		#node-edit-form-md-preview
+			padding: 20px
 
 .debug
 	font:
