@@ -74,6 +74,10 @@ script(type="text/javascript").
 
 		$("#node-edit-form").submit();
 		displayNode('{{node._id}}');
+
+		$('#project_tree').jstree("refresh");
+		//- $('#project_tree').jstree().refresh_node($('#n_{{node._id}}'));
+		//- console.log("{{node._id}}");
 	});
 
 	$("#item_cancel").click(function(e) {
