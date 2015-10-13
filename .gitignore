@@ -24,8 +24,5 @@ pillar-web/application/templates/stats.html
 pillar-web/application/templates/project/
 pillar-web/application/templates/blog/
 
-pillar-web/application/templates/nodes/custom/
-
-pillar-web/application/templates/nodes/edit.html
-pillar-web/application/templates/nodes/edit_embed.html
-
+pillar-web/application/templates/nodes/
+pillar-web/application/templates/_modal.html
