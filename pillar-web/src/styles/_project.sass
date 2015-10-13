@@ -370,6 +370,7 @@ section.node-details-container
 							opacity: .8
 
 					.info
+						width: 100%
 						float: left
 
 						a.title
@@ -378,6 +379,7 @@ section.node-details-container
 							+clearfix
 
 						span.details
+							width: 100%
 							display: block
 							font-size: .9em
 							padding: 5px 0
@@ -400,13 +402,25 @@ section.node-details-container
 
 						.image
 							max-width: 100%
-							margin: 0 10px 0 0
 
 						.info
 							padding: 5px 10px 0 0
 
 							a.title
 								font-size: 1em
+							span.details
+								width: 100%
+								+text-overflow-ellipsis
+
+								.who
+									font-weight: 400
+									margin-left: 0
+									+text-overflow-ellipsis
+
+									span
+										+text-overflow-ellipsis
+										font-weight: 500
+										margin-left: 3px
 
 	.node-details-meta
 		font-weight: 300
