@@ -2,16 +2,15 @@
 
 #node-container
 	section.node-preview.project
-		img.backdrop(src="{{ node.properties.picture_header.thumbnail('l') }}")
-		.overlay
-		.node-title
-			| {{node.name}}
+		img(src="{{ node.properties.picture_header.thumbnail('l') }}")
 
 	section.node-details-container.project
 
 		.node-details-header
-			// XXX link to user/organization
-			// small by {{ node.user }}
+			.node-title
+				| {{node.name}}
+				// XXX link to user/organization
+				// small by {{ node.user }}
 
 			.node-title-details
 				.date {{ node._created }}
@@ -52,9 +51,7 @@
 									span That Guy with Long Name
 					| {% endfor %}
 
-
-	section.debug.hidden
-		| {{ node.to_dict() }}
+include ../_scripts
 
 | {% endblock %}
 

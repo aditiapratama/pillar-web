@@ -23,9 +23,7 @@
 #node-edit-container
 
 	#node-edit-header
-		.node-edit-title
-			| Editing:
-			span {{node.name}}
+		.node-edit-title {{node.name}}
 
 	form(
 		id="node-edit-form",
@@ -85,7 +83,7 @@ script(type="text/javascript").
 
 	$(function() {
 		var $namefield = $('.form-group.name input'),
-				$name = $('.node-edit-title span');
+				$name = $('.node-edit-title');
 
 		$namefield.keyup(function() {
 			$name.html($namefield.val());
