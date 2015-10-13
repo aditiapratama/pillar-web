@@ -2,14 +2,21 @@
 
 #node-container
 
+	| {% if node.picture %}
+	section.node-preview.image
+		img(src="{{ node.picture.thumbnail('l') }}")
+	| {% endif %}
+
 	section.node-details-container
 
 		.node-details-header
 			.node-title
 				| {{node.name}}
 
+		| {% if node.description %}
 		.node-details-description
 			| {{node.description}}
+		| {% endif %}
 
 	section.node-children.group
 
