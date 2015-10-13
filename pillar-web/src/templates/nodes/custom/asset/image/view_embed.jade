@@ -3,9 +3,8 @@
 #node-container
 
 	| {% if node.picture %}
-	a(href="{{ node.picture.thumbnail('l') }}")
-		section.node-preview.image
-			img(src="{{ node.picture.thumbnail('l') }}")
+	section.node-preview.image
+		img(src="{{ node.picture.thumbnail('l') }}")
 	| {% endif %}
 
 

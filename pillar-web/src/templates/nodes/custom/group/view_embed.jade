@@ -1,7 +1,6 @@
 | {% block body %}
 
 #node-container
-	a(name="{{node._id}}")
 
 	section.node-details-container
 
@@ -40,13 +39,13 @@
 				.list-node-children-item-name
 
 					| {% if child.properties.content_type == 'video' %}
-					i.zmdi.zmdi-movie
+					i.ion-ios-film-outline
 					| {% elif child.properties.content_type == 'image' %}
-					i.zmdi.zmdi-image-o
+					i.ion-image
 					| {% elif child.properties.content_type == 'file' %}
-					i.zmdi.zmdi-file
+					i.ion-document
 					| {% else %}
-					i.zmdi.zmdi-folder-outline
+					i.ion-android-folder
 					| {% endif %}
 
 					span {{ child.name }}

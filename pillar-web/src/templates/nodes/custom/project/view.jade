@@ -91,34 +91,10 @@ script(type="text/javascript", src="//releases.flowplayer.org/6.0.3/flowplayer.m
 script(type="text/javascript", src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.3/handlebars.min.js")
 
 script(type="text/javascript").
-	$('#project_context-container').perfectScrollbar({suppressScrollX: true});
-
-	// Binding for ajax event
-	$(document).bind("ajaxSend", function(){
-		$('#project-loading').fadeIn(100);
-	}).bind("ajaxComplete", function(){
-		$('#project-loading').fadeOut();
-	});
-
-	container_offset = $('#project-flex').offset();
-
-	function containerResizeY(window_height){
-
-		container_height = window_height - container_offset.top;
-
-		if (container_height > parseInt($('#project-flex').css("min-height"))) {
-			$('#project-flex, #project_nav, #project_context-container').css(
-				{'max-height': container_height + 'px'}
-			);
-		};
-	};
-
-	$(window).on("load resize",function(){
-		containerResizeY($(window).height());
-	});
 
 	function loadNodeContent(url, nodeId) {
 		$.get(url, function(dataHtml) {
+
 			// Update the DOM injecting the generate HTML into the page
 			$('#project_context').html(dataHtml);
 			// If a nodeId is specified, update the interface for editing and deletion
@@ -135,31 +111,35 @@ script(type="text/javascript").
 		});
 	}
 
+
 	function displayStorage(storageNodeId, path) {
 		var url = '/nodes/' + storageNodeId + '/view?embed=1&path=' + path;
 		loadNodeContent(url);
 	}
+
 
 	function displayNode(nodeId) {
 		// Remove the 'n_' suffix from the id
 		if (nodeId.substring(0, 2) == 'n_') {
 			nodeId = nodeId.substr(2);
 		}
-		//console.log(nodeId);
+
 		var url = '/nodes/' + nodeId + '/view?embed=1'
 		loadNodeContent(url, nodeId);
 
 		$("#item_save, #item_cancel").hide();
 	}
 
+
 	function editNode(nodeId) {
 		// Remove the 'n_' suffix from the id
 		if (nodeId.substring(0, 2) == 'n_') {
 			nodeId = nodeId.substr(2);
 		}
-		//- console.log(nodeId);
+
 		var url = '/nodes/' + nodeId + '/edit?embed=1'
 		$.get(url, function(dataHtml) {
+
 			// Update the DOM injecting the generate HTML into the page
 			$('#project_context').html(dataHtml);
 			window.location.replace('#' + nodeId);
@@ -176,11 +156,12 @@ script(type="text/javascript").
 		});
 	}
 
+
 	function addNode(parentId) {
 
-		//- console.log(nodeId);
 		var url = '/files/upload?embed=1'
 		$.get(url, function(dataHtml) {
+
 			// Update the DOM injecting the generate HTML into the page
 			$('#project_context').html(dataHtml);
 		})
@@ -192,6 +173,7 @@ script(type="text/javascript").
 			$('.button-add-icon').addClass('zmdi zmdi-collection-plus').removeClass('ion-load-c spin');
 		});
 	}
+
 
 	function loadContent() {
 		// If the loaded URL has an asset id hashed, arrange the view accordingly
@@ -223,7 +205,6 @@ script(type="text/javascript").
 											nodeId = obj.id.substring(2);
 											$.getJSON('/nodes/' + nodeId + '/view?format=jstree&children=1', function(jsonObject) {
 													callback.call(this, jsonObject.children);
-													$('.waiting').text('averrr');
 											});
 										}
 								}
@@ -231,18 +212,19 @@ script(type="text/javascript").
 				},
 				"types" : {
 						"#": {"valid_children": ["collection"]},
-						"chapter" : {"icon": "zmdi zmdi-folder-outline"},
-						"group" : {"icon": "zmdi zmdi-folder-outline"},
-						"group_storage" : {"icon": "zmdi zmdi-folder-outline"},
-						"filesystem_node" : {"icon": "zmdi zmdi-folder-outline"},
-						"file" : {"icon": "zmdi zmdi-file", "max_children": 0},
-						"filesystem_file" : {"icon": "zmdi zmdi-file", "max_children": 0},
-						"image" : {"icon": "zmdi zmdi-image-o", "max_children": 0},
-						"video" : {"icon": "zmdi zmdi-movie", "max_children": 0},
-						"default" : {"icon": "zmdi zmdi-file"}
+						"chapter" : {"icon": "ion-android-folder"},
+						"group" : {"icon": "ion-android-folder"},
+						"group_storage" : {"icon": "ion-android-folder"},
+						"filesystem_node" : {"icon": "ion-android-folder"},
+						"file" : {"icon": "ion-document", "max_children": 0},
+						"filesystem_file" : {"icon": "ion-document", "max_children": 0},
+						"image" : {"icon": "ion-image", "max_children": 0},
+						"video" : {"icon": "ion-ios-film-outline", "max_children": 0},
+						"default" : {"icon": "ion-document"}
 				},
 				"plugins": ["types",] //, "state", "sort"
 		});
+
 
 		var jstreeAPI = $('#project_tree').jstree(true);
 
@@ -280,6 +262,33 @@ script(type="text/javascript").
 
 	// Initialize the page
 	loadContent();
+
+	/* UI Stuff */
+	$('#project_context-container').perfectScrollbar({suppressScrollX: true});
+
+	// Binding for ajax event
+	$(document).bind("ajaxSend", function(){
+		$('#project-loading').fadeIn(100);
+	}).bind("ajaxComplete", function(){
+		$('#project-loading').fadeOut();
+	});
+
+	container_offset = $('#project-flex').offset();
+
+	function containerResizeY(window_height){
+
+		container_height = window_height - container_offset.top;
+
+		if (container_height > parseInt($('#project-flex').css("min-height"))) {
+			$('#project-flex, #project_nav, #project_context-container').css(
+				{'max-height': container_height + 'px'}
+			);
+		};
+	};
+
+	$(window).on("load resize",function(){
+		containerResizeY($(window).height());
+	});
 
 | {% endblock %}
 
