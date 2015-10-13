@@ -176,6 +176,7 @@ $list-node-children-item-width: 160px
 
 			&#item_add,
 			&#item_edit
+				display: none
 				li
 					min-width: 80px
 
@@ -285,39 +286,50 @@ $list-node-children-item-width: 160px
 		size: 2em
 		weight: 300
 
+$node-preview-max-height-sm: 300px
+$node-preview-max-height-md: 450px
+$node-preview-max-height-lg: 500px
+
 section.node-preview
 	&.image,
 	&.file,
+		min-height: 200px
+		flex: 1
 		max-height: 500px
 		background-color: $color-background-nav
+		display: flex
+		justify-content: center
+		align-items: center
 
 		+media-sm
-			max-height: 300px
+			max-height: $node-preview-max-height-sm
 		+media-md
-			max-height: 420px
+			max-height: $node-preview-max-height-md
 		+media-lg
-			max-height: 500px
+			max-height: $node-preview-max-height-lg
 
 		img
 			display: block
-			max-width: 100%
-			max-height: 500px
+			max-height: $node-preview-max-height-lg
 			margin: 0 auto
 
 			+media-sm
-				max-height: 300px
+				max-height: $node-preview-max-height-sm
 			+media-md
-				max-height: 420px
+				max-height: $node-preview-max-height-md
 			+media-lg
-				max-height: 500px
+				max-height: $node-preview-max-height-lg
 
 	&.video
 		background-color: black
 
 	&.group, &.project
-		background-color: rgba($color-background-nav, .9)
+		background-color: rgba($color-background-nav, .95)
 		position: relative
 		overflow: hidden
+
+		.header
+			max-width: 100%
 
 		.backdrop
 			width: 100%
@@ -394,9 +406,12 @@ section.node-details-container
 			size: 1.1em
 
 	&.group, &.project
+		.node-details-header
+			max-width: 35%
+			float: right
 		.node-details-description
 			padding: 15px 20px 25px 20px
-			max-width: 70%
+			max-width: 65%
 
 
 	&.group
@@ -904,7 +919,7 @@ section.node-children
 
 #node-edit-container
 	#node-edit-header
-		background-color: rgba($color-background-nav, .9)
+		background-color: rgba($color-background-nav, .95)
 		padding: 20px 20px 10px 20px
 		height: 100px
 		position: relative

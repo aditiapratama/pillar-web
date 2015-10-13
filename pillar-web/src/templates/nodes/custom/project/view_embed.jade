@@ -2,16 +2,11 @@
 
 #node-container
 	section.node-preview.project
-		img(src="{{ node.properties.picture_header.thumbnail('l') }}")
+		img.header(src="{{ node.properties.picture_header.thumbnail('l') }}")
 
 	section.node-details-container.project
 
 		.node-details-header
-			.node-title
-				| {{node.name}}
-				// XXX link to user/organization
-				// small by {{ node.user }}
-
 			.node-title-details
 				.date {{ node._created }}
 

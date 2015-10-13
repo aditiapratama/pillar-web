@@ -14,7 +14,7 @@ script(type="text/javascript").
 		$('#item_edit').attr('data-node_id', '{{node._id}}');
 		$('#item_add').attr('data-parent_node_id', '{{parent._id}}');
 
-		$('#item_add, #item_edit').show();
+		$('#item_add, #item_edit').fadeIn(100);
 	{% else %}
 		$('#item_add, #item_edit').hide();
 	{% endif %}
