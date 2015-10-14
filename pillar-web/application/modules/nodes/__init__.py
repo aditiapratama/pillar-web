@@ -327,6 +327,18 @@ def view(node_id):
                     }, api=api)
                 list_latest.append(node_item)
             node.properties.nodes_latest = list(reversed(list_latest))
+            list_featured = []
+        if node.properties.nodes_featured:
+            for node_id in node.properties.nodes_featured:
+                #list_featured.append(Node.find(n, api=api))
+                node_item = Node.find(node_id, {
+                    'projection': '{"name":1, "user":1, "picture":1, "node_type":1}',
+                    'embedded': '{"user":1}',
+                    }, api=api)
+                picture = File.find(node_item.picture, api=api)
+                node_item.picture = picture
+                list_featured.append(node_item)
+            node.properties.nodes_featured = list(reversed(list_featured))
 
     elif node_type_name == 'storage':
         storage = StorageNode(node)
@@ -409,11 +421,15 @@ def view(node_id):
     return return_content
 
 
-def project_update_nodes_list(project_id, node_id, list_name='latest'):
+def project_update_nodes_list(node_id, project_id=None, list_name='latest'):
     """Update the project node with the latest edited or favorited node.
     The list value can be 'latest' or 'featured' and it will determined where
     the node reference will be placed in.
     """
+    if not project_id and 'current_project_id' in session:
+        project_id = session['current_project_id']
+    elif not project_id:
+        return None
     api = SystemUtility.attract_api()
     project = Node.find(project_id, api=api)
     if list_name == 'latest':
@@ -431,9 +447,14 @@ def project_update_nodes_list(project_id, node_id, list_name='latest'):
     if node_id in nodes_list:
         # Pop to put this back on top of the list
         nodes_list.remove(node_id)
+        if list_name == 'featured':
+            # We treat the action as a toggle and do not att the item back
+            project.update(api=api)
+            return "removed"
 
     nodes_list.append(node_id)
     project.update(api=api)
+    return "added"
 
 
 @nodes.route("/<node_id>/edit", methods=['GET', 'POST'])
@@ -453,8 +474,7 @@ def edit(node_id):
     if form.validate_on_submit():
         if process_node_form(
                 form, node_id=node_id, node_type=node_type, user=user_id):
-            if 'current_project_id' in session:
-                project_update_nodes_list(session['current_project_id'], node_id)
+            project_update_nodes_list(node_id)
             return redirect(url_for('nodes.view', node_id=node_id, embed=1))
         else:
             error = "Server error"

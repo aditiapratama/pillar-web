@@ -13,10 +13,9 @@ script(type="text/javascript").
 	{% if node.has_method('PUT') %}
 		$('#item_edit').attr('data-node_id', '{{node._id}}');
 		$('#item_add').attr('data-parent_node_id', '{{parent._id}}');
-
-		$('#item_add, #item_edit').fadeIn(100);
+		$('#item_add, #item_edit, #item_featured').fadeIn(100);
 	{% else %}
-		$('#item_add, #item_edit').hide();
+		$('#item_add, #item_edit, #item_featured').hide();
 	{% endif %}
 
 

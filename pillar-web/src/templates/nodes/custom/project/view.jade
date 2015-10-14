@@ -45,6 +45,10 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 			i.ion-load-c
 
 		ul.project-edit-tools
+			a#item_featured(href="#")
+				li.button-featured
+					i.button-featured-icon.ion-ios-star-outline
+					| Featured
 			a#item_add(href="#")
 				li.button-add
 					i.button-add-icon.zmdi.zmdi-collection-plus
@@ -130,7 +134,7 @@ script(type="text/javascript").
 		var url = '/nodes/' + nodeId + '/view?embed=1'
 		loadNodeContent(url, nodeId);
 
-		$("#item_save, #item_cancel").hide();
+		//$("#item_save, #item_cancel, #item_featured").hide();
 	}
 
 
@@ -245,9 +249,7 @@ script(type="text/javascript").
 		});
 
 		$('#item_edit').click(function(e){
-
 			$('.button-edit-icon').addClass('ion-load-c spin').removeClass('zmdi zmdi-edit');
-
 			// When clicking on the edit icon, embed the edit
 			e.preventDefault;
 			node_id = document.getElementById("item_edit");
@@ -256,12 +258,21 @@ script(type="text/javascript").
 
 
 		$('#item_add').click(function(e){
-
 			$('.button-add-icon').addClass('ion-load-c spin').removeClass('zmdi zmdi-collection-plus');
-
 			e.preventDefault;
 			node_id = document.getElementById("item_add");
 			addNode(node_id.getAttribute('data-parent_node_id'));
+		});
+
+		$('#item_featured').click(function(e){
+			e.preventDefault;
+			var current_node = document.getElementById("item_edit");
+			var current_node_id = current_node.getAttribute('data-node_id')
+			$.post("{{url_for('nodes.projects_add_featured_node')}}", {node_id : current_node_id},
+				function(data){
+				// Feedback logic
+			});
+
 		});
 
 	};
