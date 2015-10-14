@@ -21,15 +21,15 @@
 			.node-updates
 				h3 Latest Updates
 				ul.node-updates-list
-					| {% for i in range(0, 5) %}
+					| {% for n in node.properties.nodes_latest %}
 					li.node-updates-list-item
 						//- a.image(href="")
 						//- 	img(src="{{ node.properties.picture_header.thumbnail('s') }}")
 						.info
-							a.title(href="") Update Name
+							a.title(href="#", data-node_id="{{ n._id }}") {{ n.name }}
 							span.details
-								span.when {{loop.index * 19}} mins ago by
-								span.who This Other Guy
+								span.when {{ n._updated }} mins ago by
+								span.who {{ n.user.full_name }}
 					| {% endfor %}
 
 			.node-featured
@@ -47,6 +47,13 @@
 					| {% endfor %}
 
 include ../_scripts
+
+script().
+	$(".node-updates-list-item a.title").unbind('click');
+	$(".node-updates-list-item a.title").click(function(e) {
+		e.preventDefault();
+		displayNode($(this).data('node_id'));
+		});
 
 | {% endblock %}
 

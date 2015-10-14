@@ -317,6 +317,17 @@ def view(node_id):
         if node.properties.picture_header:
             picture_header = File.find(node.properties.picture_header, api=api)
             node.properties.picture_header = picture_header
+        if node.properties.nodes_latest:
+            list_latest = []
+            for node_id in node.properties.nodes_latest:
+                #list_latest.append(Node.find(n, api=api))
+                node_item = Node.find(node_id, {
+                    'projection': '{"name":1, "user":1, "node_type":1}',
+                    'embedded': '{"user":1}',
+                    }, api=api)
+                list_latest.append(node_item)
+            node.properties.nodes_latest = list(reversed(list_latest))
+
     elif node_type_name == 'storage':
         storage = StorageNode(node)
         path = request.args.get('path')
@@ -383,7 +394,6 @@ def view(node_id):
         if not os.path.exists(template_path_full):
             return "Missing template"
 
-
         return_content = render_template(template_path,
             node=node,
             type_names=type_names(),
@@ -415,8 +425,12 @@ def project_update_nodes_list(project_id, node_id, list_name='latest'):
         node_list_name = 'nodes_' + list_name
         project.properties[node_list_name] = []
         nodes_list = project.properties[node_list_name]
-    elif len(nodes_list) > 10:
+    elif len(nodes_list) > 5:
         nodes_list.pop(0)
+
+    if node_id in nodes_list:
+        # Pop to put this back on top of the list
+        nodes_list.remove(node_id)
 
     nodes_list.append(node_id)
     project.update(api=api)
@@ -439,7 +453,6 @@ def edit(node_id):
     if form.validate_on_submit():
         if process_node_form(
                 form, node_id=node_id, node_type=node_type, user=user_id):
-            #node = Node.find(node_id, api=api)
             if 'current_project_id' in session:
                 project_update_nodes_list(session['current_project_id'], node_id)
             return redirect(url_for('nodes.view', node_id=node_id, embed=1))
