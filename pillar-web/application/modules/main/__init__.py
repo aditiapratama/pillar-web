@@ -6,6 +6,7 @@ from pillarsdk.organizations import Organization
 from pillarsdk.exceptions import ResourceNotFound
 from flask import abort
 from flask import render_template
+from flask import session
 from flask.ext.login import login_required
 from flask.ext.login import current_user
 from application import app
@@ -54,6 +55,7 @@ def project_view(name, project):
     """
     user = UserProxy(name)
     project = user.project(project)
+    session['current_project_id'] = project._id
     return view(project._id)
 
 

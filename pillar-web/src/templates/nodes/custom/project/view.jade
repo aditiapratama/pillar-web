@@ -45,6 +45,11 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 			i.ion-load-c
 
 		ul.project-edit-tools
+			<!-- Button trigger modal -->
+			a#item_move(href="#")
+				li.button-move
+					i.button-move-icon.ion-ios-star-outline
+					| Move
 			a#item_featured(href="#")
 				li.button-featured
 					i.button-featured-icon.ion-ios-star-outline
@@ -241,6 +246,14 @@ script(type="text/javascript").
 
 		$('#project_tree').on("select_node.jstree", function (e, data) {
 			if (typeof(data.node.original.path) === 'undefined') {
+				// Check if we are in the process of moving a node
+				if (Cookies.get('bcloud_moving_node_id')) {
+					// Allow moving nodes only inside of node_type group
+					if (data.node.original.type != 'group') {
+						$('#item_move').addClass('disabled');
+						}
+					}
+
 				displayNode(data.node.id);
 			} else {
 				displayStorage(data.node.original.storage_node, data.node.original.path);
@@ -262,6 +275,31 @@ script(type="text/javascript").
 			e.preventDefault;
 			node_id = document.getElementById("item_add");
 			addNode(node_id.getAttribute('data-parent_node_id'));
+		});
+
+		$('#item_move').click(function(e){
+			e.preventDefault;
+			node_id = document.getElementById("item_edit");
+
+			moving_node_id = Cookies.get('bcloud_moving_node_id');
+			if (moving_node_id) {
+				// Check if destination node is the same
+				// Check if destination node is of type group
+				var current_node = document.getElementById("item_edit");
+				var current_node_id = current_node.getAttribute('data-node_id')
+				$.post("{{url_for('nodes.projects_move_node')}}", {
+					node_id: moving_node_id, dest_parent_node_id: current_node_id},
+					function(data){
+					// Feedback logic
+					// console.log(data);
+				}).done(function() {
+					Cookies.remove('bcloud_moving_node_id');
+				});
+
+			} else {
+				Cookies.set('bcloud_moving_node_id', node_id.getAttribute('data-node_id'));
+				// TODO set status as moving
+			}
 		});
 
 		$('#item_featured').click(function(e){

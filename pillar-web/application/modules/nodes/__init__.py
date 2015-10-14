@@ -160,10 +160,10 @@ def jstree_get_children(node_id):
 
 def jstree_build_children(node):
     return dict(
-        id="n_{0}".format(node['_id']),
-        text=node['name'],
-        type='group',
-        children=jstree_get_children(node['_id'])
+        id="n_{0}".format(node._id),
+        text=node.name,
+        type=node.node_type.name,
+        children=jstree_get_children(node._id)
     )
 
 
@@ -412,10 +412,6 @@ def view(node_id):
             parent=parent,
             children=children,
             config=app.config)
-        #return_content = make_response(render_template_response)
-        if node_type_name == 'project':
-            session['current_project_id'] = node._id
-            #return_content.set_cookie('current_project_id', value=node._id)
 
     #print(time.time() - start)
     return return_content
@@ -578,7 +574,6 @@ def delete(node_id):
         return redirect(url_for('nodes.index', node_type_name=node_type['name']))
     else:
         return redirect(url_for('nodes.edit', node_id=node._id))
-
 
 
 # Import of custom modules (using the same nodes decorator)
