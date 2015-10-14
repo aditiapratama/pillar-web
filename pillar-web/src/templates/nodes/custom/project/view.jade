@@ -45,28 +45,40 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 			i.ion-load-c
 
 		ul.project-edit-tools
-			<!-- Button trigger modal -->
-			a#item_move(href="#")
-				li.button-move
-					i.button-move-icon.ion-ios-star-outline
-					| Move
-			a#item_featured(href="#")
+
+			a#item_featured.project-mode-view(
+				href="#",
+				title="Feature on project's homepage")
 				li.button-featured
 					i.button-featured-icon.ion-ios-star-outline
 					| Featured
-			a#item_add(href="#")
+			a#item_add.project-mode-view(
+				href="#",
+				title="Add new asset")
 				li.button-add
 					i.button-add-icon.zmdi.zmdi-collection-plus
 					| Add Asset
-			a#item_edit(href="#")
+			a#item_move.project-mode-view(
+				href="#",
+				title="Move asset into a folder...")
+				li.button-move
+					i.button-move-icon.ion-arrow-move
+					| Move
+			a#item_edit.project-mode-view(
+				href="#",
+				title="Edit asset")
 				li.button-edit
 					i.button-edit-icon.zmdi.zmdi-edit
 					| Edit
-			a#item_cancel(href="#")
+			a#item_cancel.project-mode-edit(
+				href="#",
+				title="Cancel changes")
 				li.button-cancel
 					i.button-cancel-icon.ion-close-round
 					| Cancel
-			a#item_save(href="#")
+			a#item_save.project-mode-edit(
+				href="#",
+				title="Save changes")
 				li.button-save
 					i.button-save-icon.ion-checkmark-round
 					| Save Changes
@@ -87,6 +99,11 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 
 		#project_context-container
 			#project_context
+			#overlay-mode-move-container
+				.title
+					i.ion-ios-arrow-thin-left
+					| Select a folder and click "Move Here"
+
 
 
 | {% endblock %}
@@ -95,10 +112,10 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 | {% block footer %}{% endblock %}
 
 | {% block footer_scripts %}
-script(type="text/javascript", src="//cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js")
-script(type="text/javascript", src="//releases.flowplayer.org/6.0.3/flowplayer.min.js")
+script(src="//cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js")
+script(src="//releases.flowplayer.org/6.0.3/flowplayer.min.js")
 
-script(type="text/javascript").
+script().
 
 	function loadNodeContent(url, nodeId) {
 
@@ -139,7 +156,9 @@ script(type="text/javascript").
 		var url = '/nodes/' + nodeId + '/view?embed=1'
 		loadNodeContent(url, nodeId);
 
-		//$("#item_save, #item_cancel, #item_featured").hide();
+		$('.project-mode-view').show();
+		$('.project-mode-edit').hide();
+
 	}
 
 
@@ -157,8 +176,8 @@ script(type="text/javascript").
 			$('#project_context').html(dataHtml);
 			window.location.replace('#' + nodeId);
 
-			$("#item_add, #item_edit").hide();
-			$("#item_save, #item_cancel").show();
+			$('.project-mode-view').hide();
+			$('.project-mode-edit').show();
 		})
 		.fail(function(dataResponse) {
 			$('#project_context').html($('<iframe id="server_error"/>'));
@@ -294,21 +313,33 @@ script(type="text/javascript").
 					// console.log(data);
 				}).done(function() {
 					Cookies.remove('bcloud_moving_node_id');
+
+					$('#item_move .button-move').removeClass('moving');
+					$('#item_move .button-move').html('<i class="ion-arrow-move"></i> Move');
+					$('#overlay-mode-move-container').hide();
 				});
 
 			} else {
 				Cookies.set('bcloud_moving_node_id', node_id.getAttribute('data-node_id'));
-				// TODO set status as moving
+
+				$('#item_move .button-move').addClass('moving');
+				$('#item_move .button-move').html('<i class="ion-checkmark-round"></i> Move Here');
+				$('#overlay-mode-move-container').show();
 			}
 		});
 
 		$('#item_featured').click(function(e){
 			e.preventDefault;
 			var current_node = document.getElementById("item_edit");
-			var current_node_id = current_node.getAttribute('data-node_id')
+			var current_node_id = current_node.getAttribute('data-node_id');
+
 			$.post("{{url_for('nodes.projects_add_featured_node')}}", {node_id : current_node_id},
 				function(data){
 				// Feedback logic
+			})
+			.done(function(){
+				$('#item_featured .button-featured').addClass('featured');
+				$('#item_featured .button-featured-icon').addClass('ion-ios-star').removeClass('ion-ios-star-outline');
 			});
 
 		});

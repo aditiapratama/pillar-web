@@ -177,22 +177,39 @@ $list-node-children-item-width: 160px
 						cursor: default
 						+pulse-75
 
+				&.button-move
+					&.moving
+						background-color: $color-success
+						border-color: $color-success
+						pointer-events: none
+						cursor: default
+						+pulse-75
+
 			&#item_save,
-			&#item_cancel,
-			&#item_featured
+			&#item_cancel
 				display: none
 
 				i
 					font-size: 1em
 
 			&#item_add,
-			&#item_edit
+			&#item_edit,
+			&#item_move,
+			&#item_featured
 				display: none
 				li
 					min-width: 80px
 
+					&.featured
+						color: $color-warning
+						border-color: $color-warning
+
+						&:hover
+							background-color: rgba($color-warning, .1)
+
 					i
 						margin-right: 10px
+
 
 			&#item_delete
 				li i
@@ -374,9 +391,12 @@ section.node-preview
 			transform: translate(-50%, -50%)
 
 
-
 section.node-details-container
+	flex: 1
 	background-color: white
+
+	&.group
+		flex: 0
 
 	.node-details-header
 		display: flex
@@ -1051,6 +1071,53 @@ section.node-children
 
 		#node-edit-form-md-preview
 			padding: 20px
+
+
+#overlay-mode-move-container
+	display: none
+	background-color: rgba($color-background-nav, .9)
+	color: white
+	position: absolute
+	top: 0
+	left: 0
+	right: 0
+	bottom: 0
+	width: 100%
+	height: 100%
+	z-index: 12
+	transition: all 150ms ease-in-out
+
+	.title
+		position: absolute
+		top: 50%
+		left: 50%
+		transform: translate(-50%, -50%)
+
+		font:
+			family: $font-headings
+			size: 1.5em
+			weight: 300
+
+		i
+			position: relative
+			right: 0
+			padding-right: 15px
+
+			animation:
+				name: overlay-mode-move-icon
+				duration: 1.5s
+				delay: 0
+				fill-mode: forwards
+				iteration-count: infinite
+
+
+@keyframes overlay-mode-move-icon
+	0
+		right: 0
+	50%
+		right: 5px
+	100%
+		right: 0
 
 .debug
 	font:
