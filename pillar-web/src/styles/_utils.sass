@@ -149,6 +149,14 @@
 		fill-mode: forwards
 		iteration-count: infinite
 
+=pulse-75
+	animation:
+		name: pulse-75
+		duration: 1s
+		delay: 0
+		fill-mode: forwards
+		iteration-count: infinite
+
 .spin
 	position: relative
 	+spin
@@ -164,6 +172,14 @@
 		opacity: 1
 	50%
 		opacity: 0
+	100%
+		opacity: 1
+
+@keyframes pulse-75
+	0
+		opacity: 1
+	50%
+		opacity: .8
 	100%
 		opacity: 1
 

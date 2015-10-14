@@ -131,6 +131,10 @@ script(type="text/javascript").
 	$("#item_save").unbind( "click" );
 	$("#item_cancel").unbind( "click" );
 
+	/* Reset Save Changes button status */
+	$("#item_save li.button-save").removeClass('field-error saving');
+	$("#item_save li.button-save").html('<i class="ion-checkmark-round"></i> Save Changes');
+
 	$("#node-edit-form").submit(function(e) {
 		e.preventDefault();
 
@@ -138,14 +142,23 @@ script(type="text/javascript").
 			$(this).serialize(),
 			function(dataHtml){
 				$('#project_context').html(dataHtml);
-			});
+
+				$("#item_save li.button-save").addClass('saving');
+				$("#item_save li.button-save").html('<i class="ion-load-c spin"></i> Saving...');
+		})
+		.fail(function(){
+			$("#item_save li.button-save").addClass('field-error');
+			$("#item_save li.button-save").html('<i class="ion-alert-circled"></i> Try again');
+		})
+		.done(function(){
+			$("#item_save li.button-save").html('<i class="ion-android-happy"></i> Success!');
+		});
 
 	});
 
 	$('#item_save').click(function(e){
 
 		$("#node-edit-form").submit();
-		$("#item_save, #item_cancel").hide();
 
 		// Don't refresh whole tree, causes additional displayNode() to be called
 		//- $('#project_tree').jstree("refresh");

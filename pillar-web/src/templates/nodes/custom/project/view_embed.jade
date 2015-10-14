@@ -21,16 +21,25 @@
 			.node-updates
 				h3 Latest Updates
 				ul.node-updates-list
+					| {% if node.properties.nodes_latest %}
+
 					| {% for n in node.properties.nodes_latest %}
 					li.node-updates-list-item
-						//- a.image(href="")
-						//- 	img(src="{{ node.properties.picture_header.thumbnail('s') }}")
 						.info
 							a.title(href="#", data-node_id="{{ n._id }}") {{ n.name }}
 							span.details
 								span.when {{ n._updated }} mins ago by
 								span.who {{ n.user.full_name }}
 					| {% endfor %}
+
+					| {% else %}
+
+					li.node-updates-list-item
+						.info
+							span.details
+								span.when No updates yet.
+
+					| {% endif %}
 
 			.node-featured
 				h3 Featured Assets

@@ -60,6 +60,7 @@
 		| {% endif %}
 
 	script.
+		$('a.item_icon').unbind("click");
 		$('a.item_icon').click(function(e){
 			// When clicking on a node preview, we load its content
 			e.preventDefault;
