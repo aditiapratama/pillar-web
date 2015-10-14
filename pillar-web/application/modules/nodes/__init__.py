@@ -171,7 +171,6 @@ def jstree_build_from_node(node):
     api = SystemUtility.attract_api()
     open_nodes = [jstree_parse_node(node)]
     # Get the current node again (with parent data)
-    #parent = Node.find(node.parent + '/?projection={"name":1, "parent":1, "node_type.name": 1}&embedded={"node_type":1}', api=api)
     try:
         parent = Node.find(node.parent, {
             'projection': '{"name": 1, "parent": 1, "node_type": 1}',
