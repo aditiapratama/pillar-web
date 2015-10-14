@@ -433,6 +433,10 @@ def project_update_nodes_list(node_id, project_id=None, list_name='latest'):
     else:
         nodes_list = project.properties.nodes_featured
 
+    # Do not allow adding project to lists
+    if node_id == project._id:
+        return "fail"
+
     if not nodes_list:
         node_list_name = 'nodes_' + list_name
         project.properties[node_list_name] = []
