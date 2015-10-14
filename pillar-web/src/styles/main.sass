@@ -175,9 +175,12 @@ header.navbar-header
 				left: 20px
 				right: 20px
 
-			&:hover
+			&:hover, &:focus
 				background-color: rgba($color-background-nav, .4)
 				border-bottom: 3px solid lighten($color-background-nav, 15%)
+
+			&:focus
+				border-bottom: 3px solid $color-primary
 
 			&.active
 				border-bottom: 3px solid $color-secondary
