@@ -296,9 +296,13 @@ script().
 				if (Cookies.get('bcloud_moving_node_id')) {
 					// Allow moving nodes only inside of node_type group
 					if (data.node.original.type != 'group') {
-						$('#item_move').addClass('disabled');
-						}
+						$('#item_move_accept').addClass('disabled');
+						$('#item_move_accept').html('Select a Folder');
+					} else {
+						$('#item_move_accept').removeClass('disabled');
+						$('#item_move_accept').html('<i class="ion-checkmark-round"></i>Move Here');
 					}
+				}
 
 				displayNode(data.node.id);
 			} else {

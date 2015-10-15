@@ -1251,6 +1251,10 @@ section.node-children
 			button.move
 				+button-rounded-filled($color-success, 3px)
 
+				&.disabled
+					pointer-events: none
+					background: repeating-linear-gradient(-45deg, darken($color-success, 15%), darken($color-success, 15%) 10px, darken($color-success, 20%) 10px, darken($color-success, 20%) 20px)
+
 
 @keyframes overlay-mode-move-icon
 	0
