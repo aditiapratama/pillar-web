@@ -9,19 +9,19 @@
 
 		#blog_index-container
 
-			| {% for item in news %}
+			| {% for post in posts %}
 
 			.blog_index-item
 
 				a.item-title(
-					href="#")
-					| {{item.name}}
+					href="{{url_for('blog_view', url=post.properties.url)}}")
+					| {{post.name}}
 
 				.item-info
-					| {{item._updated}} | {{item.properties.category}}
+					| {{post._updated}} | {{post.properties.category}}
 
 				.item-content
-					| {{item.properties.content|safe}}
+					| {{post.properties.content|safe}}
 
 			| {% endfor %}
 
