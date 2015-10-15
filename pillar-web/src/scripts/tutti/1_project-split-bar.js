@@ -68,6 +68,12 @@ $('.project_split, .project_nav-collapse-btn, .project_nav-expand-btn').on('clic
 	projectNavToggle();
 });
 
+$(document).keypress(function(e) {
+	if(e.which == 116) {
+		projectNavToggle();
+	}
+});
+
 $( document ).ready(function() {
 	projectNavCheck();
 });
