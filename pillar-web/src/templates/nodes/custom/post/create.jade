@@ -1,21 +1,24 @@
 | {% extends 'layout.html' %}
 | {% block body %}
-.col-md-9
-	| {% with errors = errors %}
-	| {% if errors %}
-	div
-		| {% for field in errors %}
-		.alert.alert-danger(role='alert')
-			strong {{field}}
-			| 						{% for message in errors[field] %}
-			| 								{{message}}|
-			| 						{% endfor %}
-		| 				{% endfor %}
-	| 		{% endif %}
-	| 		{% endwith %}
-	h2 Add {{ node_type.name }}
-	.row
-		.col-md-6
+.container.box
+	#blog_container
+
+		#blog_post-container
+			| {% with errors = errors %}
+			| {% if errors %}
+			div
+				| {% for field in errors %}
+				.alert.alert-danger(role='alert')
+					strong {{field}}
+					| 						{% for message in errors[field] %}
+					| 								{{message}}|
+					| 						{% endfor %}
+				| 				{% endfor %}
+			| 		{% endif %}
+			| 		{% endwith %}
+
+			h2 Add {{ node_type.name }}
+
 			form(method='POST', enctype='multipart/form-data', action="{{url_for('nodes.posts_create', project=project)}}")
 				| {% for field in form %}
 				| {% if field.name == 'csrf_token' %}
@@ -24,14 +27,36 @@
 				| {% if field.type == "HiddenField" %}
 				| {{ field }}
 				| {% else %}
-				.form-group
+				.form-group(class="{{field.name}}")
 					| {{ field.label }}
 					| {{ field(class='form-control') }}
 				| 						{% endif %}
 				| 					{% endif %}
 				| 				{% endfor %}
 				input.btn.btn-default(type='submit', value='Create {{ node_type.name }}')
+
+		#blog_index-sidebar
+
+
 | {% endblock %}
+
+| {% block footer_scripts %}
+script(type="text/javascript").
+
+	var convert = new Markdown.getSanitizingConverter().makeHtml;
+
+	/* Build the markdown preview when typing in textarea */
+	$(function() {
+		var $textarea = $('.form-group.content textarea'),
+				$preview = $('<div class="node-edit-form-md-preview" />').insertAfter($textarea);
+
+		$textarea.keyup(function() {
+			// Convert markdown
+			$preview.html(convert($textarea.val()));
+		}).trigger('keyup');
+	});
+| {% endblock %}
+
 | {% block footer_navigation %}
 | {% endblock %}
 | {% block footer %}
