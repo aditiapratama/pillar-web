@@ -211,22 +211,6 @@ def get_node_form(node_type):
     setattr(ProceduralForm,
         'description',
         TextAreaField('Description'))
-    #setattr(ProceduralForm,
-    #    'picture',
-    #    FileField('Picture'))
-    select = []
-    select.append(('None', 'None'))
-    nodes = pillarsdk.File.all(
-        {'max_results': 999, 'where': '{"is_preview" : {"$ne":true}}'},
-        api=api)
-    for option in nodes['_items']:
-        try:
-            select.append((str(option['_id']), str(option['name'])))
-        except KeyError:
-            select.append((str(option['_id']), str(option['filename'])))
-    # setattr(ProceduralForm,
-    #         'picture_file',
-    #         FileField('Picture File'))
     setattr(ProceduralForm,
         'picture',
         FileSelectField('Picture'))
@@ -254,20 +238,20 @@ def get_node_form(node_type):
                            "{0}__".format(prop_name))
                 continue
             if schema_prop['type'] == 'list' and 'items' in form_prop:
+                # Attempt at populating the content of a select menu. If this
+                # is a large collection this will not work because of pagination.
+                # This whole section should just be removed in the future. See
+                # the next statement for an improved approach to this.
                 for item in form_prop['items']:
                     items = eval("pillarsdk.{0}".format(item[0]))
-                    items_to_select = items.all({'max_results': 200}, api=api)
+                    items_to_select = items.all(api=api)
                     if items_to_select:
                         items_to_select = items_to_select["_items"]
                     else:
                         items_to_select = []
                     select = []
                     for select_item in items_to_select:
-                        try:
-                            select.append((select_item['_id'], select_item[item[1]]))
-                        except KeyError:
-                            # Backwards compatibility
-                            select.append((select_item['_id'], select_item['_id']))
+                        select.append((select_item['_id'], select_item[item[1]]))
                     if item[0] == 'File':
                         setattr(ProceduralForm,
                                 prop_name,
@@ -275,7 +259,14 @@ def get_node_form(node_type):
                     else:
                         setattr(ProceduralForm,
                                 prop_name,
-                                SelectMultipleField(choices=select))
+                                SelectMultipleField(choices=select, coerce=str))
+            elif schema_prop['type'] == 'list':
+                # Create and empty multiselect field, which will be populated
+                # with choices from the data it's being initialized with.
+                setattr(ProceduralForm,
+                        prop_name,
+                        SelectMultipleField(choices=[]))
+
             elif 'allowed' in schema_prop:
                 select = []
                 for option in schema_prop['allowed']:

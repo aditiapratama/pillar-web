@@ -1,5 +1,7 @@
 import json
 import os
+from datetime import datetime
+
 from pillarsdk import Node
 from pillarsdk import NodeType
 from pillarsdk import User
@@ -16,8 +18,7 @@ from flask import url_for
 from flask import request
 from flask import jsonify
 from flask import session
-
-from datetime import datetime
+from wtforms import SelectMultipleField
 
 from application.modules.nodes.forms import get_node_form
 from application.modules.nodes.forms import get_comment_form
@@ -461,14 +462,61 @@ def project_update_nodes_list(node_id, project_id=None, list_name='latest'):
 def edit(node_id):
     """Generic node editing form
     """
+    def set_properties(
+            dyn_schema, form_schema, node_properties, form, prefix="", set_data=True):
+        """Initialize custom properties for the form. We run this function once
+        before validating the function with set_data=False, so that we can set
+        any multiselect field that was originally specified empty and fill it
+        with the current choices.
+        """
+        for prop in dyn_schema:
+            if not prop in node_properties:
+                continue
+            schema_prop = dyn_schema[prop]
+            form_prop = form_schema[prop]
+            prop_name = "{0}{1}".format(prefix, prop)
+            if schema_prop['type'] == 'dict':
+                set_properties(
+                    schema_prop['schema'],
+                    form_prop['schema'],
+                    node_properties[prop_name],
+                    form,
+                    "{0}__".format(prop_name))
+            else:
+                try:
+                    data = node_properties[prop]
+                except KeyError:
+                    print ("{0} not found in form".format(prop_name))
+                if schema_prop['type'] == 'datetime':
+                    data = datetime.strptime(data, RFC1123_DATE_FORMAT)
+                if prop_name in form:
+                    # Other field types
+                    if isinstance(form[prop_name], SelectMultipleField):
+                        # If we are dealing with a multiselect field, check if
+                        # it's empty (usually because we can't query the whole
+                        # database to pick all the choices). If it's empty we
+                        # populate the choices with the actual data.
+                        if not form[prop_name].choices:
+                            form[prop_name].choices = [(d,d) for d in data]
+                            # Choices should be a tuple with value and name
+                    # Assign data to the field
+                    if set_data:
+                        form[prop_name].data = data
+
     api = SystemUtility.attract_api()
     node = Node.find(node_id, api=api)
+    # TODO: simply embed node_type
     node_type = NodeType.find(node.node_type, api=api)
     form = get_node_form(node_type)
     user_id = current_user.objectid
-    node_schema = node_type['dyn_schema'].to_dict()
+    dyn_schema = node_type['dyn_schema'].to_dict()
     form_schema = node_type['form_schema'].to_dict()
     error = ""
+    node_type_name = node_type.name
+
+    node_properties = node.properties.to_dict()
+
+    set_properties(dyn_schema, form_schema, node_properties, form, set_data=False)
 
     if form.validate_on_submit():
         if process_node_form(
@@ -489,35 +537,7 @@ def edit(node_id):
     if node.parent:
         form.parent.data = node.parent
 
-    def set_properties(
-            node_schema, form_schema, prop_dict, form, prefix=""):
-        for prop in node_schema:
-            if not prop in prop_dict:
-                continue
-            schema_prop = node_schema[prop]
-            form_prop = form_schema[prop]
-            prop_name = "{0}{1}".format(prefix, prop)
-            if schema_prop['type'] == 'dict':
-                set_properties(
-                    schema_prop['schema'],
-                    form_prop['schema'],
-                    prop_dict[prop_name],
-                    form,
-                    "{0}__".format(prop_name))
-            else:
-                try:
-                    data = prop_dict[prop]
-                except KeyError:
-                    print ("{0} not found in form".format(prop_name))
-                if schema_prop['type'] == 'datetime':
-                    data = datetime.strptime(data, RFC1123_DATE_FORMAT)
-                if prop_name in form:
-                    form[prop_name].data = data
-
-
-    prop_dict = node.properties.to_dict()
-    set_properties(node_schema, form_schema, prop_dict, form)
-
+    set_properties(dyn_schema, form_schema, node_properties, form)
 
     # Get Parent
     try:
