@@ -35,51 +35,58 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 				// XXX - Link to project overview
 				a(href="") {{ node.name }}
 
+			| {# TODO
 			li
 				a(href="#") Extras
 
 			li
 				a(href="#") Videos
+			#}
 
 		#project-loading
 			i.ion-load-c
 
 		ul.project-edit-tools
 
-			a#item_featured.project-mode-view(
-				href="#",
-				title="Feature on project's homepage")
-				li.button-featured
+			li.button-featured.project-mode-view
+				a#item_featured(
+					href="#",
+					title="Feature on project's homepage")
 					i.button-featured-icon.ion-ios-star-outline
 					| Featured
-			a#item_add.project-mode-view(
-				href="#",
-				title="Add new asset")
-				li.button-add
+
+			li.button-add
+				a#item_add.project-mode-view(
+					href="#",
+					title="Add new asset")
 					i.button-add-icon.zmdi.zmdi-collection-plus
 					| Add Asset
-			a#item_move.project-mode-view(
-				href="#",
-				title="Move asset into a folder...")
-				li.button-move
+
+			li.button-move
+				a#item_move.project-mode-view(
+					href="#",
+					title="Move asset into a folder...")
 					i.button-move-icon.ion-arrow-move
 					| Move
-			a#item_edit.project-mode-view(
-				href="#",
-				title="Edit asset")
-				li.button-edit
+
+			li.button-edit
+				a#item_edit.project-mode-view(
+					href="#",
+					title="Edit asset")
 					i.button-edit-icon.zmdi.zmdi-edit
 					| Edit
-			a#item_cancel.project-mode-edit(
-				href="#",
-				title="Cancel changes")
-				li.button-cancel
+
+			li.button-cancel
+				a#item_cancel.project-mode-edit(
+					href="#",
+					title="Cancel changes")
 					i.button-cancel-icon.ion-close-round
 					| Cancel
-			a#item_save.project-mode-edit(
-				href="#",
-				title="Save changes")
-				li.button-save
+
+			li.button-save
+				a#item_save.project-mode-edit(
+					href="#",
+					title="Save changes")
 					i.button-save-icon.ion-checkmark-round
 					| Save Changes
 			//- a#item_delete(href="#")
@@ -338,8 +345,8 @@ script().
 				// Feedback logic
 			})
 			.done(function(){
-				$('#item_featured .button-featured').addClass('featured');
-				$('#item_featured .button-featured-icon').addClass('ion-ios-star').removeClass('ion-ios-star-outline');
+				$('.button-featured').addClass('featured');
+				$('.button-featured-icon').addClass('ion-ios-star').removeClass('ion-ios-star-outline');
 			});
 
 		});

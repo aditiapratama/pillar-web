@@ -86,6 +86,7 @@ $list-node-children-item-width: 160px
 		border-top-left-radius: 3px
 		border-top-right-radius: 3px
 
+	/* Breadcrumbs */
 	ul.breadcrumb
 		position: relative
 		padding: 0
@@ -120,6 +121,7 @@ $list-node-children-item-width: 160px
 			left: -13px
 			top: 2px
 
+	/* Edit Asset buttons */
 	ul.project-edit-tools
 		align-self: flex-end
 		display: flex
@@ -137,57 +139,76 @@ $list-node-children-item-width: 160px
 
 		font-size: .9em
 
-		a
-			color: $color-text-light-primary
+		li
+			margin: 0
+			padding: 0
+			position: relative
+			float: left
 
-			&:hover
-				color: $color-text-light
 
-
-			li
-				margin: 5px
-				padding: 5px 15px
-				float: left
-				border-radius: 3px
-				border: thin solid darken($color-background, 50%)
-
-				text-align: center
-				text-transform: uppercase
-
-				transition: background-color 150ms ease-in-out
-
-				i
-					margin-right: 5px
-
-				&:hover
-					background-color: darken($color-background, 60%)
-
-				&.button-save
+			&.button-save
+				a
 					border-color: $color-success
 					background-color: $color-success
 					color: white
 
-					&.field-error
+					&:hover
+						background-color: lighten($color-success, 5%)
+
+				&.field-error
+					a
 						background-color: $color-danger
 						border-color: $color-danger
 						color: white
 
-					&.saving
+				&.saving
+					a
 						pointer-events: none
 						cursor: default
 						+pulse-75
 
-				&.button-move
-					&.moving
-						background-color: $color-success
-						border-color: $color-success
-						pointer-events: none
-						cursor: default
-						+pulse-75
+			&.button-move
+				&.moving
+					background-color: $color-success
+					border-color: $color-success
+					pointer-events: none
+					cursor: default
+					+pulse-75
+
+			&.button-add,
+			&.button-edit
+				min-width: 80px
+
+			&.featured
+				a
+					color: $color-warning
+					border-color: $color-warning
+
+					&:hover
+						background-color: rgba($color-warning, .1)
+
+		a
+			margin: 5px
+			padding: 5px 15px
+			color: $color-text-light-primary
+			border-radius: 3px
+			border: thin solid darken($color-background, 50%)
+			text-align: center
+			text-transform: uppercase
+			transition: background-color 150ms ease-in-out
+
+			i
+				margin-right: 5px
+
+			&:hover
+				background-color: darken($color-background, 60%)
+				color: $color-text-light
+				text-decoration: none
+
+
 
 			&#item_save,
 			&#item_cancel
-				display: none
 
 				i
 					font-size: 1em
@@ -196,16 +217,8 @@ $list-node-children-item-width: 160px
 			&#item_edit,
 			&#item_move,
 			&#item_featured
-				display: none
+
 				li
-					min-width: 80px
-
-					&.featured
-						color: $color-warning
-						border-color: $color-warning
-
-						&:hover
-							background-color: rgba($color-warning, .1)
 
 					i
 						margin-right: 10px

@@ -327,8 +327,8 @@ def view(node_id):
                     }, api=api)
                 list_latest.append(node_item)
             node.properties.nodes_latest = list(reversed(list_latest))
-            list_featured = []
         if node.properties.nodes_featured:
+            list_featured = []
             for node_id in node.properties.nodes_featured:
                 #list_featured.append(Node.find(n, api=api))
                 node_item = Node.find(node_id, {
