@@ -43,6 +43,17 @@
 | {% block footer_scripts %}
 script(type="text/javascript").
 
+	function FormatForUrl(str) {
+			return str.replace(/_/g, '-')
+					.replace(/ /g, '-')
+					.replace(/:/g, '-')
+					.replace(/\\/g, '-')
+					.replace(/\//g, '-')
+					.replace(/[^a-zA-Z0-9\-]+/g, '')
+					.replace(/-{2,}/g, '-')
+					.toLowerCase();
+	};
+
 	var convert = new Markdown.getSanitizingConverter().makeHtml;
 
 	/* Build the markdown preview when typing in textarea */
@@ -55,6 +66,15 @@ script(type="text/javascript").
 			$preview.html(convert($textarea.val()));
 		}).trigger('keyup');
 	});
+
+	$(function() {
+		var $name_input = $('.form-group.name input');
+		$name_input.keyup(function() {
+			$('#url').val(FormatForUrl($name_input.val()));
+		}).trigger('keyup');
+	});
+
+
 | {% endblock %}
 
 | {% block footer_navigation %}
