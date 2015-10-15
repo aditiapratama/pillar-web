@@ -124,12 +124,12 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 						i.ion-ios-arrow-thin-left
 						| Select the <strong>folder</strong> where you want to move it
 					.buttons
-						button.cancel
-							i.ion-close-round
-							| Cancel
-						button.move
+						button#item_move_accept.move
 							i.ion-checkmark-round
 							| Move Here
+						button#item_move_cancel.cancel
+							i.ion-close-round
+							| Cancel
 
 
 
@@ -323,37 +323,66 @@ script().
 			addNode(node_id.getAttribute('data-parent_node_id'));
 		});
 
+		/* Move Node */
+		moving_node_id = Cookies.get('bcloud_moving_node_id');
+
+		function moveModeEnter() {
+			$('#overlay-mode-move-container').addClass('visible');
+			$('.button-move').addClass('disabled');
+		};
+
+		function moveModeExit() {
+			/* Remove cookie, display current node, remove UI */
+			var current_node = document.getElementById("item_edit");
+			displayNode(current_node.getAttribute('data-node_id'));
+
+			$('#overlay-mode-move-container').removeClass('visible');
+			$('.button-move').removeClass('disabled');
+
+			Cookies.remove('bcloud_moving_node_id');
+		};
+
+		if (moving_node_id) {
+			moveModeEnter();
+		} else {
+			$('#overlay-mode-move-container').removeClass('visible');
+			$('.button-move').removeClass('disabled');
+		};
+
 		$('#item_move').click(function(e){
 			e.preventDefault;
+
+			moveModeEnter();
+
 			node_id = document.getElementById("item_edit");
-
 			moving_node_id = Cookies.get('bcloud_moving_node_id');
-			if (moving_node_id) {
-				// Check if destination node is the same
-				// Check if destination node is of type group
-				var current_node = document.getElementById("item_edit");
-				var current_node_id = current_node.getAttribute('data-node_id')
-				$.post("{{url_for('nodes.projects_move_node')}}", {
-					node_id: moving_node_id, dest_parent_node_id: current_node_id},
-					function(data){
-					// Feedback logic
-					// console.log(data);
-				}).done(function() {
-					Cookies.remove('bcloud_moving_node_id');
 
-					$('#item_move .button-move').removeClass('moving');
-					$('#item_move .button-move').html('<i class="ion-arrow-move"></i> Move');
-					$('#overlay-mode-move-container').hide();
-				});
-
-			} else {
-				Cookies.set('bcloud_moving_node_id', node_id.getAttribute('data-node_id'));
-
-				$('#item_move .button-move').addClass('moving');
-				$('#item_move .button-move').html('<i class="ion-checkmark-round"></i> Move Here');
-				$('#overlay-mode-move-container').show();
-			}
+			Cookies.set('bcloud_moving_node_id', node_id.getAttribute('data-node_id'));
 		});
+
+		$("#item_move_accept").click(function(e) {
+
+			e.preventDefault();
+
+			var current_node = document.getElementById("item_edit");
+			var moving_node_id = Cookies.get('bcloud_moving_node_id');
+
+			$.post("{{url_for('nodes.projects_move_node')}}", {
+				node_id: moving_node_id, dest_parent_node_id: current_node.getAttribute('data-node_id')},
+				function(data){
+			}).done(function() {
+
+				Cookies.remove('bcloud_moving_node_id');
+				moveModeExit();
+
+			});
+		});
+
+		$("#item_move_cancel").click(function(e) {
+			e.preventDefault();
+			moveModeExit();
+		});
+
 
 		$('#item_featured').click(function(e){
 			e.preventDefault;
@@ -367,21 +396,16 @@ script().
 			.done(function(){
 				$('.button-featured').addClass('featured');
 				$('.button-featured-icon').addClass('ion-ios-star').removeClass('ion-ios-star-outline');
-			});
-
 		});
 
+
+
+		});
 	};
 
 	// Initialize the page
 	loadContent();
 
-	$("#overlay-mode-move-container .buttons .cancel").click(function(e) {
-		console.log('e');
-		e.preventDefault();
-
-		displayNode('{{node._id}}');
-	});
 
 	/* UI Stuff */
 	$('#project_context-container').perfectScrollbar({suppressScrollX: true});

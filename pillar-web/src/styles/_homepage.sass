@@ -60,11 +60,11 @@
 					padding: 10px 25px
 
 
-					@include button-rounded($color-text-light)
+					@include button-rounded($color-text-light, 999em)
 					opacity: 1
 
 					&.get-started
-						@include button-rounded-filled($color-primary)
+						@include button-rounded-filled($color-primary, 999em)
 
 						opacity: 1
 
@@ -430,7 +430,7 @@ section#homepage.get-started
 		color: lighten($color-background-nav, 20%)
 
 	a.get-started
-		@include button-rounded-filled($color-primary)
+		@include button-rounded-filled($color-primary, 999em)
 
 		padding: 15px 50px
 		font-size: 1.5em

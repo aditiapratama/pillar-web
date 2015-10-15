@@ -9,6 +9,8 @@
 
 		#blog_index-container
 
+			| {% if posts %}
+
 			| {% for post in posts %}
 
 			.blog_index-item
@@ -24,6 +26,13 @@
 					| {{post.properties.content|safe}}
 
 			| {% endfor %}
+
+			| {% else %}
+
+			.blog_index-item
+				.item-content No posts yet.
+
+			| {% endif %}
 
 		#blog_index-sidebar
 

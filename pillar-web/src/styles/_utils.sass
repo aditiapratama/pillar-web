@@ -26,7 +26,7 @@
 		&:after
 			clear: both
 
-@mixin button-rounded($mixin-color)
+@mixin button-rounded($mixin-color, $roundness)
 	opacity: .9
 	padding:
 		left: 25px
@@ -36,7 +36,7 @@
 
 	color: $mixin-color
 	border: thin solid $mixin-color
-	border-radius: 999em
+	border-radius: $roundness
 	background-color: transparent
 	transition: color 350ms ease-out, border 150ms ease-in-out, opacity 150ms ease-in-out, background-color 150ms ease-in-out
 	text-shadow: none
@@ -56,7 +56,7 @@
 	i
 		margin-right: 10px
 
-@mixin button-rounded-filled($mixin-color)
+@mixin button-rounded-filled($mixin-color, $roundness)
 	text-transform: uppercase
 	opacity: .9
 	padding:
@@ -64,7 +64,7 @@
 		right: 25px
 	color: white
 	border: thin solid $mixin-color
-	border-radius: 999em
+	border-radius: $roundness
 	background-color: $mixin-color
 	text-shadow: none
 
