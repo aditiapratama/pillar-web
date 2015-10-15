@@ -126,6 +126,10 @@ $list-node-children-item-width: 160px
 			top: 2px
 
 	/* Edit Asset buttons */
+	.project-mode-view,
+	.project-mode-edit
+		display: none
+
 	ul.project-edit-tools
 		align-self: flex-end
 		display: flex
@@ -238,49 +242,51 @@ $list-node-children-item-width: 160px
 			// &:not(:last-of-type)
 				// border-right: thin solid darken($color-background, 50%)
 
-		/* Extra options in dropdown */
+		/* Extra asset tools in dropdown */
 		ul.dropdown-menu
 			width: auto
-			min-width: 240px
+			min-width: 180px
 			padding: 0
 			margin: 0
 			top: 35px
 			left: initial
-			right: 0
+			right: 10px
 			bottom: initial
 			border: thin solid rgba(darken($color-background-nav, 5%), .3)
-			border-top-left-radius: 3px
-			border-top-right-radius: 3px
-			border-bottom-left-radius: 0
-			border-bottom-right-radius: 0
+			border-bottom-left-radius: 3px
+			border-bottom-right-radius: 3px
+			border-top-left-radius: 0
+			border-top-right-radius: 0
+			background-color: lighten($color-background-nav, 10%)
 
 			li
 				padding: 0
-				text-align: right
 				clear: both
 				display: flex
 				align-items: center
+				width: 100%
 
 				a
+					margin: 0
 					padding: 10px 15px
 					width: 100%
+					border: 0
+					border-top: thin solid $color-background-nav
+					font-size: .9em
+					width: 100%
+					text-align: left
 
 					&:hover
 						color: $color-primary
 						background-color: transparent
+					&:active, &:focus
+						color: $color-primary
+						background-color: transparent
 
-					span
-						&.length
-							float: left
-							color: $color-text-dark-hint
-							padding-right: 15px
-						&.format
-							text-transform: uppercase
-							align-self: flex-end
-							margin-left: auto
-						&.size
-							display: inline-block
-							padding-left: 15px
+					i
+						display: inline-block
+						margin: 0 15px 0 0
+
 		&.open
 			button
 				box-shadow: none
@@ -1156,28 +1162,51 @@ section.node-children
 	z-index: 12
 	transition: all 150ms ease-in-out
 
-	.title
+	.overlay-container
 		position: absolute
 		top: 50%
 		left: 50%
 		transform: translate(-50%, -50%)
 
-		font:
-			family: $font-headings
-			size: 1.5em
-			weight: 300
-
-		i
+		.title
+			text-align: center
 			position: relative
-			right: 0
-			padding-right: 15px
+			left: -15px
 
-			animation:
-				name: overlay-mode-move-icon
-				duration: 1.5s
-				delay: 0
-				fill-mode: forwards
-				iteration-count: infinite
+			font:
+				family: $font-headings
+				size: 1.5em
+				weight: 300
+
+			i
+				position: relative
+				right: 0
+				padding-right: 15px
+
+				animation:
+					name: overlay-mode-move-icon
+					duration: 1.5s
+					delay: 0
+					fill-mode: forwards
+					iteration-count: infinite
+
+			strong
+				font-weight: 400
+
+		.buttons
+			max-width: 500px
+			text-align: center
+			padding: 15px 0
+
+			button
+				padding: 5px
+				margin: 0 10px
+
+			button.cancel
+				+button-rounded($color-background)
+
+			button.move
+				+button-rounded-filled($color-success)
 
 
 @keyframes overlay-mode-move-icon

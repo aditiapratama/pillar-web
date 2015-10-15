@@ -119,9 +119,17 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 		#project_context-container
 			#project_context
 			#overlay-mode-move-container
-				.title
-					i.ion-ios-arrow-thin-left
-					| Select a folder and click "Move Here"
+				.overlay-container
+					.title
+						i.ion-ios-arrow-thin-left
+						| Select the <strong>folder</strong> where you want to move it
+					.buttons
+						button.cancel
+							i.ion-close-round
+							| Cancel
+						button.move
+							i.ion-checkmark-round
+							| Move Here
 
 
 
@@ -367,6 +375,13 @@ script().
 
 	// Initialize the page
 	loadContent();
+
+	$("#overlay-mode-move-container .buttons .cancel").click(function(e) {
+		console.log('e');
+		e.preventDefault();
+
+		displayNode('{{node._id}}');
+	});
 
 	/* UI Stuff */
 	$('#project_context-container').perfectScrollbar({suppressScrollX: true});
