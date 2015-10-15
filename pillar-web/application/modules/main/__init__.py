@@ -38,6 +38,28 @@ def stats():
         'stats.html')
 
 
+@app.route("/news")
+def news():
+    """Blog with project news"""
+    api = SystemUtility.attract_api()
+    node_type = NodeType.find_first({
+        'where': '{"name" : "blog"}',
+        'projection': '{"name": 1}'
+        }, api=api)
+    blog = Node.find_first({
+        'where': '{"node_type" : "%s", \
+            "parent": "%s"}' % (node_type._id, app.config['CLOUD_PROJECT_ID']),
+        'embedded': '{"picture":1}',
+        }, api=api)
+    news = Node.all({
+        'where': '{"parent": "%s"}' % (blog._id),
+        'embedded': '{"picture":1}',
+        }, api=api)
+    return render_template(
+        'blog/index.html',
+        news=news._items)
+
+
 @app.route("/<name>/")
 def user_view(name):
     """View a user or organization."""

@@ -1,6 +1,6 @@
 | {% extends 'layout.html' %}
 
-| {% block page_title %}{{user.name}}{% endblock%}
+| {% block page_title %}Project News{% endblock%}
 
 | {% block body %}
 
@@ -9,19 +9,19 @@
 
 		#blog_index-container
 
-			| {% for project in projects %}
+			| {% for item in news %}
 
 			.blog_index-item
 
 				a.item-title(
-					href="{{ url_for('project_view', name=user.url, project=project.properties.url) }}")
-					| {{project.name}}
+					href="#")
+					| {{item.name}}
 
 				.item-info
-					| {{project._updated}} | {{project.properties.category}}
+					| {{item._updated}} | {{item.properties.category}}
 
 				.item-content
-					| {{project.description|safe}}
+					| {{item.properties.content|safe}}
 
 			| {% endfor %}
 
