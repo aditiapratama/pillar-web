@@ -13,6 +13,7 @@ from application import app
 from application import SystemUtility
 from application.modules.nodes import index
 from application.modules.nodes import view
+from application.modules.nodes.custom.posts import posts_view
 from application.modules.users.model import UserProxy
 from application.helpers import attach_project_pictures
 
@@ -38,48 +39,12 @@ def stats():
         'stats.html')
 
 
-@app.route("/blog")
-def blog_index():
-    """Blog with project news"""
-    api = SystemUtility.attract_api()
-    node_type = NodeType.find_first({
-        'where': '{"name" : "blog"}',
-        'projection': '{"name": 1}'
-        }, api=api)
-    blog = Node.find_first({
-        'where': '{"node_type" : "%s", \
-            "parent": "%s"}' % (node_type._id, app.config['CLOUD_PROJECT_ID']),
-        'embedded': '{"picture":1}',
-        }, api=api)
-    posts = Node.all({
-        'where': '{"parent": "%s"}' % (blog._id),
-        'embedded': '{"picture":1}',
-        }, api=api)
-    return render_template(
-        'nodes/custom/blog/index.html',
-        posts=posts._items)
-
-
+@app.route("/blog/")
 @app.route("/blog/<url>")
-def blog_view(url):
-    """View individual blogpost"""
-    api = SystemUtility.attract_api()
-    node_type = NodeType.find_first({
-        'where': '{"name" : "blog"}',
-        'projection': '{"name": 1}'
-        }, api=api)
-    blog = Node.find_first({
-        'where': '{"node_type" : "%s", \
-            "parent": "%s"}' % (node_type._id, app.config['CLOUD_PROJECT_ID']),
-        'embedded': '{"picture":1}',
-        }, api=api)
-    post = Node.find_one({
-        'where': '{"parent": "%s", "properties.url": "%s"}' % (blog._id, url),
-        'embedded': '{"picture":1, "node_type": 1}',
-        }, api=api)
-    return render_template(
-        'nodes/custom/post/view.html',
-        node=post)
+def main_blog(url=None):
+    """Blog with project news"""
+    project_id = app.config['CLOUD_PROJECT_ID']
+    return posts_view(project_id, url)
 
 
 @app.route("/<name>/")
@@ -93,28 +58,28 @@ def user_view(name):
         projects=projects._items)
 
 
-@app.route("/<name>/<project>/")
-def project_view(name, project):
-    """Entry point to view a project.
-    """
+@app.route("/<name>/<project>/blog/")
+@app.route("/<name>/<project>/blog/<url>")
+def project_blog(name, project, url=None):
+    """View project blog"""
     user = UserProxy(name)
     project = user.project(project)
     session['current_project_id'] = project._id
-    return view(project._id)
+    return posts_view(project._id, url=url)
 
 
-@app.route("/<name>/<project>/<node_id>")
-def node_view(name, project, node_id):
-    """Entry point to view a project.
-    """
-    user = UserProxy(name)
-    project = user.project(project)
-    api = SystemUtility.attract_api()
-    try:
-        node = Node.find(node_id + '/?embedded={"picture":1,"node_type":1}', api=api)
-    except ResourceNotFound:
-        return abort(404)
-    return node.name
+# @app.route("/<name>/<project>/<node_id>")
+# def node_view(name, project, node_id):
+#     """Entry point to view a project.
+#     """
+#     user = UserProxy(name)
+#     project = user.project(project)
+#     api = SystemUtility.attract_api()
+#     try:
+#         node = Node.find(node_id + '/?embedded={"picture":1,"node_type":1}', api=api)
+#     except ResourceNotFound:
+#         return abort(404)
+#     return node.name
 
 
 def get_projects(category):
