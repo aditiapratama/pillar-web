@@ -48,12 +48,6 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 
 		ul.project-edit-tools
 
-			li.button-featured.project-mode-view
-				a#item_featured(
-					href="#",
-					title="Feature on project's homepage")
-					i.button-featured-icon.ion-ios-star-outline
-					| Featured
 
 			li.button-add
 				a#item_add.project-mode-view(
@@ -62,13 +56,6 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 					i.button-add-icon.zmdi.zmdi-collection-plus
 					| Add Asset
 
-			li.button-move
-				a#item_move.project-mode-view(
-					href="#",
-					title="Move asset into a folder...")
-					i.button-move-icon.ion-arrow-move
-					| Move
-
 			li.button-edit
 				a#item_edit.project-mode-view(
 					href="#",
@@ -76,6 +63,34 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 					i.button-edit-icon.zmdi.zmdi-edit
 					| Edit
 
+			li.button-dropdown
+				a.dropdown-toggle.project-mode-view(
+					type="button",
+					data-toggle="dropdown",
+					aria-haspopup="true",
+					aria-expanded="false")
+					i.ion-android-more-vertical
+
+				ul.dropdown-menu
+					li.button-featured
+						a#item_featured(
+							href="#",
+							title="Feature on project's homepage")
+							i.button-featured-icon.ion-ios-star-outline
+							| Featured
+
+					li.button-move
+						a#item_move(
+							href="#",
+							title="Move asset into a folder...")
+							i.button-move-icon.ion-arrow-move
+							| Move
+
+					//- li.button-delete
+					//- 	a#item_delete(href="#")
+					//- 		i.zmdi.zmdi-delete
+
+			// Edit Mode
 			li.button-cancel
 				a#item_cancel.project-mode-edit(
 					href="#",
@@ -89,9 +104,6 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 					title="Save changes")
 					i.button-save-icon.ion-checkmark-round
 					| Save Changes
-			//- a#item_delete(href="#")
-			//- 	li
-			//- 		i.zmdi.zmdi-delete
 
 	#project-flex
 

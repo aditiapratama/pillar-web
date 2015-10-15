@@ -1,7 +1,8 @@
 
 function projectNavCollapse() {
 
-	$("#project_nav").hide();
+	// $("#project_nav").hide();
+	$("#project_nav").addClass('collapsed');
 	$('.project_split').hide();
 
 	$("#project_context").addClass('project_nav-collapsed');
@@ -15,7 +16,8 @@ function projectNavCollapse() {
 
 function projectNavExpand() {
 
-	$("#project_nav").show();
+	// $("#project_nav").show();
+	$("#project_nav").removeClass('collapsed');
 	$('.project_split').show();
 
 	$("#project_context").removeAttr('class');
