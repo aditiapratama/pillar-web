@@ -73,14 +73,13 @@ def blog_view(url):
             "parent": "%s"}' % (node_type._id, app.config['CLOUD_PROJECT_ID']),
         'embedded': '{"picture":1}',
         }, api=api)
-    post = Node.all({
-        'where': '{"parent": "%s"}' % (blog._id),
-        'embedded': '{"picture":1}',
+    post = Node.find_one({
+        'where': '{"parent": "%s", "properties.url": "%s"}' % (blog._id, url),
+        'embedded': '{"picture":1, "node_type": 1}',
         }, api=api)
     return render_template(
-        'blog/index.html',
-        news=news._items)
-
+        'nodes/custom/post/view.html',
+        node=post)
 
 
 @app.route("/<name>/")

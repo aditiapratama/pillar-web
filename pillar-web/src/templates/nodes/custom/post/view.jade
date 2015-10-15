@@ -1,6 +1,33 @@
 | {% extends 'layout.html' %}
-| {% from '_macros/_file_uploader_javascript.html' import render_file_uploader_javascript %}
+
+| {% block page_title %}Project News{% endblock%}
+
+| {% block body %}
+
+.container.box
+	#blog_container
+
+		#blog_index-container
+
+			.blog_index-item
+
+				.item-title
+					| {{node.name}}
+
+				.item-info
+					| {{node._updated}} | {{node.properties.category}}
+
+				.item-content
+					| {{node.properties.content|safe}}
+
+				#comments-container
+					#comments-list-items-loading
+						i.ion-load-c
+		#blog_index-sidebar
+
+
+| {% endblock %}
 
 | {% block footer_scripts %}
-| {{render_file_uploader_javascript()}}
+include ../_scripts
 | {% endblock %}
