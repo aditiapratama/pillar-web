@@ -14,6 +14,7 @@ from application import SystemUtility
 from application.modules.nodes import index
 from application.modules.nodes import view
 from application.modules.nodes.custom.posts import posts_view
+from application.modules.nodes.custom.posts import posts_create
 from application.modules.users.model import UserProxy
 from application.helpers import attach_project_pictures
 
@@ -46,6 +47,11 @@ def main_blog(url=None):
     project_id = app.config['CLOUD_PROJECT_ID']
     return posts_view(project_id, url)
 
+
+@app.route("/blog/create")
+def main_posts_create():
+    project_id = app.config['CLOUD_PROJECT_ID']
+    return posts_create(project_id)
 
 @app.route("/<name>/")
 def user_view(name):
