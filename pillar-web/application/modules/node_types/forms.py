@@ -70,17 +70,6 @@ class NodeTypeForm(Form):
     properties = ModelFieldList(FormField(CustomFieldForm), model=CustomFields)
 
 
-"""
-class IMForm(Form):
-    protocol = SelectField(choices=[('aim', 'AIM'), ('msn', 'MSN')])
-    username = TextField()
-
-class ContactForm(Form):
-    first_name  = TextField()
-    last_name   = TextField()
-    im_accounts = FieldList(BooleanField('Is extended'),)
-"""
-
 
 def get_node_form(node_type):
     class ProceduralForm(Form):

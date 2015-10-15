@@ -9,6 +9,7 @@ from application import app
 from application import SystemUtility
 from application.modules.nodes import nodes
 from application.modules.nodes.forms import get_node_form
+from application.modules.nodes.forms import process_node_form
 
 def posts_view(project_id, url=None):
     """View individual blogpost"""
@@ -44,19 +45,23 @@ def posts_view(project_id, url=None):
             posts=posts._items)
 
 
-@nodes.route("/posts/<project>/create")
+@nodes.route("/posts/<project>/create", methods=['GET', 'POST'])
 @login_required
 def posts_create(project):
     api = SystemUtility.attract_api()
     node_type = NodeType.find_first({'where': '{"name" : "post"}',}, api=api)
     form = get_node_form(node_type)
-    # if form.validate_on_submit():
-    #     node_type.name = form.name.data
-    #     node_type.description = form.description.data
-    #     node_type.url = form.url.data
-    #     # Processing custom fields
-    #     for field in form.properties:
-    #         print field.data['id']
-    # else:
-    #     print form.errors
-    return render_template('nodes/add.html', node_type=node_type, form=form)
+    if form.validate_on_submit():
+        user_id = current_user.objectid
+        if process_node_form(
+                form, node_type=node_type, user=user_id):
+            return 'ok'
+        else:
+            error = "Server error"
+            print ("Error sending data")
+        return 'ok'
+
+    return render_template('nodes/custom/post/create.html',
+        node_type=node_type,
+        form=form,
+        project=project)
