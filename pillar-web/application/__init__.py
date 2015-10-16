@@ -53,17 +53,13 @@ def load_user(userid):
         user = User.find(user_id, api=api)
     if token and user:
         login_user = userClass(userid)
-        login_user.email = user['email']
-        login_user.objectid = user['_id']
-        login_user.username = user['username']
+        login_user.email = user.email
+        login_user.objectid = user._id
+        login_user.username = user.username
         #login_user.permissions = user['computed_permissions']
-        login_user.gravatar = gravatar(user['email'])
+        login_user.gravatar = gravatar(user.email)
         try:
-            login_user.first_name = user['first_name']
-        except KeyError:
-            pass
-        try:
-            login_user.last_name = user['last_name']
+            login_user.full_name = user.full_name
         except KeyError:
             pass
     else:
