@@ -2,14 +2,14 @@
 
 #node-container
 
-	section.node-details-container
+	section.node-details-container.storage
 
 		.node-details-header
 			.node-title
 				| {{node.name}}
 
 
-	section.node-children.group
+	section.node-children.storage
 
 		| {% if node.children %}
 		| 	{% for child in node.children %}

@@ -46,9 +46,8 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 		#project-loading
 			i.ion-load-c
 
+		| {% if node.has_method('PUT') %}
 		ul.project-edit-tools
-
-
 			li.button-add
 				a#item_add.project-mode-view(
 					href="#",
@@ -104,6 +103,8 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 					title="Save changes")
 					i.button-save-icon.ion-checkmark-round
 					| Save Changes
+
+			| {% endif %}
 
 	#project-flex
 
