@@ -48,8 +48,10 @@
 
 					| {% for n in node.properties.nodes_featured %}
 					li.node-featured-list-item
+						| {% if n.picture %}
 						a.image(href="#", data-node_id="{{ n._id }}")
 							img(src="{{ n.picture.thumbnail('m') }}")
+						| {% endif %}
 						.info
 							a.title(href="#", data-node_id="{{ n._id }}") {{ n.name }}
 							span.details

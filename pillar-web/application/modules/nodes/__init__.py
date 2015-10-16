@@ -144,18 +144,22 @@ def jstree_parse_node(node, children=None):
 
 def jstree_get_children(node_id):
     api = SystemUtility.attract_api()
+    children_list = []
+
     if node_id.startswith('n_'):
         node_id = node_id.split('_')[1]
-    children = Node.all({
-        'projection': '{"name": 1, "parent": 1, "node_type": 1, "properties": 1}',
-        'embedded': '{"node_type": 1}',
-        'where': '{"parent": "%s"}' % node_id}, api=api)
+    try:
+        children = Node.all({
+            'projection': '{"name": 1, "parent": 1, "node_type": 1, "properties": 1}',
+            'embedded': '{"node_type": 1}',
+            'where': '{"parent": "%s"}' % node_id}, api=api)
+        for child in children._items:
+            # Skip nodes of type comment
+            if child.node_type.name != 'comment':
+                children_list.append(jstree_parse_node(child))
+    except ForbiddenAccess:
+        pass
 
-    children_list = []
-    for child in children._items:
-        # Skip nodes of type comment
-        if child.node_type.name != 'comment':
-            children_list.append(jstree_parse_node(child))
     return children_list
 
 
@@ -178,6 +182,8 @@ def jstree_build_from_node(node):
             'embedded': '{"node_type":1}',
             }, api=api)
     except ResourceNotFound:
+        parent = None
+    except ForbiddenAccess:
         parent = None
     while (parent):
         open_nodes.append(jstree_parse_node(parent))
@@ -230,6 +236,20 @@ def jstree_build_from_node(node):
     return nodes_list
 
 
+class FakeUser(object):
+    def __init__(self):
+        super(FakeUser, self).__init__()
+        self.full_name = 'Anonymous user'
+
+
+class FakeNodeAsset(Node):
+    def __init__(self):
+        super(FakeNodeAsset, self).__init__()
+        self.name = 'Asset'
+        self.description = 'Login to view this asset'
+        self.user = FakeUser()
+        self.properties = None
+
 @nodes.route("/<node_id>/view")
 def view(node_id):
     #import time
@@ -240,6 +260,8 @@ def view(node_id):
         node = Node.find(node_id + '/?embedded={"picture":1, "node_type":1}', api=api)
     except ResourceNotFound:
         return abort(404)
+    except ForbiddenAccess:
+        return abort(403)
 
     node_type_name = node.node_type.name
 
@@ -320,24 +342,28 @@ def view(node_id):
         if node.properties.nodes_latest:
             list_latest = []
             for node_id in node.properties.nodes_latest:
-                #list_latest.append(Node.find(n, api=api))
-                node_item = Node.find(node_id, {
-                    'projection': '{"name":1, "user":1, "node_type":1}',
-                    'embedded': '{"user":1}',
-                    }, api=api)
-                list_latest.append(node_item)
+                try:
+                    node_item = Node.find(node_id, {
+                        'projection': '{"name":1, "user":1, "node_type":1}',
+                        'embedded': '{"user":1}',
+                        }, api=api)
+                    list_latest.append(node_item)
+                except ForbiddenAccess:
+                    list_latest.append(FakeNodeAsset())
             node.properties.nodes_latest = list(reversed(list_latest))
         if node.properties.nodes_featured:
             list_featured = []
             for node_id in node.properties.nodes_featured:
-                #list_featured.append(Node.find(n, api=api))
-                node_item = Node.find(node_id, {
-                    'projection': '{"name":1, "user":1, "picture":1, "node_type":1}',
-                    'embedded': '{"user":1}',
-                    }, api=api)
-                picture = File.find(node_item.picture, api=api)
-                node_item.picture = picture
-                list_featured.append(node_item)
+                try:
+                    node_item = Node.find(node_id, {
+                        'projection': '{"name":1, "user":1, "picture":1, "node_type":1}',
+                        'embedded': '{"user":1}',
+                        }, api=api)
+                    picture = File.find(node_item.picture, api=api)
+                    node_item.picture = picture
+                    list_featured.append(node_item)
+                except ForbiddenAccess:
+                    list_featured.append(FakeNodeAsset())
             node.properties.nodes_featured = list(reversed(list_featured))
 
     elif node_type_name == 'storage':
@@ -370,11 +396,14 @@ def view(node_id):
     except ResourceNotFound:
         parent = None
     # Get children
-    children = Node.all({
-        'where': '{"parent": "%s"}' % node._id,
-        'embedded': '{"picture": 1, "node_type": 1}'}, api=api)
+    try:
+        children = Node.all({
+            'where': '{"parent": "%s"}' % node._id,
+            'embedded': '{"picture": 1, "node_type": 1}'}, api=api)
+        children = children._items
+    except ForbiddenAccess:
+        return abort(403)
 
-    children = children._items
     for child in children:
         if child.picture:
             child.picture = File.find(child.picture._id, api=api)
