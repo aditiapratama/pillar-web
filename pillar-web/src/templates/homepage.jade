@@ -14,6 +14,42 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 | {% endblock %}
 
 | {% block body %}
+
+| {% if current_user.is_authenticated() %}
+
+#homepage.page-content
+	#content
+		section#updates
+			h3.section-title Blog Updates
+
+			.update-list-item
+				.update-list-item-title
+					h4 Title of the Update
+				.update-list-item-content.
+					Text of the update
+
+			.update-list-item
+				.update-list-item-title
+					h4 Title of the Update
+				.update-list-item-content.
+					Text of the update
+
+		section#updates
+			h3.section-title Updated Assets
+
+			.update-list-item
+				.update-list-item-title
+					h4 Title of the Update
+				.update-list-item-content.
+					Text of the update
+
+			.update-list-item
+				.update-list-item-title
+					h4 Title of the Update
+				.update-list-item-content.
+					Text of the update
+
+| {% else %}
 #homepage.page-content
 	#header
 		.text
@@ -159,20 +195,7 @@ section#homepage.get-started
 	.notes
 		| * no sign-up fee · cancel anytime · 3 months minimum
 
-#homepage.page-content
-			//
-				section#updates
-					h2.section-title Latest Updates
-
-					| {% for i in range(1, 8) %}
-					.update-list-item
-						.update-list-item-title
-							h4 Title of the Update {{loop.index}}
-							span.update-list-item-when
-								| {{loop.index * 6.66 | round | int }} mins ago
-						//- span.update-list-item-content.
-						//- 	Sed elementum eros nec lectus euismod hendrerit. In non laoreet libero, sed facilisis justo.
-					| {% endfor %}
+| {% endif %}
 
 | {% endblock %}
 

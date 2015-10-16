@@ -74,7 +74,11 @@
 		align-items: stretch
 		margin-bottom: 15px
 
+		+container-behavior
+
 		#sidebar, #updates
+			flex: 1
+			margin: 0 15px
 			+container-box
 
 		#sidebar
@@ -82,148 +86,148 @@
 			background-color: white
 			margin: 0 5px 10px 5px
 
-			#join
-				text-align: center
-				padding: 0 15px
-				color: $color-info
+		section#join
+			text-align: center
+			padding: 0 15px
+			color: $color-info
 
-				/* Price '$10 per month' */
-				#price
-					position: relative
-					left: -5px
-
-					span.amount
-						margin: 0
-						padding: 0
-
-						display: flex
-						justify-content: center
-						align-items: center
-
-						font:
-							family: $font-headings
-							size: 6em
-							weight: 600
-
-						small
-							font:
-								size: .5em
-								weight: 300
-
-					span.per
-						position: relative
-						top: -10px
-						left: 10px
-
-						font:
-							size: 1em
-
-						small
-							font-size: .5em
-
-				/* Subscribe button */
-				a#subscribe
-					display: block
-					width: 100%
-					font:
-						size: 1.3em
-						family: $font-headings
-					padding: 5px 0
-					margin: 15px 0 10px 0
-
-					border-radius: 999em
-					background-color: $color-info
-					color: white
-					border: 1px solid transparent
-					transition: background-color 150ms ease-in-out
-
-					&:hover
-						border-color: $color-info
-						background-color: transparent
-						color: $color-info
-						text-decoration: none
-
-				span.extra
-					display: block
-					margin: 15px auto
-					font:
-						family: $font-headings
-						size: .75em
-						weight: 400
-
-			#stats
-				padding-top: 15px
-				margin-top: 15px
-				border-top: thin solid lighten($color-text, 60%)
-				text-align: center
+			/* Price '$10 per month' */
+			#price
+				position: relative
+				left: -5px
 
 				span.amount
-					color: $color-text-dark-secondary
+					margin: 0
+					padding: 0
+
+					display: flex
+					justify-content: center
+					align-items: center
+
 					font:
 						family: $font-headings
-						size: 4em
-						weight: 400
+						size: 6em
+						weight: 600
 
-				span.what
-					display: block
+					small
+						font:
+							size: .5em
+							weight: 300
+
+				span.per
+					position: relative
+					top: -10px
+					left: 10px
+
+					font:
+						size: 1em
+
+					small
+						font-size: .5em
+
+			/* Subscribe button */
+			a#subscribe
+				display: block
+				width: 100%
+				font:
+					size: 1.3em
+					family: $font-headings
+				padding: 5px 0
+				margin: 15px 0 10px 0
+
+				border-radius: 999em
+				background-color: $color-info
+				color: white
+				border: 1px solid transparent
+				transition: background-color 150ms ease-in-out
+
+				&:hover
+					border-color: $color-info
+					background-color: transparent
+					color: $color-info
+					text-decoration: none
+
+			span.extra
+				display: block
+				margin: 15px auto
+				font:
+					family: $font-headings
+					size: .75em
+					weight: 400
+
+		section#stats
+			padding-top: 15px
+			margin-top: 15px
+			border-top: thin solid lighten($color-text, 60%)
+			text-align: center
+
+			span.amount
+				color: $color-text-dark-secondary
+				font:
+					family: $font-headings
+					size: 4em
+					weight: 400
+
+			span.what
+				display: block
+				font:
+					size: 1.3em
+					weight: 300
+
+		section#goals
+			padding: 0 15px
+
+			.milestone-item
+				padding: 15px 0
+
+				&:first-of-type
+					margin-top: 15px
+
+				&:not(:last-of-type)
+					border-bottom: thin solid lighten($color-text, 60%)
+
+				.milestone-item-title
 					font:
 						size: 1.3em
-						weight: 300
-
-			#goals
-				padding: 0 15px
-
-				.milestone-item
-					padding: 15px 0
-
-					&:first-of-type
-						margin-top: 15px
-
-					&:not(:last-of-type)
-						border-bottom: thin solid lighten($color-text, 60%)
-
-					.milestone-item-title
-						font:
-							size: 1.3em
 
 
-					.milestone-item-content
-						color: lighten($color-text, 5%)
+				.milestone-item-content
+					color: lighten($color-text, 5%)
 
-			section#updates
-				padding: 15px
+		section#updates
+			padding: 15px
 
-				.section-title
-					margin: 0 0 15px 0
+			.section-title
+				margin: 0 0 15px 0
 
-				.update-list-item
-					padding: 20px 0
-					font:
-						family: $font-body
+			.update-list-item
+				padding: 20px 0
+				font:
+					family: $font-body
 
-					&:first-of-type
-						border-top: thin solid $color-background
+				&:first-of-type
+					border-top: thin solid $color-background
 
-					.update-list-item-title
-						display: flex
-						align-items: center
-						margin: 0 0 10px 0
+				.update-list-item-title
+					display: flex
+					align-items: center
+					margin: 0 0 10px 0
 
-						h4
-							color: lighten($color-text, 10%)
-							margin: 0
-							font:
-								size: 1.4em
-								family: $font-body
-								weight: 400
-
-					.update-list-item-when
-						font-size: .8em
-						color: $color-text-dark-secondary
-						padding-left: 10px
-
-					.update-list-item-content
+					h4
 						color: lighten($color-text, 10%)
+						margin: 0
+						font:
+							size: 1.4em
+							family: $font-body
+							weight: 400
+
+				.update-list-item-when
+					font-size: .8em
+					color: $color-text-dark-secondary
+					padding-left: 10px
+
+				.update-list-item-content
+					color: lighten($color-text, 10%)
 
 
 
@@ -435,3 +439,8 @@ section#homepage.get-started
 		padding: 15px 50px
 		font-size: 1.5em
 
+#homepage_container
+	margin: 0 auto 15px auto
+	display: flex
+	justify-content: center
+	+container-box
