@@ -1041,7 +1041,8 @@ section.node-children
 					color: $color-primary
 
 
-#node-edit-container
+#node-edit-container,
+#blog_container
 	#node-edit-header
 		background-color: rgba($color-background-nav, .95)
 		padding: 20px 20px 10px 20px
@@ -1056,12 +1057,16 @@ section.node-children
 			font-size: 2.5em
 			color: white
 
-
 	#node-edit-form
 		background-color: white
+
+	#node-edit-form,
+	#blog_post-edit-form
 		padding: 20px
 
 		.form-group
+			position: relative
+			margin: 0 auto 30px auto
 			font-family: $font-body
 
 			input, textarea, select
@@ -1083,11 +1088,6 @@ section.node-children
 				text-transform: capitalize
 
 
-
-		.form-group
-			position: relative
-			margin: 0 auto 30px auto
-
 			label
 				color: $color-text-dark
 				font-family: $font-body
@@ -1101,7 +1101,8 @@ section.node-children
 				min-width: 0
 				border-radius: 3px
 
-		.form-group.description
+		.form-group.description,
+		.form-group.content
 			position: relative
 
 			textarea
@@ -1126,14 +1127,8 @@ section.node-children
 					border-color: $color-danger
 
 			.node-edit-form-md-preview
-				border-top: 1px solid $color-background
-				border-bottom: 1px solid $color-background
-				position: relative
-				margin: 40px auto 25px auto
-				padding: 10px 10px 25px 10px
-				color: $color-text-dark-primary
-				cursor: default
-				transition: all 150ms ease-in-out
+
+				+markdown-preview-container
 
 				&:before
 					content: 'Live Preview:'
@@ -1152,12 +1147,13 @@ section.node-children
 					color: $color-text-dark-hint
 					transition: color 150ms ease-in-out
 
+
 			.node-edit-form-md-preview:empty
 				color: transparent
 				margin: 0 auto
 				padding: 0 10px
 
-				&:before
+				&:before, &:after
 					content: ''
 					color: transparent
 

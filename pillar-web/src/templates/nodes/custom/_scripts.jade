@@ -2,22 +2,29 @@ script(type="text/javascript").
 
 	/* Convert Markdown */
 	var convert = new Markdown.getSanitizingConverter().makeHtml;
-	$('.node-details-description').html(convert($('.node-details-description').text()));
+	convert_fields = '.node-details-description, .blog_index-item .item-content';
 
-	var url = "{{url_for('nodes.comments_index')}}?parent_id={{node._id}}"
-	$.get(url, function(dataHtml) {
-		// Update the DOM injecting the generate HTML into the page
-		$('#comments-container').replaceWith(dataHtml);
-	})
+	$(convert_fields).each(function(i){
+		$(convert_fields).eq(i).html(convert($(convert_fields).eq(i).text()));
+	});
 
-	{% if node.has_method('PUT') %}
-		$('#item_edit').attr('data-node_id', '{{node._id}}');
-		{% if node.node_type.name != 'post' %}
-		$('#item_add').attr('data-parent_node_id', '{{parent._id}}');
+	{% if node %}
+
+		var url = "{{url_for('nodes.comments_index')}}?parent_id={{node._id}}"
+		$.get(url, function(dataHtml) {
+			// Update the DOM injecting the generate HTML into the page
+			$('#comments-container').replaceWith(dataHtml);
+		})
+
+		{% if node.has_method('PUT') %}
+			$('#item_edit').attr('data-node_id', '{{node._id}}');
+			{% if node.node_type.name != 'post' %}
+			$('#item_add').attr('data-parent_node_id', '{{parent._id}}');
+			{% endif %}
+			$('.project-mode-view').fadeIn(100);
+		{% else %}
+			$('.project-mode-view').hide();
 		{% endif %}
-		$('.project-mode-view').fadeIn(100);
-	{% else %}
-		$('.project-mode-view').hide();
 	{% endif %}
 
 

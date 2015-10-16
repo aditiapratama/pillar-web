@@ -1,13 +1,13 @@
 | {% extends 'layout.html' %}
 
-| {% block page_title %}Project News{% endblock%}
+| {% block page_title %}{{node.name}} - Blog{% endblock%}
 
 | {% block body %}
 
 .container.box
 	#blog_container
 
-		#blog_index-container
+		#blog_post-container
 
 			.blog_index-item
 
@@ -18,16 +18,29 @@
 					| {{node._updated}} | {{node.properties.category}}
 
 				.item-content
-					| {{node.properties.content|safe}}
+					| {{node.properties.content }}
 
-				#comments-container
-					#comments-list-items-loading
-						i.ion-load-c
+
+			#comments-container
+				#comments-list-items-loading
+					i.ion-load-c
+
 		#blog_index-sidebar
 
 
 | {% endblock %}
 
 | {% block footer_scripts %}
-include ../_scripts
+script().
+	/* Convert Markdown */
+	var convert = new Markdown.getSanitizingConverter().makeHtml;
+
+	$('.blog_index-item .item-content').html(convert($('.blog_index-item .item-content').text()));
+
+	var url = "{{url_for('nodes.comments_index')}}?parent_id={{node._id}}"
+	$.get(url, function(dataHtml) {
+		// Update the DOM injecting the generate HTML into the page
+		$('#comments-container').replaceWith(dataHtml);
+	})
+
 | {% endblock %}

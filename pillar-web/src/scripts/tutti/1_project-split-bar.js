@@ -71,7 +71,9 @@ $('.project_split, .project_nav-collapse-btn, .project_nav-expand-btn').on('clic
 });
 
 $(document).keypress(function(e) {
-	if(e.which == 116) {
+	var tag = e.target.tagName.toLowerCase();
+
+	if(e.which == 116 && tag != 'input' && tag != 'textarea') {
 		projectNavToggle();
 	}
 });

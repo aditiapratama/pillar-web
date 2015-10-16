@@ -28,9 +28,13 @@
 								| commenting as
 								span.author-name {{ current_user.username }}
 
-						button.comment-action-cancel.btn.btn-outline(type="button")
-							i.ion-ios-close-empty
-						button.comment-action-submit.btn.btn-outline(type="button")
+						button.comment-action-cancel.btn.btn-outline(
+							type="button",
+							title="Cancel")
+							i.ion-close-round
+						button.comment-action-submit.btn.btn-outline(
+							type="button",
+							title="Post Comment")
 							| Post Comment
 
 					.comment-reply-preview

@@ -1,6 +1,6 @@
 | {% extends 'layout.html' %}
 
-| {% block page_title %}Project News{% endblock%}
+| {% block page_title %}Blog{% endblock%}
 
 | {% block body %}
 
@@ -23,7 +23,7 @@
 					| {{post._updated}} | {{post.properties.category}}
 
 				.item-content
-					| {{post.properties.content|safe}}
+					| {{post.properties.content}}
 
 			| {% endfor %}
 
@@ -35,5 +35,13 @@
 			| {% endif %}
 
 		#blog_index-sidebar
+			| {% if blog.has_method('POST') %}
+			a.btn.btn-default.button-create(href="/blog/create")
+				| Create New Post
+			| {% endif %}
 
+| {% endblock %}
+
+| {% block footer_scripts %}
+include ../_scripts
 | {% endblock %}

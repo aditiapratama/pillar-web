@@ -20,7 +20,7 @@ def posts_view(project_id, url=None):
         'where': '{"name" : "blog"}',
         'projection': '{"name": 1}'
         }, api=api)
-    blog = Node.find_first({
+    blog = Node.find_one({
         'where': '{"node_type" : "%s", \
             "parent": "%s"}' % (node_type._id, project_id),
         }, api=api)
@@ -35,6 +35,7 @@ def posts_view(project_id, url=None):
 
         return render_template(
             'nodes/custom/post/view.html',
+            blog=blog,
             node=post)
     else:
         # Render all posts
@@ -45,6 +46,7 @@ def posts_view(project_id, url=None):
             }, api=api)
         return render_template(
             'nodes/custom/blog/index.html',
+            blog=blog,
             posts=posts._items)
 
 

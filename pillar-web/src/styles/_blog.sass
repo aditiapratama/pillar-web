@@ -5,39 +5,77 @@
 	+container-box
 
 
-#blog_index-container,
-#blog_post-container
-	width: 75%
-	padding: 20px
+	&.post-create
+		flex-direction: row-reverse
 
-	.blog_index-item
-		margin: 0 auto 15px auto
+	#blog_index-container,
+	#blog_post-container
+		width: 75%
+		padding: 25px
 
-		.item-title
-			display: block
-			font:
-				family: $font-headings
-				size: 2.2em
-				weight: 300
-			padding: 5px 0
+		.blog_index-item
+			margin: 0 auto 15px auto
 
-		.item-info
-			color: $color-text-dark-secondary
-			font-size: .9em
+			.item-title
+				display: block
+				font:
+					family: $font-headings
+					size: 2.2em
+					weight: 300
+				padding: 5px 0
 
-		.item-content
-			padding: 25px 0 35px 0
-			color: $color-text-dark
-			font:
-				family: $font-body
-				size: 1em
-				weight: 300
+			.item-info
+				color: $color-text-dark-secondary
+				font-size: .9em
 
-	form
-		.description
+			.item-content
+				padding: 25px 0 35px 0
+				color: $color-text-dark
+				font:
+					family: $font-body
+					size: 1em
+					weight: 300
+
+		.button-create
+			float: right
+			+button-rounded($color-success, 999em)
+			margin: 0 0 20px 0
 
 
+	#blog_post-edit-form
+		padding: 0
+
+		.form-group
+			label
+				text-transform: capitalize
+		.form-group.content
+			.form-control
+				min-height: 350px
+		.form-group.picture
+			+text-overflow-ellipsis
+
+
+
+#blog_post-edit-title
+	padding: 0
+	font:
+		family: $font-headings
+		size: 2.2em
+		weight: 300
+	margin: 0 20px 0 0
 
 #blog_index-sidebar
 	width: 25%
 	background-color: lighten($color-background, 5%)
+	padding: 25px
+
+	.button-create
+		display: block
+		width: 100%
+		+button-rounded($color-success, 999em)
+		margin: 0
+
+	#blog_post-edit-form
+		.form-group
+			.form-control
+				background-color: white
