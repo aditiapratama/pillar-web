@@ -2,7 +2,31 @@
 	background-color: black !important
 
 .flowplayer.is-mouseout .fp-timeline
-	display: none
+	display: none !important
 
 .flowplayer
-	background-color: black
+	background-color: black !important
+
+.flowplayer .fp-controls
+	background-color: rgba(black, .5) !important
+
+.flowplayer .fp-timeline
+	background-color: rgba(white, 0.15) !important
+	margin-right: 160px !important
+
+.flowplayer .fp-progress,
+.flowplayer .fp-volumelevel
+	background-color: $color-primary !important
+
+.flowplayer .fp-buffer
+	// background-color: rgba($color-primary, .36) !important
+	background: repeating-linear-gradient(-45deg, darken(rgba($color-primary, .36), 15%), darken(rgba($color-primary, .36), 15%) 10px, darken(rgba($color-primary, .26), 20%) 10px, darken(rgba($color-primary, .26), 20%) 20px) !important
+
+.flowplayer .fp-brand
+	display: none !important
+
+.flowplayer .fp-remaining, .flowplayer .fp-duration
+	right: 117px !important
+
+.flowplayer .fp-volumeslider
+	background-color: rgba(white, 0.15) !important

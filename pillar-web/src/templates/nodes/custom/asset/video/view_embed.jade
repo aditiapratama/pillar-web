@@ -1,5 +1,5 @@
 | {% block head %}
-link(rel="stylesheet", href="//releases.flowplayer.org/6.0.3/skin/functional.css")
+link(rel="stylesheet", href="//releases.flowplayer.org/6.0.3/skin/minimalist.css")
 | {% endblock %}
 
 | {% block body %}
@@ -7,7 +7,7 @@ link(rel="stylesheet", href="//releases.flowplayer.org/6.0.3/skin/functional.css
 #node-container
 
 	section.node-preview.video
-		#flowplayer_container.is-splash(
+		#flowplayer_container.is-splash.play-button(
 			style="{% if node.picture %}background-image:url({{node.picture.thumbnail('l')}}); background-repeat:no-repeat; {% endif %}")
 
 
@@ -64,6 +64,7 @@ script(type="text/javascript").
 
 	flowplayer(container, {
 		key: "{{config.FLOWPLAYER_KEY}}",
+		embed: false,
 		splash: true,
 			clip: {
 				sources: {{ node.video_sources | safe }}
