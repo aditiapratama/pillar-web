@@ -1,9 +1,11 @@
+import requests
 import json
 from pillarsdk import utils
 from pillarsdk.users import User
 from pillarsdk.nodes import Node
 from pillarsdk.nodes import NodeType
 from pillarsdk.tokens import Token
+from pillarsdk.groups import Group
 
 from flask import Blueprint
 from flask import render_template
@@ -18,7 +20,9 @@ from application.modules.users.forms import UserProfileForm
 from application.helpers import Pagination
 
 from application import SystemUtility
-from application import userClass
+from application import UserClass
+from application import load_user
+from application import app
 
 from flask.ext.login import login_user
 from flask.ext.login import logout_user
@@ -50,14 +54,49 @@ def authenticate(username, password):
     return response
 
 
+def user_roles_update(user_id):
+    api = SystemUtility.attract_api()
+    db_user = User.find(user_id, api=api)
+    group = Group.find_one({'where': "name=='subscriber'"}, api=api)
+    external_subscriptions_server = app.config['EXTERNAL_SUBSCRIPTIONS_MANAGEMENT_SERVER']
+    r = requests.get(external_subscriptions_server, params={'blenderid': db_user.email})
+    store_user = r.json()
+
+    if store_user['cloud_access'] == 1:
+        if db_user.roles and 'subscriber' not in db_user.roles:
+            db_user.roles.append('subscriber')
+        elif not db_user.roles:
+            db_user.roles = ['subscriber',]
+
+        if db_user.groups and group._id not in db_user.groups:
+            db_user.groups.append(group._id)
+        elif not db_user.groups:
+            db_user.groups = [group._id]
+        db_user.update(api=api)
+
+    elif db_user.roles and 'admin' not in db_user.roles:
+        if db_user.roles and 'subscriber' in db_user.roles:
+            db_user.roles.remove('subscriber')
+
+        if db_user.groups and group._id in db_user.groups:
+            db_user.groups.remove(group._id)
+
+        db_user.update(api=api)
+
+
 @users.route("/login", methods=['GET', 'POST'])
 def login():
     form = UserLoginForm()
     if form.validate_on_submit():
         auth = authenticate(form.email.data, form.password.data)
         if auth and auth['status'] == 'success':
-            user = userClass(auth['data']['token'])
+            user = UserClass(auth['data']['token'])
             login_user(user)
+            user = load_user(current_user.id)
+            # Check with the store for user roles. If the user has an active
+            # subscription, we apply the 'subscriber' role
+            user_roles_update(user.objectid)
+
             flash('Welcome {0}!'.format(form.email.data))
             return redirect('/')
         elif auth:

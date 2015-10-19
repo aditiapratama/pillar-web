@@ -52,12 +52,12 @@ def load_user(userid):
         user_id = token['_items'][0]['user']
         user = User.find(user_id, api=api)
     if token and user:
-        login_user = userClass(userid)
+        login_user = UserClass(userid)
         login_user.email = user.email
         login_user.objectid = user._id
         login_user.username = user.username
-        #login_user.permissions = user['computed_permissions']
         login_user.gravatar = gravatar(user.email)
+        login_user.roles = user.roles
         try:
             login_user.full_name = user.full_name
         except KeyError:
@@ -67,17 +67,23 @@ def load_user(userid):
     return login_user
 
 
-class userClass(UserMixin):
+class UserClass(UserMixin):
     def __init__(self, token):
         # We store the Token instead of ID
         self.id = token
         self.username = None
-        self.first_name = None
-        self.last_name = None
+        self.full_name = None
         self.objectid = None
-        #self.permissions = None
         self.gravatar = None
         self.email = None
+        self.roles = []
+
+    def has_role(self, role):
+        if self.roles and role in self.roles:
+            return True
+        else:
+            return False
+
 
 
 class SystemUtility():
