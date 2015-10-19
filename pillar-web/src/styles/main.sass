@@ -9,6 +9,7 @@
 @import _blog
 @import _join
 @import _homepage
+@import _error
 @import _stats
 @import _font-borg
 
@@ -177,16 +178,16 @@ header.navbar-header
 
 			&:hover, &:focus
 				background-color: rgba($color-background-nav, .4)
-				border-bottom: 3px solid lighten($color-background-nav, 15%)
+				border-bottom: 3px solid $color-primary-dark
 
 			&:focus
 				border-bottom: 3px solid $color-primary
 
 			&.active
-				border-bottom: 3px solid $color-secondary
+				border-bottom: 3px solid $color-primary-light
 
 				&:hover
-					border-color: lighten($color-secondary, 5%)
+					border-color: lighten($color-primary, 5%)
 
 		&.nav-item-sign-in
 			i

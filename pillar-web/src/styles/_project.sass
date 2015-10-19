@@ -499,6 +499,7 @@ section.node-details-container
 
 		.node-title
 			+project-node-title
+			color: $color-text-dark-primary
 
 		.node-title-details
 			margin-left: auto
@@ -677,8 +678,16 @@ section.node-details-container
 					border-radius: 3px
 					cursor: default
 
-				&.length
+				&.type
 					margin-left: auto
+					text-transform: capitalize
+					padding: 0 5px 0 15px
+					cursor: default
+					font-weight: 400
+					color: $color-text-dark-hint
+
+				&.length
+					// margin-left: auto
 					padding: 0 5px 0 15px
 					cursor: default
 					font-weight: 400
@@ -691,7 +700,7 @@ section.node-details-container
 					padding: 0 0 0 15px
 
 					&.video, &.image
-						margin-left: auto
+						// margin-left: auto
 
 
 					/* Actual button */
@@ -712,7 +721,7 @@ section.node-details-container
 					/* Videos have dropdown caret, so paddit 5px less */
 					&.video.download
 						button
-							padding-right: 20px
+							padding-right: 10px
 
 					/* Download dropdown options */
 					ul.dropdown-menu
@@ -744,6 +753,10 @@ section.node-details-container
 								&:hover
 									color: $color-primary
 									background-color: transparent
+
+									span
+										&.length
+											color: lighten($color-primary, 10%)
 
 								span
 									&.length

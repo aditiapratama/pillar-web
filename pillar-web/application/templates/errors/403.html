@@ -1,0 +1,19 @@
+
+<div id="error_container" class="403">
+  <div id="error_box">
+    <div class="error-title">Sign in to continue.</div>
+    <div class="error-lead">
+      This content is only available to Cloud subscribers.<br/>
+      Get full access to the Blender Cloud for only $10 per month.
+      
+    </div>
+    <div class="buttons"><a href="{{ url_for('join') }}" class="sign-up btn btn-outline">Subscribe Now</a><a href="{{ url_for('users.login') }}" class="sign-in btn btn-outline">
+        Log In
+        </a></div>
+    <hr/>
+    <div class="error-lead extra">
+      If you have just subscribed, please <a href="{{ url_for('users.logout') }}">log out</a> and in again.<br/>
+      For any other issue get in touch with cloudsupport@blender.org
+    </div>
+  </div>
+</div>

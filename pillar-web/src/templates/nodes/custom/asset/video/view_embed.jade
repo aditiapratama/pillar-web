@@ -15,7 +15,9 @@ link(rel="stylesheet", href="//releases.flowplayer.org/6.0.3/skin/minimalist.css
 			.fp-endscreen
 				a.watch-again.fp-toggle
 					i.ion-android-refresh
-					|  Watch again
+					| Watch again
+			.fp-loading
+				i.ion-load-c.spin
 
 
 	section.node-details-container.video
@@ -35,6 +37,9 @@ link(rel="stylesheet", href="//releases.flowplayer.org/6.0.3/skin/minimalist.css
 
 				li.node-details-meta-list-item.date
 					| {{ node._created }}
+
+				li.node-details-meta-list-item.type
+					| {{ node.properties.content_type }}
 
 				li.btn-group.node-details-meta-list-item.video.download
 					button.btn.btn-default.dropdown-toggle(

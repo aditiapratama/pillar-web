@@ -10,7 +10,6 @@ from pillarsdk import File
 from pillarsdk.exceptions import ResourceNotFound
 from pillarsdk.exceptions import ForbiddenAccess
 
-from flask import abort
 from flask import Blueprint
 from flask import render_template
 from flask import redirect
@@ -259,9 +258,9 @@ def view(node_id):
     try:
         node = Node.find(node_id + '/?embedded={"picture":1, "node_type":1}', api=api)
     except ResourceNotFound:
-        return abort(404)
+        return render_template('errors/404.html')
     except ForbiddenAccess:
-        return abort(403)
+        return render_template('errors/403.html')
 
     node_type_name = node.node_type.name
 
@@ -402,7 +401,7 @@ def view(node_id):
             'embedded': '{"picture": 1, "node_type": 1}'}, api=api)
         children = children._items
     except ForbiddenAccess:
-        return abort(403)
+        return render_template('errors/403.html')
 
     for child in children:
         if child.picture:

@@ -11,7 +11,7 @@
 	background-color: black !important
 
 .flowplayer .fp-controls
-	background-color: darken($color-info, 30%) !important
+	background-color: darken($color-primary, 30%) !important
 	bottom: -5px !important
 
 .flowplayer .fp-timeline
@@ -52,7 +52,7 @@
 	border-radius: 999em !important
 	top: 15px !important
 	right: 15px !important
-	background-color: $color-info !important
+	background-color: darken($color-primary, 30%) !important
 	color: white !important
 
 .flowplayer .fp-endscreen
@@ -81,9 +81,14 @@
 			weight: 300
 		color: white
 		cursor: pointer
+		transition: color 150ms ease-in-out
 
 		i
 			margin-right: 5px
+
+		&:hover
+			text-decoration: none
+			color: $color-primary
 
 
 .flowplayer .fp-startscreen
@@ -126,3 +131,33 @@
 		.big-play-button
 			transform: scale(1.2)
 
+
+/* Loading */
+.flowplayer .fp-waiting
+	background-image: none !important
+
+.flowplayer .fp-waiting em,
+.flowplayer .fp-waiting p
+	display: none !important
+
+.flowplayer .fp-loading
+	opacity: 0
+	position: absolute
+	top: 0
+	bottom: 0
+	left: 0
+	right: 0
+	background-color: rgba($color-background-nav, .5)
+	display: flex
+	justify-content: center
+	align-items: center
+	transition: opacity 350ms ease-in-out
+	font-size: 5em
+	color: white
+
+	i
+		position: relative
+		top: 2px
+
+.flowplayer .fp-is-loading .fp-loading
+	opacity: 1

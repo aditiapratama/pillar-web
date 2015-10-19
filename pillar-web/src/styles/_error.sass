@@ -1,0 +1,66 @@
+#error_container
+	display: flex
+	justify-content: center
+	align-items: center
+	position: absolute
+	top: 0
+	left: 0
+	right: 0
+	bottom: 0
+
+
+	#error_box
+		min-width: 60%
+		text-align: center
+		display: flex
+		justify-content: center
+		align-items: center
+		flex-direction: column
+
+		+container-box
+
+		box-shadow: 0 0 15px rgba(black, .2)
+		padding: 0
+		background-color: $color-background-nav
+
+		.error-title
+			padding: 25px 0 10px 0
+			color: white
+			font:
+				family: $font-headings
+				size: 2em
+				weight: 300
+
+		.error-lead
+			width: 100%
+			padding: 0 25px 25px 0
+
+			color: $color-text-light-primary
+			font:
+				family: $font-body
+				weight: 300
+
+
+			&.extra
+				padding: 25px 0
+				font-size: .9em
+				color: $color-text-light-secondary
+
+		hr
+			margin: 0 0
+			width: 100%
+			border: none
+			height: 3px
+			background-color: lighten($color-background-nav, 5%)
+
+		.buttons
+			margin: 0 15px 25px 0
+
+			a
+				font-size: 1.2em
+				margin: 0 15px
+				&.sign-up
+					@include button-rounded-filled($color-primary, 999em)
+				&.sign-in
+					@include button-rounded($color-background, 999em)
+

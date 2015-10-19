@@ -26,6 +26,9 @@
 				li.node-details-meta-list-item.date
 					| {{ node._created }}
 
+				li.node-details-meta-list-item.type
+					| {{ node.properties.content_type }}
+
 				li.node-details-meta-list-item.file.length
 					| {{ node.file.length | filesizeformat }}
 

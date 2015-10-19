@@ -1,0 +1,19 @@
+#error_container.403
+	#error_box
+		.error-title Sign in to continue.
+
+		.error-lead.
+			This content is only available to Cloud subscribers.<br/>
+			Get full access to the Blender Cloud for only $10 per month.
+
+		.buttons
+			a.sign-up.btn.btn-outline(href="{{ url_for('join') }}").
+				Subscribe Now
+			a.sign-in.btn.btn-outline(href="{{ url_for('users.login') }}").
+				Log In
+
+		hr
+
+		.error-lead.extra.
+			If you have just subscribed, please <a href="{{ url_for('users.logout') }}">log out</a> and in again.<br/>
+			For any other issue get in touch with cloudsupport@blender.org
