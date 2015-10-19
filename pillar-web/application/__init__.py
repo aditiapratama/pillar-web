@@ -18,8 +18,6 @@ from flask.ext.login import LoginManager
 from flask.ext.login import UserMixin
 from flask.ext.login import current_user
 
-from helpers import gravatar
-
 # Initialize the Flask all object
 app = Flask(__name__,
     template_folder='templates',
@@ -146,6 +144,7 @@ from application.modules.nodes.custom import shots
 from application.modules.nodes.custom import tasks
 from application.modules.nodes.custom import comments
 from application.modules.nodes.custom import projects
+from helpers import gravatar
 
 # Pagination global to use un jinja template
 app.jinja_env.globals['url_for_other_page'] = url_for_other_page
