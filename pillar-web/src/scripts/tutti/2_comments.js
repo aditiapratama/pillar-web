@@ -8,6 +8,7 @@
 		// container of the first-level comment in the thread
 		parentDivFirst = $(this).parent().parent().siblings('.is-first');
 
+
 		// Get the id of the comment
 		if (parentDiv.hasClass('is-reply')) {
 			parentNodeId = parentDivFirst.data('node_id');

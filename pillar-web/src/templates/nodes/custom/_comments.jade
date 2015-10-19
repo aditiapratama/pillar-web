@@ -2,9 +2,8 @@
 #comments-container
 
 	section#comments-list
-		| {% if current_user.is_authenticated() %}
 		.comment-reply-container
-
+			| {% if current_user.is_authenticated() %}
 			.comment-reply-avatar
 				img(src="{{ current_user.gravatar }}")
 
@@ -26,7 +25,7 @@
 
 							.comment-author
 								| commenting as
-								span.author-name {{ current_user.username }}
+								span.author-name(title="{{ current_user.full_name }}") {{ current_user.username }}
 
 						button.comment-action-cancel.btn.btn-outline(
 							type="button",
@@ -38,7 +37,21 @@
 							| Post Comment
 
 					.comment-reply-preview
-		| {% endif %}
+
+			| {% else %}
+
+			.comment-reply-form
+				.comment-reply-field.sign-in
+					textarea(
+						disabled,
+						id="comment_field",
+						data-parent_id="{{ parent_id }}",
+						placeholder="")
+					.sign-in
+						a(href="{{ url_for('users.login') }}") Sign in
+						| to comment.
+
+			| {% endif %}
 
 		section#comments-list-header
 			#comments-list-items
@@ -76,7 +89,7 @@
 							.comment-action-rating.up(title="Upvote comment")
 							.comment-action-rating.down(title="Downvote comment")
 
-						.comment-action-reply reply
+						.comment-action-reply(title="Reply to this comment") reply
 
 				| {{/list}}
 				| {% endraw %}
@@ -92,7 +105,7 @@
 					| {% endif %}
 
 
-			| {# Build the list using individual
+			| {# Build the list using individual comments
 			//
 				script#comments-list-template(type="text/x-handlebars-template")
 					| {% raw %}

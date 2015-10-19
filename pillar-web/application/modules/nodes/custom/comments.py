@@ -53,7 +53,7 @@ def format_comment(comment, is_reply=False, is_team=False, replies=None):
     :param is_team: True if the author belongs to the group that owns the node
     :param replies: list of replies (formatted with this function)
     """
-    is_own = current_user.objectid == comment.user._id
+    is_own = current_user.objectid == comment.user._id if current_user.is_authenticated() else None
     is_rated = False
     is_rated_positive = None
     if comment.properties.ratings:
