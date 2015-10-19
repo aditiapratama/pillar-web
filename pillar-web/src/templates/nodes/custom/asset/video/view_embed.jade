@@ -9,6 +9,13 @@ link(rel="stylesheet", href="//releases.flowplayer.org/6.0.3/skin/minimalist.css
 	section.node-preview.video
 		#flowplayer_container.is-splash.play-button(
 			style="{% if node.picture %}background-image:url({{node.picture.thumbnail('l')}}); background-repeat:no-repeat; {% endif %}")
+			.fp-startscreen.fp-toggle
+				a.big-play-button
+					i.ion-play
+			.fp-endscreen
+				a.watch-again.fp-toggle
+					i.ion-android-refresh
+					|  Watch again
 
 
 	section.node-details-container.video

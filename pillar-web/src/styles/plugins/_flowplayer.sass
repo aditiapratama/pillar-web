@@ -1,6 +1,9 @@
 .flowplayer.is-playing
 	background-color: black !important
 
+.flowplayer.is-paused.is-ready
+	background-image: none !important
+
 .flowplayer.is-mouseout .fp-timeline
 	display: none !important
 
@@ -8,25 +11,118 @@
 	background-color: black !important
 
 .flowplayer .fp-controls
-	background-color: rgba(black, .5) !important
+	background-color: darken($color-info, 30%) !important
+	bottom: -5px !important
 
 .flowplayer .fp-timeline
 	background-color: rgba(white, 0.15) !important
 	margin-right: 160px !important
+	border-radius: 999em !important
 
 .flowplayer .fp-progress,
 .flowplayer .fp-volumelevel
-	background-color: $color-primary !important
+	background-color: white !important
 
 .flowplayer .fp-buffer
 	// background-color: rgba($color-primary, .36) !important
-	background: repeating-linear-gradient(-45deg, darken(rgba($color-primary, .36), 15%), darken(rgba($color-primary, .36), 15%) 10px, darken(rgba($color-primary, .26), 20%) 10px, darken(rgba($color-primary, .26), 20%) 20px) !important
+	background: repeating-linear-gradient(-45deg, darken(rgba(white, .36), 15%), darken(rgba(white, .36), 15%) 10px, darken(rgba(white, .26), 20%) 10px, darken(rgba(white, .26), 20%) 20px) !important
 
 .flowplayer .fp-brand
 	display: none !important
 
 .flowplayer .fp-remaining, .flowplayer .fp-duration
 	right: 117px !important
+	bottom: 5px !important
+
+.flowplayer .fp-elapsed
+	bottom: 5px !important
+
+.flowplayer .fp-time
+	text-shadow: none !important
+	font-family: $font-body !important
+
+.flowplayer .fp-volumelevel
+	border-radius: 999em !important
 
 .flowplayer .fp-volumeslider
+	border-radius: 999em !important
 	background-color: rgba(white, 0.15) !important
+
+.flowplayer .fp-fullscreen
+	border-radius: 999em !important
+	top: 15px !important
+	right: 15px !important
+	background-color: $color-info !important
+	color: white !important
+
+.flowplayer .fp-endscreen
+	position: absolute
+	top: 0
+	bottom: 0
+	left: 0
+	right: 0
+	background-color: rgba($color-background-nav, .5)
+	display: flex
+	justify-content: center
+	align-items: center
+	opacity: 0
+	transition: opacity 350ms ease-in-out
+
+.flowplayer.is-finished .fp-endscreen
+	z-index: 12
+	opacity: 1
+
+
+.flowplayer .fp-endscreen
+	.watch-again
+		font:
+			size: 2em
+			family: $font-body
+			weight: 300
+		color: white
+		cursor: pointer
+
+		i
+			margin-right: 5px
+
+
+.flowplayer .fp-startscreen
+	z-index: 12
+	position: absolute
+	top: 0
+	bottom: 0
+	left: 0
+	right: 0
+	background-color: rgba($color-background-nav, .5)
+	display: flex
+	justify-content: center
+	align-items: center
+	transition: opacity 350ms ease-in-out
+
+.flowplayer.is-ready .fp-startscreen
+	opacity: 1
+
+.flowplayer.is-playing .fp-startscreen,
+.flowplayer.is-finished .fp-startscreen
+	opacity: 0
+	z-index: 0
+
+.is-splash.flowplayer .fp-ui, .is-paused.flowplayer .fp-ui
+	background: none !important
+
+.flowplayer .fp-startscreen,
+.flowplayer .fp-endscreen
+	.big-play-button
+		font-size: 5em !important
+		color: white
+		transition: transform 150ms ease-in-out
+		cursor: pointer
+
+		&:hover
+			transform: scale(1.2)
+
+.flowplayer .fp-startscreen
+	&:hover
+		.big-play-button
+			transform: scale(1.2)
+

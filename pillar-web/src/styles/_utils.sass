@@ -29,13 +29,13 @@
 @mixin button-rounded($mixin-color, $roundness)
 	opacity: .9
 	padding:
-		left: 25px
-		right: 25px
+		left: 20px
+		right: 20px
 
 	text-transform: uppercase
 
 	color: $mixin-color
-	border: thin solid $mixin-color
+	border: 1px solid $mixin-color
 	border-radius: $roundness
 	background-color: transparent
 	transition: color 350ms ease-out, border 150ms ease-in-out, opacity 150ms ease-in-out, background-color 150ms ease-in-out
@@ -45,7 +45,7 @@
 		opacity: 1
 		cursor: pointer
 		color: $mixin-color
-		border: thin solid $mixin-color
+		border: 1px solid $mixin-color
 		background-color: rgba($mixin-color, .1)
 
 	&:active, &:focus
@@ -60,10 +60,10 @@
 	text-transform: uppercase
 	opacity: .9
 	padding:
-		left: 25px
-		right: 25px
+		left: 20px
+		right: 20px
 	color: white
-	border: thin solid $mixin-color
+	border: 1px solid $mixin-color
 	border-radius: $roundness
 	background-color: $mixin-color
 	text-shadow: none

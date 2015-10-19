@@ -2,6 +2,7 @@
 
 $tree-color-text: white
 $tree-color-highlight: white
+$tree-color-highlight-background: $color-primary
 
 .jstree-default
 	font-weight: 400
@@ -131,7 +132,7 @@ $tree-color-highlight: white
 	color: $tree-color-highlight !important
 
 .jstree-default li[aria-selected='true']
-	background-color: rgba($color-background, .2)
+	background-color: rgba($tree-color-highlight-background, .5)
 
 	a.jstree-anchor
 		&:after
