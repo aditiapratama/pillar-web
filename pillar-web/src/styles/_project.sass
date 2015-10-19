@@ -447,6 +447,13 @@ section.node-preview
 		position: relative
 		overflow: hidden
 
+		+media-sm
+			max-height: $node-preview-max-height-sm
+		+media-md
+			max-height: $node-preview-max-height-md
+		+media-lg
+			max-height: $node-preview-max-height-lg
+
 		.header
 			max-width: 100%
 			width: 100%
@@ -1054,14 +1061,18 @@ section.node-children
 					color: $color-primary
 
 
+#node-add-container,
 #node-edit-container,
 #blog_container
+
+	#node-add-header,
 	#node-edit-header
 		background-color: rgba($color-background-nav, .95)
 		padding: 20px 20px 10px 20px
 		height: 100px
 		position: relative
 
+		.node-add-title,
 		.node-edit-title
 			position: absolute
 			bottom: 10px
@@ -1070,9 +1081,12 @@ section.node-children
 			font-size: 2.5em
 			color: white
 
+	#node-add-form,
 	#node-edit-form
+		flex: 1
 		background-color: white
 
+	#node-add-form,
 	#node-edit-form,
 	#blog_post-edit-form
 		padding: 20px
@@ -1175,6 +1189,11 @@ section.node-children
 			padding: 20px
 
 
+#node-add-container,
+#node-edit-container
+	display: flex
+	flex-direction: column
+
 #overlay-mode-move-container
 	visibility: hidden
 	background-color: lighten($color-background-nav, 5%)
@@ -1275,5 +1294,47 @@ section.node-children
 	100%
 		right: 0
 
+#node-add-form
+	.fileupload-buttonbar
+		padding: 10px 0
+		.fileinput-button
+			@include button-rounded($color-success, 6px)
+		.start
+			@include button-rounded($color-info, 6px)
+		.cancel
+			@include button-rounded($color-warning, 6px)
+		.delete
+			@include button-rounded($color-danger, 6px)
+		.toggle
+			margin: 0 20px
+
+	.files
+		.btn
+			&.start
+				@include button-rounded($color-info, 6px)
+			&.cancel
+				@include button-rounded($color-warning, 6px)
+			&.delete
+				@include button-rounded($color-danger, 6px)
+
+			&.create
+				@include button-rounded($color-success, 6px)
+
+	.template-upload,
+	.template-download
+
+		td
+			border: none
+		.preview
+			img
+				border-radius: 3px
+		.progress
+			height: 10px
+			box-shadow: none
+		.size
+			color: $color-text-dark-secondary
+
+		.toggle
+			margin: 0 20px
 
 @import plugins/_flowplayer
