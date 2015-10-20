@@ -11,7 +11,11 @@ libjpeg-dev \
 nano \
 vim \
 apache2-mpm-event \
-libapache2-mod-wsgi
+libapache2-mod-wsgi \
+python-crypto \
+python-openssl \
+libssl-dev \
+libffi-dev
 
 RUN mkdir -p /data/dev/pillar-web \
 && mkdir -p /data/dev/pillar-python-sdk \
@@ -39,6 +43,12 @@ RUN . /data/venv/bin/activate \
 && pip install -r /data/www/pillar-web/requirements.txt
 
 RUN ln -s /data/dev/pillar-python-sdk/pillarsdk /data/venv/lib/python2.7/site-packages/pillarsdk
+
+ADD comodo.crt /usr/share/ca-certificates/
+RUN echo comodo.crt >> /etc/ca-certificates.conf \
+&& update-ca-certificates
+
+ENV REQUESTS_CA_BUNDLE /etc/ssl/certs/comodo.pem
 
 VOLUME /data/dev/pillar-web
 VOLUME /data/dev/pillar-python-sdk
