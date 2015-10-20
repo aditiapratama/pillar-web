@@ -134,11 +134,11 @@
 
 /* Loading */
 .flowplayer .fp-waiting
-	background-image: none !important
+	// background-image: none !important
 
 .flowplayer .fp-waiting em,
 .flowplayer .fp-waiting p
-	display: none !important
+	// display: none !important
 
 .flowplayer .fp-loading
 	opacity: 0
@@ -154,10 +154,12 @@
 	transition: opacity 350ms ease-in-out
 	font-size: 5em
 	color: white
+	pointer-events: none
 
 	i
 		position: relative
-		top: 2px
+		padding-top: 4px
 
-.flowplayer .fp-is-loading .fp-loading
+.flowplayer.is-loading .fp-loading
 	opacity: 1
+	z-index: 12
