@@ -211,7 +211,7 @@ script().
 			$('#server_error').attr('src', url);
 		})
 		.always(function(){
-			$('.button-edit-icon').addClass('zmdi zmdi-edit').removeClass('ion-load-c spin');
+			$('.button-edit-icon').addClass('zmdi zmdi-edit').removeClass('ion-load-c spinner');
 		});
 	}
 
@@ -231,7 +231,7 @@ script().
 			$('#server_error').attr('src', url);
 		})
 		.always(function(){
-			$('.button-add-icon').addClass('zmdi zmdi-collection-plus').removeClass('ion-load-c spin');
+			$('.button-add-icon').addClass('zmdi zmdi-collection-plus').removeClass('ion-load-c spinner');
 		});
 	}
 
@@ -318,7 +318,7 @@ script().
 		});
 
 		$('#item_edit').click(function(e){
-			$('.button-edit-icon').addClass('ion-load-c spin').removeClass('zmdi zmdi-edit');
+			$('.button-edit-icon').addClass('ion-load-c spinner').removeClass('zmdi zmdi-edit');
 			// When clicking on the edit icon, embed the edit
 			e.preventDefault;
 			node_id = document.getElementById("item_edit");
@@ -327,7 +327,7 @@ script().
 
 
 		$('#item_add').click(function(e){
-			$('.button-add-icon').addClass('ion-load-c spin').removeClass('zmdi zmdi-collection-plus');
+			$('.button-add-icon').addClass('ion-load-c spinner').removeClass('zmdi zmdi-collection-plus');
 			e.preventDefault;
 			node_id = document.getElementById("item_add");
 			addNode(node_id.getAttribute('data-parent_node_id'));
