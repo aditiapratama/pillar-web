@@ -130,7 +130,8 @@ $list-node-children-item-width: 160px
 
 	/* Edit Asset buttons */
 	.project-mode-view,
-	.project-mode-edit
+	.project-mode-edit,
+	.project-mode-add
 		display: none
 
 	ul.project-edit-tools
@@ -555,7 +556,7 @@ section.node-details-container
 
 	.node-details-meta
 		font-weight: 300
-		padding: 15px 20px
+		padding: 15px 20px 25px 20px
 
 		ul.node-details-meta-list
 			display: flex
@@ -880,6 +881,7 @@ section.node-children
 		position: relative
 		width: 100%
 		color: white
+		background-color: $color-background-nav
 
 		border-top-left-radius: 3px
 		border-top-right-radius: 3px
@@ -964,11 +966,12 @@ section.node-children
 	+media-lg
 		border-radius: 3px
 
-.node_index-collection
-	// display: flex
-	// flex-flow: row wrap
-	// justify-content: flex-start
+// No border-radius when we have a header as well
+#node_index-header+#node_index-collection-container
+	+media-lg
+		border-radius: 0
 
+.node_index-collection
 	.node_index-collection-card-container
 		width: 33.33%
 		float: left
@@ -1032,7 +1035,7 @@ section.node-children
 			background-color: white
 			border-radius: 3px
 			overflow: hidden
-			padding: 3px
+			border: 3px solid white
 
 			&:hover
 				img.thumb
@@ -1042,6 +1045,7 @@ section.node-children
 				width: 100%
 				border-radius: 3px
 				transition: opacity 150ms ease-in-out
+				+position-center-translate
 
 
 		.item-info
@@ -1049,7 +1053,7 @@ section.node-children
 			background-color: white
 			border-bottom-left-radius: 3px
 			border-bottom-right-radius: 3px
-			min-height: 128px
+			min-height: 168px
 
 			a.item-title
 				display: inline-block
@@ -1127,6 +1131,7 @@ section.node-children
 				color: $color-text-dark
 				font-family: $font-body
 				font-weight: 300
+				text-transform: capitalize
 
 		.form-group.picture
 			.picture-progress-bar
@@ -1137,6 +1142,7 @@ section.node-children
 				border-radius: 3px
 
 		.form-group.description,
+		.form-group.summary,
 		.form-group.content
 			position: relative
 
@@ -1152,6 +1158,7 @@ section.node-children
 				color: $color-text-dark
 
 				transition: all 300ms ease-in-out
+				resize: vertical
 
 
 				&:focus

@@ -3,6 +3,8 @@
 
 	section#comments-list
 		.comment-reply-container
+			| {% if current_user.is_authenticated() %}
+
 			| {% if comment_node_type.has_method('POST') %}
 			.comment-reply-avatar
 				img(src="{{ current_user.gravatar }}")
@@ -40,8 +42,20 @@
 
 			| {% else %}
 
+			| {# * It's autenticated, but has no 'POST' permission #}
+			.comment-reply-form
+				.comment-reply-field.sign-in
+					textarea(
+						disabled,
+						id="comment_field",
+						data-parent_id="{{ parent_id }}",
+						placeholder="")
+					.sign-in
+						| Not allowed to comment.
+			| {% endif %}
 
-
+			| {% else %}
+			| {# * It's not autenticated #}
 			.comment-reply-form
 				.comment-reply-field.sign-in
 					textarea(

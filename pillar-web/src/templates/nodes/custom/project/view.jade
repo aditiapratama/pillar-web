@@ -223,6 +223,8 @@ script().
 
 			// Update the DOM injecting the generate HTML into the page
 			$('#project_context').html(dataHtml);
+
+			$('.project-mode-view, .project-mode-edit').hide();
 		})
 		.fail(function(dataResponse) {
 			$('#project_context').html($('<iframe id="server_error"/>'));
