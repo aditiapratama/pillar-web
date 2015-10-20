@@ -23,6 +23,12 @@
 		padding: 0
 		background-color: $color-background-nav
 
+		.error-top-container
+			position: relative
+			width: 100%
+			background-color: $color-background-nav
+			background: repeating-linear-gradient(-45deg, lighten($color-background-nav, 2%), lighten($color-background-nav, 2%) 10px, $color-background-nav 10px, $color-background-nav 20px)
+
 		.error-title
 			padding: 25px 0 10px 0
 			color: white
@@ -34,6 +40,7 @@
 		.error-lead
 			width: 100%
 			padding: 0 25px 25px 0
+			line-height: 1.6em
 
 			color: $color-text-light-primary
 			font:
