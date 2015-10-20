@@ -93,9 +93,9 @@ def get_projects(category):
     and improved with more extensive filtering capabilities.
     """
     api = SystemUtility.attract_api()
-    node_type = NodeType.find_first({
+    node_type = NodeType.find_one({
         'where': '{"name" : "project"}',
-        'projection': '{"name": 1}'
+        'projection': '{"name": 1, "permissions": 1}'
         }, api=api)
     projects = Node.all({
         'where': '{"node_type" : "%s", \

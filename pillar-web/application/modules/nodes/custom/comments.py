@@ -80,15 +80,13 @@ def format_comment(comment, is_reply=False, is_team=False, replies=None):
 @nodes.route("/comments/")
 def comments_index():
     parent_id = request.args.get('parent_id')
+    # Get data only if we format it
+    api = SystemUtility.attract_api()
+    node_type = NodeType.find_one({
+        'where': '{"name" : "comment"}',
+        }, api=api)
 
     if request.args.get('format'):
-
-        # Get data only if we format it
-        api = SystemUtility.attract_api()
-        node_type = NodeType.find_first({
-            'where': '{"name" : "comment"}',
-            }, api=api)
-
         nodes = Node.all({
             'where': '{"node_type" : "%s", "parent": "%s"}' % (node_type._id, parent_id),
             'embedded': '{"user":1}'}, api=api)
@@ -113,7 +111,8 @@ def comments_index():
     else:
         # Data will be requested via javascript
         return_content = render_template('nodes/custom/_comments.html',
-            parent_id=parent_id)
+            parent_id=parent_id,
+            comment_node_type=node_type)
     return return_content
 
 

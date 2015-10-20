@@ -3,7 +3,7 @@
 
 	section#comments-list
 		.comment-reply-container
-			| {% if current_user.is_authenticated() %}
+			| {% if comment_node_type.has_method('POST') %}
 			.comment-reply-avatar
 				img(src="{{ current_user.gravatar }}")
 
@@ -39,6 +39,8 @@
 					.comment-reply-preview
 
 			| {% else %}
+
+
 
 			.comment-reply-form
 				.comment-reply-field.sign-in

@@ -16,9 +16,9 @@ from application.modules.nodes.forms import process_node_form
 def posts_view(project_id, url=None):
     """View individual blogpost"""
     api = SystemUtility.attract_api()
-    node_type = NodeType.find_first({
+    node_type = NodeType.find_one({
         'where': '{"name" : "blog"}',
-        'projection': '{"name": 1}'
+        'projection': '{"name": 1, "permissions":1}'
         }, api=api)
     blog = Node.find_one({
         'where': '{"node_type" : "%s", \
@@ -39,6 +39,11 @@ def posts_view(project_id, url=None):
             node=post)
     else:
         # Render all posts
+        node_type_post = NodeType.find_one({
+            'where': '{"name" : "post"}',
+            'projection': '{"permissions":1}'
+            }, api=api)
+
         posts = Node.all({
             'where': '{"parent": "%s"}' % (blog._id),
             'embedded': '{"picture":1}',
@@ -46,7 +51,7 @@ def posts_view(project_id, url=None):
             }, api=api)
         return render_template(
             'nodes/custom/blog/index.html',
-            blog=blog,
+            node_type_post=node_type_post,
             posts=posts._items)
 
 
@@ -54,15 +59,15 @@ def posts_view(project_id, url=None):
 @login_required
 def posts_create(project_id):
     api = SystemUtility.attract_api()
-    node_type = NodeType.find_first({
+    node_type = NodeType.find_one({
         'where': '{"name" : "blog"}',
-        'projection': '{"name": 1}'
+        'projection': '{"name": 1, "permissions": 1}'
         }, api=api)
     blog = Node.find_first({
         'where': '{"node_type" : "%s", \
             "parent": "%s"}' % (node_type._id, project_id),
         }, api=api)
-    node_type = NodeType.find_first({'where': '{"name" : "post"}',}, api=api)
+    node_type = NodeType.find_one({'where': '{"name" : "post"}',}, api=api)
     form = get_node_form(node_type)
     if form.validate_on_submit():
         user_id = current_user.objectid
