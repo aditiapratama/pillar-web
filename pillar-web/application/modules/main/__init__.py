@@ -22,8 +22,37 @@ from application.helpers import attach_project_pictures
 @app.route("/")
 def homepage():
     """Homepage"""
-    return render_template(
-        'homepage.html')
+    if current_user.is_authenticated() and current_user.has_role('subscriber'):
+        api = SystemUtility.attract_api()
+        node_type_post = NodeType.find_one({
+            'where': '{"name" : "post"}',
+            'projection': '{"permissions": 1}'
+            }, api=api)
+        latest_posts = Node.all({
+            'where': '{"node_type": "%s"}' % (node_type_post._id),
+            'embedded': '{"picture":1}',
+            'sort': '-_created',
+            'max_results': '5'
+            }, api=api)
+
+        node_type_asset = NodeType.find_one({
+            'where': '{"name" : "asset"}',
+            'projection': '{"permissions": 1}'
+            }, api=api)
+        latest_assets = Node.all({
+            'where': '{"node_type": "%s"}' % (node_type_asset._id),
+            'embedded': '{"picture":1}',
+            'sort': '-_created',
+            'max_results': '5'
+            }, api=api)
+
+        return render_template(
+            'homepage.html',
+            latest_posts=latest_posts._items,
+            latest_assets=latest_assets._items)
+    else:
+        return render_template(
+            'homepage.html')
 
 
 @app.route("/join")
