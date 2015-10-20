@@ -169,6 +169,14 @@ script(type="text/javascript").
 		//- $('#project_tree').jstree().refresh_node($('#n_{{node._id}}'));
 	});
 
+	$('#item_cancel').click(function(e){
+
+		displayNode('{{node._id}}');
+
+		$('.project-mode-view').show();
+		$('.project-mode-edit').hide();
+	});
+
 	//- console.log($._data($(elementSelector)[0], "events"));
 
 
