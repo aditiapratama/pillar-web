@@ -3,10 +3,10 @@
 | {% block body %}
 .container
 	#login-container
-		.login-title Login
+		.login-title Welcome back!
 
 		.login-form
-			form(method="POST", action="{{url_for('users.login')}}")
+			form#login-form(method="POST", action="{{url_for('users.login')}}")
 				.form-group
 					| {{ form.email.label }}
 					| {{ form.email(class='form-control') }}
@@ -15,6 +15,18 @@
 					| {{ form.password.label }}
 					| {{ form.password(class='form-control') }}
 
-				input.btn.btn-default(type="submit",value="Login")
+				.buttons
+					button.btn.btn-default.button-login(type="submit")
+						i.ion-log-in
+						| Login
+
+					.lead-register
+						a.forgot(href="https://blender.org/id/reset") forgot your password?
+						a.btn.btn-default.button-register(href="https://blender.org/id/register", target="_blank")
+							i.ion-android-star-outline
+							| Create Account
+
 
 | {% endblock %}
+
+| {% block footer_container %}{% endblock %}

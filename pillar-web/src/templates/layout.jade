@@ -51,7 +51,7 @@ html(lang="en")
 			|	{% for (category, message) in messages %}
 			.alert(role="alert", class="alert-{{ category }}")
 				i.alert-icon(class="{{ category }}")
-				span {{message}}
+				span {{ message }}
 				button.close(type="button", data-dismiss="alert")
 					i.ion-close-round
 			|	{% endfor %}
@@ -134,6 +134,7 @@ html(lang="en")
 			.page-content
 				| {% block body %}{% endblock %}
 
+		| {% block footer_container %}
 		#footer-container
 			| {% block footer_navigation %}
 			#footer-navigation
@@ -206,6 +207,7 @@ html(lang="en")
 					a.hop(href="#hop")
 						i.ion-ios-arrow-up
 			| {% endblock %}
+		| {% endblock %}
 
 		| {#
 		| {% assets filters="jsmin",

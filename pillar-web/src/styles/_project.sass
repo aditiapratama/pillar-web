@@ -1109,16 +1109,7 @@ section.node-children
 			font-family: $font-body
 
 			input, textarea, select
-				color: $color-text-dark
-				box-shadow: none
-				font-family: $font-body
-				border-radius: 3px
-				border-color: $color-background-dark
-				background-color: $color-background-light
-
-				&:focus
-					border-color: $color-info
-					box-shadow: none
+				+input-generic
 
 				&#fileupload
 					color: $color-info
@@ -1126,12 +1117,8 @@ section.node-children
 			select
 				text-transform: capitalize
 
-
 			label
-				color: $color-text-dark
-				font-family: $font-body
-				font-weight: 300
-				text-transform: capitalize
+				+label-generic
 
 		.form-group.picture
 			.picture-progress-bar
