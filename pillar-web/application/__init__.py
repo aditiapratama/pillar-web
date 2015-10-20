@@ -145,6 +145,11 @@ from application.modules.nodes.custom import tasks
 from application.modules.nodes.custom import comments
 from application.modules.nodes.custom import projects
 from helpers import gravatar
+from helpers import pretty_date
+
+@app.template_filter('pretty_date')
+def format_pretty_date(d):
+    return pretty_date(d)
 
 # Pagination global to use un jinja template
 app.jinja_env.globals['url_for_other_page'] = url_for_other_page

@@ -109,7 +109,7 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 				.update-list-item-title
 					h4 {{update.name}}
 
-				.update-list-item-time {{update._updated}}
+				.update-list-item-time {{update._updated | pretty_date }}
 
 				| {% if update.description %}
 				.update-list-item-content.
@@ -127,7 +127,7 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 				.update-list-item-title
 					h4 {{update.name}}
 
-				.update-list-item-time {{update._updated}}
+				.update-list-item-time {{update._updated | pretty_date }}
 
 				| {% if update.properties.content_type %}
 				.update-list-item-type.

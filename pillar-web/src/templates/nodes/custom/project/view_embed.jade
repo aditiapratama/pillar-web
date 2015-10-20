@@ -8,7 +8,7 @@
 
 		.node-details-header
 			.node-title-details
-				.date {{ node._created }}
+				.date {{ node._created | pretty_date }}
 
 				//- | {% if node.properties.status %}
 				.status {{node.properties.status}}
