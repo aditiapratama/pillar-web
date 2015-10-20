@@ -33,7 +33,7 @@
 					| {{ node.file.length | filesizeformat }}
 
 				li.node-details-meta-list-item.file.download
-					a(href="{% if node.has_method('GET') %}{{ node.file.link }}{% else %}{{ url_for('join') }}{% endif %}")
+					a(href="{% if node.has_method('GET') %}{{ node.file.link }}{% else %}{{ url_for('users.login') }}{% endif %}")
 						button.btn.btn-default(type="button")
 							| Download
 

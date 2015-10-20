@@ -549,110 +549,7 @@ section.node-details-container
 		.node-details-description
 			padding: 15px 20px 5px 20px
 
-	.node-extra
-		display: flex
-		flex-direction: row
-		align-items: stretch
 
-		padding: 0 20px
-		width: 100%
-
-		.node-featured, .node-updates
-			flex: 1
-
-			ul
-				padding: 0
-				margin: 0 0 25px 0
-				+clearfix
-
-				li
-					list-style: none
-					padding: 10px 0
-					border:
-						top: thin solid $color-background
-
-					+clearfix
-
-					&:first-of-type
-						border: none
-
-					.image
-						max-width: 60px
-						float: left
-						margin: 0 20px 0px 0
-						transition: opacity 150ms ease-in-out
-
-						img
-							width: 100%
-							border-radius: 3px
-
-						&:hover
-							opacity: .8
-
-					.info
-						width: 100%
-						float: left
-
-						.title
-							display: block
-							font-size: 1.2em
-							+clearfix
-
-						span.details
-							width: 100%
-							display: block
-							font-size: .9em
-							padding: 5px 0
-							color: $color-text-dark-secondary
-							+clearfix
-
-							.who
-								margin-left: 3px
-								font-weight: 500
-
-				&.node-updates-list
-					padding-right: 25px
-
-				&.node-featured-list
-
-					li
-						width: 50%
-						float: left
-						border: none
-						padding-right: 20px
-
-						.image
-							max-width: 100%
-							width: 100%
-							min-height: 80px
-							overflow: hidden
-							position: relative
-
-							img
-								position: absolute
-								width: 100%
-								top: 50%
-								left: 50%
-								transform: translate(-50%, -50%)
-
-						.info
-							padding: 5px 10px 0 0
-
-							a.title
-								font-size: 1em
-							span.details
-								width: 100%
-								+text-overflow-ellipsis
-
-								.who
-									font-weight: 400
-									margin-left: 0
-									+text-overflow-ellipsis
-
-									span
-										+text-overflow-ellipsis
-										font-weight: 500
-										margin-left: 3px
 
 	.node-details-meta
 		font-weight: 300
@@ -780,6 +677,115 @@ section.node-details-container
 					&.open
 						button
 							box-shadow: none
+
+
+
+.node-extra
+	display: flex
+	flex-direction: row
+	align-items: stretch
+
+	padding: 0 20px
+	width: 100%
+
+	.node-featured, .node-updates
+		flex: 1
+
+		ul
+			padding: 0
+			margin: 0 0 25px 0
+			+clearfix
+
+			li
+				list-style: none
+				padding: 10px 0
+				border:
+					top: thin solid $color-background
+
+				+clearfix
+
+				&:first-of-type
+					border: none
+
+				.image
+					max-width: 60px
+					float: left
+					margin: 0 20px 0px 0
+					transition: opacity 150ms ease-in-out
+
+					img
+						width: 100%
+						border-radius: 3px
+
+					&:hover
+						opacity: .8
+
+				.info
+					width: 100%
+					float: left
+
+					.title
+						display: block
+						font-size: 1.2em
+						+clearfix
+
+					span.details
+						width: 100%
+						display: block
+						font-size: .9em
+						padding: 5px 0
+						color: $color-text-dark-secondary
+						+clearfix
+
+						.who
+							margin-left: 3px
+							font-weight: 500
+
+			&.node-updates-list
+				padding-right: 25px
+
+			&.node-featured-list
+
+				li
+					width: 50%
+					float: left
+					border: none
+					padding-right: 20px
+
+					.image
+						max-width: 100%
+						width: 100%
+						min-height: 80px
+						overflow: hidden
+						position: relative
+
+						img
+							position: absolute
+							width: 100%
+							top: 50%
+							left: 50%
+							transform: translate(-50%, -50%)
+
+					.info
+						padding: 5px 10px 0 0
+
+						a.title
+							font-size: 1em
+						span.details
+							width: 100%
+							+text-overflow-ellipsis
+
+							.who
+								font-weight: 400
+								margin-left: 0
+								+text-overflow-ellipsis
+
+								span
+									+text-overflow-ellipsis
+									font-weight: 500
+									margin-left: 3px
+
+
 
 section.node-children
 	background-color: white

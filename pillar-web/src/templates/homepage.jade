@@ -41,7 +41,7 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 					| Follow Glass Half
 
 				| {% else %}
-				a.btn.btn-default.btn-outline.get-started(href="{{ url_for('join') }}")
+				a.btn.btn-default.btn-outline.get-started(href="https://store.blender.org/product/membership/")
 					| Get Started
 				a.btn.btn-default.btn-outline.learn-more(href="#upnext")
 					| Learn More
@@ -101,6 +101,55 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 
 #homepage.page-content
 	#content
+		section#updates.node-extra
+			.node-updates
+				h3 Latest Updates
+				ul.node-updates-list
+					| {% if latest_posts %}
+
+					| {% for n in latest_posts %}
+					li.node-updates-list-item
+						.info
+							a.title(href="#", data-node_id="{{ n._id }}") {{ n.name }}
+							span.details
+								span.when {{ n._updated }} mins ago by
+								span.who {{ n.user.full_name }}
+					| {% endfor %}
+
+					| {% else %}
+
+					li.node-updates-list-item
+						.info
+							span.details
+								span.when No updates yet.
+
+					| {% endif %}
+
+		section#updates.node-extra
+			.node-featured
+				h3 Featured Assets
+				ul.node-featured-list
+					| {% if latest_assets %}
+
+					| {% for n in latest_assets %}
+					li.node-featured-list-item
+						.info
+							a.title(href="#", data-node_id="{{ n._id }}") {{ n.name }}
+							span.details
+								span.who by
+									span {{ n.user.full_name }}
+					| {% endfor %}
+
+					| {% else %}
+
+					li.node-featured-list-item
+						.info
+							span.details
+								span.when No featured items yet.
+
+					| {% endif %}
+
+	//
 		section#updates
 			h3.section-title Blog Updates
 
@@ -217,7 +266,7 @@ section#homepage.get-started
 
 	h2 Only $10 per month*
 
-	a.btn.btn-default.btn-outline.get-started(href="{{ url_for('join') }}")
+	a.btn.btn-default.btn-outline.get-started(href="https://store.blender.org/product/membership/")
 		| Subscribe Now
 
 	.notes

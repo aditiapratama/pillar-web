@@ -16,13 +16,14 @@ pillar-web/application/static/assets/js/*.min.js
 pillar-web/application/static/storage/
 pillar-web/application/static/uploads/
 
-pillar-web/application/templates/layout.html
+pillar-web/application/templates/_modal.html
 pillar-web/application/templates/homepage.html
 pillar-web/application/templates/join.html
+pillar-web/application/templates/layout.html
 pillar-web/application/templates/stats.html
+pillar-web/application/templates/upload.html
+pillar-web/application/templates/upload_embed.html
 
-pillar-web/application/templates/project/
-pillar-web/application/templates/blog/
-
+pillar-web/application/templates/errors/
 pillar-web/application/templates/nodes/
-pillar-web/application/templates/_modal.html
+pillar-web/application/templates/users/
