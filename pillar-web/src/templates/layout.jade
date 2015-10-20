@@ -45,15 +45,15 @@ html(lang="en")
 				.navbar-backdrop-overlay
 				| {% endblock %}
 
-			| {% with messages = get_flashed_messages() %}
+			| {% with messages = get_flashed_messages(with_categories=True) %}
 			|		{% if messages %}
 
-			|	{% for message in messages %}
-			// XXX - Use alert category too
-			.alert(role="alert")
+			|	{% for (category, message) in messages %}
+			.alert(role="alert", class="alert-{{ category }}")
+				i.alert-icon(class="{{ category }}")
+				span {{message}}
 				button.close(type="button", data-dismiss="alert")
 					i.ion-close-round
-				| {{message}}
 			|	{% endfor %}
 
 			|		{% endif %}

@@ -64,11 +64,11 @@ $navbar-backdrop-height: 600px
 	padding-top: 0
 
 .alert
+	display: block
 	position: relative
 	z-index: 13
 	width: 100%
 	margin-bottom: 0
-	display: block
 	text-align: center
 	padding: 15px 20px
 	border-radius: 0
@@ -78,7 +78,35 @@ $navbar-backdrop-height: 600px
 	color: $color-text-dark
 	background-color: $color-background
 
+	+clearfix
+
+	&.alert-danger,
+	&.alert-error
+		background-color: lighten($color-danger, 35%)
+		color: $color-danger
+		.alert-icon, .close
+			color: $color-danger
+
+	&.alert-warning
+		background-color: lighten($color-warning, 20%)
+		color: darken($color-warning, 20%)
+		.alert-icon, .close
+			color: darken($color-warning, 20%)
+
+	&.alert-success
+		background-color: lighten($color-success, 45%)
+		color: $color-success
+		.alert-icon, .close
+			color: $color-success
+
+	&.alert-info
+		background-color: lighten($color-info, 30%)
+		color: darken($color-info, 10%)
+		.alert-icon, .close
+			color: darken($color-info, 10%)
+
 	.close
+		opacity: .5
 		position: relative
 		top: -2px
 		right: -10px
@@ -86,6 +114,35 @@ $navbar-backdrop-height: 600px
 
 		i
 			font-size: .6em
+
+	i.alert-icon
+		&:before
+			display: inline-block
+			speak: none
+			font:
+				family: "Ionicons"
+				style: normal
+				weight: normal
+				variant: normal
+			text:
+				transform: none
+				rendering: auto
+			line-height: 1
+			-webkit-font-smoothing: antialiased
+			-moz-osx-font-smoothing: grayscale
+
+			padding: 0 10px
+			transform: scale(1.2)
+
+		&.success:before
+			content: "\f121"
+		&.info:before
+			content: "\f44c"
+		&.warning:before
+			content: "\f101"
+		&.danger:before,
+		&.error:before
+			content: "\f100"
 
 
 /* When there's an alert, disable the fixed top */

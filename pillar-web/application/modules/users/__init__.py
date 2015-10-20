@@ -97,10 +97,10 @@ def login():
             # subscription, we apply the 'subscriber' role
             user_roles_update(user.objectid)
 
-            flash('Welcome {0}!'.format(form.email.data))
+            flash('Welcome {0}!'.format(form.email.data), 'info')
             return redirect('/')
         elif auth:
-            flash('{0}'.format(auth['data']))
+            flash('{0}'.format(auth['data']), 'danger')
             return redirect('/')
     return render_template('users/login.html', form=form)
 
@@ -108,7 +108,7 @@ def login():
 @users.route("/logout")
 def logout():
     logout_user()
-    flash('Successfully logged out')
+    flash('Successfully logged out', 'info')
     return redirect('/')
 
 
@@ -128,7 +128,7 @@ def profile():
         user.first_name = form.first_name.data
         user.last_name = form.last_name.data
         user.update(api=api)
-        flash("Profile updated")
+        flash("Profile updated", 'success')
 
     return render_template('users/profile.html',
                            form=form)
