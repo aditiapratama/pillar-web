@@ -10,9 +10,8 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 | {% block header_backdrop %}
 .homepage.navbar-backdrop
 	video(loop, muted, autoplay, poster="{{ url_for('static', filename='assets/img/background_join_glass.jpg')}}", class="fullscreen-bg__video")
-		//- source(src="{{ url_for('static', filename='assets/video/header-glass_half.mp4')}}", type="video/webm")
+		source(src="{{ url_for('static', filename='assets/video/header-glass_half.webm')}}", type="video/webm")
 		source(src="{{ url_for('static', filename='assets/video/header-glass_half.mp4')}}", type="video/mp4")
-		//- source(src="{{ url_for('static', filename='assets/video/header-glass_half.mp4')}}", type="video/ogg")
 .homepage.navbar-backdrop-overlay
 
 
@@ -157,48 +156,7 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 								span.when No featured items yet.
 
 					| {% endif %}
-
-	//
-		section#updates
-			h3.section-title Blog Updates
-
-			| {% for update in latest_posts %}
-			.update-list-item
-				.update-list-item-title
-					h4 {{update.name}}
-
-				.update-list-item-time {{update._updated | pretty_date }}
-
-				| {% if update.description %}
-				.update-list-item-content.
-					{{update.description}}
-				| {% endif %}
-
-			| {% endfor %}
-
-
-		section#updates
-			h3.section-title Updated Assets
-
-			| {% for update in latest_assets %}
-			.update-list-item
-				.update-list-item-title
-					h4 {{update.name}}
-
-				.update-list-item-time {{update._updated | pretty_date }}
-
-				| {% if update.properties.content_type %}
-				.update-list-item-type.
-					{{update.properties.content_type}}
-				| {% endif %}
-
-				| {% if update.user.full_name %}
-				.update-list-item-name.
-					by {{ update.user.full_name }}
-				| {% endif %}
-
-			| {% endfor %}
-
+| {% endif %}
 
 a(name="upnext")
 section#homepage.bullets
@@ -262,7 +220,7 @@ section#homepage.bullets
 			.bullets-list-item-content.
 				Blender Institute will host the core team working on the 2.8 Workflow project.
 
-| {% else %}
+| {% if not current_user.is_authenticated() or not current_user.has_role('subscriber') %}
 
 section#homepage.supported-by
 
