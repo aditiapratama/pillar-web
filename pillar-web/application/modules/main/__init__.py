@@ -141,6 +141,7 @@ def open_projects():
     projects = get_projects('film')
     return render_template(
         'nodes/custom/project/index_collection.html',
+        title='open-projects',
         projects=projects._items)
 
 
@@ -149,4 +150,5 @@ def training():
     projects = get_projects('training')
     return render_template(
         'nodes/custom/project/index_collection.html',
+        title='training',
         projects=projects._items)

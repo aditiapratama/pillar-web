@@ -1,19 +1,41 @@
 | {% extends 'layout.html' %}
 
+| {% block header_backdrop %}
+.navbar-backdrop(
+	style="{% if title == 'open-projects' %}background-image: url({{ url_for('static', filename='assets/img/background_join_bbb.jpg')}}){% elif title == 'training' %}background-image: url({{ url_for('static', filename='assets/img/background_join_peoplecodingblender.jpg')}}){% endif %}")
+.navbar-backdrop-overlay
+| {% endblock %}
+
 | {% block body %}
 
 #project_container
 
 	#node_index-container
 
-		#node_index-header
-			| {% if user %}
+		| {% if user %}
+		#node_index-header.user
 			#node_index-user-avatar
 				img(src="{{ user.gravatar }}")
 			#node_index-user-info
 				.node_index-user-name {{user.name}}
 				.node_index-user-description {{user.description}}
-			| {% endif %}
+		| {% endif %}
+
+		| {% if title == 'open-projects' %}
+		#node_index-header.collection
+			#node_index-collection-info
+				.node_index-collection-name Open Projects
+				.node_index-collection-description.
+					Full production data and tutorials from all open movies, for you to use freely.
+
+		| {% elif title == 'training' %}
+		#node_index-header.collection
+			#node_index-collection-info
+				.node_index-collection-name Training
+				.node_index-collection-description.
+					Production quality training videos by 3D professionals.
+		| {% endif %}
+
 
 		#node_index-collection-container
 			.node_index-collection

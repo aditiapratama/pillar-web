@@ -16,7 +16,6 @@ html(lang="en")
 		| {% endblock %}
 
 		link(href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css", rel="stylesheet")
-		//- link(href="//netdna.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css", rel="stylesheet")
 
 		link(href='//fonts.googleapis.com/css?family=Roboto:300,400,500', rel='stylesheet', type='text/css')
 		link(href='//fonts.googleapis.com/css?family=Lato:300,400', rel='stylesheet', type='text/css')
@@ -77,13 +76,20 @@ html(lang="en")
 
 					nav.collapse.navbar-collapse
 						ul.nav.navbar-nav.navbar-right
-							li(class="{% if title in ['open-project', 'open_project']: %}active{% endif %}")
+							| {% if node and node.properties and node.properties.category %}
+							| {% set category = node.properties.category %}
+							| {% else %}
+							| {% set category = title %}
+							| {% endif %}
+							li
 								a(href="/open-projects",
-									title="Browse Open Projects")
+									title="Browse Open Projects",
+									class="{% if category in ['open-projects', 'film']: %}active{% endif %}")
 									span Open Projects
-							li(class="{% if title == 'training': %}active{% endif %}")
+							li
 								a(href="/training",
-									title="Browse Training and Tutorials")
+									title="Browse Training and Tutorials",
+									class="{% if category == 'training': %}active{% endif %}")
 									span Training
 
 							| {% if current_user.is_anonymous() %}
@@ -100,17 +106,13 @@ html(lang="en")
 									img.gravatar(src="{{ current_user.gravatar }}")
 
 								ul.dropdown-menu
-									| {# XXX
-									| {% if current_user.has_role('admin') %}
-									| #}
+									| {# {% if current_user.has_role('admin') %}
 									li
-										a(href="{# XXX {{url_for('admin.index')}} #}",
+										a(href="#",
 											title="Whoosh!")
 											i.ion-jet
 											| Whoosh!
-									| {# XXX
-									| {% endif %}
-									| #}
+									| {% endif %} #}
 
 									li
 										a(href="{{url_for('users.profile')}}"

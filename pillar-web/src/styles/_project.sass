@@ -27,6 +27,16 @@ $list-node-children-item-width: 160px
 	min-height: 600px
 	background-color: rgba($color-background-nav, .9)
 
+	+media-xs
+		border-radius: 0
+	+media-sm
+		border-radius: 0
+	+media-md
+		border-radius: 0
+	+media-lg
+		border-bottom-left-radius: 3px
+		border-bottom-right-radius: 3px
+
 #project-nav,
 #project_context-container
 	flex: 1
@@ -54,7 +64,7 @@ $list-node-children-item-width: 160px
 	transition: all 250ms ease-in-out
 
 	+media-lg
-		// border-bottom-left-radius: 3px
+		border-bottom-left-radius: 3px
 
 	&.collapsed
 		left: ($project_nav-width * -1)
@@ -886,22 +896,43 @@ section.node-children
 		border-top-left-radius: 3px
 		border-top-right-radius: 3px
 
+		&.collection
+			background-color: transparent
+			padding: 25px 0 45px 0
+			font-size: 1.2em
+
 		#node_index-user-avatar
 			padding: 15px
 
 			img
 				border-radius: 3px
 
-		#node_index-user-info
-			.node_index-user-name
+		#node_index-user-info,
+		#node_index-collection-info
+			.node_index-user-name,
+			.node_index-collection-name
+				padding-bottom: 10px
 				font:
 					family: $font-headings
-					size: 2.2em
+					size: 2.1em
 					weight: 300
 
-			.node_index-user-description
-				color: lighten($color-text, 60%)
-				font-weight: 300
+			.node_index-user-description,
+			.node_index-collection-description
+				color: $color-text-light
+				font:
+					size: 1.1em
+					weight: 300
+
+
+		#node_index-collection-info
+			width: 100%
+			text-align: center
+			padding: 25px 25px 5px 25px
+			text-shadow: 0 0 50px rgba(black, .5)
+
+			.node_index-collection-name
+				text-transform: uppercase
 
 	#node_index-list-container,
 
@@ -956,20 +987,13 @@ section.node-children
 						border-radius: 3px
 
 #node_index-collection-container
-	background-color: $color-background-nav
+	// background-color: $color-background-nav
 	height: 100%
 	width: 100%
 	padding: 15px
 	margin: 0 auto
 	+clearfix
 
-	+media-lg
-		border-radius: 3px
-
-// No border-radius when we have a header as well
-#node_index-header+#node_index-collection-container
-	+media-lg
-		border-radius: 0
 
 .node_index-collection
 	.node_index-collection-card-container
