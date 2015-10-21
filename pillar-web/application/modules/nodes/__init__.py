@@ -358,8 +358,9 @@ def view(node_id):
                         'projection': '{"name":1, "user":1, "picture":1, "node_type":1}',
                         'embedded': '{"user":1}',
                         }, api=api)
-                    picture = File.find(node_item.picture, api=api)
-                    node_item.picture = picture
+                    if node_item.picture:
+                        picture = File.find(node_item.picture, api=api)
+                        node_item.picture = picture
                     list_featured.append(node_item)
                 except ForbiddenAccess:
                     list_featured.append(FakeNodeAsset())
