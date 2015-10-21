@@ -25,7 +25,7 @@
 			border-radius: 3px
 			color: white
 
-			text-shadow: 1px 1px 1px rgba(black,.9), 0 0 30px rgba(black,.7)
+			text-shadow: 1px 1px 0 rgba(black,.8), 0 0 30px rgba(white,.4), 0 0 50px rgba(white,.5)
 
 			display: flex
 			flex-direction: column
@@ -43,8 +43,9 @@
 				text-align: center
 				max-width: 780px
 				font:
-					size: 1.6em
+					size: 1.3em
 					weight: 400
+				line-height: 1.6em
 
 			.buttons
 				display: flex
@@ -237,22 +238,26 @@
 
 
 .homepage.navbar-backdrop
-	width: 105%
+	// width: 105%
+	// width: 105%
+	width: 100%
 	left: 0
 	// filter: blur(10px)
 	filter: blur(0)
 	max-height: 800px
+	background-image: none
+	background-color: #afbfcc // glasshalf
 
 .homepage.navbar-backdrop-overlay
 	height: 800px
 	top: -40px
 	// background: linear-gradient(to bottom, rgba(black, 0) 0%, rgba(black, 0) 25%, rgba(black,.6) 90%, rgba(black,.5) 100%)
-	background: linear-gradient(to bottom, rgba(black, .5) 0%, rgba(black, .3) 40%, rgba(black, .4) 70%, rgba($color-background,.6) 90%, $color-background 100%)
+	background: linear-gradient(to bottom, rgba(black, .6) 0%, rgba(black, .2) 25%, rgba(black, .1) 56%, rgba($color-background,.4) 90%, $color-background 100%)
 
 section#homepage.links
 	height: initial
 	padding: 0
-	margin-bottom: 45px
+	margin-bottom: 25px
 
 	display: flex
 	flex-direction: column
@@ -286,9 +291,11 @@ section#homepage.links
 			overflow: hidden
 
 			position: relative
+			transition: background-color 150ms ease-in-out
 
 			&:hover, &:active, &:focus
 				text-decoration: none
+				background-color: lighten($color-background-nav, 5%)
 
 				img.header
 					opacity: .9
@@ -299,8 +306,10 @@ section#homepage.links
 				// transform: scale(1.2)
 				// filter: blur(4px)
 
-				border-top-left-radius: 3px
-				border-top-right-radius: 3px
+				// border-top-left-radius: 3px
+				// border-top-right-radius: 3px
+				border-bottom-left-radius: 3px
+				border-bottom-right-radius: 3px
 				width: 100%
 				position: relative
 				top: 0
@@ -313,6 +322,7 @@ section#homepage.links
 				display: block
 				width: 100%
 				position: relative
+				text-transform: uppercase
 
 				padding: 10px 5px
 

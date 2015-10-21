@@ -8,9 +8,14 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 | {% endblock %}
 
 | {% block header_backdrop %}
-.homepage.navbar-backdrop(
-	style="background-image: url({{ url_for('static', filename='assets/img/background_join_bbb.jpg')}})")
+.homepage.navbar-backdrop
+	video(loop, muted, autoplay, poster="{{ url_for('static', filename='assets/img/background_join_glass.jpg')}}", class="fullscreen-bg__video")
+		//- source(src="{{ url_for('static', filename='assets/video/header-glass_half.mp4')}}", type="video/webm")
+		source(src="{{ url_for('static', filename='assets/video/header-glass_half.mp4')}}", type="video/mp4")
+		//- source(src="{{ url_for('static', filename='assets/video/header-glass_half.mp4')}}", type="video/ogg")
 .homepage.navbar-backdrop-overlay
+
+
 | {% endblock %}
 
 | {% block body %}
@@ -18,17 +23,19 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 #homepage.page-content
 	#header
 		.text
-			.title.
-				{% if current_user.is_authenticated() %}
-					Glass Half
-				{% else %}
-					Your Online Animation Studio
-				{% endif %}
+			.title
+				| {% if current_user.is_authenticated() %}
+				img(src="{{ url_for('static', filename='assets/img/logo_glasshalf.png')}}")
+				| {% else %}
+				| Your Online Animation Studio
+				| {% endif %}
 
 			.lead.
 				{% if current_user.is_authenticated() %}
 					Two amateur art critics meet in a gallery and argue passionately about the pieces they see,
-					causing chaos for everyone else, until finally they find a piece on which they can agree...
+					<br/>
+					causing chaos for everyone else,
+					until finally they find a piece on which they can agree...
 				{% else %}
 					We make film, we build a production pipeline, and we share everything.
 					<br/>Get full access to the Blender Institute's Open Projects and training material.
@@ -38,7 +45,7 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 				| {% if current_user.is_authenticated() %}
 
 				a.btn.btn-default.btn-outline.follow(href="https://cloud.blender.org/bi/glass-half")
-					| Follow Glass Half
+					| Follow The Project
 
 				| {% else %}
 				a.btn.btn-default.btn-outline.get-started(href="https://store.blender.org/product/membership/")
@@ -75,23 +82,25 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 			#links-container
 
 				a.links-item.training(href="{{ url_for('training') }}")
-					img.header(src="{{ url_for('static', filename='assets/img/frontpage_link_training.jpg') }}")
+					//- img.header(src="{{ url_for('static', filename='assets/img/frontpage_link_training.jpg') }}")
 					span.bar
 					span.title Training
+
 					p.content.
 						Learn from the masters - production quality
 						training videos by 3d professionals.
 
 
 				a.links-item.open_projects(href="{{ url_for('open_projects') }}")
-					img.header(src="{{ url_for('static', filename='assets/img/frontpage_link_openprojects.jpg') }}")
+					//- img.header(src="{{ url_for('static', filename='assets/img/frontpage_link_openprojects.jpg') }}")
 					span.bar
 					span.title Open Movies
+
 					p.content Full production data and tutorials from all open movies, for you to use freely.
 
 
 				a.links-item.upnext(href="#upnext")
-					img.header(src="{{ url_for('static', filename='assets/img/frontpage_link_assets.jpg') }}")
+					//- img.header(src="{{ url_for('static', filename='assets/img/frontpage_link_assets.jpg') }}")
 					span.bar
 					span.title Up Next
 
@@ -190,10 +199,9 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 
 			| {% endfor %}
 
-| {% else %}
 
+a(name="upnext")
 section#homepage.bullets
-	a(name="upnext")
 
 	h1 Up Next
 
@@ -254,6 +262,7 @@ section#homepage.bullets
 			.bullets-list-item-content.
 				Blender Institute will host the core team working on the 2.8 Workflow project.
 
+| {% else %}
 
 section#homepage.supported-by
 
