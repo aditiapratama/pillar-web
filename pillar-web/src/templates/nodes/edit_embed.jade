@@ -135,9 +135,12 @@ script(type="text/javascript").
 	$("li.button-save").removeClass('field-error saving');
 	$("li.button-save a#item_save").html('<i class="ion-checkmark-round"></i> Save Changes');
 
+
+	/* Submit changes */
 	$("#node-edit-form").submit(function(e) {
 		e.preventDefault();
 
+		/* Let us know started saving */
 		$("li.button-save").addClass('saving');
 		$("li.button-save a#item_save").html('<i class="ion-load-c spin"></i> Saving...');
 
@@ -146,17 +149,32 @@ script(type="text/javascript").
 			data: $(this).serialize(),
 			type: 'POST'
 		})
-		.fail(function(){
+		.fail(function(data){
+			/* Something went wrong, print it */
+			statusBarSet('error', data.status + ' ' + data.statusText);
+
 			$("li.button-save").addClass('field-error');
 			$("li.button-save a#item_save").html('<i class="ion-alert-circled"></i> Houston');
+
+			/* Back to normal */
+			setTimeout(function(){
+				$("li.button-save").removeClass('saving field-error');
+				$("li.button-save a#item_save").html('<i class="ion-checkmark-round"></i> Try Again');
+			}, 2000);
 		})
 		.done(function(dataHtml){
-			$('#project_context').html(dataHtml);
-			$("li.button-save a#item_save").html('<i class="ion-android-happy"></i> Success!');
+			/* Success! */
 
+			/* Load content*/
+			$('#project_context').html(dataHtml);
+
+			statusBarSet('success', '<i class="ion-checkmark-round"></i> Changes Saved');
+
+			/* Style button */
 			$("li.button-save").removeClass('saving field-error');
 			$("li.button-save a#item_save").html('<i class="ion-checkmark-round"></i> Save Changes');
 
+			/* Show/hide buttons */
 			$('.project-mode-view').show();
 			$('.project-mode-edit').hide();
 		});

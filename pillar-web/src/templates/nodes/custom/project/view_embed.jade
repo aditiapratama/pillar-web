@@ -18,9 +18,32 @@
 			| {{node.description}}
 
 		.node-extra
+			.node-blog
+				ul.node-blog-list
+					h3 Blog
+					| {% if node.properties.nodes_latest %}
+
+					| {% for n in node.properties.nodes_latest %}
+					li.node-blog-list-item
+						.info
+							a.title(href="#", data-node_id="{{ n._id }}") {{ n.name }}
+							span.details
+								span.when {{ n._updated | pretty_date }} by
+								span.who {{ n.user.full_name }}
+					| {% endfor %}
+
+					| {% else %}
+
+					li.node-blog-list-item
+						.info
+							span.details
+								span.when No blog entries yet.
+
+					| {% endif %}
+
 			.node-updates
-				h3 Latest Updates
 				ul.node-updates-list
+					h3 Updated Assets
 					| {% if node.properties.nodes_latest %}
 
 					| {% for n in node.properties.nodes_latest %}
@@ -28,7 +51,7 @@
 						.info
 							a.title(href="#", data-node_id="{{ n._id }}") {{ n.name }}
 							span.details
-								span.when {{ n._updated }} mins ago by
+								span.when {{ n._updated | pretty_date }} by
 								span.who {{ n.user.full_name }}
 					| {% endfor %}
 

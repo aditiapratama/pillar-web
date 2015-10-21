@@ -100,6 +100,28 @@ $list-node-children-item-width: 160px
 		border-top-left-radius: 3px
 		border-top-right-radius: 3px
 
+	span#project-statusbar
+		+position-center-translate
+		min-width: 50%
+		padding: 5px 15px
+		background-color: rgba($color-background-nav, .8)
+		color: $color-text-light
+		text-align: center
+		border-radius: 3px
+		opacity: 0
+		font:
+			weight: 300
+
+		transition: all 350ms ease-in-out
+
+		&.error
+			color: $color-danger
+		&.success
+			color: $color-success
+
+		&.active
+			opacity: 1
+
 	/* Breadcrumbs */
 	ul.breadcrumb
 		position: relative
@@ -145,7 +167,6 @@ $list-node-children-item-width: 160px
 		display: none
 
 	ul.project-edit-tools
-		align-self: flex-end
 		display: flex
 		align-items: center
 		height: 100%
@@ -167,6 +188,11 @@ $list-node-children-item-width: 160px
 			position: relative
 			float: left
 
+			a
+				min-width: 110px
+				&:focus, &:active
+					text-decoration: none
+					outline: none
 
 			&.button-save
 
@@ -244,6 +270,11 @@ $list-node-children-item-width: 160px
 				background-color: darken($color-background, 60%)
 				color: $color-text-light
 				text-decoration: none
+
+			&:focus, &:active
+				text-decoration: none
+				outline: none
+
 
 			&#item_save,
 			&#item_cancel
@@ -701,7 +732,10 @@ section.node-details-container
 	padding: 0 20px
 	width: 100%
 
-	.node-featured, .node-updates
+
+	.node-featured,
+	.node-updates,
+	.node-blog
 		flex: 1
 
 		ul
@@ -755,12 +789,16 @@ section.node-details-container
 							font-weight: 500
 
 			&.node-updates-list
-				padding-right: 25px
+				padding:
+					left: 25px
+					right: 25px
+				margin-left: 25px
+				border-left: thin solid $color-background
 
 			&.node-featured-list
 
 				li
-					width: 50%
+					width: 100%
 					float: left
 					border: none
 					padding-right: 20px
@@ -798,6 +836,10 @@ section.node-details-container
 									font-weight: 500
 									margin-left: 3px
 
+	.node-blog
+		min-width: 35%
+	.node-updates
+		min-width: 35%
 
 
 section.node-children

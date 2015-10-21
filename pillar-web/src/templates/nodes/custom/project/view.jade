@@ -46,6 +46,8 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 		#project-loading
 			i.ion-load-c
 
+		span#project-statusbar
+
 		| {% if node.has_method('PUT') %}
 		ul.project-edit-tools
 			li.button-add
@@ -76,7 +78,7 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 							href="#",
 							title="Feature on project's homepage")
 							i.button-featured-icon.ion-ios-star-outline
-							| Featured
+							| Toggle Featured
 
 					li.button-move
 						a#item_move(
@@ -185,7 +187,6 @@ script().
 
 		$('.project-mode-view').show();
 		$('.project-mode-edit').hide();
-
 	}
 
 
@@ -381,7 +382,7 @@ script().
 				node_id: moving_node_id, dest_parent_node_id: current_node.getAttribute('data-node_id')},
 				function(data){
 			}).done(function() {
-
+				statusBarSet('success', '<i class="ion-checkmark-round"></i> Moved just fine');
 				Cookies.remove('bcloud_moving_node_id');
 				moveModeExit();
 
@@ -406,6 +407,8 @@ script().
 			.done(function(){
 				$('.button-featured').addClass('featured');
 				$('.button-featured-icon').addClass('ion-ios-star').removeClass('ion-ios-star-outline');
+
+				statusBarSet('success', '<i class="ion-ios-star"></i> Featuredddd!');
 		});
 
 
@@ -443,6 +446,18 @@ script().
 	$(window).on("load resize",function(){
 		containerResizeY($(window).height());
 	});
+
+	function statusBarSet(classes, html){
+		/* Print status */
+		$("#project-statusbar").addClass('active ' + classes);
+		$("#project-statusbar").html(html);
+		/* Back to normal */
+
+		setTimeout(function(){
+		$("#project-statusbar").removeAttr('class');
+		$("#project-statusbar").html();
+		}, 2000);
+	};
 
 | {% endblock %}
 
