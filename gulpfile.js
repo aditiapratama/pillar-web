@@ -7,6 +7,7 @@ var gulp          = require('gulp'),
     concat        = require('gulp-concat'),
     uglify        = require('gulp-uglify'),
     rename        = require('gulp-rename'),
+    chmod         = require('gulp-chmod'),
     livereload    = require('gulp-livereload');
 
 
@@ -43,6 +44,7 @@ gulp.task('scripts', function() {
         .pipe(uglify())
         .pipe(rename({suffix: '.min'}))
         .pipe(sourcemaps.write("."))
+        .pipe(chmod(644))
         .pipe(gulp.dest('pillar-web/application/static/assets/js/'))
         .pipe(livereload());
 });
@@ -56,6 +58,7 @@ gulp.task('scripts_concat_tutti', function() {
         .pipe(concat("tutti.min.js"))
         .pipe(uglify())
         .pipe(sourcemaps.write("."))
+        .pipe(chmod(644))
         .pipe(gulp.dest('pillar-web/application/static/assets/js/'))
         .pipe(livereload());
 });
@@ -65,6 +68,7 @@ gulp.task('scripts_concat_markdown', function() {
         .pipe(sourcemaps.init())
         .pipe(concat("markdown.min.js"))
         .pipe(uglify())
+        .pipe(chmod(644))
         .pipe(gulp.dest('pillar-web/application/static/assets/js/'))
         .pipe(livereload());
 });
