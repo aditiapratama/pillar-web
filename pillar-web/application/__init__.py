@@ -1,6 +1,8 @@
 import sys
 import os
 import config
+import bugsnag
+from bugsnag.flask import handle_exceptions
 from pillarsdk import Api
 from pillarsdk import NodeType
 from pillarsdk.users import User
@@ -27,6 +29,13 @@ app = Flask(__name__,
 app.config.from_object(config.Development)
 app.config['TEMPLATES_PATH'] = '{0}/templates'.format(
     os.path.dirname(__file__))
+
+bugsnag.configure(
+    api_key=app.config['BUGSNAG_API_KEY'],
+    project_root="/data/dev/pillar-web/pillar-web",
+)
+handle_exceptions(app)
+
 
 # Login manager
 login_manager = LoginManager()
