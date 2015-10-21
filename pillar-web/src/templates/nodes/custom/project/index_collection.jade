@@ -1,5 +1,9 @@
 | {% extends 'layout.html' %}
 
+| {% block page_title %}
+| {% if title == 'open-projects' %}Open Projects{% elif title == 'training' %}Training{% endif %}
+| {% endblock %}
+
 | {% block header_backdrop %}
 .navbar-backdrop(
 	style="{% if title == 'open-projects' %}background-image: url({{ url_for('static', filename='assets/img/background_join_bbb.jpg')}}){% elif title == 'training' %}background-image: url({{ url_for('static', filename='assets/img/background_join_peoplecodingblender.jpg')}}){% endif %}")
