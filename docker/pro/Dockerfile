@@ -5,7 +5,6 @@ RUN apt-get update && apt-get install -y \
 python \
 python-dev \
 python-pip \
-git \
 zlib1g-dev \
 libjpeg-dev \
 nano \
@@ -17,12 +16,11 @@ python-openssl \
 libssl-dev \
 libffi-dev
 
-RUN mkdir -p /data/dev/pillar-web \
-&& mkdir -p /data/dev/pillar-python-sdk \
-&& mkdir -p /data/www \
-&& mkdir -p /storage/shared \
-&& mkdir -p /storage/pillar-web/uploads \
-&& mkdir -p /storage/pillar-web/storage
+RUN mkdir -p /data/git/pillar-web \
+&& mkdir -p /data/git/pillar-python-sdk \
+&& mkdir -p /data/storage/shared \
+&& mkdir -p /data/storage/pillar-web/uploads \
+&& mkdir -p /data/storage/pillar-web/storage
 
 ENV APACHE_RUN_USER www-data
 ENV APACHE_RUN_GROUP www-data
@@ -33,16 +31,16 @@ ENV APACHE_LOCK_DIR /var/lock/apache2
 
 RUN mkdir -p $APACHE_RUN_DIR $APACHE_LOCK_DIR $APACHE_LOG_DIR
 
-RUN git clone https://github.com/armadillica/pillar-web.git /data/www/pillar-web
-#RUN git clone https://github.com/armadillica/pillar-python-sdk.git /data/www/
-
 RUN pip install virtualenv \
 && virtualenv /data/venv
 
-RUN . /data/venv/bin/activate \
-&& pip install -r /data/www/pillar-web/requirements.txt
+ENV PIP_PACKAGES_VERSION = 1
+ADD requirements.txt /requirements.txt
 
-RUN ln -s /data/dev/pillar-python-sdk/pillarsdk /data/venv/lib/python2.7/site-packages/pillarsdk
+RUN . /data/venv/bin/activate \
+&& pip install -r /requirements.txt
+
+RUN ln -s /data/git/pillar-python-sdk/pillarsdk /data/venv/lib/python2.7/site-packages/pillarsdk
 
 ADD comodo.crt /usr/share/ca-certificates/
 RUN echo comodo.crt >> /etc/ca-certificates.conf \
@@ -50,13 +48,13 @@ RUN echo comodo.crt >> /etc/ca-certificates.conf \
 
 ENV REQUESTS_CA_BUNDLE /etc/ssl/certs/comodo.pem
 
-VOLUME /data/dev/pillar-web
-VOLUME /data/dev/pillar-python-sdk
-VOLUME /storage/shared
-VOLUME /storage/pillar-web/uploads
-VOLUME /storage/pillar-web/storage
+VOLUME /data/git/pillar-web
+VOLUME /data/git/pillar-python-sdk
+VOLUME /data/storage/shared
+VOLUME /data/storage/pillar-web/uploads
+VOLUME /data/storage/pillar-web/storage
 
-EXPOSE 5001
+EXPOSE 80
 
 ADD 000-default.conf /etc/apache2/sites-available/000-default.conf
 

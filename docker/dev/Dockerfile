@@ -5,40 +5,40 @@ RUN apt-get update && apt-get install -y \
 python \
 python-dev \
 python-pip \
-git \
 zlib1g-dev \
 libjpeg-dev \
-nano
+nano \
+python-crypto \
+python-openssl \
+libssl-dev \
+libffi-dev
 
-RUN mkdir /data \
-&& mkdir /data/dev \
-&& mkdir /data/dev/pillar-web \
-&& mkdir /data/dev/pillar-python-sdk \
-&& mkdir /data/www \
-&& mkdir /storage \
-&& mkdir /storage/shared \
-&& mkdir /storage/pillar-web \
-&& mkdir /storage/pillar-web/uploads \
-&& mkdir /storage/pillar-web/storage
-
-RUN git clone https://github.com/armadillica/pillar-web.git /data/www/pillar-web
-#RUN git clone https://github.com/armadillica/pillar-python-sdk.git /data/www/
+RUN mkdir -p /data/git/pillar-web \
+&& mkdir -p /data/git/pillar-python-sdk \
+&& mkdir -p /data/storage/shared \
+&& mkdir -p /data/storage/pillar-web/uploads \
+&& mkdir -p /data/storage/pillar-web/storage
 
 RUN pip install virtualenv \
 && virtualenv /data/venv
 
+ENV PIP_PACKAGES_VERSION 1
+ADD requirements.txt /requirements.txt
+
 RUN . /data/venv/bin/activate \
-&& pip install -r /data/www/pillar-web/requirements.txt
+&& pip install -r /requirements.txt
 
-RUN ln -s /data/dev/pillar-python-sdk/pillarsdk /data/venv/lib/python2.7/site-packages/pillarsdk
+RUN ln -s /data/git/pillar-python-sdk/pillarsdk /data/venv/lib/python2.7/site-packages/pillarsdk
 
-VOLUME /data/dev/pillar-web
-VOLUME /data/dev/pillar-python-sdk
-VOLUME /storage/shared
-VOLUME /storage/pillar-web/uploads
-VOLUME /storage/pillar-web/storage
+VOLUME /data/git/pillar-web
+VOLUME /data/git/pillar-python-sdk
+VOLUME /data/storage/shared
+VOLUME /data/storage/pillar-web/uploads
+VOLUME /data/storage/pillar-web/storage
 
 EXPOSE 5001
+
+ENV BUILD_VERSION 1
 
 ADD runserver.sh /runserver.sh
 

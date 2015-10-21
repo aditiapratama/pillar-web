@@ -2,7 +2,7 @@ activate_this = '/data/venv/bin/activate_this.py'
 execfile(activate_this, dict(__file__=activate_this))
 import sys
 #import logging
-sys.path.append('/data/dev/pillar-web/pillar-web/')
+sys.path.append('/data/git/pillar-web/pillar-web/')
 from flup.server.fcgi import WSGIServer
 from application import app as application
 
