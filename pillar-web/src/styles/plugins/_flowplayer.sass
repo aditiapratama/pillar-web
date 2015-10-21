@@ -1,3 +1,7 @@
+$flowplayer-skin-main: $color-background-nav
+$flowplayer-skin-highlight: $color-primary
+$flowplayer-skin-background: $color-background-nav
+
 .flowplayer.is-playing
 	background-color: black !important
 
@@ -11,21 +15,29 @@
 	background-color: black !important
 
 .flowplayer .fp-controls
-	background-color: darken($color-primary, 30%) !important
+	background-color: $flowplayer-skin-main !important
 	bottom: -5px !important
 
 .flowplayer .fp-timeline
-	background-color: rgba(white, 0.15) !important
+	background-color: rgba(lighten($flowplayer-skin-main, 10%), .15) !important
 	margin-right: 160px !important
 	border-radius: 999em !important
+	top: 11px !important
+	height: 8px !important
+
+.flowplayer .fp-progress.animated
+	&:after
+		width: 16px
+		height: 16px
+		border-radius: 50%
+		background-color: white
 
 .flowplayer .fp-progress,
 .flowplayer .fp-volumelevel
-	background-color: white !important
+	background-color: $flowplayer-skin-highlight !important
 
 .flowplayer .fp-buffer
-	// background-color: rgba($color-primary, .36) !important
-	background: repeating-linear-gradient(-45deg, darken(rgba(white, .36), 15%), darken(rgba(white, .36), 15%) 10px, darken(rgba(white, .26), 20%) 10px, darken(rgba(white, .26), 20%) 20px) !important
+	background-color: rgba($flowplayer-skin-highlight, .3) !important
 
 .flowplayer .fp-brand
 	display: none !important
@@ -46,13 +58,13 @@
 
 .flowplayer .fp-volumeslider
 	border-radius: 999em !important
-	background-color: rgba(white, 0.15) !important
+	background-color: rgba($flowplayer-skin-highlight, 0.15) !important
 
 .flowplayer .fp-fullscreen
 	border-radius: 999em !important
 	top: 15px !important
 	right: 15px !important
-	background-color: darken($color-primary, 30%) !important
+	background-color: $flowplayer-skin-main !important
 	color: white !important
 
 .flowplayer .fp-endscreen
@@ -61,7 +73,7 @@
 	bottom: 0
 	left: 0
 	right: 0
-	background-color: rgba($color-background-nav, .5)
+	background-color: rgba($flowplayer-skin-background, .5)
 	display: flex
 	justify-content: center
 	align-items: center
@@ -98,7 +110,7 @@
 	bottom: 0
 	left: 0
 	right: 0
-	background-color: rgba($color-background-nav, .5)
+	background-color: rgba($flowplayer-skin-background, .5)
 	display: flex
 	justify-content: center
 	align-items: center
@@ -147,7 +159,7 @@
 	bottom: 0
 	left: 0
 	right: 0
-	background-color: rgba($color-background-nav, .5)
+	background-color: rgba($flowplayer-skin-background, .5)
 	display: flex
 	justify-content: center
 	align-items: center
