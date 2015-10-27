@@ -382,7 +382,7 @@ script().
 				node_id: moving_node_id, dest_parent_node_id: current_node.getAttribute('data-node_id')},
 				function(data){
 			}).done(function() {
-				statusBarSet('success', '<i class="ion-checkmark-round"></i> Moved just fine');
+				statusBarSet('success', 'Moved just fine');
 				Cookies.remove('bcloud_moving_node_id');
 				moveModeExit();
 
@@ -408,7 +408,7 @@ script().
 				$('.button-featured').addClass('featured');
 				$('.button-featured-icon').addClass('ion-ios-star').removeClass('ion-ios-star-outline');
 
-				statusBarSet('success', '<i class="ion-ios-star"></i> Featuredddd!');
+				statusBarSet('success', 'Featured status toggled', 'ion-ios-star');
 		});
 
 
@@ -434,7 +434,7 @@ script().
 
 	function containerResizeY(window_height){
 
-		container_height = window_height - container_offset.top;
+		var container_height = window_height - container_offset.top;
 
 		if (container_height > parseInt($('#project-flex').css("min-height"))) {
 			$('#project-flex, #project_nav, #project_context-container').css(
@@ -447,17 +447,43 @@ script().
 		containerResizeY($(window).height());
 	});
 
-	function statusBarSet(classes, html){
-		/* Print status */
-		$("#project-statusbar").addClass('active ' + classes);
-		$("#project-statusbar").html(html);
-		/* Back to normal */
 
+	function statusBarSet(classes, html, icon_name){
+		/* Utility to notify the user by temporarily flashing text on the project header
+			 Usage:
+				'classes' can be: success, error, warning, info, default
+				'html': the text to display, can contain html tags
+					(in case of errors, it's better to use data.status + data.statusText instead )
+				'icon_name': optional, sets a custom icon (otherwise an icon based on the class will be used)
+		*/
+
+		if (!icon_name) {
+			if (classes == 'error') {
+				icon_name = 'ion-alert-circled';
+			} else if (classes == 'success') {
+				icon_name = 'ion-checkmark-round';
+			} else if (classes == 'warning') {
+				icon_name = 'ion-alert-circled';
+			} else if (classes == 'info') {
+				icon_name = 'ion-information-circled';
+			} else {
+				icon = '<i class="' + icon_name + '"></i>';
+			};
+		} else {
+			icon = '<i class="' + icon_name + '"></i>';
+		};
+
+		var text = icon + html;
+		$("#project-statusbar").addClass('active ' + classes);
+		$("#project-statusbar").html(text);
+
+		/* Back to normal */
 		setTimeout(function(){
 		$("#project-statusbar").removeAttr('class');
 		$("#project-statusbar").html();
 		}, 2000);
 	};
+
 
 | {% endblock %}
 

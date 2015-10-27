@@ -114,10 +114,19 @@ $list-node-children-item-width: 160px
 
 		transition: all 350ms ease-in-out
 
+		i
+			margin-right: 5px
+
+		&.info
+			color: $color-info
 		&.error
 			color: $color-danger
+		&.warning
+			color: $color-warning
 		&.success
 			color: $color-success
+		&.default
+			color: $color-text-light
 
 		&.active
 			opacity: 1
@@ -377,10 +386,11 @@ $list-node-children-item-width: 160px
 		font-size: 1.3em
 
 .project_nav-collapse-btn
+	height: $project_footer-height
 	position: absolute
 	bottom: 0
 	left: 0
-	padding: 5px 10px
+	padding: 3px 10px
 
 .project_nav-expand-btn
 	float: left
