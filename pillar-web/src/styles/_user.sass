@@ -1,11 +1,13 @@
-#login-container
+#login-container,
+#profile-container
 	width: 60%
 	margin: 40px auto
 	padding: 15px 35px 25px 35px
 
 	+container-box
 
-	.login-title
+	.login-title,
+	.profile-title
 		text-align: center
 		color: $color-primary
 		font:
@@ -38,7 +40,8 @@
 				font-size: .8em
 				color: $color-text-dark-secondary
 
-		.button-login
+		.button-login,
+		.button-submit
 			min-width: 200px
 			@include button-rounded-filled($color-primary, 999em)
 
@@ -46,9 +49,3 @@
 			min-width: 150px
 			@include button-rounded($color-primary, 999em)
 
-	.login-form
-		#login-form
-			input
-				+input-generic
-			label
-				+label-generic
