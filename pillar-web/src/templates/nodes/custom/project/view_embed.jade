@@ -8,11 +8,11 @@
 
 		.node-details-header
 			.node-title-details
-				.date {{ node._created | pretty_date }}
+				.date(title="Last updated {{ node._updated | pretty_date }}") {{ node._created | pretty_date }}
 
-				//- | {% if node.properties.status %}
+				| {% if node.properties.status %}
 				.status {{node.properties.status}}
-				//- | {% endif %}
+				| {% endif %}
 
 		.node-details-description
 			| {{node.description}}

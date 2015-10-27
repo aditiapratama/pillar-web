@@ -433,7 +433,7 @@ def view(node_id):
         template_path_full = os.path.join(app.config['TEMPLATES_PATH'],
                                         template_path)
         if not os.path.exists(template_path_full):
-            return "Missing template"
+            return "Missing template '{0}'".format(template_path)
 
         return_content = render_template(template_path,
             node=node,

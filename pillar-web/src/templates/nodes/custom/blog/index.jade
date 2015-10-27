@@ -35,7 +35,7 @@
 			| {% endif %}
 
 		#blog_index-sidebar
-			| {% if node_type_post.has_method('POST') %}
+			| {% if node_type_post and node_type_post.has_method('POST') %}
 			a.btn.btn-default.button-create(href="/blog/create")
 				| Create New Post
 			| {% endif %}

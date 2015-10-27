@@ -82,6 +82,10 @@ html(lang="en")
 							| {% set category = title %}
 							| {% endif %}
 							li
+								a(href="{{ url_for('main_blog') }}",
+									title="Blender Cloud Blog")
+									span Blog
+							li
 								a(href="/open-projects",
 									title="Browse Open Projects",
 									class="{% if category in ['open-projects', 'film']: %}active{% endif %}")
@@ -167,9 +171,9 @@ html(lang="en")
 									title="Blender Cloud Home")
 									li Home
 
-								a(href="/news",
-									title="Cloud News")
-									li News
+								a(href="{{ url_for('main_blog') }}",
+									title="Blender Cloud Blog")
+									li Blog
 
 								a(href="http://wiki.blender.org/index.php/Org:Institute/BlenderCloud",
 									title="About Blender Cloud")
@@ -178,15 +182,15 @@ html(lang="en")
 						.col-md-2.col-xs-6
 							h4 Blender
 							ul.footer-links
-								a(href="http://www.blender.org",
+								a(href="https://www.blender.org",
 									title="Blender Official Website")
 									li Blender.org
 
-								a(href="http://www.blender.org/store",
+								a(href="https://www.blender.org/store",
 									title="The Official Blender Store")
 									li Blender Store
 
-								a(href="http://www.blendernetwork.org",
+								a(href="https://www.blendernetwork.org",
 									title="The Network of Blender Professionals")
 									li Blender Network
 
