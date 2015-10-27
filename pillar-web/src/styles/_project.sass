@@ -54,10 +54,6 @@ $list-node-children-item-width: 160px
 	// background-color: rgba($color-background-nav, .9)
 	border-right: thick solid lighten($color-background-nav, 10%)
 
-	-webkit-user-select: none
-	-moz-user-select: none
-	-ms-user-select: none
-	-o-user-select: none
 	user-select: none
 
 	left: 0
@@ -78,7 +74,6 @@ $list-node-children-item-width: 160px
 	align-items: center
 
 	position: relative
-	background-color: $color-background-nav
 	color: white
 
 #project_nav-footer
@@ -96,6 +91,8 @@ $list-node-children-item-width: 160px
 	height: $project_header-height
 	width: 100%
 	clear: both
+	background-color: $color-background-nav
+
 	+media-lg
 		border-top-left-radius: 3px
 		border-top-right-radius: 3px
@@ -387,6 +384,7 @@ $list-node-children-item-width: 160px
 
 .project_nav-collapse-btn
 	height: $project_footer-height
+	width: 100%
 	position: absolute
 	bottom: 0
 	left: 0
@@ -449,10 +447,6 @@ $list-node-children-item-width: 160px
 	bottom: 0
 	z-index: 10
 	cursor: w-resize
-	-webkit-user-select: none
-	-moz-user-select: none
-	-ms-user-select: none
-	-o-user-select: none
 	user-select: none
 
 
@@ -501,7 +495,7 @@ section.node-preview
 		background-color: black
 
 	&.group, &.project
-		background-color: rgba($color-background-nav, .8)
+		background-color: rgba($color-background-nav, .75)
 		position: relative
 		overflow: hidden
 
@@ -947,10 +941,9 @@ section.node-children
 		position: relative
 		width: 100%
 		color: white
-		background-color: $color-background-nav
 
-		border-top-left-radius: 3px
-		border-top-right-radius: 3px
+		&.user
+			padding: 0 20px
 
 		&.collection
 			background-color: transparent
@@ -1275,6 +1268,9 @@ section.node-children
 #node-edit-container
 	display: flex
 	flex-direction: column
+	flex: 1
+
+	color: $color-text-dark
 
 #overlay-mode-move-container
 	visibility: hidden
@@ -1377,6 +1373,8 @@ section.node-children
 		right: 0
 
 #node-add-form
+	.btn
+		margin-right: 10px
 	.fileupload-buttonbar
 		padding: 10px 0
 		.fileinput-button

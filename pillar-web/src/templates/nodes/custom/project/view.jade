@@ -154,6 +154,9 @@ script().
 			$("#item_save").unbind( "click" );
 			$("#item_cancel").unbind( "click" );
 
+			// Prevent flicker by scrolling to top before showing anything
+			$("#project_context-container").scrollTop(0);
+
 			// Update the DOM injecting the generate HTML into the page
 			$('#project_context').html(dataHtml);
 
@@ -199,6 +202,8 @@ script().
 
 		var url = '/nodes/' + nodeId + '/edit?embed=1'
 		$.get(url, function(dataHtml) {
+			// Prevent flicker by scrolling to top before showing anything
+			$("#project_context-container").scrollTop(0);
 
 			// Update the DOM injecting the generate HTML into the page
 			$('#project_context').html(dataHtml);
@@ -221,6 +226,8 @@ script().
 
 		var url = '/files/upload?embed=1'
 		$.get(url, function(dataHtml) {
+			// Prevent flicker by scrolling to top before showing anything
+			$("#project_context-container").scrollTop(0);
 
 			// Update the DOM injecting the generate HTML into the page
 			$('#project_context').html(dataHtml);
