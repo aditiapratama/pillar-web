@@ -1,5 +1,20 @@
 | {% extends 'layout.html' %}
 
+| {% block og %}
+meta(property="og:title", content="{% if user %}{{user.name}}{% elif title == 'open-projects' %}Open Projects{% elif title == 'training' %}Training{% endif %}")
+// XXX - Replace with actual url
+meta(property="og:url", content="https://cloud.blender.org")
+meta(property="og:type", content="website")
+| {% endblock %}
+
+| {% block tw %}
+meta(name="twitter:card", content="summary_large_image")
+meta(name="twitter:site", content="@Blender_Cloud")
+meta(name="twitter:title", content="{% if user %}{{user.name}}{% elif title == 'open-projects' %}Open Projects{% elif title == 'training' %}Training{% endif %} on Blender Cloud")
+meta(name="twitter:description", content="{% if user %}{{user.description}}{% elif title == 'open-projects' %}Full production data and tutorials from all open movies, for you to use freely.{% elif title == 'training' %}Production quality training videos by 3D professionals.{% endif %}")
+meta(name="twitter:image", content="{% if title == 'open-projects' %}{{ url_for('static', filename='assets/img/background_join_bbb.jpg')}}{% elif title == 'training' %}{{ url_for('static', filename='assets/img/background_join_peoplecodingblender.jpg')}}{% endif %}")
+| {% endblock %}
+
 | {% block page_title %}
 | {% if user %}{{user.name}}{% elif title == 'open-projects' %}Open Projects{% elif title == 'training' %}Training{% endif %}
 | {% endblock %}

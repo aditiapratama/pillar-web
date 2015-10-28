@@ -9,6 +9,14 @@ meta(property="og:url", content="https://cloud.blender.org")
 meta(property="og:type", content="website")
 | {% endblock %}
 
+| {% block tw %}
+meta(name="twitter:card", content="summary_large_image")
+meta(name="twitter:site", content="@Blender_Cloud")
+meta(name="twitter:title", content="{{node.name}} on Blender Cloud")
+meta(name="twitter:description", content="{{node.properties.summary}}")
+meta(name="twitter:image", content="{{ node.properties.picture_header.thumbnail('l') }}")
+| {% endblock %}
+
 | {% block head %}
 link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css", rel="stylesheet")
 | {% endblock %}

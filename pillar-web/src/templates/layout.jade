@@ -15,6 +15,14 @@ html(lang="en")
 		meta(property="og:type", content="website")
 		| {% endblock %}
 
+		| {% block tw %}
+		meta(name="twitter:card", content="summary_large_image")
+		meta(name="twitter:site", content="@Blender_Cloud")
+		meta(name="twitter:title", content="Blender Cloud")
+		meta(name="twitter:description", content="Blender Cloud is a web based service developed by Blender Institute that allows people to access the training videos and all the data from the past open projects.")
+		meta(name="twitter:image", content="{{ url_for('static', filename='assets/img/background_join_glass.jpg')}}")
+		| {% endblock %}
+
 		link(href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css", rel="stylesheet")
 
 		link(href='//fonts.googleapis.com/css?family=Roboto:300,400,500', rel='stylesheet', type='text/css')
