@@ -121,12 +121,10 @@ def profile():
     user = User.find(current_user.objectid, api=api)
 
     form = UserProfileForm(
-        first_name = user.first_name,
-        last_name = user.last_name)
+        full_name = user.full_name)
 
     if form.validate_on_submit():
-        user.first_name = form.first_name.data
-        user.last_name = form.last_name.data
+        user.full_name = form.full_name.data
         user.update(api=api)
         flash("Profile updated", 'success')
 

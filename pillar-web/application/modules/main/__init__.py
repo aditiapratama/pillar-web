@@ -30,7 +30,7 @@ def homepage():
             }, api=api)
         latest_posts = Node.all({
             'where': '{"node_type": "%s"}' % (node_type_post._id),
-            'embedded': '{"picture":1}',
+            'embedded': '{"picture":1, "project":1}',
             'sort': '-_created',
             'max_results': '5'
             }, api=api)
@@ -41,7 +41,7 @@ def homepage():
             }, api=api)
         latest_assets = Node.all({
             'where': '{"node_type": "%s"}' % (node_type_asset._id),
-            'embedded': '{"picture":1}',
+            'embedded': '{"picture":1, "user":1}',
             'sort': '-_created',
             'max_results': '5'
             }, api=api)
@@ -73,13 +73,13 @@ def stats():
 @app.route("/blog/<url>")
 def main_blog(url=None):
     """Blog with project news"""
-    project_id = app.config['CLOUD_PROJECT_ID']
+    project_id = app.config['MAIN_PROJECT_ID']
     return posts_view(project_id, url)
 
 
 @app.route("/blog/create")
 def main_posts_create():
-    project_id = app.config['CLOUD_PROJECT_ID']
+    project_id = app.config['MAIN_PROJECT_ID']
     return posts_create(project_id)
 
 @app.route("/<name>/")

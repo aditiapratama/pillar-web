@@ -6,6 +6,7 @@ from pillarsdk import Node
 from pillarsdk import NodeType
 from pillarsdk import User
 from pillarsdk import File
+from pillarsdk import Organization
 # from pillarsdk import binaryFile
 from pillarsdk.exceptions import ResourceNotFound
 from pillarsdk.exceptions import ForbiddenAccess
@@ -249,6 +250,7 @@ class FakeNodeAsset(Node):
         self.user = FakeUser()
         self.properties = None
 
+
 @nodes.route("/<node_id>/view")
 def view(node_id):
     #import time
@@ -263,6 +265,43 @@ def view(node_id):
         return render_template('errors/403.html')
 
     node_type_name = node.node_type.name
+
+    rewrite_url = None
+    embedded_node_id = None
+    if request.args.get('redir') and request.args.get('redir') == '1':
+        # Check the project propety for the node. The only case when the prop is
+        # None is if the node is a project, which usually means we are at the
+        # second stage of redirection.
+        if node.project:
+            # Set node to embed in the session
+            session['embedded_node'] = node.to_dict()
+            # Render the project node (which will get the redir arg)
+            return view(node.project)
+        # We double check that the node is indeed of type project
+        elif node_type_name == 'project':
+            # Build the user name, to be used when building the full url
+            if node.properties.organization:
+                user = Organization.find(node.properties.organization, api=api)
+                name = user.url
+            else:
+                name = node.user.url
+            # Handle special cases (will be mainly used for items that are part
+            # of the blog, or attract)
+            if session['embedded_node']['node_type']['name'] == 'post':
+                # Very special case of the post belonging to the main project,
+                # which is read from the configuration.
+                if node._id == app.config['MAIN_PROJECT_ID']:
+                    return redirect(url_for('main_blog',
+                        url=session['embedded_node']['properties']['url']))
+                else:
+                    return redirect(url_for('project_blog',
+                        name=name,
+                        project=node.properties.url,
+                        url=session['embedded_node']['properties']['url']))
+            rewrite_url = "/{0}/{1}/#{2}".format(name, node.properties.url,
+                session['embedded_node']['_id'])
+            embedded_node_id = session['embedded_node']['_id']
+
 
     # JsTree functionality.
     # This return a lightweight version of the node, to be used by JsTree in the
@@ -344,7 +383,7 @@ def view(node_id):
                 try:
                     node_item = Node.find(node_id, {
                         'projection': '{"name":1, "user":1, "node_type":1}',
-                        'embedded': '{"user":1}',
+                        'embedded': '{"user":1, "node_type":1}',
                         }, api=api)
                     list_latest.append(node_item)
                 except ForbiddenAccess:
@@ -356,7 +395,7 @@ def view(node_id):
                 try:
                     node_item = Node.find(node_id, {
                         'projection': '{"name":1, "user":1, "picture":1, "node_type":1}',
-                        'embedded': '{"user":1}',
+                        'embedded': '{"user":1, "node_type":1}',
                         }, api=api)
                     if node_item.picture:
                         picture = File.find(node_item.picture, api=api)
@@ -432,12 +471,14 @@ def view(node_id):
                                                 template_action, embed_string)
         template_path_full = os.path.join(app.config['TEMPLATES_PATH'],
                                         template_path)
+        print template_path_full
         if not os.path.exists(template_path_full):
             return "Missing template '{0}'".format(template_path)
 
         return_content = render_template(template_path,
             node=node,
-            type_names=type_names(),
+            rewrite_url=rewrite_url,
+            embedded_node_id=embedded_node_id,
             parent=parent,
             children=children,
             config=app.config)
@@ -551,6 +592,7 @@ def edit(node_id):
         if process_node_form(
                 form, node_id=node_id, node_type=node_type, user=user_id):
             project_update_nodes_list(node_id)
+            print 'pitttiiiii'
             return redirect(url_for('nodes.view', node_id=node_id, embed=1))
         else:
             error = "Server error"

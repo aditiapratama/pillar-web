@@ -6,11 +6,8 @@
 		.profile-form
 			form#profile-form(method='POST', action="{{url_for('users.profile')}}")
 				.form-group
-					| {{ form.first_name.label }}
-					| {{ form.first_name(size=20, class='form-control') }}
-				.form-group
-					| {{ form.last_name.label }}
-					| {{ form.last_name(size=20, class='form-control') }}
+					| {{ form.full_name.label }}
+					| {{ form.full_name(size=20, class='form-control') }}
 				.buttons
 					button.btn.btn-default.button-submit(type='submit')
 						i.ion-checkmark-round

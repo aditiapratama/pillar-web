@@ -1,0 +1,33 @@
+| {% block body %}
+
+.container.box
+	#blog_container
+
+		#blog_post-container
+
+			.blog_index-item
+
+				.item-title
+					| {{node.name}}
+
+				.item-info
+					| {{node._updated}} | {{node.properties.category}}
+
+				.item-content
+					| {{node.properties.content }}
+
+
+			#comments-container
+				#comments-list-items-loading
+					i.ion-load-c
+
+		#blog_index-sidebar
+
+| {% endblock %}
+
+
+| {% block footer_scripts %}
+
+include ../_scripts
+
+| {% endblock %}

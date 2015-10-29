@@ -15,8 +15,7 @@ class UserLoginForm(Form):
 
 
 class UserProfileForm(Form):
-    first_name = TextField('First Name', validators=[DataRequired()])
-    last_name = TextField('Last Name', validators=[DataRequired()])
+    full_name = TextField('Full Name', validators=[DataRequired()])
 
     def __init__(self, csrf_enabled=False, *args, **kwargs):
         super(UserProfileForm, self).__init__(csrf_enabled=False, *args, **kwargs)
