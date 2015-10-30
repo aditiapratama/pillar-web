@@ -500,6 +500,8 @@ def project_update_nodes_list(node_id, project_id=None, list_name='latest'):
     project = Node.find(project_id, api=api)
     if list_name == 'latest':
         nodes_list = project.properties.nodes_latest
+    elif list_name == 'blog':
+        nodes_list = project.properties.nodes_blog
     else:
         nodes_list = project.properties.nodes_featured
 
@@ -591,14 +593,18 @@ def edit(node_id):
     if form.validate_on_submit():
         if process_node_form(
                 form, node_id=node_id, node_type=node_type, user=user_id):
-            project_update_nodes_list(node_id)
-            print 'pitttiiiii'
+            # Handle the specific case of a blog post
+            if node_type.name == 'post':
+                project_update_nodes_list(node_id, list_name='blog')
+            else:
+                project_update_nodes_list(node_id)
             return redirect(url_for('nodes.view', node_id=node_id, embed=1))
         else:
             error = "Server error"
             print ("Error sending data")
     else:
-        print form.errors
+        if form.errors:
+            print form.errors
 
     # Populate Form
     form.name.data = node.name
