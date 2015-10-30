@@ -11,19 +11,19 @@
 
 			| {% if posts %}
 
-			| {% for post in posts %}
+			| {% for node in posts %}
 
 			.blog_index-item
 
 				a.item-title(
-					href="{{url_for('main_blog', url=post.properties.url)}}")
-					| {{post.name}}
+					href="{{url_for('main_blog', url=node.properties.url)}}")
+					| {{node.name}}
 
 				.item-info
-					| {{post._updated}} | {{post.properties.category}}
+					| {{node._updated}} | {{node.properties.category}} by {{node.user.full_name}}
 
 				.item-content
-					| {{post.properties.content}}
+					| {{node.properties.content}}
 
 			| {% endfor %}
 
