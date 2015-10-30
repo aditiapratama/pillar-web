@@ -98,10 +98,10 @@ def login():
             user_roles_update(user.objectid)
 
             flash('Welcome {0}!'.format(form.email.data), 'info')
-            return redirect('/')
+            return redirect(url_for('homepage'))
         elif auth:
             flash('{0}'.format(auth['data']), 'danger')
-            return redirect('/')
+            return redirect(url_for('users.login'))
     return render_template('users/login.html', form=form)
 
 
