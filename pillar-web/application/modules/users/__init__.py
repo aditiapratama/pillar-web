@@ -96,8 +96,7 @@ def login():
             # Check with the store for user roles. If the user has an active
             # subscription, we apply the 'subscriber' role
             user_roles_update(user.objectid)
-
-            flash('Welcome {0}!'.format(form.email.data), 'info')
+            # flash('Welcome {0}!'.format(form.email.data), 'info')
             return redirect(url_for('homepage'))
         elif auth:
             flash('{0}'.format(auth['data']), 'danger')
@@ -108,7 +107,7 @@ def login():
 @users.route("/logout")
 def logout():
     logout_user()
-    flash('Successfully logged out', 'info')
+    # flash('Successfully logged out', 'info')
     return redirect('/')
 
 

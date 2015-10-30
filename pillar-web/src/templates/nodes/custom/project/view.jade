@@ -29,96 +29,28 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 | {% block body %}
 
 #project_container
-	#project-header
-		.project_nav-expand-btn(title="Toggle Navigation Panel [T]")
-			i.ion-ios-arrow-right
-
-		ul.breadcrumb
-
-			li.project-organization
-				// XXX - Link to project organization
-				a(href="/bi") Blender Institute
-
-			li.project-title
-				// XXX - Link to project overview
-				a(href="") {{ node.name }}
-
-			| {# TODO
-			li
-				a(href="#") Extras
-
-			li
-				a(href="#") Videos
-			| #}
-
-		#project-loading
-			i.ion-load-c
-
-		span#project-statusbar
-
-		| {% if node.has_method('PUT') %}
-		ul.project-edit-tools
-			li.button-add
-				a#item_add.project-mode-view(
-					href="#",
-					title="Add new asset")
-					i.button-add-icon.zmdi.zmdi-collection-plus
-					| Add Asset
-
-			li.button-edit
-				a#item_edit.project-mode-view(
-					href="#",
-					title="Edit asset")
-					i.button-edit-icon.zmdi.zmdi-edit
-					| Edit
-
-			li.button-dropdown
-				a.dropdown-toggle.project-mode-view(
-					type="button",
-					data-toggle="dropdown",
-					aria-haspopup="true",
-					aria-expanded="false")
-					i.ion-android-more-vertical
-
-				ul.dropdown-menu
-					li.button-featured
-						a#item_featured(
-							href="#",
-							title="Feature on project's homepage")
-							i.button-featured-icon.ion-ios-star-outline
-							| Toggle Featured
-
-					li.button-move
-						a#item_move(
-							href="#",
-							title="Move asset into a folder...")
-							i.button-move-icon.ion-arrow-move
-							| Move
-
-					//- li.button-delete
-					//- 	a#item_delete(href="#")
-					//- 		i.zmdi.zmdi-delete
-
-			// Edit Mode
-			li.button-cancel
-				a#item_cancel.project-mode-edit(
-					href="#",
-					title="Cancel changes")
-					i.button-cancel-icon.ion-close-round
-					| Cancel
-
-			li.button-save
-				a#item_save.project-mode-edit(
-					href="#",
-					title="Save changes")
-					i.button-save-icon.ion-checkmark-round
-					| Save Changes
-
-			| {% endif %}
 
 	#project-flex
 
 		#project_nav
+			#project-header
+				.project_nav-expand-btn(title="Toggle Navigation Panel [T]")
+					i.ion-ios-arrow-right
+
+				ul.breadcrumb
+
+					| {#
+					li.project-organization
+						a(href="/bi") Blender Institute
+					| #}
+
+					li.project-title
+						a(href="") {{ node.name }}
+
+				#project-loading
+					i.ion-load-c
+
+
 			#project_tree
 
 		#project_nav-footer
@@ -128,6 +60,69 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 		.project_split
 
 		#project_context-container
+			| {% if node.has_method('PUT') %}
+			#project-header
+				span#project-statusbar
+
+				ul.project-edit-tools
+					li.button-add
+						a#item_add.project-mode-view(
+							href="#",
+							title="Add new asset")
+							i.button-add-icon.zmdi.zmdi-collection-plus
+							| Add Asset
+
+					li.button-edit
+						a#item_edit.project-mode-view(
+							href="#",
+							title="Edit asset")
+							i.button-edit-icon.zmdi.zmdi-edit
+							| Edit
+
+					li.button-dropdown
+						a.dropdown-toggle.project-mode-view(
+							type="button",
+							data-toggle="dropdown",
+							aria-haspopup="true",
+							aria-expanded="false")
+							i.ion-android-more-vertical
+
+						ul.dropdown-menu
+							li.button-featured
+								a#item_featured(
+									href="#",
+									title="Feature on project's homepage")
+									i.button-featured-icon.ion-ios-star-outline
+									| Toggle Featured
+
+							li.button-move
+								a#item_move(
+									href="#",
+									title="Move asset into a folder...")
+									i.button-move-icon.ion-arrow-move
+									| Move
+
+							//- li.button-delete
+							//- 	a#item_delete(href="#")
+							//- 		i.zmdi.zmdi-delete
+
+					// Edit Mode
+					li.button-cancel
+						a#item_cancel.project-mode-edit(
+							href="#",
+							title="Cancel changes")
+							i.button-cancel-icon.ion-close-round
+							| Cancel
+
+					li.button-save
+						a#item_save.project-mode-edit(
+							href="#",
+							title="Save changes")
+							i.button-save-icon.ion-checkmark-round
+							| Save Changes
+
+			| {% endif %}
+
 			#project_context
 			#overlay-mode-move-container
 				.overlay-container
