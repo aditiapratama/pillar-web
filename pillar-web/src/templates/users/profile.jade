@@ -2,14 +2,29 @@
 | {% block body %}
 .container
 	#profile-container.page-content
-		.profile-title Profile
+		.profile-title Profile Settings
+
 		.profile-form
 			form#profile-form(method='POST', action="{{url_for('users.profile')}}")
-				.form-group
-					| {{ form.full_name.label }}
-					| {{ form.full_name(size=20, class='form-control') }}
+				.left
+					.form-group
+						| {{ form.full_name.label }}
+						| {{ form.full_name(size=20, class='form-control') }}
+
+					.form-group.profile-password
+						| Change your password at the
+						a(href="https://blender.org/id/change")  Blender ID
+
+				.right
+					.profile-avatar
+						a(href="http://gravatar.com/")
+							img(src="{{ current_user.gravatar }}")
+							span Change Gravatar
+
 				.buttons
 					button.btn.btn-default.button-submit(type='submit')
 						i.ion-checkmark-round
 						| Save Changes
+
+
 | {% endblock %}

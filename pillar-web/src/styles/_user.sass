@@ -56,3 +56,35 @@
 			min-width: 150px
 			@include button-rounded($color-primary, 999em)
 
+#profile-container
+	#profile-form
+		width: 100%
+	.profile-form
+		display: flex
+		align-items: center
+		justify-content: center
+
+		.left, .right
+			padding: 25px 0
+
+		.left
+			width: 60%
+			float: left
+
+		.right
+			width: 40%
+			float: right
+			text-align: center
+
+		.profile-avatar
+			img
+				border-radius: 999em
+			span
+				display: block
+				padding: 15px 0
+				font:
+					size: .9em
+
+		.profile-password
+			color: $color-text-dark-primary
+
