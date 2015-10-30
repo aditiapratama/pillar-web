@@ -5,6 +5,13 @@
 	#login-container
 		.login-title Welcome back!
 
+		.login-info
+			| Sign in using your
+			a(href="https://blender.org/id/")  Blender ID
+			| .
+			a(href="https://blender.org/id/register")  Don't have one?
+
+
 		.login-form
 			form#login-form(method="POST", action="{{url_for('users.login')}}")
 				.form-group
@@ -16,15 +23,15 @@
 					| {{ form.password(class='form-control') }}
 
 				.buttons
-					button.btn.btn-default.button-login(type="submit")
-						i.ion-log-in
-						| Login
-
-					.lead-register
+					.login-button-container
 						a.forgot(href="https://blender.org/id/reset") forgot your password?
-						a.btn.btn-default.button-register(href="https://blender.org/id/register", target="_blank")
-							i.ion-android-star-outline
-							| Create Account
+						button.btn.btn-default.button-login(type="submit")
+							i.ion-log-in
+							| Login
+
+					a.btn.btn-default.button-register(href="https://blender.org/id/register", target="_blank")
+						i.ion-android-star-outline
+						| Create Account
 
 
 | {% endblock %}

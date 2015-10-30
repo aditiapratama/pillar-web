@@ -66,7 +66,7 @@ meta(name="twitter:image", content="{% if title == 'open-projects' %}{{ url_for(
 							href="{{ url_for('project_view', name='bi', project=project.properties.url) }}")
 
 							.overlay
-							img.background(src="{{ project.properties.picture_header.thumbnail('l') }}")
+							img.background(src="{{ project.properties.picture_header.thumbnail('m') }}")
 
 						a.card-thumbnail(
 							href="{{ url_for('project_view', name='bi', project=project.properties.url) }}")
@@ -88,4 +88,3 @@ meta(name="twitter:image", content="{% if title == 'open-projects' %}{{ url_for(
 				| {% endfor %}
 
 | {% endblock %}
-u
