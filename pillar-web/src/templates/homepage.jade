@@ -24,7 +24,8 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 		.text
 			.title
 				| {% if current_user.is_authenticated() %}
-				img(src="{{ url_for('static', filename='assets/img/logo_glasshalf.png')}}")
+				a(href="/bi/glass-half")
+					img(src="{{ url_for('static', filename='assets/img/logo_glasshalf.png')}}")
 				| {% else %}
 				| Your Online Animation Studio
 				| {% endif %}
