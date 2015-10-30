@@ -18,19 +18,17 @@
 			| {{node.description}}
 
 		.node-extra
-			| {% if has_blog %}
+			| {% if node.properties.nodes_blog %}
 			.node-blog
 				ul.node-blog-list
 					h3 Blog
-					| {% for n in node.properties.nodes_latest %}
-					| {% if n.node_type.name == 'post' %}
+					| {% for n in node.properties.nodes_blog %}
 					li.node-blog-list-item
 						.info
 							a.title(href="{{ url_for('nodes.view', node_id=n._id, redir=1) }}", data-node_id="{{ n._id }}") {{ n.name }}
 							span.details
 								span.when {{ n._updated | pretty_date }} by
 								span.who {{ n.user.full_name }}
-					| {% endif %}
 					| {% endfor %}
 			| {% endif %}
 
@@ -40,7 +38,7 @@
 					| {% if node.properties.nodes_latest %}
 
 					| {% for n in node.properties.nodes_latest %}
-					| {% if n.node_type.name not in ['post', 'comment'] %}
+					| {% if n.node_type.name not in ['comment'] %}
 					li.node-updates-list-item
 						.info
 							a.title(href="#", data-node_id="{{ n._id }}") {{ n.name }}

@@ -404,6 +404,18 @@ def view(node_id):
                 except ForbiddenAccess:
                     list_featured.append(FakeNodeAsset())
             node.properties.nodes_featured = list(reversed(list_featured))
+        if node.properties.nodes_blog:
+            list_blog = []
+            for node_id in node.properties.nodes_blog:
+                try:
+                    node_item = Node.find(node_id, {
+                        'projection': '{"name":1, "user":1, "node_type":1}',
+                        'embedded': '{"user":1, "node_type":1}',
+                        }, api=api)
+                    list_blog.append(node_item)
+                except ForbiddenAccess:
+                    list_blog.append(FakeNodeAsset())
+            node.properties.nodes_blog = list(reversed(list_blog))
 
     elif node_type_name == 'storage':
         storage = StorageNode(node)
