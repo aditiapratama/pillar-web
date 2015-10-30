@@ -49,34 +49,11 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 				| {% else %}
 				a.btn.btn-default.btn-outline.get-started(href="https://store.blender.org/product/membership/")
 					| Get Started
-				a.btn.btn-default.btn-outline.learn-more(href="#upnext")
+				a.btn.btn-default.btn-outline.learn-more.go-to-upnext
 					| Learn More
 				| {% endif %}
 
 	#content
-		//
-			#sidebar.hidden
-
-				section#join
-					#price
-						span.amount
-							small $
-							| 10
-						span.per
-							|	per month
-
-					a#subscribe(href="#") Subscribe Now
-					span.extra no sign-up fee - cancel anytime <br/> 3 months minimum
-
-
-				section#goals
-					.milestone-item
-						.milestone-item-title &check; 8 Open Movies
-						.milestone-item-content.
-							From Elephants Dream to Cosmos Laundromat -
-							the full production data and tutorials for you to use freely.
-
-
 		section#homepage.links
 			#links-container
 
@@ -96,7 +73,7 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 					p.content Full production data and tutorials from all open movies, for you to use freely.
 
 
-				a.links-item.upnext(href="#upnext")
+				a.links-item.upnext.go-to-upnext
 					span.bar
 					span.title Up Next
 
@@ -155,10 +132,12 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 					| {% endif %}
 | {% endif %}
 
-a(name="upnext")
+
 section#homepage.bullets
 
 	h1 Up Next
+
+	.lead Below is a brief of the projects we have planned for the near future, exciting times ahead!
 
 	.bullets-list
 		.bullets-list-item
@@ -241,4 +220,9 @@ section#homepage.get-started
 | {% endblock %}
 
 | {% block footer_scripts %}
+script.
+	$('.go-to-upnext').on('click', function(e){
+		e.preventDefault;
+		$("html, body").animate({scrollTop: $('.bullets').offset().top }, 350);
+	})
 | {% endblock %}
