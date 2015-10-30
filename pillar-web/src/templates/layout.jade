@@ -94,15 +94,15 @@ html(lang="en")
 									title="Blender Cloud Blog")
 									span Blog
 							li
-								a(href="/open-projects",
-									title="Browse Open Projects",
-									class="{% if category in ['open-projects', 'film']: %}active{% endif %}")
-									span Open Projects
-							li
 								a(href="/training",
 									title="Browse Training and Tutorials",
 									class="{% if category == 'training': %}active{% endif %}")
 									span Training
+							li
+								a(href="/open-projects",
+									title="Browse Open Projects",
+									class="{% if category in ['open-projects', 'film']: %}active{% endif %}")
+									span Open Projects
 
 							| {% if current_user.is_anonymous() %}
 							li
