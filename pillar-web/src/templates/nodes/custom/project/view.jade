@@ -300,7 +300,7 @@ script().
 						"image" : {"icon": "ion-image", "max_children": 0},
 						"video" : {"icon": "ion-ios-film-outline", "max_children": 0},
 						"blog" : {"icon": "ion-chatbubble-working", "max_children": 0},
-						"default" : {"icon": "ion-document"}
+						"default" : {"icon": "ion-android-folder-open"}
 				},
 				"plugins": ["types",] //, "state", "sort"
 		});
@@ -311,7 +311,6 @@ script().
 
 		$('#project_tree').on("select_node.jstree", function (e, data) {
 			if (typeof(data.node.original.path) === 'undefined') {
-
 				var moving_node_id = Cookies.get('bcloud_moving_node_id')
 				var node_id = document.getElementById("item_add");
 

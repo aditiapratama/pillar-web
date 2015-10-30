@@ -363,7 +363,9 @@ $list-node-children-item-width: 160px
 	#project-loading
 		position: relative
 		color: $color-text-light-primary
-		left: 15px
+		margin-left: auto
+		right: 15px
+		padding-bottom: 5px
 		display: none
 
 		i
@@ -733,6 +735,13 @@ section.node-details-container
 						button
 							box-shadow: none
 
+section.node-details-container
+	&.storage
+		.node-details-meta
+			ul.node-details-meta-list
+				li.node-details-meta-list-item
+					&.length
+						margin-left: auto
 
 
 .node-extra

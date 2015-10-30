@@ -2,14 +2,14 @@
 
 #node-container
 
-	section.node-details-container
+	section.node-details-container.storage
 
 		.node-details-header
 			.node-title
 				| {{node.name}}
 
 		//- .node-details-description
-		//- 	| {{node.description|safe}}
+		//- 	| {{node.description}}
 
 		.node-details-meta
 
@@ -17,16 +17,24 @@
 				li.node-details-meta-list-item.status
 						| {{node.status}}
 
-				li.node-details-meta-list-item.date
-					| {{ node._created }}
+				li.node-details-meta-list-item.date(title="Created {{ node._created | pretty_date }}")
+					| {{ node._updated | pretty_date }}
 
 				li.node-details-meta-list-item.file.length
 					| {{ node.length | filesizeformat }}
 
 				li.node-details-meta-list-item.file.download
-					a(href="{{ node.download_link }}")
+					a(href="{% if node.has_method('GET') %}{{ node.download_link }}{% else %}{{ url_for('users.login') }}{% endif %}")
 						button.btn.btn-default(type="button")
 							| Download
+
+
+		#comments-container
+			#comments-list-items-loading
+				i.ion-load-c
+
+
+include ../_scripts
 
 | {% endblock %}
 
