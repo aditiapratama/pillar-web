@@ -483,7 +483,6 @@ def view(node_id):
                                                 template_action, embed_string)
         template_path_full = os.path.join(app.config['TEMPLATES_PATH'],
                                         template_path)
-        print template_path_full
         if not os.path.exists(template_path_full):
             return "Missing template '{0}'".format(template_path)
 

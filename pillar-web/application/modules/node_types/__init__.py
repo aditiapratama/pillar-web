@@ -50,9 +50,11 @@ def edit(node_type_id):
         node_type.url = form.url.data
         # Processing custom fields
         for field in form.properties:
-            print field.data['id']
+            pass
+            #print field.data['id']
     else:
-        print form.errors
+        if form.errors:
+            print form.errors
     return render_template('node_types/edit.html',
                            node_type=node_type,
                            form=form)
