@@ -28,7 +28,7 @@ def posts_view(project_id, url=None):
         try:
             post = Node.find_one({
                 'where': '{"parent": "%s", "properties.url": "%s"}' % (blog._id, url),
-                'embedded': '{"picture":1, "node_type": 1}',
+                'embedded': '{"picture":1, "node_type": 1, "user": 1}',
                 }, api=api)
         except ResourceNotFound:
             return abort(404)
@@ -46,7 +46,7 @@ def posts_view(project_id, url=None):
 
         posts = Node.all({
             'where': '{"parent": "%s"}' % (blog._id),
-            'embedded': '{"picture":1}',
+            'embedded': '{"picture":1, "user": 1}',
             'sort': '-_created'
             }, api=api)
         return render_template(
