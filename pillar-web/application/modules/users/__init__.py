@@ -97,7 +97,7 @@ def login():
             # subscription, we apply the 'subscriber' role
             user_roles_update(user.objectid)
 
-            flash('Welcome {0}!'.format(form.email.data), 'info')
+            # flash('Welcome {0}!'.format(form.email.data), 'info')
             return redirect('/')
         elif auth:
             flash('{0}'.format(auth['data']), 'danger')
@@ -108,7 +108,7 @@ def login():
 @users.route("/logout")
 def logout():
     logout_user()
-    flash('Successfully logged out', 'info')
+    # flash('Successfully logged out', 'info')
     return redirect('/')
 
 
