@@ -11,7 +11,7 @@
 					| {{node.name}}
 
 				.item-info
-					| {{node._updated}} | {{node.properties.category}}
+					| {{node._updated | pretty_date }} | {{node.properties.category}}
 
 				.item-content
 					| {{node.properties.content }}

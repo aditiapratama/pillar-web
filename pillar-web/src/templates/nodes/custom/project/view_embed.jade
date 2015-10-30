@@ -18,11 +18,10 @@
 			| {{node.description}}
 
 		.node-extra
+			| {% if has_blog %}
 			.node-blog
 				ul.node-blog-list
 					h3 Blog
-					| {% if node.properties.nodes_latest %}
-
 					| {% for n in node.properties.nodes_latest %}
 					| {% if n.node_type.name == 'post' %}
 					li.node-blog-list-item
@@ -33,15 +32,7 @@
 								span.who {{ n.user.full_name }}
 					| {% endif %}
 					| {% endfor %}
-
-					| {% else %}
-
-					li.node-blog-list-item
-						.info
-							span.details
-								span.when No blog entries yet.
-
-					| {% endif %}
+			| {% endif %}
 
 			.node-updates
 				ul.node-updates-list

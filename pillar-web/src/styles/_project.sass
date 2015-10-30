@@ -13,8 +13,8 @@ $list-node-children-item-width: 160px
 	+container-behavior
 
 	+media-lg
-		padding-bottom: 15px
-		border-radius: 3px
+		border-top-left-radius: 3px
+		border-top-right-radius: 3px
 
 /* Flexible. Child of project_container, contains the nav tree + side views */
 #project-flex
@@ -801,10 +801,10 @@ section.node-details-container
 
 			&.node-updates-list
 				padding:
-					left: 25px
+					left: 0
 					right: 25px
-				margin-left: 25px
-				border-left: thin solid $color-background
+				margin-left: 0
+				// border-left: thin solid $color-background
 
 			&.node-featured-list
 
@@ -820,6 +820,7 @@ section.node-details-container
 						min-height: 80px
 						overflow: hidden
 						position: relative
+						border-radius: 3px
 
 						img
 							position: absolute
@@ -851,6 +852,15 @@ section.node-details-container
 		min-width: 35%
 	.node-updates
 		min-width: 35%
+
+
+	.node-blog+.node-updates
+		ul.node-updates-list
+			padding:
+				left: 25px
+				right: 25px
+			margin-left: 25px
+			border-left: thin solid $color-background
 
 #homepage
 	.node-updates-list

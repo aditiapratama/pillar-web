@@ -2,6 +2,9 @@ $flowplayer-skin-main: $color-background-nav
 $flowplayer-skin-highlight: $color-primary
 $flowplayer-skin-background: $color-background-nav
 
+.flowplayer
+	display: block !important
+
 .flowplayer.is-playing
 	background-color: black !important
 
@@ -16,7 +19,6 @@ $flowplayer-skin-background: $color-background-nav
 
 .flowplayer .fp-controls
 	background-color: $flowplayer-skin-main !important
-	bottom: -5px !important
 
 .flowplayer .fp-timeline
 	background-color: rgba(lighten($flowplayer-skin-main, 10%), .15) !important
@@ -44,10 +46,8 @@ $flowplayer-skin-background: $color-background-nav
 
 .flowplayer .fp-remaining, .flowplayer .fp-duration
 	right: 117px !important
-	bottom: 5px !important
 
 .flowplayer .fp-elapsed
-	bottom: 5px !important
 
 .flowplayer .fp-time
 	text-shadow: none !important

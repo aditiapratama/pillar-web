@@ -23,8 +23,8 @@
 				li.node-details-meta-list-item.status
 						| {{node.properties.status}}
 
-				li.node-details-meta-list-item.date
-					| {{ node._created }}
+				li.node-details-meta-list-item.date(title="Created {{ n._updated | pretty_date }}")
+					| {{ node._updated | pretty_date }}
 
 				li.node-details-meta-list-item.type
 					| {{ node.properties.content_type }}
