@@ -7,6 +7,7 @@ from pillarsdk.exceptions import ResourceNotFound
 from flask import abort
 from flask import render_template
 from flask import session
+from flask import redirect
 from flask.ext.login import login_required
 from flask.ext.login import current_user
 from application import app
@@ -61,6 +62,7 @@ def homepage():
 @cache.cached(timeout=3600, unless=current_user_is_authenticated)
 def join():
     """Join page"""
+    return redirect("https://store.blender.org/product/membership/")
     return render_template(
         'join.html')
 
