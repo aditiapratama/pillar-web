@@ -11,15 +11,17 @@ from flask.ext.login import login_required
 from flask.ext.login import current_user
 from application import app
 from application import SystemUtility
+from application import cache
 from application.modules.nodes import index
 from application.modules.nodes import view
 from application.modules.nodes.custom.posts import posts_view
 from application.modules.nodes.custom.posts import posts_create
 from application.modules.users.model import UserProxy
 from application.helpers import attach_project_pictures
-
+from application.helpers import current_user_is_authenticated
 
 @app.route("/")
+@cache.cached(timeout=3600, unless=current_user_is_authenticated)
 def homepage():
     """Homepage"""
     if current_user.is_authenticated() and current_user.has_role('subscriber'):
@@ -56,6 +58,7 @@ def homepage():
 
 
 @app.route("/join")
+@cache.cached(timeout=3600, unless=current_user_is_authenticated)
 def join():
     """Join page"""
     return render_template(
@@ -71,6 +74,7 @@ def stats():
 
 @app.route("/blog/")
 @app.route("/blog/<url>")
+@cache.memoize(timeout=3600, unless=current_user_is_authenticated)
 def main_blog(url=None):
     """Blog with project news"""
     project_id = app.config['MAIN_PROJECT_ID']
@@ -83,6 +87,7 @@ def main_posts_create():
     return posts_create(project_id)
 
 @app.route("/<name>/")
+@cache.memoize(timeout=3600, unless=current_user_is_authenticated)
 def user_view(name):
     """View a user or organization."""
     user = UserProxy(name)
@@ -95,6 +100,7 @@ def user_view(name):
 
 @app.route("/<name>/<project>/blog/")
 @app.route("/<name>/<project>/blog/<url>")
+@cache.memoize(timeout=3600, unless=current_user_is_authenticated)
 def project_blog(name, project, url=None):
     """View project blog"""
     user = UserProxy(name)
@@ -137,6 +143,7 @@ def get_projects(category):
 
 
 @app.route("/open-projects")
+@cache.cached(timeout=3600, unless=current_user_is_authenticated)
 def open_projects():
     projects = get_projects('film')
     return render_template(
@@ -146,6 +153,7 @@ def open_projects():
 
 
 @app.route("/training")
+@cache.cached(timeout=3600, unless=current_user_is_authenticated)
 def training():
     projects = get_projects('training')
     return render_template(

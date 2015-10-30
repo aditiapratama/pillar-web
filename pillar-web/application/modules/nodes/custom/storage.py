@@ -1,6 +1,7 @@
 import requests
 import os
 from application import SystemUtility
+from application import cache
 
 
 class StorageNode(object):
@@ -17,6 +18,7 @@ class StorageNode(object):
             self.storage_node.properties.project,
             self.storage_node.properties.subdir)
 
+    @cache.memoize(timeout=3600)
     def browse(self, path=None):
         """Search a storage node for a path, which can point both to a directory
         of to a file.

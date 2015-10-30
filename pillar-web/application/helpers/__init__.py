@@ -4,6 +4,7 @@ import urllib
 from math import ceil
 from flask import url_for
 from flask import request
+from flask.ext.login import current_user
 from pillarsdk import File
 
 
@@ -125,3 +126,6 @@ def pretty_date(time=False):
             return str(day_diff/30) + " month ago"
     return str(day_diff/365) + " years ago"
 
+
+def current_user_is_authenticated():
+    return current_user.is_authenticated()

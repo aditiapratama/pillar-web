@@ -3,12 +3,13 @@ from flask import request
 from flask import jsonify
 from flask import session
 from flask.ext.login import login_required
+from application import SystemUtility
+from application import app
+from application import cache
 from application.modules.nodes import nodes
 from application.modules.nodes import project_update_nodes_list
 from application.modules.nodes import view
 from application.modules.users.model import UserProxy
-from application import SystemUtility
-from application import app
 
 
 @nodes.route('/projects/add-featured-node', methods=['POST'])
@@ -34,6 +35,7 @@ def projects_move_node():
 
 
 @app.route("/<name>/<project>/")
+@cache.memoize(timeout=3600)
 def project_view(name, project):
     """Entry point to view a project.
     """

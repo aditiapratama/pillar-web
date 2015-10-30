@@ -19,6 +19,7 @@ from flask.ext.mail import Mail
 from flask.ext.login import LoginManager
 from flask.ext.login import UserMixin
 from flask.ext.login import current_user
+from flask.ext.cache import Cache
 
 # Initialize the Flask all object
 app = Flask(__name__,
@@ -138,6 +139,7 @@ class SystemUtility():
 
 # Initialized the available extensions
 mail = Mail(app)
+cache = Cache(app)
 
 
 # Import controllers
