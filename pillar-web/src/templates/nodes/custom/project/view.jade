@@ -34,15 +34,7 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 
 		#project_nav
 			#project-header
-				.project_nav-expand-btn(title="Toggle Navigation Panel [T]")
-					i.ion-ios-arrow-right
-
 				ul.breadcrumb
-
-					| {#
-					li.project-organization
-						a(href="/bi") Blender Institute
-					| #}
 
 					li.project-title
 						a(href="") {{ node.name }}
@@ -50,18 +42,23 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 				#project-loading
 					i.ion-load-c
 
-
 			#project_tree
+
 
 		#project_nav-footer
 			.project_nav-collapse-btn(title="Toggle Navigation Panel [T]")
-				i.ion-ios-arrow-left
+				i.zmdi.zmdi-chevron-left
+				i.zmdi.zmdi-chevron-left
 
-		.project_split
+		.project_split(title="Toggle Navigation Panel [T]")
 
 		#project_context-container
 			| {% if node.has_method('PUT') %}
 			#project-header
+				ul.breadcrumb.context
+					li.project-title
+						a(href="") {{ node.name }}
+
 				span#project-statusbar
 
 				ul.project-edit-tools
@@ -136,6 +133,9 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 							i.ion-close-round
 							| Cancel
 
+			.project_nav-expand-btn(title="Toggle Navigation Panel [T]")
+				i.zmdi.zmdi-chevron-right
+				i.zmdi.zmdi-chevron-right
 
 
 | {% endblock %}

@@ -51,7 +51,6 @@ $list-node-children-item-width: 160px
 	position: relative
 
 	color: white
-	// background-color: rgba($color-background-nav, .9)
 	border-right: thick solid lighten($color-background-nav, 10%)
 
 	user-select: none
@@ -136,6 +135,15 @@ $list-node-children-item-width: 160px
 		background-color: transparent
 		display: inline-block
 		font-weight: 300
+
+		&.context
+			visibility: hidden
+			opacity: 0
+			transition: opacity 250ms ease-in-out
+
+			&.active
+				visibility: visible
+				opacity: 1
 
 		li
 			margin: 0
@@ -397,11 +405,18 @@ $list-node-children-item-width: 160px
 
 .project_nav-expand-btn
 	float: left
-	padding-left: 12px
+	padding:
+		left: 16px
+		right: 24px
+		top: 10px
+		bottom: 3px
+	position: absolute
+	bottom: 0
+	left: 0
+	color: $color-text-dark-secondary
 
-	i
-		position: relative
-		top: 1px
+	&:hover
+		color: $color-text-dark-primary
 
 #project_context
 	display: flex
@@ -446,13 +461,18 @@ $list-node-children-item-width: 160px
 .project_split
 	float: right
 	position: absolute
-	width: 16px
+	width: 15px
 	margin-left: -8px
-	top: 0 // $project_header-height
+	top: 0
 	bottom: 0
 	z-index: 10
 	cursor: w-resize
 	user-select: none
+	transition: background-color 250ms ease-in-out
+
+	&.collapsed
+		background-color: rgba($color-background-nav, .15)
+		cursor: e-resize
 
 
 /* Node Context */
