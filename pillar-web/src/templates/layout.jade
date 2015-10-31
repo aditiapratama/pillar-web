@@ -28,7 +28,6 @@ html(lang="en")
 
 			loadCSS( "//fonts.googleapis.com/css?family=Roboto:300,400,500" );
 			loadCSS( "//fonts.googleapis.com/css?family=Lato:300,400" );
-			loadCSS( "//cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.1.2/css/material-design-iconic-font.min.css" );
 			loadCSS( "//code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" );
 
 		link(href="{{ url_for('static', filename='assets/ico/favicon.png') }}", rel="shortcut icon")
@@ -58,7 +57,7 @@ html(lang="en")
 				i.alert-icon(class="{{ category }}")
 				span {{ message }}
 				button.close(type="button", data-dismiss="alert")
-					i.ion-close-round
+					i.pi-close
 			|	{% endfor %}
 
 			|		{% endif %}
@@ -71,7 +70,7 @@ html(lang="en")
 					header.navbar-header
 						button.navbar-toggle(data-target=".navbar-collapse", data-toggle="collapse", type="button")
 							span.sr-only Toggle navigation
-							i.ion-navicon
+							i.pi-menu
 						a.navbar-brand(
 							href="/",
 							title="Blender Cloud")
@@ -229,8 +228,8 @@ html(lang="en")
 
 		script(type="text/javascript", src="//code.jquery.com/jquery-2.1.4.min.js")
 		script(type="text/javascript", src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js")
-		script(type="text/javascript", src="//cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/0.6.5/js/min/perfect-scrollbar.jquery.min.js", async)
-		script(type="text/javascript", src="//cdnjs.cloudflare.com/ajax/libs/js-cookie/2.0.3/js.cookie.min.js", async)
+		script(type="text/javascript", src="//cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/0.6.5/js/min/perfect-scrollbar.jquery.min.js")
+		script(type="text/javascript", src="//cdnjs.cloudflare.com/ajax/libs/js-cookie/2.0.3/js.cookie.min.js",)
 		script(type="text/javascript", src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.3/handlebars.min.js")
 		script(type="text/javascript", src="{{ url_for('static', filename='assets/js/markdown.min.js') }}")
 		script(type="text/javascript", src="{{ url_for('static', filename='assets/js/tutti.min.js') }}")

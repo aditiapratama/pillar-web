@@ -9,12 +9,12 @@
 
 			.buttons
 				a.sign-up.btn.btn-outline(href="https://store.blender.org/product/membership/")
-					i.ion-checkmark-round
+					i.pi-check
 					| Subscribe Now
 
 				| {% if not current_user.is_authenticated() %}
 				a.sign-in.btn.btn-outline(href="{{ url_for('users.login') }}")
-					i.ion-log-in
+					i.pi-log-in
 					| Sign In
 				| {% endif %}
 
