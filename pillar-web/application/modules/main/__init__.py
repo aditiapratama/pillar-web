@@ -25,7 +25,7 @@ from application.helpers import current_user_is_authenticated
 @cache.cached(timeout=3600, unless=current_user_is_authenticated)
 def homepage():
     """Homepage"""
-    if current_user.is_authenticated() and current_user.has_role('subscriber'):
+    if current_user.is_authenticated():
         api = SystemUtility.attract_api()
         node_type_post = NodeType.find_one({
             'where': '{"name" : "post"}',
