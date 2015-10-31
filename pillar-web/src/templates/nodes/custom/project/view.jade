@@ -145,7 +145,7 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 
 | {% block footer_scripts %}
 script(src="//cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js")
-script(src="//releases.flowplayer.org/6.0.3/flowplayer.min.js")
+script(src="//releases.flowplayer.org/6.0.3/flowplayer.min.js", async)
 
 | {% if node.has_method('PUT') %}
 | {# JS containing the Edit, Add, Featured, and Move functions #}

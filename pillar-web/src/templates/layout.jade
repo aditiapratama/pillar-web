@@ -23,20 +23,18 @@ html(lang="en")
 		meta(name="twitter:image", content="{{ url_for('static', filename='assets/img/background_join_glass.jpg')}}")
 		| {% endblock %}
 
-		link(href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css", rel="stylesheet")
+		script.
+			!function(e){"use strict";e.loadCSS=function(t,n,o){var r,i=e.document,l=i.createElement("link");if(n)r=n;else{var d=(i.body||i.getElementsByTagName("head")[0]).childNodes;r=d[d.length-1]}var a=i.styleSheets;l.rel="stylesheet",l.href=t,l.media="only x",r.parentNode.insertBefore(l,n?r:r.nextSibling);var f=function(e){for(var t=l.href,n=a.length;n--;)if(a[n].href===t)return e();setTimeout(function(){f(e)})};return l.onloadcssdefined=f,f(function(){l.media=o||"all"}),l},"undefined"!=typeof module&&(module.exports=e.loadCSS)}(this);
 
-		link(href='//fonts.googleapis.com/css?family=Roboto:300,400,500', rel='stylesheet', type='text/css')
-		link(href='//fonts.googleapis.com/css?family=Lato:300,400', rel='stylesheet', type='text/css')
-		link(href='//cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.1.2/css/material-design-iconic-font.min.css', rel='stylesheet')
-		link(href="//code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css", rel="stylesheet")
-
-		//- noscript
-			//- link(href="{{ url_for('static', filename='jquery-file-upload/css/jquery.fileupload-noscript.css') }}", rel="stylesheet")
-		//- noscript
-			//- link(href="{{ url_for('static', filename='jquery-file-upload/css/jquery.fileupload-ui-noscript.css') }}", rel="stylesheet")
+			loadCSS( "//fonts.googleapis.com/css?family=Roboto:300,400,500" );
+			loadCSS( "//fonts.googleapis.com/css?family=Lato:300,400" );
+			loadCSS( "//cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.1.2/css/material-design-iconic-font.min.css" );
+			loadCSS( "//code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" );
 
 		link(href="{{ url_for('static', filename='assets/ico/favicon.png') }}", rel="shortcut icon")
 		link(href="{{ url_for('static', filename='assets/ico/apple-touch-icon-precomposed.png') }}", rel="icon apple-touch-icon-precomposed", sizes="192x192")
+
+		link(href="{{ url_for('static', filename='assets/css/bootstrap.min.css') }}", rel="stylesheet")
 
 		| {% block head %}{% endblock %}
 
@@ -223,20 +221,16 @@ html(lang="en")
 			| {% endblock %}
 		| {% endblock %}
 
-		| {#
-		| {% assets filters="jsmin",
-		|		 output="assets/packed/attract.js",
-		|		 "assets/js/bootstrap-markdown.js",
-		|		 "assets/js/markdown.js",
-		|		 "assets/js/jquery.attract.js" %}
-		script(type="text/javascript", src="{{ ASSET_URL }}")
-		| {% endassets %}
-		| #}
+		noscript
+			link(href='//fonts.googleapis.com/css?family=Roboto:300,400,500', rel='stylesheet', type='text/css')
+			link(href='//fonts.googleapis.com/css?family=Lato:300,400', rel='stylesheet', type='text/css')
+			link(href='//cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.1.2/css/material-design-iconic-font.min.css', rel='stylesheet')
+			link(href="//code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css", rel="stylesheet")
 
 		script(type="text/javascript", src="//code.jquery.com/jquery-2.1.4.min.js")
 		script(type="text/javascript", src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js")
-		script(type="text/javascript", src="//cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/0.6.5/js/min/perfect-scrollbar.jquery.min.js")
-		script(type="text/javascript", src="//cdnjs.cloudflare.com/ajax/libs/js-cookie/2.0.3/js.cookie.min.js")
+		script(type="text/javascript", src="//cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/0.6.5/js/min/perfect-scrollbar.jquery.min.js", async)
+		script(type="text/javascript", src="//cdnjs.cloudflare.com/ajax/libs/js-cookie/2.0.3/js.cookie.min.js", async)
 		script(type="text/javascript", src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.3/handlebars.min.js")
 		script(type="text/javascript", src="{{ url_for('static', filename='assets/js/markdown.min.js') }}")
 		script(type="text/javascript", src="{{ url_for('static', filename='assets/js/tutti.min.js') }}")
