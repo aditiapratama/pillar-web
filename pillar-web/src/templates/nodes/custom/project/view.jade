@@ -40,7 +40,7 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 						a(href="") {{ node.name }}
 
 				#project-loading
-					i.ion-load-c
+					i.pi-spin
 
 			#project_tree
 
@@ -81,21 +81,21 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 							data-toggle="dropdown",
 							aria-haspopup="true",
 							aria-expanded="false")
-							i.ion-android-more-vertical
+							i.pi-more-vertical
 
 						ul.dropdown-menu
 							li.button-featured
 								a#item_featured(
 									href="#",
 									title="Feature on project's homepage")
-									i.button-featured-icon.ion-ios-star-outline
+									i.button-featured-icon.pi-star
 									| Toggle Featured
 
 							li.button-move
 								a#item_move(
 									href="#",
 									title="Move asset into a folder...")
-									i.button-move-icon.ion-arrow-move
+									i.button-move-icon.pi-move
 									| Move
 
 							//- li.button-delete
@@ -107,14 +107,14 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 						a#item_cancel.project-mode-edit(
 							href="#",
 							title="Cancel changes")
-							i.button-cancel-icon.ion-close-round
+							i.button-cancel-icon.pi-cancel
 							| Cancel
 
 					li.button-save
 						a#item_save.project-mode-edit(
 							href="#",
 							title="Save changes")
-							i.button-save-icon.ion-checkmark-round
+							i.button-save-icon.pi-check
 							| Save Changes
 
 			| {% endif %}
@@ -123,13 +123,13 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 			#overlay-mode-move-container
 				.overlay-container
 					.title
-						i.ion-ios-arrow-thin-left
+						i.pi-angle-left
 						| Select the <strong>folder</strong> where you want to move it
 					.buttons
 						button#item_move_accept.move.disabled
 							| Select a Folder
 						button#item_move_cancel.cancel
-							i.ion-close-round
+							i.pi-cancel
 							| Cancel
 
 			.project_nav-expand-btn(title="Toggle Navigation Panel [T]")
@@ -245,16 +245,16 @@ script.
 				},
 				"types" : {
 						"#": {"valid_children": ["collection"]},
-						"chapter" : {"icon": "ion-android-folder"},
-						"group" : {"icon": "ion-android-folder"},
-						"group_storage" : {"icon": "ion-android-folder"},
-						"filesystem_node" : {"icon": "ion-android-folder"},
-						"file" : {"icon": "ion-document", "max_children": 0},
-						"filesystem_file" : {"icon": "ion-document", "max_children": 0},
-						"image" : {"icon": "ion-image", "max_children": 0},
-						"video" : {"icon": "ion-ios-film-outline", "max_children": 0},
-						"blog" : {"icon": "ion-chatbubble-working", "max_children": 0},
-						"default" : {"icon": "ion-android-folder-open"}
+						"chapter" : {"icon": "pi-folder"},
+						"group" : {"icon": "pi-folder"},
+						"group_storage" : {"icon": "pi-folder"},
+						"filesystem_node" : {"icon": "pi-folder"},
+						"file" : {"icon": "pi-document", "max_children": 0},
+						"filesystem_file" : {"icon": "pi-document", "max_children": 0},
+						"image" : {"icon": "pi-image", "max_children": 0},
+						"video" : {"icon": "pi-film-thick", "max_children": 0},
+						"blog" : {"icon": "pi-chatbubble-working", "max_children": 0},
+						"default" : {"icon": "pi-folder"}
 				},
 				"plugins": ["types",] //, "state", "sort"
 		});
@@ -276,7 +276,7 @@ script.
 						$('#item_move_accept').html('Select a Folder');
 					} else {
 						$('#item_move_accept').removeClass('disabled');
-						$('#item_move_accept').html('<i class="ion-checkmark-round"></i>Move Here');
+						$('#item_move_accept').html('<i class="pi-check"></i>Move Here');
 					}
 				}
 

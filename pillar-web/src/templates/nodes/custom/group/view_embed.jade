@@ -35,23 +35,23 @@
 						| {% if child.properties.content_type %}
 
 						| {% if child.properties.content_type == 'video' %}
-						i.ion-play
+						i.pi-play
 						| {% endif %}
 
 						| {% else %}
-						i.ion-android-folder
+						i.pi-folder
 						| {% endif %}
 
 				.list-node-children-item-name
 
 					| {% if child.properties.content_type == 'video' %}
-					i.ion-ios-film-outline
+					i.pi-film-thick
 					| {% elif child.properties.content_type == 'image' %}
-					i.ion-image
+					i.pi-image
 					| {% elif child.properties.content_type == 'file' %}
-					i.ion-document
+					i.pi-document
 					| {% else %}
-					i.ion-android-folder
+					i.pi-folder
 					| {% endif %}
 
 					span {{ child.name }}

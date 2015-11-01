@@ -20,15 +20,15 @@
 
 					.list-node-children-item-thumbnail-icon
 						| {% if child['content_type'] == 'video' %}
-						i.ion-ios-film-outline
+						i.pi-film
 						| {% elif child['content_type'] == 'image' %}
-						i.ion-image
+						i.pi-image
 						| {% elif child['content_type'] == 'file' %}
-						i.ion-document-text
+						i.pi-document
 						| {% elif child['content_type'] == 'binary' %}
-						i.ion-document
+						i.pi-file-archive
 						| {% else %}
-						i.ion-android-folder
+						i.pi-folder
 						| {% endif %}
 
 				.list-node-children-item-name

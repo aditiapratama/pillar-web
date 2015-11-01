@@ -12,6 +12,7 @@ node_modules/
 *.js.map
 
 pillar-web/application/static/assets/css/main.css
+pillar-web/application/static/assets/css/pillar-font.css
 pillar-web/application/static/assets/js/*.min.js
 pillar-web/application/static/storage/
 pillar-web/application/static/uploads/

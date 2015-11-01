@@ -11,13 +11,13 @@ link(rel="stylesheet", href="//releases.flowplayer.org/6.0.3/skin/minimalist.css
 			style="{% if node.picture %}background-image:url({{node.picture.thumbnail('l')}}); background-repeat:no-repeat; {% endif %}")
 			.fp-startscreen.fp-toggle
 				a.big-play-button
-					i.ion-play
+					i.pi-play
 			.fp-endscreen
 				a.watch-again.fp-toggle
-					i.ion-android-refresh
+					i.pi-replay
 					| Watch again
 			.fp-waiting
-				i.ion-load-c.spin
+				i.pi-spin.spin
 
 
 	section.node-details-container.video
@@ -48,7 +48,7 @@ link(rel="stylesheet", href="//releases.flowplayer.org/6.0.3/skin/minimalist.css
 						aria-haspopup="true",
 						aria-expanded="false")
 						| Download
-						i.ion-ios-arrow-down.icon-dropdown-menu
+						i.pi-angle-down.icon-dropdown-menu
 
 					ul.dropdown-menu
 						| {% for child in node.file_children._items %}
@@ -64,7 +64,7 @@ link(rel="stylesheet", href="//releases.flowplayer.org/6.0.3/skin/minimalist.css
 
 		#comments-container
 			#comments-list-items-loading
-				i.ion-load-c
+				i.pi-spin
 
 
 | {% endblock %}

@@ -133,7 +133,7 @@ script(type="text/javascript").
 
 	/* Reset Save Changes button status */
 	$("li.button-save").removeClass('field-error saving');
-	$("li.button-save a#item_save").html('<i class="ion-checkmark-round"></i> Save Changes');
+	$("li.button-save a#item_save").html('<i class="pi-check"></i> Save Changes');
 
 
 	/* Submit changes */
@@ -142,7 +142,7 @@ script(type="text/javascript").
 
 		/* Let us know started saving */
 		$("li.button-save").addClass('saving');
-		$("li.button-save a#item_save").html('<i class="ion-load-c spin"></i> Saving...');
+		$("li.button-save a#item_save").html('<i class="pi-spin spin"></i> Saving...');
 
 		$.ajax({
 			url: "{{url_for('nodes.edit', node_id=node._id)}}",
@@ -154,12 +154,12 @@ script(type="text/javascript").
 			statusBarSet('error', data.status + ' ' + data.statusText);
 
 			$("li.button-save").addClass('field-error');
-			$("li.button-save a#item_save").html('<i class="ion-alert-circled"></i> Houston');
+			$("li.button-save a#item_save").html('<i class="pi-warning"></i> Houston');
 
 			/* Back to normal */
 			setTimeout(function(){
 				$("li.button-save").removeClass('saving field-error');
-				$("li.button-save a#item_save").html('<i class="ion-checkmark-round"></i> Try Again');
+				$("li.button-save a#item_save").html('<i class="pi-check"></i> Try Again');
 			}, 2000);
 		})
 		.done(function(dataHtml){
@@ -172,7 +172,7 @@ script(type="text/javascript").
 
 			/* Style button */
 			$("li.button-save").removeClass('saving field-error');
-			$("li.button-save a#item_save").html('<i class="ion-checkmark-round"></i> Save Changes');
+			$("li.button-save a#item_save").html('<i class="pi-check"></i> Save Changes');
 
 			/* Show/hide buttons */
 			$('.project-mode-view').show();

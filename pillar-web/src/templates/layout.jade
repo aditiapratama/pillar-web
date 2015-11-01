@@ -28,7 +28,6 @@ html(lang="en")
 
 			loadCSS( "//fonts.googleapis.com/css?family=Roboto:300,400,500" );
 			loadCSS( "//fonts.googleapis.com/css?family=Lato:300,400" );
-			loadCSS( "//code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" );
 
 		link(href="{{ url_for('static', filename='assets/ico/favicon.png') }}", rel="shortcut icon")
 		link(href="{{ url_for('static', filename='assets/ico/apple-touch-icon-precomposed.png') }}", rel="icon apple-touch-icon-precomposed", sizes="192x192")
@@ -57,7 +56,7 @@ html(lang="en")
 				i.alert-icon(class="{{ category }}")
 				span {{ message }}
 				button.close(type="button", data-dismiss="alert")
-					i.pi-close
+					i.pi-cancel
 			|	{% endfor %}
 
 			|		{% endif %}
@@ -75,9 +74,7 @@ html(lang="en")
 							href="/",
 							title="Blender Cloud")
 							span.app-logo
-								i.bf-cloud
-							span.app-name
-								img(src="{{ url_for('static', filename='assets/img/blendercloud_logo_header.png') }}")
+								i.pi-blender-cloud-logo
 
 					nav.collapse.navbar-collapse
 						ul.nav.navbar-nav.navbar-right
@@ -119,26 +116,26 @@ html(lang="en")
 									li
 										a(href="#",
 											title="Whoosh!")
-											i.ion-jet
+											i.pi-whoosh
 											| Whoosh!
 									| {% endif %} #}
 
 									li
 										a(href="{{url_for('users.profile')}}"
 											title="Settings")
-											i.ion-ios-gear-outline
+											i.pi-cog
 											| Settings
 									li.divider(role="separator")
 									li
 										a(href="/users/logout")
-											i.ion-log-out(title="Log Out")
+											i.pi-log-out(title="Log Out")
 											| Log out
 
 							| {% else %}
 
 							li.nav-item-sign-in
 								a(href="/users/login")
-									i.ion-log-in(title="Sign In")
+									i.pi-log-in(title="Sign In")
 									|  Sign In
 							| {% endif %}
 
@@ -163,11 +160,11 @@ html(lang="en")
 								a(href="https://twitter.com/Blender_Cloud",
 									title="Follow us on Twitter")
 									li
-										i.ion-social-twitter-outline
+										i.pi-social-twitter
 								a(href="mailto:cloudsupport@blender.org"
 									title="Support Email")
 									li
-										i.ion-ios-email-outline
+										i.pi-email-outline
 
 						.col-md-2.col-xs-6
 							h4 Blender Cloud
@@ -216,15 +213,13 @@ html(lang="en")
 				span.credits
 					| Blender Cloud
 					a.hop(href="#hop")
-						i.ion-ios-arrow-up
+						i.pi-angle-up
 			| {% endblock %}
 		| {% endblock %}
 
 		noscript
 			link(href='//fonts.googleapis.com/css?family=Roboto:300,400,500', rel='stylesheet', type='text/css')
 			link(href='//fonts.googleapis.com/css?family=Lato:300,400', rel='stylesheet', type='text/css')
-			link(href='//cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.1.2/css/material-design-iconic-font.min.css', rel='stylesheet')
-			link(href="//code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css", rel="stylesheet")
 
 		script(type="text/javascript", src="//code.jquery.com/jquery-2.1.4.min.js")
 		script(type="text/javascript", src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js")
