@@ -337,3 +337,76 @@ def delete(filename):
             return simplejson.dumps({filename: 'False'})
     else:
         return abort(404)
+
+
+def process_and_create_file(project_id, name, length, mime_type):
+    """Base function that handles the hashing of a file name and the creation of
+    a record in the files collection. This function is use in the nodes module
+    on assets_create.
+
+    :type project_id: string
+    :param bucket_name: The project id, uset to fetch the gcs bucket.
+
+    :type name: string
+    :param subdir: The the filename (currently used to build the path).
+
+    :type length: int
+    :param subdir: Filesize in bit (in case we start the upload from the js
+        interface, we get the size for free, otherwise at the moment we
+        hardcode it to 0)
+
+    :type mime_type: string
+    :param subdir: MIME type used do display/preview the file accordingly
+
+    """
+
+    root, ext = os.path.splitext(name)
+     # Hash name based on file name, user id and current timestamp
+    hash_name = name + str(current_user.objectid) + str(round(time.time()))
+    link = hashlib.sha1(hash_name).hexdigest()
+    link = os.path.join(link[:2], link + ext)
+
+    src_dir_path = os.path.join(app.config['UPLOAD_DIR'], str(current_user.objectid))
+
+    # Move the file in designated location
+    destination_dir = os.path.join(app.config['SHARED_DIR'], link[:2])
+    if not os.path.isdir(destination_dir):
+        os.makedirs(destination_dir)
+    # (TODO) Check if filename already exsits
+    src_file_path = os.path.join(src_dir_path, name)
+    dst_file_path = os.path.join(destination_dir, link[3:])
+    # (TODO) Thread this operation
+
+    shutil.copy(src_file_path, dst_file_path)
+
+    api = SystemUtility.attract_api()
+    file_item = File({
+        'name': link[3:],
+        'filename': name,
+        'user': current_user.objectid,
+        'backend': 'gcs',
+        'md5': '',
+        'content_type': mime_type,
+        'length': length,
+        'project': project_id
+        })
+    file_item.create(api=api)
+    return file_item
+
+
+@files.route('/create', methods=['POST'])
+def create():
+    """Endpoint hit by the automatic upload of a picture, currently used in the
+    edit node form. Some sanity checks are already done in the fronted, but
+    additional checks can be implemented here.
+    """
+    name = request.form['name']
+    size = request.form['size']
+    content_type = request.form['type']
+    project_id = session['current_project_id']
+    file_item = process_and_create_file(project_id, name, size, content_type)
+    api = SystemUtility.attract_api()
+    thumbnail = file_item.thumbnail_file('s', api=api)
+
+    return jsonify(status='success', data=dict(id=file_item._id,
+                                                link=thumbnail.link))

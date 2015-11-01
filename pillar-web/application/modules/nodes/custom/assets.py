@@ -11,8 +11,9 @@ from pillarsdk import Node
 from pillarsdk import NodeType
 from pillarsdk import File
 from application import app
-from application.modules.nodes import nodes
 from application import SystemUtility
+from application.modules.nodes import nodes
+from application.modules.files import process_and_create_file
 
 
 @nodes.route('/assets/create', methods=['POST'])
@@ -31,10 +32,6 @@ def assets_create():
         filetype = 'video'
     else:
         filetype = 'file'
-    # Hash name based on file name, user id and current timestamp
-    hash_name = name + str(current_user.objectid) + str(round(time.time()))
-    link = hashlib.sha1(hash_name).hexdigest()
-    link = os.path.join(link[:2], link + ext)
 
     api = SystemUtility.attract_api()
     node_type = NodeType.find_first({
@@ -53,37 +50,12 @@ def assets_create():
             #file=a.link[4:],
             status='processing'))
 
-    src_dir_path = os.path.join(app.config['UPLOAD_DIR'], str(current_user.objectid))
-
-    # Move the file in designated location
-    destination_dir = os.path.join(app.config['SHARED_DIR'], link[:2])
-    if not os.path.isdir(destination_dir):
-        os.makedirs(destination_dir)
-    # (TODO) Check if filename already exsits
-    src_file_path = os.path.join(src_dir_path, name)
-    dst_file_path = os.path.join(destination_dir, link[3:])
-    # (TODO) Thread this operation
-
-    shutil.copy(src_file_path, dst_file_path)
-
     if filetype == 'file':
-        mime_type = 'application'
+        mime_type_base = 'application'
     else:
-        mime_type = filetype
-    content_type = "{0}/{1}".format(mime_type, ext.replace(".", ""))
-
-    node_file = File({
-        'name': link,
-        'filename': name,
-        'user': current_user.objectid,
-        'backend': 'cdnsun',
-        'md5': '',
-        'content_type': content_type,
-        'length': 0,
-        'project': project_id
-        })
-
-    node_file.create(api=api)
+        mime_type_base = filetype
+    mime_type = "{0}/{1}".format(mime_type_base, ext.replace(".", ""))
+    node_file = node_file = process_and_create_file(project_id, name, 0, mime_type)
 
     node_asset_props['properties']['file'] = node_file._id
     if parent_id:
@@ -92,9 +64,7 @@ def assets_create():
     node_asset.create(api=api)
 
     return jsonify(
-        link=link,
+        #link=link,
         name=name,
         filetype=filetype,
         asset_id=node_asset._id)
-
-
