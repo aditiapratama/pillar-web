@@ -1,5 +1,6 @@
 from pillarsdk import Node
 from pillarsdk import NodeType
+from pillarsdk import File
 from pillarsdk.exceptions import ResourceNotFound
 from flask import abort
 from flask import render_template
@@ -16,6 +17,15 @@ from application.modules.nodes.forms import process_node_form
 def posts_view(project_id, url=None):
     """View individual blogpost"""
     api = SystemUtility.attract_api()
+    # Fetch project (for backgroud images and links generation)
+    project = Node.find(project_id, api=api)
+    if project.properties.picture_square:
+        picture_square = File.find(project.properties.picture_square, api=api)
+        project.properties.picture_square = picture_square
+    if project.properties.picture_header:
+        picture_header = File.find(project.properties.picture_header, api=api)
+        project.properties.picture_header = picture_header
+
     node_type = NodeType.find_one({
         'where': '{"name" : "blog"}',
         'projection': '{"name": 1, "permissions":1}'
@@ -36,7 +46,8 @@ def posts_view(project_id, url=None):
         return render_template(
             'nodes/custom/post/view.html',
             blog=blog,
-            node=post)
+            node=post,
+            project=project)
     else:
         # Render all posts
         node_type_post = NodeType.find_one({
@@ -52,7 +63,8 @@ def posts_view(project_id, url=None):
         return render_template(
             'nodes/custom/blog/index.html',
             node_type_post=node_type_post,
-            posts=posts._items)
+            posts=posts._items,
+            project=project)
 
 
 @nodes.route("/posts/<project_id>/create", methods=['GET', 'POST'])
