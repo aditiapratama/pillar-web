@@ -4,6 +4,7 @@ import time
 import shutil
 from flask import request
 from flask import jsonify
+from flask import session
 from flask.ext.login import login_required
 from flask.ext.login import current_user
 from pillarsdk import Node
@@ -17,6 +18,7 @@ from application import SystemUtility
 @nodes.route('/assets/create', methods=['POST'])
 @login_required
 def assets_create():
+    project_id = session['current_project_id']
     name = request.form['name']
     parent_id = request.form.get('parent_id')
     # Detect filetype by extension (improve by detectin real file type)
@@ -77,7 +79,8 @@ def assets_create():
         'backend': 'cdnsun',
         'md5': '',
         'content_type': content_type,
-        'length': 0
+        'length': 0,
+        'project': project_id
         })
 
     node_file.create(api=api)
