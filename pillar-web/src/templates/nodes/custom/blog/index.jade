@@ -27,7 +27,9 @@
 					| {{node.name}}
 
 				.item-info
-					| {{node._updated}} | {{node.properties.category}} by {{node.user.full_name}}
+					| {{node._updated | pretty_date }} | {{node.properties.category}} by {{node.user.full_name}}
+					| |
+					a(href="{{ url_for('nodes.view', node_id=node._id, redir=1) }}#comments")  comment
 
 				.item-content
 					| {{node.properties.content}}

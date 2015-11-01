@@ -1,5 +1,6 @@
 
 #comments-container
+	a(name="#comments")
 
 	section#comments-list
 		.comment-reply-container
@@ -78,6 +79,7 @@
 				| {% raw %}
 
 				| {{#list items }}
+				a(name="comment-{{ _id }}")
 				.comment-container(
 					data-node_id="{{ _id }}",
 					class="{{#if is_team}}is-team{{/if}}{{#if is_reply}}is-reply{{else}}is-first{{/if}}")
