@@ -203,15 +203,16 @@ html(lang="en")
 
 			| {% block footer %}
 			footer.container
-				| {#
-				ul.links
-					li
-						a(href="{# XXX {{url_for('terms_and_conditions')}} #}")
-							| Terms & Services, Cancellation
-					li
-						a(href="{# XXX {{url_for('privacy')}} #}")
-							| Privacy Policy
-				| #}
+
+				//
+					ul.links
+						li
+							a(href="{# XXX {{url_for('terms_and_conditions')}} #}")
+								| Terms & Services, Cancellation
+						li
+							a(href="{# XXX {{url_for('privacy')}} #}")
+								| Privacy Policy
+
 				span.credits
 					| Blender Cloud
 					a.hop(href="#hop")
