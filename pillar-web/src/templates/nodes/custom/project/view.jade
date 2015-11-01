@@ -46,12 +46,20 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 
 
 		#project_nav-footer
-			.project_nav-collapse-btn(title="Toggle Navigation Panel [T]")
+			.project_nav-collapse-btn(
+				title="Collapse Navigation [T]",
+				data-toggle="tooltip",
+				data-placement="right")
 				i.pi-angle-double-left
 
-		.project_split(title="Toggle Navigation Panel [T]")
+		.project_split(title="Toggle Navigation [T]")
 
 		#project_context-container
+			.project_nav-expand-btn(
+				title="Expand Navigation [T]",
+				data-toggle="tooltip",
+				data-placement="right")
+				i.pi-angle-double-right
 			| {% if node.has_method('PUT') %}
 			#project-header
 				ul.breadcrumb.context
@@ -132,8 +140,6 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 							i.pi-cancel
 							| Cancel
 
-			.project_nav-expand-btn(title="Toggle Navigation Panel [T]")
-				i.pi-angle-double-right
 
 
 | {% endblock %}
@@ -152,6 +158,10 @@ script(type="text/javascript", src="{{ url_for('static', filename='assets/js/pro
 
 script.
 
+	/* Initialize scrollbars */
+	Ps.initialize(document.getElementById('project_context-container'), {suppressScrollX: true});
+	Ps.initialize(document.getElementById('project_nav'), {suppressScrollX: true});
+
 	var urlNodeMove = "{{url_for('nodes.projects_move_node')}}";
 	var urlNodeFeature = "{{url_for('nodes.projects_add_featured_node')}}";
 
@@ -168,6 +178,9 @@ script.
 
 			// Update the DOM injecting the generate HTML into the page
 			$('#project_context').html(dataHtml);
+
+			// Update scrollbars
+			Ps.update(document.getElementById('project_context-container'));
 
 			// If a nodeId is specified, update the interface for editing and deletion
 			if (typeof(nodeId) != 'undefined') {
@@ -218,6 +231,7 @@ script.
 		{% endif %}
 
 		displayNode(nodeId);
+		Ps.initialize(document.getElementById('project_context-container'));
 
 		$('#project_tree').jstree({
 				'core': {
@@ -262,8 +276,8 @@ script.
 
 		var jstreeAPI = $('#project_tree').jstree(true);
 
-
 		$('#project_tree').on("select_node.jstree", function (e, data) {
+
 			if (typeof(data.node.original.path) === 'undefined') {
 				var moving_node_id = Cookies.get('bcloud_moving_node_id')
 				var node_id = document.getElementById("item_add");
@@ -291,6 +305,18 @@ script.
 				displayStorage(data.node.original.storage_node, data.node.original.path);
 				jstreeAPI.toggle_node(data.node);
 			}
+
+			/* Update scrollbar */
+			Ps.update(document.getElementById('project_nav'));
+		});
+
+		$('#project_tree').on("open_node.jstree", function () {
+			/* Update scrollbar */
+			Ps.update(document.getElementById('project_nav'));
+		});
+		$('#project_tree').on("close_node.jstree", function () {
+			/* Update scrollbar */
+			Ps.update(document.getElementById('project_nav'));
 		});
 
 	};
@@ -300,8 +326,6 @@ script.
 
 
 	/* UI Stuff */
-	$('#project_context-container').perfectScrollbar({suppressScrollX: true});
-
 	// Binding for ajax event
 	$(document).bind("ajaxSend", function(){
 		$('#project-loading').show();
@@ -320,11 +344,26 @@ script.
 				{'max-height': container_height + 'px'}
 			);
 		};
+
+		Ps.update(document.getElementById('project_context-container'));
+		Ps.update(document.getElementById('project_nav'));
 	};
 
 	$(window).on("load resize",function(){
 		containerResizeY($(window).height());
 	});
+
+	$("#project_context-container").hover(function(){
+		Ps.update(document.getElementById('project_context-container'));
+	});
+
+	$("#project_nav").hover(function(){
+		Ps.update(document.getElementById('project_nav'));
+	});
+
+	$(function () {
+		$('[data-toggle="tooltip"]').tooltip()
+	})
 
 | {% endblock %}
 

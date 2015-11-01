@@ -25,7 +25,7 @@ function editNode(nodeId) {
 		$('#server_error').attr('src', url);
 	})
 	.always(function(){
-		$('.button-edit-icon').addClass('pi-edit').removeClass('ion-load-c spinner');
+		$('.button-edit-icon').addClass('pi-edit').removeClass('pi-spin spinner');
 	});
 }
 
@@ -48,14 +48,14 @@ function addNode(parentId) {
 		$('#server_error').attr('src', url);
 	})
 	.always(function(){
-		$('.button-add-icon').addClass('pi-collection-plus').removeClass('ion-load-c spinner');
+		$('.button-add-icon').addClass('pi-collection-plus').removeClass('pi-spin spinner');
 	});
 }
 
 
 /* Edit Button */
 $('#item_edit').click(function(e){
-	$('.button-edit-icon').addClass('ion-load-c spinner').removeClass('pi-edit');
+	$('.button-edit-icon').addClass('pi-spin spinner').removeClass('pi-edit');
 	// When clicking on the edit icon, embed the edit
 	e.preventDefault;
 	node_id = document.getElementById("item_edit");
@@ -65,7 +65,7 @@ $('#item_edit').click(function(e){
 
 /* Add Button */
 $('#item_add').click(function(e){
-	$('.button-add-icon').addClass('ion-load-c spinner').removeClass('pi-collection-plus');
+	$('.button-add-icon').addClass('pi-spin spinner').removeClass('pi-collection-plus');
 	e.preventDefault;
 	node_id = document.getElementById("item_add");
 	addNode(node_id.getAttribute('data-parent_node_id'));
@@ -144,9 +144,9 @@ $('#item_featured').click(function(e){
 	})
 	.done(function(){
 		$('.button-featured').addClass('featured');
-		$('.button-featured-icon').addClass('ion-ios-star').removeClass('ion-ios-star-outline');
+		$('.button-featured-icon').addClass('pi-star-filled').removeClass('pi-star');
 
-		statusBarSet('success', 'Featured status toggled', 'ion-ios-star');
+		statusBarSet('success', 'Featured status toggled', 'pi-star-filled');
 	});
 });
 

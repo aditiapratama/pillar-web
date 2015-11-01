@@ -6,13 +6,13 @@ function projectNavCollapse() {
 
 	$("#project_context").addClass('project_nav-collapsed');
 
-	$('#project_nav').perfectScrollbar('destroy');
 
 	$('.project_nav-expand-btn').show();
 	$('.project_nav-collapse-btn').hide();
 
 	$("ul.breadcrumb.context").addClass('active');
 
+	Ps.destroy(document.getElementById('project_nav'));
 };
 
 function projectNavExpand() {
@@ -22,13 +22,13 @@ function projectNavExpand() {
 
 	$("#project_context").removeAttr('class');
 
-	$('#project_nav').perfectScrollbar({suppressScrollX: true});
 
 	$('.project_nav-expand-btn').hide();
 	$('.project_nav-collapse-btn').show();
 
 	$("ul.breadcrumb.context").removeClass('active');
 
+	Ps.initialize(document.getElementById('project_nav'), {suppressScrollX: true});
 };
 
 function projectNavCheck(){

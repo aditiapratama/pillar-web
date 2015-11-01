@@ -4,7 +4,7 @@
 
 	| {% if node.picture %}
 	section.node-preview.image
-		img(src="{{ node.picture.thumbnail('l') }}")
+		img.node-preview-thumbnail(src="{{ node.picture.thumbnail('l') }}")
 	| {% endif %}
 
 
@@ -43,5 +43,12 @@
 
 include ../../_scripts
 
+| {% endblock %}
+
+| {% block footer_scripts %}
+script.
+	if ($('.node-preview-thumbnail').width() > 750) {
+		$('.node-preview.image, .node-preview-thumbnail').css({'max-height': '100%', 'width': '100%'});
+	}
 | {% endblock %}
 

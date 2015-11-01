@@ -485,8 +485,19 @@ footer
 		box-shadow: none
 
 
-.material-icons
-	font-size: 1em // reset, since default is 24px
+.tooltip
+	.tooltip-inner
+		max-width: auto
+		white-space: nowrap
+		background-color: $color-background-nav
+		color: $color-text-light-primary
+		border-radius: 3px
+
+	&.top .tooltip-arrow,
+	&.bottom .tooltip-arrow,
+	&.left .tooltip-arrow,
+	&.right .tooltip-arrow
+		border-right-color: $color-background-nav
 
 input, input.form-control
 	+input-generic

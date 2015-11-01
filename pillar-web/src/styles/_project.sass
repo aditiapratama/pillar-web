@@ -51,7 +51,7 @@ $list-node-children-item-width: 160px
 	position: relative
 
 	color: white
-	border-right: thick solid lighten($color-background-nav, 10%)
+	border-right: thick solid $color-background-nav
 
 	user-select: none
 
@@ -408,8 +408,8 @@ $list-node-children-item-width: 160px
 	float: left
 	padding:
 		left: 10px
-		right: 24px
-		top: 10px
+		right: 0
+		top: 0
 		bottom: 3px
 	position: absolute
 	bottom: 0
@@ -439,14 +439,11 @@ $list-node-children-item-width: 160px
 /* Project context on the right of the navigation */
 /* Contains #project_context */
 #project_context-container
-	position: relative
+	// position: relative
+	overflow: hidden
 	display: flex
 
 	flex-direction: column
-	// background-color: white
-
-	+media-lg
-		border-bottom-right-radius: 3px
 
 	iframe#server_error
 		width: 100%
