@@ -2,14 +2,13 @@
 	margin: 0 auto 15px auto
 	display: flex
 	justify-content: center
-	+container-box
-
 
 	&.post-create
 		flex-direction: row-reverse
 
 	#blog_index-container,
 	#blog_post-container
+		+container-box
 		width: 75%
 		padding: 25px
 
@@ -33,7 +32,7 @@
 				color: $color-text-dark
 				font:
 					family: $font-body
-					size: 1em
+					size: 1.3em
 					weight: 300
 
 		.button-create
@@ -71,8 +70,7 @@
 
 #blog_index-sidebar
 	width: 25%
-	background-color: lighten($color-background, 5%)
-	padding: 25px
+	padding: 0 15px
 
 	.button-create
 		display: block
@@ -84,3 +82,91 @@
 		.form-group
 			.form-control
 				background-color: white
+
+	.blog_project-sidebar
+		+container-box
+		background-color: lighten($color-background, 5%)
+		padding: 20px
+
+	.blog_project-card
+		position: relative
+		width: 100%
+		border-radius: 3px
+		overflow: hidden
+		background-color: white
+		color: lighten($color-text, 10%)
+		box-shadow: 0 0 30px rgba(black, .2)
+
+		margin:
+			top: 0
+			bottom: 15px
+			left: auto
+			right: auto
+
+
+		a.item-header
+			position: relative
+			width: 100%
+			height: 100px
+			display: block
+			background-size: 100% 100%
+
+			overflow: hidden
+
+			.overlay
+				width: 100%
+				height: 100px
+				@include overlay(transparent, 0%, rgba(white, .6), 100%)
+
+
+			img.background
+				width: 100%
+				filter: blur(5px)
+				transform: scale(1.4)
+
+		.card-thumbnail
+
+			position: absolute
+			height: 90px
+			width: 90px
+			display: block
+			top: 35px
+			left: 50%
+			transform: translateX(-50%)
+			background-color: white
+			border-radius: 3px
+			overflow: hidden
+
+			&:hover
+				img.thumb
+					opacity: .9
+
+			img.thumb
+				width: 100%
+				border-radius: 3px
+				transition: opacity 150ms ease-in-out
+				+position-center-translate
+
+
+		.item-info
+			padding: 10px 20px
+			background-color: white
+			border-bottom-left-radius: 3px
+			border-bottom-right-radius: 3px
+
+			a.item-title
+				display: inline-block
+				width: 100%
+				padding: 30px 0 15px 0
+				color: $color-text-dark
+				text-align: center
+				font:
+					size: 1.6em
+					family: $font-headings
+					weight: 300
+
+				transition: color 150ms ease-in-out
+
+				&:hover
+					text-decoration: none
+					color: $color-primary

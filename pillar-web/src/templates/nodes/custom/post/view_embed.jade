@@ -1,3 +1,11 @@
+
+| {% block header_backdrop %}
+| {% if project.properties.picture_header %}
+.navbar-backdrop(style="background-image: url({{ project.properties.picture_header.thumbnail('m') }})")
+.navbar-backdrop-overlay
+| {% endif %}
+| {% endblock %}
+
 | {% block body %}
 
 .container.box
@@ -22,6 +30,30 @@
 					i.pi-spin
 
 		#blog_index-sidebar
+
+			.blog_project-card
+				a.item-header(
+					href="{{ url_for('project_view', name='bi', project=project.properties.url) }}")
+
+					.overlay
+					img.background(src="{{ project.properties.picture_header.thumbnail('m') }}")
+
+				a.card-thumbnail(
+					href="{{ url_for('project_view', name='bi', project=project.properties.url) }}")
+
+					img.thumb(src="{{ project.properties.picture_square.thumbnail('m') }}")
+
+				.item-info
+
+					a.item-title(
+						href="{{ url_for('project_view', name='bi', project=project.properties.url) }}")
+						| {{ project.name }}
+
+					| {% if project.properties.summary %}
+					p.item-description
+						| {{project.properties.summary|safe}}
+					| {% endif %}
+
 
 | {% endblock %}
 

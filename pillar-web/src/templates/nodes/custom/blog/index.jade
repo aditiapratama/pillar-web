@@ -2,6 +2,13 @@
 
 | {% block page_title %}Blog{% endblock%}
 
+| {% block header_backdrop %}
+| {% if project.properties.picture_header %}
+.navbar-backdrop(style="background-image: url({{ project.properties.picture_header.thumbnail('m') }})")
+.navbar-backdrop-overlay
+| {% endif %}
+| {% endblock %}
+
 | {% block body %}
 
 .container.box
@@ -16,7 +23,7 @@
 			.blog_index-item
 
 				a.item-title(
-					href="{{url_for('main_blog', url=node.properties.url)}}")
+					href="{{ url_for('nodes.view', node_id=node._id, redir=1) }}")
 					| {{node.name}}
 
 				.item-info
@@ -35,9 +42,34 @@
 			| {% endif %}
 
 		#blog_index-sidebar
+
+			.blog_project-card
+				a.item-header(
+					href="{{ url_for('project_view', name='bi', project=project.properties.url) }}")
+
+					.overlay
+					img.background(src="{{ project.properties.picture_header.thumbnail('m') }}")
+
+				a.card-thumbnail(
+					href="{{ url_for('project_view', name='bi', project=project.properties.url) }}")
+
+					img.thumb(src="{{ project.properties.picture_square.thumbnail('m') }}")
+
+				.item-info
+
+					a.item-title(
+						href="{{ url_for('project_view', name='bi', project=project.properties.url) }}")
+						| {{ project.name }}
+
+					| {% if project.properties.summary %}
+					p.item-description
+						| {{project.properties.summary|safe}}
+					| {% endif %}
+
 			| {% if node_type_post and node_type_post.has_method('POST') %}
-			a.btn.btn-default.button-create(href="/blog/create")
-				| Create New Post
+			.blog_project-sidebar
+				a.btn.btn-default.button-create(href="/blog/create")
+					| Create New Post
 			| {% endif %}
 
 | {% endblock %}
