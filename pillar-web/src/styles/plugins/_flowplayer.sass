@@ -145,12 +145,23 @@ $flowplayer-skin-background: $color-background-nav
 
 
 /* Loading */
-.flowplayer .fp-waiting
-	// background-image: none !important
+.flowplayer .fp-ui .fp-waiting
+		display: none !important
 
-.flowplayer .fp-waiting em,
-.flowplayer .fp-waiting p
-	// display: none !important
+.flowplayer .fp-waiting
+	color: white
+	position: absolute
+	top: 0
+	bottom: 0
+	left: 0
+	right: 0
+	margin: 0
+	background-color: rgba($flowplayer-skin-background, .5)
+
+	i
+		font-size: 2em
+		opacity: .2
+		+position-center-translate
 
 .flowplayer .fp-loading
 	opacity: 0
@@ -175,3 +186,6 @@ $flowplayer-skin-background: $color-background-nav
 .flowplayer.is-loading .fp-loading
 	opacity: 1
 	z-index: 12
+
+.flowplayer.is-loading .fp-startscreen
+	display: none
