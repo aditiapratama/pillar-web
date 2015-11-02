@@ -1281,12 +1281,20 @@ section.node-children
 				&.field-error
 					border-color: $color-danger
 
+			.md-preview-loading
+				position: absolute
+				left: 85px
+				padding-top: 5px
+				font-size: .9em
+				color: $color-text-dark-secondary
+				display: none
+
 			.node-edit-form-md-preview
 
 				+markdown-preview-container
 
 				&:before
-					content: 'Live Preview:'
+					content: 'Live Preview'
 					position: absolute
 					top: -25px
 					font-size: .9em

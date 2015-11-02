@@ -71,12 +71,31 @@ script(type="text/javascript").
 
 	/* Build the markdown preview when typing in textarea */
 	$(function() {
+
 		var $textarea = $('.form-group.description textarea'),
-				$preview = $('<div class="node-edit-form-md-preview" />').insertAfter($textarea);
+				$loader = $('<div class="md-preview-loading"><i class="pi-spin spin"></i></div>').insertAfter($textarea),
+				$preview = $('<div class="node-edit-form-md-preview" />').insertAfter($loader);
+
+		$loader.hide();
+
+		// Delay function to not start converting heavy posts immediately
+		var delay = (function(){
+			var timer = 0;
+			return function(callback, ms){
+				clearTimeout (timer);
+				timer = setTimeout(callback, ms);
+			};
+		})();
 
 		$textarea.keyup(function() {
-			// Convert markdown
-			$preview.html(convert($textarea.val()));
+			$loader.show();
+
+			delay(function(){
+				// Convert markdown
+				$preview.html(convert($textarea.val()));
+				$loader.hide();
+			}, 1500 );
+
 		}).trigger('keyup');
 	});
 
