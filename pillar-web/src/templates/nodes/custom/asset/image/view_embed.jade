@@ -23,7 +23,7 @@
 				li.node-details-meta-list-item.status
 						| {{node.properties.status}}
 
-				li.node-details-meta-list-item.date(title="Created {{ node._updated | pretty_date }}")
+				li.node-details-meta-list-item.date(title="Created {{ node._created | pretty_date }}")
 					| {{ node._updated | pretty_date }}
 
 				li.node-details-meta-list-item.type
@@ -48,7 +48,7 @@ include ../../_scripts
 | {% block footer_scripts %}
 script.
 	if ($('.node-preview-thumbnail').width() > 750) {
-		$('.node-preview.image, .node-preview-thumbnail').css({'max-height': '100%', 'width': '100%'});
+		$('.node-preview, .node-preview-thumbnail').css({'max-height': '100%', 'width': '100%'});
 	}
 | {% endblock %}
 

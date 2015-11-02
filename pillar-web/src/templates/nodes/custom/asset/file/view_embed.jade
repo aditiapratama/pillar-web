@@ -4,7 +4,7 @@
 
 	| {% if node.picture %}
 	section.node-preview.file
-		img(src="{{ node.picture.thumbnail('l') }}")
+		img.node-preview-thumbnail(src="{{ node.picture.thumbnail('l') }}")
 	| {% endif %}
 
 
@@ -50,6 +50,6 @@ include ../../_scripts
 | {% block footer_scripts %}
 script.
 	if ($('.node-preview-thumbnail').width() > 750) {
-		$('.node-preview.image, .node-preview-thumbnail').css({'max-height': '100%', 'width': '100%'});
+		$('.node-preview.file, .node-preview-thumbnail').css({'max-height': '100%', 'width': '100%'});
 	}
 | {% endblock %}
