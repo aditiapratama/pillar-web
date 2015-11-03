@@ -12,7 +12,9 @@ function projectNavCollapse() {
 
 	$("ul.breadcrumb.context").addClass('active');
 
-	Ps.destroy(document.getElementById('project_nav'));
+	if (typeof Ps !== 'undefined'){
+		Ps.destroy(document.getElementById('project_nav'));
+	};
 };
 
 function projectNavExpand() {
@@ -28,27 +30,35 @@ function projectNavExpand() {
 
 	$("ul.breadcrumb.context").removeClass('active');
 
-	Ps.initialize(document.getElementById('project_nav'), {suppressScrollX: true});
+	if (typeof Ps !== 'undefined'){
+		Ps.initialize(document.getElementById('project_nav'), {suppressScrollX: true});
+	};
 };
 
 function projectNavCheck(){
-	nav_status = Cookies.get('bcloud_ui_nav_collapse');
 
-	if (nav_status) {
-		if (nav_status == 'expanded') {
+	/* Only run if we're in a project */
+	if(document.getElementById("project_container") !== null) {
+
+		var nav_status = Cookies.get('bcloud_ui_nav_collapse');
+
+		if (nav_status) {
+			if (nav_status == 'expanded') {
+				projectNavExpand();
+
+			} else if ( nav_status == 'collapsed' ) {
+				projectNavCollapse();
+			}
+		} else {
 			projectNavExpand();
-
-		} else if ( nav_status == 'collapsed' ) {
-			projectNavCollapse();
 		}
-	} else {
-		projectNavExpand();
+
 	}
 }
 
 function projectNavToggle(){
 
-	nav_status = Cookies.get('bcloud_ui_nav_collapse');
+	var nav_status = Cookies.get('bcloud_ui_nav_collapse');
 
 	if (nav_status) {
 		if (nav_status == 'expanded') {
@@ -72,14 +82,20 @@ $('.project_split, .project_nav-collapse-btn, .project_nav-expand-btn').on('clic
 	projectNavToggle();
 });
 
-$(document).keypress(function(e) {
-	var tag = e.target.tagName.toLowerCase();
+/* Check if we're in a project */
+if(document.getElementById("project_container") !== null) {
 
-	if(e.which == 116 && tag != 'input' && tag != 'textarea') {
-		projectNavToggle();
-	}
-});
+	$(document).keypress(function(e) {
+		var tag = e.target.tagName.toLowerCase();
 
+		/* Toggle when pressing [T] key */
+		if(e.which == 116 && tag != 'input' && tag != 'textarea') {
+			projectNavToggle();
+		}
+	});
+}
+
+/* Check on load */
 $( document ).ready(function() {
 	projectNavCheck();
 });

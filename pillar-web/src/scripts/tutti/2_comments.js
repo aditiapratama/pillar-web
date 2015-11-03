@@ -3,10 +3,10 @@
 	$('body').on('click', '.comment-action-reply', function(){
 
 		// container of the comment we are replying to
-		parentDiv = $(this).closest('.comment-container');
+		var parentDiv = $(this).closest('.comment-container');
 
 		// container of the first-level comment in the thread
-		parentDivFirst = $(this).parent().parent().siblings('.is-first');
+		var parentDivFirst = $(this).parent().parent().siblings('.is-first');
 
 
 		// Get the id of the comment
@@ -24,7 +24,7 @@
 		parentDiv.addClass('is-replying');
 
 		// Move comment-reply container field after the parent container
-		commentForm = $('.comment-reply-container').detach();
+		var commentForm = $('.comment-reply-container').detach();
 		parentDiv.after(commentForm);
 	});
 

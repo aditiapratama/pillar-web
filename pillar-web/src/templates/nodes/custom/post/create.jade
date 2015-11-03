@@ -24,28 +24,28 @@
 			| 		{% endwith %}
 
 			#blog_index-sidebar
-				#blog_post-edit-title
-					| &nbsp;
+				.blog_project-sidebar
+					// #blog_post-edit-title
 
-				#blog_post-edit-form
-					| {% for field in form %}
-					| {% if field.name == 'csrf_token' %}
-					| {{ field }}
-					| {% else %}
-					| {% if field.type == "HiddenField" %}
-					| {{ field }}
-					| {% else %}
+					#blog_post-edit-form
+						| {% for field in form %}
+						| {% if field.name == 'csrf_token' %}
+						| {{ field }}
+						| {% else %}
+						| {% if field.type == "HiddenField" %}
+						| {{ field }}
+						| {% else %}
 
-					| {% if field.name in ['picture', 'category', 'status'] %}
+						| {% if field.name in ['picture', 'category', 'status'] %}
 
-					.form-group(class="{{field.name}}")
-						| {{ field.label }}
-						| {{ field(class='form-control') }}
+						.form-group(class="{{field.name}}")
+							| {{ field.label }}
+							| {{ field(class='form-control') }}
 
-					| {% endif %}
-					| {% endif %}
-					| {% endif %}
-					| {% endfor %}
+						| {% endif %}
+						| {% endif %}
+						| {% endif %}
+						| {% endfor %}
 
 			#blog_post-container
 				#blog_post-edit-title

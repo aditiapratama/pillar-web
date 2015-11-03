@@ -22,7 +22,7 @@
 		| {% if children %}
 		| 	{% for child in children %}
 
-		a(href="#", data-node_id="{{ child._id }}", title="{{ child.name }}", class="item_icon")
+		a(href="", data-node_id="{{ child._id }}", title="{{ child.name }}", class="item_icon")
 			.list-node-children-item
 				.list-node-children-item-thumbnail
 

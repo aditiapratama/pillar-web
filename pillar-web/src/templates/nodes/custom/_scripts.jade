@@ -2,8 +2,9 @@ script(type="text/javascript").
 
 	/* Convert Markdown */
 	var convert = new Markdown.getSanitizingConverter().makeHtml;
-	convert_fields = '.node-details-description, .blog_index-item .item-content';
+	var convert_fields = '.node-details-description, .blog_index-item .item-content';
 
+	/* Parse description/content fields to convert markdown */
 	$(convert_fields).each(function(i){
 		$(convert_fields).eq(i).html(convert($(convert_fields).eq(i).text()));
 	});

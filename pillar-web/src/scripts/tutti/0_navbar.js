@@ -1,10 +1,8 @@
 function NavbarTransparent() {
 
-	startingpoint = 80;
+	var startingpoint = 80;
 
 	$(window).on("scroll", function () {
-
-		scroll = Math.min(Math.max(parseInt(($(this).scrollTop() - startingpoint)), 0), $(this).scrollTop());
 
 		if ($(this).scrollTop() > startingpoint) {
 			$('.navbar-overlay, .navbar-transparent').addClass('is-active');
