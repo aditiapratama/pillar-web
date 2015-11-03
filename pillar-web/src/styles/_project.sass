@@ -41,6 +41,7 @@ $list-node-children-item-width: 160px
 #project_context-container
 	flex: 1
 
+
 /* Container for navigation on the left */
 #project_nav
 
@@ -92,10 +93,6 @@ $list-node-children-item-width: 160px
 	width: 100%
 	clear: both
 	background-color: $color-background-nav
-
-	+media-lg
-		border-top-left-radius: 3px
-		border-top-right-radius: 3px
 
 	span#project-statusbar
 		+position-center-translate
@@ -447,6 +444,7 @@ $list-node-children-item-width: 160px
 	display: flex
 
 	flex-direction: column
+	background-color: white
 
 	iframe#server_error
 		width: 100%
@@ -522,7 +520,7 @@ section.node-preview
 		background-color: black
 
 	&.group, &.project
-		background-color: rgba($color-background-nav, .75)
+		background-color: $color-background-nav
 		position: relative
 		overflow: hidden
 
