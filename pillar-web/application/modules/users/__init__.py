@@ -6,6 +6,7 @@ from pillarsdk.nodes import Node
 from pillarsdk.nodes import NodeType
 from pillarsdk.tokens import Token
 from pillarsdk.groups import Group
+from pillarsdk.exceptions import ResourceInvalid
 
 from flask import Blueprint
 from flask import render_template
@@ -120,15 +121,21 @@ def profile():
     user = User.find(current_user.objectid, api=api)
 
     form = UserProfileForm(
-        full_name = user.full_name)
+        full_name = user.full_name,
+        username = user.username)
 
     if form.validate_on_submit():
-        user.full_name = form.full_name.data
-        user.update(api=api)
-        flash("Profile updated", 'success')
+        try:
+           user.full_name = form.full_name.data
+           user.username = form.username.data
+           user.update(api=api)
+           flash("Profile updated", 'success')
+        except ResourceInvalid as e:
+            message = json.loads(e.content)
+            flash(message)
 
     return render_template('users/profile.html',
-                           form=form)
+            form=form)
 
 
 def type_names():

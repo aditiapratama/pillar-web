@@ -1,12 +1,16 @@
+from pillarsdk.users import User
 from flask_wtf import Form
-from wtforms import TextField
+from wtforms import StringField
 from wtforms import BooleanField
 from wtforms import PasswordField
 from wtforms.validators import DataRequired
+from wtforms.validators import Length
+from wtforms.validators import NoneOf
+from application import SystemUtility
 
 
 class UserLoginForm(Form):
-    email = TextField('Email', validators=[DataRequired()])
+    email = StringField('Email', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
     remember_me = BooleanField('Remember Me')
 
@@ -15,7 +19,25 @@ class UserLoginForm(Form):
 
 
 class UserProfileForm(Form):
-    full_name = TextField('Full Name', validators=[DataRequired()])
+    full_name = StringField('Full Name', validators=[DataRequired(), Length(
+        min=3, max=128, message='Min. 3, max. 128 chars please')])
+    username = StringField('Username', validators=[DataRequired(), Length(
+        min=3, max=128, message='Min. 3, max. 128 chars please')])
 
     def __init__(self, csrf_enabled=False, *args, **kwargs):
         super(UserProfileForm, self).__init__(csrf_enabled=False, *args, **kwargs)
+
+    def validate(self):
+        rv = Form.validate(self)
+        if not rv:
+            return False
+
+        api = SystemUtility.attract_api()
+        user = User.find_first({'where': '{"username": "%s"}' % (self.username.data)}, api=api)
+
+        if user:
+            self.username.errors.append('Sorry, username already exists!')
+            return False
+
+        self.user = user
+        return True
