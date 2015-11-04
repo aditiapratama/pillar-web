@@ -34,7 +34,6 @@
         if (tag.match(basic_tag_whitelist) || tag.match(a_white) || tag.match(img_white) || tag.match(iframe_youtube)) {
             return tag;
         } else {
-            console.log(tag);
             return "";
         }
     }
