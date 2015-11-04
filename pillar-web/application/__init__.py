@@ -2,6 +2,7 @@ import sys
 import os
 import config
 import bugsnag
+import redis
 from bugsnag.flask import handle_exceptions
 from pillarsdk import Api
 from pillarsdk import NodeType
@@ -93,7 +94,6 @@ class UserClass(UserMixin):
             return False
 
 
-
 class SystemUtility():
     def __new__(cls, *args, **kwargs):
         raise TypeError("Base class may not be instantiated")
@@ -137,9 +137,17 @@ class SystemUtility():
         else:
             return None
 
-# Initialized the available extensions
+# Initialize the available extensions
 mail = Mail(app)
 cache = Cache(app)
+
+# Initialize Redis client to manage deletion of custom cache keys
+if app.config.get('CACHE_REDIS_HOST') and app.config['CACHE_TYPE'] == 'redis':
+    redis_client = redis.StrictRedis(
+        host=app.config['CACHE_REDIS_HOST'],
+        port=app.config['CACHE_REDIS_PORT'])
+else:
+    redis_client = None
 
 
 # Import controllers

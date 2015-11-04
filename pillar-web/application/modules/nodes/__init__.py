@@ -25,9 +25,11 @@ from application.modules.nodes.forms import get_comment_form
 from application.modules.nodes.forms import process_node_form
 from application.modules.nodes.custom.storage import StorageNode
 from application.helpers import Pagination
+from application.helpers.caching import delete_redis_cache_template
 
 from application import app
 from application import SystemUtility
+from application import cache
 
 from flask.ext.login import login_required
 from flask.ext.login import current_user
@@ -37,6 +39,8 @@ from jinja2.exceptions import TemplateNotFound
 RFC1123_DATE_FORMAT = '%a, %d %b %Y %H:%M:%S GMT'
 
 nodes = Blueprint('nodes', __name__)
+
+
 
 def type_names():
     api = SystemUtility.attract_api()
@@ -251,11 +255,19 @@ class FakeNodeAsset(Node):
         self.properties = None
 
 
+@cache.memoize(timeout=3600 * 23)
+def get_file(file_id):
+    api = SystemUtility.attract_api()
+    file_item = File.find(file_id, api=api)
+    return file_item.to_dict()
+
+
 @nodes.route("/<node_id>/view")
 def view(node_id):
     #import time
     #start = time.time()
     api = SystemUtility.attract_api()
+
     # Get node with embedded picture data
     try:
         node = Node.find(node_id + '/?embedded={"picture":1, "node_type":1}', api=api)
@@ -438,7 +450,8 @@ def view(node_id):
 
     # Get previews
     if node.picture:
-        node.picture = File.find(node.picture._id, api=api)
+        f = File()
+        node.picture = f.from_dict(get_file(node.picture._id))
     # Get Parent
     try:
         parent = Node.find(node['parent'], api=api)
@@ -492,7 +505,8 @@ def view(node_id):
             embedded_node_id=embedded_node_id,
             parent=parent,
             children=children,
-            config=app.config)
+            config=app.config,
+            api=api)
 
     #print(time.time() - start)
     return return_content
@@ -609,6 +623,13 @@ def edit(node_id):
                 project_update_nodes_list(node_id, list_name='blog')
             else:
                 project_update_nodes_list(node_id)
+
+            # Delete cached template fragment
+            delete_redis_cache_template('asset_view', node._id)
+            # Delete memoized File object
+            cache.delete_memoized(get_file, node._id)
+            # Emergency hardcore cache flush
+            # cache.clear()
             return redirect(url_for('nodes.view', node_id=node_id, embed=1))
         else:
             error = "Server error"
