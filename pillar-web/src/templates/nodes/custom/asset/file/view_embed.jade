@@ -4,7 +4,7 @@
 
 	| {% if node.picture %}
 	section.node-preview.file
-		img.node-preview-thumbnail(src="{{ node.picture.thumbnail('l') }}")
+		img.node-preview-thumbnail(src="{{ node.picture.thumbnail('l', api=api) }}")
 	| {% endif %}
 
 

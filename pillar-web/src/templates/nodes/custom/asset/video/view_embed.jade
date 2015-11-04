@@ -8,7 +8,7 @@ link(rel="stylesheet", href="//releases.flowplayer.org/6.0.3/skin/minimalist.css
 
 	section.node-preview.video
 		#flowplayer_container.is-splash.play-button(
-			style="{% if node.picture %}background-image:url({{node.picture.thumbnail('l')}}); background-repeat:no-repeat; {% endif %}")
+			style="{% if node.picture %}background-image:url({{node.picture.thumbnail('l', api=api)}}); background-repeat:no-repeat; {% endif %}")
 			.fp-startscreen.fp-toggle
 				a.big-play-button
 					i.pi-play

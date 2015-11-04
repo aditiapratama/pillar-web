@@ -4,7 +4,7 @@
 
 	section.node-preview.group
 		| {% if node.picture %}
-		img.backdrop(src="{{ node.picture.thumbnail('l') }}")
+		img.backdrop(src="{{ node.picture.thumbnail('l', api=api) }}")
 		.overlay
 		| {% endif %}
 		.node-title
@@ -28,7 +28,7 @@
 
 					| {% if child.picture %}
 					img(
-						src="{{ child.picture.thumbnail('b')}} ")
+						src="{{ child.picture.thumbnail('b', api=api)}} ")
 					| {% endif %}
 
 					.list-node-children-item-thumbnail-icon
