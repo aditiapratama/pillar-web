@@ -60,6 +60,7 @@ meta(name="twitter:image", content="{% if title == 'open-projects' %}{{ url_for(
 			.node_index-collection
 
 				| {% for project in projects %}
+				| {% if project.properties.status == 'published' %}
 				.node_index-collection-card-container
 					.node_index-collection-card
 						a.item-header(
@@ -85,6 +86,34 @@ meta(name="twitter:image", content="{% if title == 'open-projects' %}{{ url_for(
 								| {{project.properties.summary|safe}}
 							| {% endif %}
 
+				| {% elif project.properties.status == 'pending' %}
+				.node_index-collection-card-container
+					.node_index-collection-card
+						a.item-header(
+							href="{{ url_for('project_view', name='bi', project=project.properties.url) }}")
+
+							.overlay
+							img.background(src="{{ project.properties.picture_header.thumbnail('m') }}")
+
+						a.card-thumbnail(
+							href="{{ url_for('project_view', name='bi', project=project.properties.url) }}")
+
+							img.thumb(src="{{ project.properties.picture_square.thumbnail('m') }}")
+
+						.item-info
+
+							a.item-title(
+								href="{{ url_for('project_view', name='bi', project=project.properties.url) }}")
+								| {{project.name}}
+								small  (pending)
+
+
+							| {% if project.properties.summary %}
+							p.item-description
+								| {{project.properties.summary|safe}}
+							| {% endif %}
+
+				| {% endif %}
 				| {% endfor %}
 
 | {% endblock %}
