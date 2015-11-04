@@ -22,7 +22,7 @@
 		| {% if children %}
 		| 	{% for child in children %}
 
-		a(href="", data-node_id="{{ child._id }}", title="{{ child.name }}", class="item_icon")
+		a(href="#", data-node_id="{{ child._id }}", title="{{ child.name }}", class="item_icon")
 			.list-node-children-item
 				.list-node-children-item-thumbnail
 
@@ -62,8 +62,8 @@
 	script.
 		$('a.item_icon').unbind("click");
 		$('a.item_icon').click(function(e){
-			// When clicking on a node preview, we load its content
 			e.preventDefault;
+			// When clicking on a node preview, we load its content
 			var nodeId = $(this).data('node_id');
 			displayNode(nodeId);
 			// Update tree with current selection
