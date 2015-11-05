@@ -163,10 +163,13 @@ script(type="text/javascript").
 					if (data.status === 'success') {
 						// If successful, add id to the picture hidden field
 						if ($("#picture").val()){
+							$('.node-preview-thumbnail').hide();
 							deleteFile($("#picture"), data.data.id);
 						} else {
 							$("#picture").val(data.data.id);
 						}
+						$('.node-preview-thumbnail').attr('src', data.data.link);
+						$('.node-preview-thumbnail').show();
 						statusBarSet('success', 'File Uploaded Successfully');
 					}
 				});
