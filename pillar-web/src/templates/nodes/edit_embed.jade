@@ -249,7 +249,8 @@ script(type="text/javascript").
 
 	$('#file_delete').click(function(e){
 		e.preventDefault();
-		deleteFile($(this).data('file_id'));
+		var file_field = $('#picture');
+		deleteFile(file_field);
 		$('.node-preview-thumbnail').hide();
 	});
 
