@@ -2,12 +2,10 @@ from flask import Blueprint
 from flask import render_template
 from flask import redirect
 from flask import url_for
-
-from pillarsdk import NodeType
-from application.modules.nodes.forms import NodeTypeForm
-
 from flask.ext.login import login_required
-
+from pillarsdk import NodeType
+from application import SystemUtility
+from application.modules.nodes.forms import NodeTypeForm
 
 # Name of the Blueprint
 node_types = Blueprint('node_types', __name__)
@@ -18,7 +16,8 @@ node_types = Blueprint('node_types', __name__)
 def index():
     """Display the node types
     """
-    node_types = NodeType.all()
+    api = SystemUtility.attract_api()
+    node_types = NodeType.all(api=api)
     node_types = node_types['_items']
     return render_template('node_types/index.html',
                            title='node_types',
