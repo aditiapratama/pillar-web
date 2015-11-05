@@ -14,7 +14,9 @@ meta(name="twitter:card", content="summary_large_image")
 meta(name="twitter:site", content="@Blender_Cloud")
 meta(name="twitter:title", content="{{node.name}} on Blender Cloud")
 meta(name="twitter:description", content="{{node.properties.summary}}")
+| {% if node.properties.picture_header %}
 meta(name="twitter:image", content="{{ node.properties.picture_header.thumbnail('l') }}")
+| {% endif %}
 | {% endblock %}
 
 | {% block head %}
@@ -22,7 +24,9 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 | {% endblock %}
 
 | {% block header_backdrop %}
+| {% if node.properties.picture_header %}
 .navbar-backdrop(style="background-image: url({{ node.properties.picture_header.thumbnail('l') }})")
+| {% endif %}
 .navbar-backdrop-overlay
 | {% endblock %}
 

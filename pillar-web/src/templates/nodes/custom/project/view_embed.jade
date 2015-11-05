@@ -2,7 +2,9 @@
 
 #node-container
 	section.node-preview.project
+		| {% if node.properties.picture_header %}
 		img.header(src="{{ node.properties.picture_header.thumbnail('l', api=api) }}")
+		| {% endif %}
 
 	section.node-details-container.project
 

@@ -44,18 +44,21 @@
 			| {% endif %}
 
 		#blog_index-sidebar
-
+			| {% if project._id != config.MAIN_PROJECT_ID %}
 			.blog_project-card
 				a.item-header(
 					href="{{ url_for('project_view', name='bi', project=project.properties.url) }}")
 
 					.overlay
+					| {% if project.properties.picture_header %}
 					img.background(src="{{ project.properties.picture_header.thumbnail('m') }}")
+					| {% endif %}
 
 				a.card-thumbnail(
 					href="{{ url_for('project_view', name='bi', project=project.properties.url) }}")
-
+					| {% if project.properties.picture_square %}
 					img.thumb(src="{{ project.properties.picture_square.thumbnail('m') }}")
+					| {% endif %}
 
 				.item-info
 
@@ -67,6 +70,7 @@
 					p.item-description
 						| {{project.properties.summary|safe}}
 					| {% endif %}
+			| {% endif %}
 
 			| {% if node_type_post and node_type_post.has_method('POST') %}
 			.blog_project-sidebar
