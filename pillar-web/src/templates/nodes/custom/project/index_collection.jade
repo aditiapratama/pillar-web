@@ -60,58 +60,37 @@ meta(name="twitter:image", content="{% if title == 'open-projects' %}{{ url_for(
 			.node_index-collection
 
 				| {% for project in projects %}
-				| {% if project.properties.status == 'published' %}
+				| {% if (project.properties.status == 'published') or (project.properties.status == 'pending' and current_user.is_authenticated() and current_user.has_role('admin'))%}
 				.node_index-collection-card-container
 					.node_index-collection-card
 						a.item-header(
 							href="{{ url_for('project_view', name='bi', project=project.properties.url) }}")
 
 							.overlay
+							| {% if project.properties.picture_header %}
 							img.background(src="{{ project.properties.picture_header.thumbnail('m') }}")
+							| {% endif %}
 
 						a.card-thumbnail(
 							href="{{ url_for('project_view', name='bi', project=project.properties.url) }}")
-
+							| {% if project.properties.picture_header %}
 							img.thumb(src="{{ project.properties.picture_square.thumbnail('m') }}")
+							| {% endif %}
 
 						.item-info
 
 							a.item-title(
 								href="{{ url_for('project_view', name='bi', project=project.properties.url) }}")
 								| {{project.name}}
+								| {% if project.properties.status == 'pending' and current_user.is_authenticated() and current_user.has_role('admin') %}
+								small (pending)
+								| {% endif %}
 
 
 							| {% if project.properties.summary %}
 							p.item-description
 								| {{project.properties.summary|safe}}
 							| {% endif %}
-				| {% elif project.properties.status == 'pending' and current_user.is_authenticated() and current_user.has_role('admin') %}
-				.node_index-collection-card-container
-					.node_index-collection-card
-						a.item-header(
-							href="{{ url_for('project_view', name='bi', project=project.properties.url) }}")
-
-							.overlay
-							img.background(src="{{ project.properties.picture_header.thumbnail('m') }}")
-
-						a.card-thumbnail(
-							href="{{ url_for('project_view', name='bi', project=project.properties.url) }}")
-
-							img.thumb(src="{{ project.properties.picture_square.thumbnail('m') }}")
-
-						.item-info
-
-							a.item-title(
-								href="{{ url_for('project_view', name='bi', project=project.properties.url) }}")
-								| {{project.name}}
-								small  (pending)
-
-
-							| {% if project.properties.summary %}
-							p.item-description
-								| {{project.properties.summary|safe}}
-							| {% endif %}
-
 				| {% endif %}
 				| {% endfor %}
 
