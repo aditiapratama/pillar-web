@@ -410,3 +410,16 @@ def create():
 
     return jsonify(status='success', data=dict(id=file_item._id,
                                                 link=thumbnail.link))
+
+
+@files.route('/delete/<item_id>', methods=['POST'])
+def item_delete(item_id):
+    """We run this when updating a preview picture (after succesfully uploading
+    a new one).
+    """
+    api = SystemUtility.attract_api()
+    file_item = File.find(item_id, api=api)
+    file_item.delete(api=api)
+    return jsonify(status='success', data=dict(message='File deleted'))
+
+

@@ -648,6 +648,11 @@ def edit(node_id):
 
     set_properties(dyn_schema, form_schema, node_properties, form)
 
+    # Get previews
+    if node.picture:
+        f = File()
+        node.picture = f.from_dict(get_file(node.picture))
+
     # Get Parent
     try:
         parent = Node.find(node['parent'], api=api)
@@ -674,7 +679,8 @@ def edit(node_id):
                 parent=parent,
                 form=form,
                 errors=form.errors,
-                error=error)
+                error=error,
+                api=api)
     except TemplateNotFound:
         template = 'nodes/edit{1}.html'.format(node_type['name'], embed_string)
         return render_template(
@@ -683,7 +689,8 @@ def edit(node_id):
                 parent=parent,
                 form=form,
                 errors=form.errors,
-                error=error)
+                error=error,
+                api=api)
 
 
 @nodes.route("/<node_id>/delete", methods=['GET', 'POST'])

@@ -45,6 +45,12 @@
 
 		.form-group(class="{{field.name}}")
 			| {{ field.label }}
+			| {% if field.name == 'picture' %}
+			| {% if node.picture %}
+			img.node-preview-thumbnail(src="{{ node.picture.thumbnail('m', api=api) }}")
+			a(href="#", id="file_delete", data-file_id="{{node.picture._id}}") Delete
+			| {% endif %}
+			| {% endif %}
 			| {{ field(class='form-control') }}
 
 		| {% endif %}
@@ -68,6 +74,22 @@ script(type='text/javascript', src="{{ url_for('static', filename='jquery-file-u
 script(type="text/javascript").
 
 	var convert = new Markdown.getSanitizingConverter().makeHtml;
+
+	function deleteFile(fileField, newFileId) {
+		newFileId = newFileId || null;
+		var fileId = fileField.val();
+		var url = '/files/delete/' + fileId;
+		$.post(url, function(data){}).success(function(dataResponse){
+			// Notify of successful request
+			statusBarSet('success', 'Original File Removed Successfully');
+			// If we provide the id of a previously uploaded file, add it here
+			if (newFileId) {
+				fileField.val(newFileId);
+			} else {
+				fileField.val('');
+			}
+		});
+	}
 
 	/* Build the markdown preview when typing in textarea */
 	$(function() {
@@ -134,12 +156,18 @@ script(type="text/javascript").
 				// Get the first file upload result (we only need one)
 				var file_data = data.result.files[0]
 				// Create a file object on the server and retrieve its id
+				statusBarSet('info', 'Uploading File');
 				$.post("{{url_for('files.create')}}",
 					{name : file_data.name, size: file_data.size, type: file_data.type})
 					.done(function(data) {
 					if (data.status === 'success') {
 						// If successful, add id to the picture hidden field
-						$("#picture").val(data.data.id);
+						if ($("#picture").val()){
+							deleteFile($("#picture"), data.data.id);
+						} else {
+							$("#picture").val(data.data.id);
+						}
+						statusBarSet('success', 'File Uploaded Successfully');
 					}
 				});
 			}
@@ -149,6 +177,7 @@ script(type="text/javascript").
 	$("#node-edit-form").unbind( "submit" );
 	$("#item_save").unbind( "click" );
 	$("#item_cancel").unbind( "click" );
+	$("#file_delete").unbind( "click" );
 
 	/* Reset Save Changes button status */
 	$("li.button-save").removeClass('field-error saving');
@@ -216,6 +245,12 @@ script(type="text/javascript").
 
 		$('.project-mode-view').show();
 		$('.project-mode-edit').hide();
+	});
+
+	$('#file_delete').click(function(e){
+		e.preventDefault();
+		deleteFile($(this).data('file_id'));
+		$('.node-preview-thumbnail').hide();
 	});
 
 	//- console.log($._data($(elementSelector)[0], "events"));
