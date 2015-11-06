@@ -717,3 +717,4 @@ def delete(node_id):
 
 # Import of custom modules (using the same nodes decorator)
 from application.modules.nodes.custom.assets import *
+from application.modules.nodes.custom.groups import *

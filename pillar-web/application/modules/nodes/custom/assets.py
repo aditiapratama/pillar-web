@@ -40,14 +40,11 @@ def assets_create():
     # We will create the Node object later on, after creating the file object
     node_asset_props = dict(
         name=name,
-        #description=a.description,
-        #picture=picture,
+        project=project_id,
         user=current_user.objectid,
         node_type=node_type._id,
-        #parent=node_parent,
         properties=dict(
             content_type=filetype,
-            #file=a.link[4:],
             status='processing'))
 
     if filetype == 'file':
@@ -55,7 +52,7 @@ def assets_create():
     else:
         mime_type_base = filetype
     mime_type = "{0}/{1}".format(mime_type_base, ext.replace(".", ""))
-    node_file = node_file = process_and_create_file(project_id, name, 0, mime_type)
+    node_file = process_and_create_file(project_id, name, 0, mime_type)
 
     node_asset_props['properties']['file'] = node_file._id
     if parent_id:

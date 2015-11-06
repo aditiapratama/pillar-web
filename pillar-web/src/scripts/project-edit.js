@@ -31,7 +31,7 @@ function editNode(nodeId) {
 
 
 /* Add Node */
-function addNode(parentId) {
+function addNode() {
 
 	var url = '/files/upload?embed=1'
 	$.get(url, function(dataHtml) {
@@ -52,6 +52,23 @@ function addNode(parentId) {
 	});
 }
 
+/* Add Group */
+function addGroup(parentId) {
+	var url = '/nodes/groups/create'
+	$.post(url, {
+		name: "New Folder",
+		parent_id: parentId})
+		.done(function(data) {
+			if (parentId) {
+				// We are in embedded mode and try to call the editNode function
+				editNode(data.data.asset_id);
+			} else {
+				window.location.replace("/nodes/" + data.data.asset_id + "/edit");
+			}
+			//alert( "Data Loaded: " + data.message );
+	});
+}
+
 
 /* Edit Button */
 $('#item_edit').click(function(e){
@@ -63,12 +80,20 @@ $('#item_edit').click(function(e){
 });
 
 
-/* Add Button */
+/* Add Asset Button */
 $('#item_add').click(function(e){
 	$('.button-add-icon').addClass('pi-spin spinner').removeClass('pi-collection-plus');
 	e.preventDefault;
-	node_id = document.getElementById("item_add");
-	addNode(node_id.getAttribute('data-parent_node_id'));
+	addNode();
+});
+
+
+/* Add Group Button */
+$('#item_add_group').click(function(e){
+	$('.button-add-group-icon').addClass('pi-spin spinner').removeClass('pi-collection-plus');
+	e.preventDefault;
+	parentNodeId = Cookies.get('bcloud_current_node_id');
+	addGroup(parentNodeId);
 });
 
 /* Move Node */
