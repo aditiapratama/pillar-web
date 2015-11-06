@@ -20,7 +20,9 @@ script(type="text/javascript").
 		{% if node.has_method('PUT') %}
 			$('#item_edit').attr('data-node_id', '{{node._id}}');
 			{% if node.node_type.name != 'post' %}
+			// We might get rid of this soon, in favor of using cookies, in the next line
 			$('#item_add').attr('data-parent_node_id', '{{parent._id}}');
+			Cookies.set('bcloud_parent_node_id', '{{parent._id}}');
 			{% endif %}
 			$('.project-mode-view').fadeIn(100);
 		{% else %}

@@ -190,6 +190,9 @@ script.
 			if (typeof(nodeId) != 'undefined') {
 				window.location.replace('#' + nodeId);
 			};
+			// This cookies is accessed anytime we need to know the context of our
+			// actions, usueally together with the project_id
+			Cookies.set('bcloud_current_node_id', nodeId);
 
 		})
 		.fail(function(dataResponse) {
@@ -210,7 +213,16 @@ script.
 		if (nodeId.substring(0, 2) == 'n_') {
 			nodeId = nodeId.substr(2);
 		}
+		//- var currentNodeId = location.hash.substring(1);
+		//- var currentNodeId = Cookies.get('bcloud_current_node_id');
 
+		//- if (currentNodeId != nodeId) {
+		//- 	var url = '/nodes/' + nodeId + '/view?embed=1'
+		//- 	loadNodeContent(url, nodeId);
+
+		//- 	$('.project-mode-view').show();
+		//- 	$('.project-mode-edit').hide();
+		//- }
 		var url = '/nodes/' + nodeId + '/view?embed=1'
 		loadNodeContent(url, nodeId);
 
@@ -233,6 +245,8 @@ script.
 			nodeId = '{{node._id}}';
 		}
 		{% endif %}
+
+		Cookies.set('bcloud_current_project_id', '{{node._id}}');
 
 		displayNode(nodeId);
 		Ps.initialize(document.getElementById('project_context-container'));
@@ -283,7 +297,7 @@ script.
 		$('#project_tree').on("select_node.jstree", function (e, data) {
 
 			if (typeof(data.node.original.path) === 'undefined') {
-				var moving_node_id = Cookies.get('bcloud_moving_node_id')
+				var moving_node_id = Cookies.get('bcloud_moving_node_id');
 				var node_id = document.getElementById("item_add");
 
 				// Check if we are in the process of moving a node
@@ -302,7 +316,11 @@ script.
 				if (data.node.original.type == 'blog') {
 					window.location.replace('blog');
 				} else {
-					displayNode(data.node.id);
+					var currentNodeId = Cookies.get('bcloud_current_node_id');
+					if (currentNodeId != data.node.id.substr(2)) {
+						displayNode(data.node.id);
+					}
+					//- displayNode(data.node.id);
 					jstreeAPI.toggle_node(data.node);
 				}
 			} else {
@@ -327,7 +345,6 @@ script.
 
 	// Initialize the page
 	loadContent();
-
 
 	/* UI Stuff */
 	// Binding for ajax event

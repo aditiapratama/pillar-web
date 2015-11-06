@@ -100,8 +100,7 @@ script(src= "{{ url_for('static', filename='jquery-file-upload/js/main.js') }}")
 script().
 	$("body").on("click", ".create", function(event) {
 		event.preventDefault();
-		add_button = document.getElementById("item_add");
-		var parent_id = add_button.getAttribute('data-parent_node_id');
+		var parent_id = Cookies.get('bcloud_current_node_id');
 		$.post("{{url_for('nodes.assets_create')}}", {
 			name: $(this).attr("data-name"),
 			type: $(this).attr("data-type"),
