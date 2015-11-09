@@ -151,7 +151,8 @@ def open_projects():
     return render_template(
         'nodes/custom/project/index_collection.html',
         title='open-projects',
-        projects=projects._items)
+        projects=projects._items,
+        api=SystemUtility.attract_api())
 
 
 @app.route("/training")
@@ -161,4 +162,5 @@ def training():
     return render_template(
         'nodes/custom/project/index_collection.html',
         title='training',
-        projects=projects._items)
+        projects=projects._items,
+        api=SystemUtility.attract_api())
