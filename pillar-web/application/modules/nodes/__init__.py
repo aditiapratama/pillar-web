@@ -630,7 +630,8 @@ def edit(node_id):
             cache.delete_memoized(get_file, node._id)
             # Emergency hardcore cache flush
             # cache.clear()
-            return redirect(url_for('nodes.view', node_id=node_id, embed=1))
+            return redirect(url_for('nodes.view', node_id=node_id, embed=1,
+                _external=True, _scheme=app.config['SCHEME']))
         else:
             error = "Server error"
             print ("Error sending data")
