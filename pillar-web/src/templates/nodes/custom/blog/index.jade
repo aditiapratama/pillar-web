@@ -74,7 +74,7 @@
 
 			| {% if node_type_post and node_type_post.has_method('POST') %}
 			.blog_project-sidebar
-				a.btn.btn-default.button-create(href="/blog/create")
+				a.btn.btn-default.button-create(href="{{url_for('nodes.posts_create', project_id=project._id)}}")
 					| Create New Post
 			| {% endif %}
 
