@@ -4,7 +4,7 @@
 
 | {% block header_backdrop %}
 | {% if project.properties.picture_header %}
-.navbar-backdrop(style="background-image: url({{ project.properties.picture_header.thumbnail('m') }})")
+.navbar-backdrop(style="background-image: url({{ project.properties.picture_header.thumbnail('m', api=api) }})")
 .navbar-backdrop-overlay
 | {% endif %}
 | {% endblock %}
@@ -51,13 +51,13 @@
 
 					.overlay
 					| {% if project.properties.picture_header %}
-					img.background(src="{{ project.properties.picture_header.thumbnail('m') }}")
+					img.background(src="{{ project.properties.picture_header.thumbnail('m', api=api) }}")
 					| {% endif %}
 
 				a.card-thumbnail(
 					href="{{ url_for('project_view', name='bi', project=project.properties.url) }}")
 					| {% if project.properties.picture_square %}
-					img.thumb(src="{{ project.properties.picture_square.thumbnail('m') }}")
+					img.thumb(src="{{ project.properties.picture_square.thumbnail('m', api=api) }}")
 					| {% endif %}
 
 				.item-info

@@ -23,7 +23,7 @@
 
 					a.item-image(
 						href="{{ url_for('project_view', name=user.url, project=project.properties.url) }}")
-						img(src="{{ project.properties.picture_square.thumbnail('s') }}")
+						img(src="{{ project.properties.picture_square.thumbnail('s', api=api) }}")
 
 					.item-info
 
