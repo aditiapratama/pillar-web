@@ -133,17 +133,19 @@ script(type="text/javascript").
 
 
 	$(function () {
-		$('#fileupload').fileupload({
+		$('.fileupload').fileupload({
 			dataType: 'json',
 			acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
 			replaceFileInput:false,
-			fileInput: $("input:file"),
+			//fileInput: $("input:" + $(this).data('name')),
+			//dropZone: $(this),
+			dropZone: $(this),
 			formData: {},
-			done: function (e, data) {
-				$.each(data.result.files, function (index, file) {
-					$('<p/>').text(file.name).appendTo(document.body);
-				});
-			},
+			//- done: function (e, data) {
+			//- 	$.each(data.result.files, function (index, file) {
+			//- 		$('<p/>').text(file.name).appendTo(document.body);
+			//- 	});
+			//- },
 			progressall: function (e, data) {
 				// Update progressbar during upload
 				var progress = parseInt(data.loaded / data.total * 100, 10);
@@ -158,15 +160,17 @@ script(type="text/javascript").
 				// Create a file object on the server and retrieve its id
 				statusBarSet('info', 'Uploading File');
 				$.post("{{url_for('files.create')}}",
-					{name : file_data.name, size: file_data.size, type: file_data.type})
+					{name : file_data.name, size: file_data.size, type: file_data.type,
+					field_name: $(this).data('field-name')})
 					.done(function(data) {
 					if (data.status === 'success') {
 						// If successful, add id to the picture hidden field
-						if ($("#picture").val()){
+						var field_name = '#' + data.data.field_name;
+						if ($(field_name).val()){
 							$('.node-preview-thumbnail').hide();
-							deleteFile($("#picture"), data.data.id);
+							deleteFile($(field_name), data.data.id);
 						} else {
-							$("#picture").val(data.data.id);
+							$(field_name).val(data.data.id);
 						}
 						$('.node-preview-thumbnail').attr('src', data.data.link);
 						$('.node-preview-thumbnail').show();

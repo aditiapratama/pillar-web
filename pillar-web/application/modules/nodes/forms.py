@@ -126,11 +126,11 @@ class FileSelectText(HiddenInput):
     def __call__(self, field, **kwargs):
         html =  super(FileSelectText, self).__call__(field, **kwargs)
         button= """
-        <input id="fileupload" type="file" name="file" data-url="{0}">
+        <input class="fileupload" type="file" name="file" data-url="{0}" data-field-name="{1}">
         <div class="picture-progress">
           <div class="picture-progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
           </div>
-        </div>""".format(url_for('files.upload'))
+        </div>""".format(url_for('files.upload'), field.name)
         # <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modal-default">
         #   Upload file!
         # </button>"""
@@ -291,10 +291,15 @@ def get_node_form(node_type):
                 setattr(ProceduralForm,
                         prop_name,
                         BooleanField(prop_name))
-            elif schema_prop['type'] == 'media':
-                setattr(ProceduralForm,
-                        prop_name,
-                        FileField(prop_name))
+            elif schema_prop['type'] == 'objectid' and 'data_relation' in schema_prop:
+                if schema_prop['data_relation']['resource'] == 'files':
+                    setattr(ProceduralForm,
+                            prop_name,
+                            FileSelectField(prop_name))
+                else:
+                    setattr(ProceduralForm,
+                            prop_name,
+                            TextField(prop_name))
             elif 'maxlength' in schema_prop and schema_prop['maxlength'] > 64:
                 setattr(ProceduralForm,
                         prop_name,
