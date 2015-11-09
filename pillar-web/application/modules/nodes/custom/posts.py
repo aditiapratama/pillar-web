@@ -47,7 +47,8 @@ def posts_view(project_id, url=None):
             'nodes/custom/post/view.html',
             blog=blog,
             node=post,
-            project=project)
+            project=project,
+            api=api)
     else:
         # Render all posts
         node_type_post = NodeType.find_one({
@@ -64,7 +65,8 @@ def posts_view(project_id, url=None):
             'nodes/custom/blog/index.html',
             node_type_post=node_type_post,
             posts=posts._items,
-            project=project)
+            project=project,
+            api=api)
 
 
 @nodes.route("/posts/<project_id>/create", methods=['GET', 'POST'])
