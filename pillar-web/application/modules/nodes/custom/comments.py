@@ -58,7 +58,7 @@ def format_comment(comment, is_reply=False, is_team=False, replies=None):
     is_rated_positive = None
     if comment.properties.ratings:
         for rating in comment.properties.ratings:
-            if rating.user == current_user.objectid:
+            if current_user.is_authenticated() and rating.user == current_user.objectid:
                 is_rated = True
                 is_rated_positive = rating.is_positive
                 continue
