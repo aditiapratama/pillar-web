@@ -38,10 +38,21 @@ def posts_view(project_id, url=None):
         try:
             post = Node.find_one({
                 'where': '{"parent": "%s", "properties.url": "%s"}' % (blog._id, url),
-                'embedded': '{"picture":1, "node_type": 1, "user": 1}',
+                'embedded': '{"node_type": 1, "user": 1}',
                 }, api=api)
+            if post.picture:
+                post.picture = File.find(post.picture, api=api)
         except ResourceNotFound:
             return abort(404)
+
+        # If post is not published, check that the user is also the author of
+        # the post. If not, return 404.
+        if post.properties.status != "published":
+            if current_user.is_authenticated():
+                if current_user.objectid != post.user._id:
+                    abort(403)
+            else:
+                abort(403)
 
         return render_template(
             'nodes/custom/post/view.html',
@@ -52,13 +63,14 @@ def posts_view(project_id, url=None):
     else:
         # Render all posts
         node_type_post = NodeType.find_one({
-            'where': '{"name" : "post"}',
+            'where': '{"name": "post"}',
             'projection': '{"permissions":1}'
             }, api=api)
 
+        status_query = "" if blog.has_method('PUT') else ', "properties.status": "published"'
         posts = Node.all({
-            'where': '{"parent": "%s"}' % (blog._id),
-            'embedded': '{"picture":1, "user": 1}',
+            'where': '{"parent": "%s" %s}' % (blog._id, status_query),
+            'embedded': '{"user": 1}',
             'sort': '-_created'
             }, api=api)
         return render_template(
@@ -82,14 +94,59 @@ def posts_create(project_id):
             "parent": "%s"}' % (node_type._id, project_id),
         }, api=api)
     node_type = NodeType.find_one({'where': '{"name" : "post"}',}, api=api)
+    # Check if user is allowed to create a post in the blog
+    if not node_type.has_method('POST'):
+        return abort(403)
     form = get_node_form(node_type)
     if form.validate_on_submit():
         user_id = current_user.objectid
-        if process_node_form(
-                form, node_type=node_type, user=user_id):
+        if process_node_form(form, node_type=node_type, user=user_id):
             return redirect(url_for('main_blog'))
     form.parent.data = blog._id
     return render_template('nodes/custom/post/create.html',
         node_type=node_type,
         form=form,
-        project_id=project_id)
+        project_id=project_id,
+        api=api)
+
+
+@nodes.route("/posts/<post_id>/edit", methods=['GET', 'POST'])
+@login_required
+def posts_edit(post_id):
+    api = SystemUtility.attract_api()
+
+    try:
+        post = Node.find(post_id, {
+            'embedded': '{"node_type": 1, "user": 1}'}, api=api)
+        if post.picture:
+            post.picture = File.find(post.picture, api=api)
+        node_type = post.node_type
+    except ResourceNotFound:
+        return abort(404)
+    # Check if user is allowed to edit the post
+    if not post.has_method('PUT'):
+        return abort(403)
+
+    project_id = post.project
+
+    form = get_node_form(node_type)
+    if form.validate_on_submit():
+        post.name = form.name.data
+        post.update(api=api)
+        if process_node_form(form, node_id=post_id, node_type=node_type,
+                            user=current_user.objectid):
+            return redirect(url_for('nodes.view', node_id=post_id, redir=1))
+    form.parent.data = post.parent
+    form.name.data = post.name
+    form.content.data = post.properties.content
+    form.status.data = post.properties.status
+    form.url.data = post.properties.url
+    if post.picture:
+        form.picture.data = post.picture._id
+    return render_template('nodes/custom/post/edit.html',
+        node_type=node_type,
+        post=post,
+        form=form,
+        project_id=project_id,
+        api=api)
+

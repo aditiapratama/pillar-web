@@ -1,0 +1,163 @@
+| {% extends 'layout.html' %}
+
+| {% block page_title %}New {{ node_type.name }}{% endblock %}
+
+| {% block body %}
+.container.box
+	form(
+		method='POST',
+		action="{{url_for('nodes.posts_edit', post_id=post._id)}}")
+
+		#blog_container.post-create
+
+			| {% with errors = errors %}
+			| {% if errors %}
+			| {% for field in errors %}
+			.alert.alert-danger(role='alert')
+				strong {{field}}
+				| 						{% for message in errors[field] %}
+				| 								{{message}}|
+				| 						{% endfor %}
+			| 				{% endfor %}
+			| 		{% endif %}
+			| 		{% endwith %}
+
+			#blog_index-sidebar
+				.blog_project-sidebar
+					// #blog_post-edit-title
+
+					#blog_post-edit-form
+						| {% for field in form %}
+						| {% if field.name in ['picture', 'category', 'status'] %}
+
+						.form-group(class="{{field.name}}")
+							| {{ field.label }}
+							| {% if field.name == 'picture' %}
+							| {% if post.picture %}
+							img.node-preview-thumbnail(src="{{ post.picture.thumbnail('m', api=api) }}")
+							a(href="#", class="file_delete", data-field-name="picture", data-file_id="{{post.picture._id}}") Delete
+							| {% endif %}
+							| {% endif %}
+							| {{ field(class='form-control') }}
+
+						| {% endif %}
+						| {% endfor %}
+
+			#blog_post-container
+				#blog_post-edit-title
+					| Edit {{ node_type.name }}
+
+				#blog_post-edit-form
+					| {% for field in form %}
+					| {% if field.name == 'csrf_token' %}
+					| {{ field }}
+					| {% else %}
+					| {% if field.type == 'HiddenField' %}
+					| {{ field }}
+					| {% else %}
+
+					| {% if field.name not in ['description', 'picture', 'category', 'status'] %}
+
+					.form-group(class="{{field.name}}")
+						| {{ field.label }}
+						| {{ field(class='form-control') }}
+
+					| {% endif %}
+					| {% endif %}
+					| {% endif %}
+					| {% endfor %}
+
+
+				input.btn.btn-default.button-create(type='submit', value='Update {{ node_type.name }}')
+
+| {% endblock %}
+
+| {% block footer_scripts %}
+script(type='text/javascript', src="{{ url_for('static', filename='jquery-file-upload/js/vendor/jquery.ui.widget.js') }}")
+script(type='text/javascript', src="{{ url_for('static', filename='jquery-file-upload/js/jquery.iframe-transport.js') }}")
+script(type='text/javascript', src="{{ url_for('static', filename='jquery-file-upload/js/jquery.fileupload.js') }}")
+
+script(type="text/javascript").
+	var convert = new Markdown.getSanitizingConverter().makeHtml;
+
+	/* Build the markdown preview when typing in textarea */
+	$(function() {
+		var $textarea = $('.form-group.content textarea'),
+				$preview = $('<div class="node-edit-form-md-preview" />').insertAfter($textarea);
+
+		$textarea.keyup(function() {
+			// Convert markdown
+			$preview.html(convert($textarea.val()));
+		}).trigger('keyup');
+	});
+
+	function deleteFile(fileField, newFileId) {
+		newFileId = newFileId || null;
+		var fileId = fileField.val();
+		var url = '/files/delete/' + fileId;
+		$.post(url, function(data){}).success(function(dataResponse){
+			// Notify of successful request
+			//- statusBarSet('success', 'Original File Removed Successfully');
+			// If we provide the id of a previously uploaded file, add it here
+			if (newFileId) {
+				fileField.val(newFileId);
+			} else {
+				fileField.val('');
+			}
+		});
+	}
+
+	$('.file_delete').click(function(e){
+		e.preventDefault();
+		var field_name = '#' + $(this).data('field-name');
+		var file_field = $(field_name);
+		deleteFile(file_field);
+		$('.node-preview-thumbnail').hide();
+	});
+
+	$(function () {
+		$('.fileupload').fileupload({
+			dataType: 'json',
+			acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
+			replaceFileInput:false,
+			dropZone: $(this),
+			formData: {},
+			progressall: function (e, data) {
+				// Update progressbar during upload
+				var progress = parseInt(data.loaded / data.total * 100, 10);
+				$('.picture-progress-bar').css(
+						'width',
+						progress + '%'
+				);
+			},
+			done: function (e, data) {
+				// Get the first file upload result (we only need one)
+				var file_data = data.result.files[0]
+				// Create a file object on the server and retrieve its id
+				$.post("{{url_for('files.create')}}",
+					{name : file_data.name, size: file_data.size, type: file_data.type,
+					field_name: $(this).data('field-name')})
+					.done(function(data) {
+					if (data.status === 'success') {
+						// If successful, add id to the picture hidden field
+						var field_name = '#' + data.data.field_name;
+						if ($(field_name).val()){
+							$('.node-preview-thumbnail').hide();
+							deleteFile($(field_name), data.data.id);
+						} else {
+							$(field_name).val(data.data.id);
+						}
+						$('.node-preview-thumbnail').attr('src', data.data.link);
+						$('.node-preview-thumbnail').show();
+					}
+				});
+			}
+		});
+	});
+
+| {% endblock %}
+
+| {% block footer_navigation %}
+| {% endblock %}
+| {% block footer %}
+| {% endblock %}

@@ -14,6 +14,9 @@
 		#blog_post-container
 
 			.blog_index-item
+				| {% if node.picture %}
+				img(src="{{ node.picture.thumbnail('m', api=api) }}")
+				| {% endif %}
 
 				.item-title
 					| {{node.name}}
@@ -56,6 +59,11 @@
 					p.item-description
 						| {{project.properties.summary|safe}}
 					| {% endif %}
+			| {% endif %}
+			| {% if node.has_method('PUT') %}
+			.blog_project-sidebar
+				a.btn.btn-default.button-create(href="{{url_for('nodes.posts_edit', post_id=node._id)}}")
+					| Edit Post
 			| {% endif %}
 
 
