@@ -10,6 +10,7 @@ from flask.ext.login import login_required
 from flask.ext.login import current_user
 from application import app
 from application import SystemUtility
+from application.helpers import attach_project_pictures
 from application.modules.nodes import nodes
 from application.modules.nodes.forms import get_node_form
 from application.modules.nodes.forms import process_node_form
@@ -19,12 +20,7 @@ def posts_view(project_id, url=None):
     api = SystemUtility.attract_api()
     # Fetch project (for backgroud images and links generation)
     project = Node.find(project_id, api=api)
-    if project.properties.picture_square:
-        picture_square = File.find(project.properties.picture_square, api=api)
-        project.properties.picture_square = picture_square
-    if project.properties.picture_header:
-        picture_header = File.find(project.properties.picture_header, api=api)
-        project.properties.picture_header = picture_header
+    attach_project_pictures(project, api)
 
     node_type = NodeType.find_one({
         'where': '{"name" : "blog"}',
@@ -85,6 +81,9 @@ def posts_view(project_id, url=None):
 @login_required
 def posts_create(project_id):
     api = SystemUtility.attract_api()
+    project = Node.find(project_id, api=api)
+    attach_project_pictures(project, api)
+
     node_type = NodeType.find_one({
         'where': '{"name" : "blog"}',
         'projection': '{"name": 1, "permissions": 1}'
@@ -101,12 +100,12 @@ def posts_create(project_id):
     if form.validate_on_submit():
         user_id = current_user.objectid
         if process_node_form(form, node_type=node_type, user=user_id):
-            return redirect(url_for('main_blog'))
+            return redirect(url_for('nodes.view', node_id=blog._id, redir=1))
     form.parent.data = blog._id
     return render_template('nodes/custom/post/create.html',
         node_type=node_type,
         form=form,
-        project_id=project_id,
+        project=project,
         api=api)
 
 
@@ -127,7 +126,8 @@ def posts_edit(post_id):
     if not post.has_method('PUT'):
         return abort(403)
 
-    project_id = post.project
+    project = Node.find(post.project, api=api)
+    attach_project_pictures(project, api)
 
     form = get_node_form(node_type)
     if form.validate_on_submit():
@@ -135,7 +135,7 @@ def posts_edit(post_id):
         post.update(api=api)
         if process_node_form(form, node_id=post_id, node_type=node_type,
                             user=current_user.objectid):
-            return redirect(url_for('nodes.view', node_id=post_id, redir=1))
+            return redirect(url_for('nodes.view', node_id=post._id, redir=1))
     form.parent.data = post.parent
     form.name.data = post.name
     form.content.data = post.properties.content
@@ -147,6 +147,6 @@ def posts_edit(post_id):
         node_type=node_type,
         post=post,
         form=form,
-        project_id=project_id,
+        project=project,
         api=api)
 
