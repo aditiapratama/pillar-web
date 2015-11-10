@@ -350,6 +350,9 @@ def view(node_id):
     # it only if we are working storage nodes, where an 'index' is also possible
     template_action = 'view'
 
+    # Embed the user
+    node.user = User.get(node.user, api=api)
+
     # XXX Code to detect a node of type asset, and aggregate file data
     if node_type_name == 'asset':
         node_file = File.find(node.properties.file, api=api)
