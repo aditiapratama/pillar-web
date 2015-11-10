@@ -6,6 +6,9 @@
 | {% if project.properties.picture_header %}
 .navbar-backdrop(style="background-image: url({{ project.properties.picture_header.thumbnail('m', api=api) }})")
 .navbar-backdrop-overlay
+| {% else %}
+.navbar-backdrop
+.navbar-backdrop-overlay
 | {% endif %}
 | {% endblock %}
 
@@ -34,6 +37,9 @@
 
 				.item-content
 					| {{node.properties.content}}
+
+				.item-meta
+					a(href="{{ url_for('nodes.view', node_id=node._id, redir=1) }}#comments") Leave a comment
 
 			| {% endfor %}
 
