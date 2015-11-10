@@ -6,12 +6,13 @@
 	&.post-create
 		flex-direction: row-reverse
 
-	#blog_index-container,
+	#blog_post-create-container,
 	#blog_post-edit-container
 		padding: 25px
 
 	#blog_index-container,
 	#blog_post-container,
+	#blog_post-create-container,
 	#blog_post-edit-container
 		+container-box
 		width: 75%
@@ -52,7 +53,7 @@
 					family: $font-headings
 					size: 2.2em
 					weight: 300
-				padding: 5px 25px
+				padding: 25px 25px 5px 25px
 
 			.item-info
 				color: $color-text-dark-secondary
@@ -89,9 +90,15 @@
 		.form-group
 			label
 				text-transform: capitalize
+
 		.form-group.content
 			.form-control
 				min-height: 350px
+
+		.form-group.url
+			label
+				text-transform: uppercase
+
 		.form-group.picture
 			+text-overflow-ellipsis
 
@@ -135,6 +142,12 @@
 		width: 100%
 		+button-rounded($color-success, 6px)
 		margin: 0
+
+	.button-back
+		display: block
+		width: 100%
+		+button-rounded($color-info, 6px)
+		margin: 15px 0 0 0
 
 	#blog_post-edit-form
 		.form-group

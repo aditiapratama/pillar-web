@@ -61,11 +61,14 @@
 						| {{project.properties.summary|safe}}
 					| {% endif %}
 			| {% endif %}
-			| {% if node.has_method('PUT') %}
 			.blog_project-sidebar
+				| {% if node.has_method('PUT') %}
 				a.btn.btn-default.button-create(href="{{url_for('nodes.posts_edit', post_id=node._id)}}")
 					| Edit Post
-			| {% endif %}
+				| {% endif %}
+
+				a.btn.btn-default.button-back(href="{{ url_for('project_view', name='bi', project=project.properties.url) }}blog")
+					| Back to Blog
 
 
 | {% endblock %}
