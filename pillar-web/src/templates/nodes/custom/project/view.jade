@@ -339,6 +339,12 @@ script.
 				jstreeAPI.toggle_node(data.node);
 			}
 
+			if (data.node.original.type === 'group') {
+				$('.button-add').removeClass('disabled');
+			} else {
+				$('.button-add').addClass('disabled');
+			};
+
 			/* Update scrollbar */
 			Ps.update(document.getElementById('project_nav'));
 		});

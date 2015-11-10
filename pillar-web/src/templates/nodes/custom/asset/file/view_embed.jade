@@ -23,6 +23,9 @@
 				li.node-details-meta-list-item.status
 						| {{node.properties.status}}
 
+				li.node-details-meta-list-item.author
+					| {{ node.user.full_name }}
+
 				li.node-details-meta-list-item.date(title="Created {{ node._created | pretty_date }}")
 					| {{ node._updated | pretty_date }}
 

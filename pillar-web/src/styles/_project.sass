@@ -266,6 +266,8 @@ $list-node-children-item-width: 160px
 
 			&.disabled
 				a
+					opacity: .6
+					background: repeating-linear-gradient(-45deg, lighten($color-background-nav, 15%), lighten($color-background-nav, 15%) 10px, lighten($color-background-nav, 5%) 10px, lighten($color-background-nav, 5%) 20px)
 					pointer-events: none
 
 		a
@@ -653,6 +655,19 @@ section.node-details-container
 				float: left
 
 				&.date
+					color: $color-text-dark-secondary
+					padding-left: 5px
+					margin-left: 5px
+
+					&:before
+						color: $color-text-dark-secondary
+						position: relative
+						content: '·'
+						left: -10px
+						font-weight: 500
+
+
+				&.author
 					color: $color-text-dark-primary
 
 				&.status
