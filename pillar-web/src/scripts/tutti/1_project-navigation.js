@@ -38,7 +38,7 @@ function projectNavExpand() {
 function projectNavCheck(){
 
 	/* Only run if we're in a project */
-	if(document.getElementById("project_container") !== null) {
+	if(document.getElementById("project-flex") !== null) {
 
 		var nav_status = Cookies.get('bcloud_ui_nav_collapse');
 
