@@ -32,7 +32,7 @@ def homepage():
             'projection': '{"permissions": 1}'
             }, api=api)
         latest_posts = Node.all({
-            'where': '{"node_type": "%s"}' % (node_type_post._id),
+            'where': '{"node_type": "%s", "properties.status": "published"}' % (node_type_post._id),
             'embedded': '{"picture":1, "project":1}',
             'sort': '-_created',
             'max_results': '5'
@@ -43,7 +43,7 @@ def homepage():
             'projection': '{"permissions": 1}'
             }, api=api)
         latest_assets = Node.all({
-            'where': '{"node_type": "%s"}' % (node_type_asset._id),
+            'where': '{"node_type": "%s", "properties.status": "published"}' % (node_type_asset._id),
             'embedded': '{"picture":1, "user":1}',
             'sort': '-_created',
             'max_results': '5'
