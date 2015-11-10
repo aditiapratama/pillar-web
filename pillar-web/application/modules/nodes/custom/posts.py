@@ -150,7 +150,7 @@ def posts_edit(post_id):
         if process_node_form(form, node_id=post_id, node_type=node_type,
                             user=current_user.objectid):
             # The the post is published, add it to the list
-            if post.properties.status == 'published':
+            if form.status.data == 'published':
                 project_update_nodes_list(post._id, project_id=project._id, list_name='blog')
             return redirect(url_for('nodes.view', node_id=post._id, redir=1))
     form.parent.data = post.parent
