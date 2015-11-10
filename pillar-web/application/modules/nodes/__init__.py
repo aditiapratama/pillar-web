@@ -351,7 +351,7 @@ def view(node_id):
     template_action = 'view'
 
     # Embed the user
-    node.user = User.get(node.user, api=api)
+    node.user = User.find(node.user, api=api)
 
     # XXX Code to detect a node of type asset, and aggregate file data
     if node_type_name == 'asset':
