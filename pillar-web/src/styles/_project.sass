@@ -95,18 +95,19 @@ $list-node-children-item-width: 160px
 	background-color: $color-background-nav
 
 	span#project-statusbar
-		+position-center-translate
+		position: absolute
+		left: 0
+		top: 10px
 		min-width: 50%
 		padding: 5px 15px
 		background-color: rgba($color-background-nav, .8)
 		color: $color-text-light
-		text-align: center
 		border-radius: 3px
 		opacity: 0
 		font:
-			weight: 300
+			weight: 400
 
-		transition: all 350ms ease-in-out
+		transition: all 250ms ease-in-out
 
 		i
 			margin-right: 5px
