@@ -12,6 +12,7 @@ from application import app
 from application import SystemUtility
 from application.helpers import attach_project_pictures
 from application.modules.nodes import nodes
+from application.modules.nodes import project_update_nodes_list
 from application.modules.nodes.forms import get_node_form
 from application.modules.nodes.forms import process_node_form
 
@@ -98,9 +99,24 @@ def posts_create(project_id):
         return abort(403)
     form = get_node_form(node_type)
     if form.validate_on_submit():
-        user_id = current_user.objectid
-        if process_node_form(form, node_type=node_type, user=user_id):
-            return redirect(url_for('nodes.view', node_id=blog._id, redir=1))
+        # Create new post object from scratch
+        post_props = dict(
+            node_type=node_type._id,
+            name=form.name.data,
+            picture=form.picture.data,
+            user=current_user.objectid,
+            parent=blog._id,
+            project=project._id,
+            properties=dict(
+                content=form.content.data,
+                status=form.status.data,
+                url=form.url.data))
+        post = Node(post_props)
+        post.create(api=api)
+        # Only if the node is set as published, push it to the list
+        if post.properties.status == 'published':
+            project_update_nodes_list(post._id, project_id=project._id, list_name='blog')
+        return redirect(url_for('nodes.view', node_id=post._id, redir=1))
     form.parent.data = blog._id
     return render_template('nodes/custom/post/create.html',
         node_type=node_type,
@@ -131,10 +147,11 @@ def posts_edit(post_id):
 
     form = get_node_form(node_type)
     if form.validate_on_submit():
-        post.name = form.name.data
-        post.update(api=api)
         if process_node_form(form, node_id=post_id, node_type=node_type,
                             user=current_user.objectid):
+            # The the post is published, add it to the list
+            if post.properties.status == 'published':
+                project_update_nodes_list(post._id, project_id=project._id, list_name='blog')
             return redirect(url_for('nodes.view', node_id=post._id, redir=1))
     form.parent.data = post.parent
     form.name.data = post.name
