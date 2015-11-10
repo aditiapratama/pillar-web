@@ -7,10 +7,14 @@
 		flex-direction: row-reverse
 
 	#blog_index-container,
-	#blog_post-container
+	#blog_post-edit-container
+		padding: 25px
+
+	#blog_index-container,
+	#blog_post-container,
+	#blog_post-edit-container
 		+container-box
 		width: 75%
-		padding: 25px
 
 		+media-xs
 			width: 100%
@@ -26,20 +30,39 @@
 		.blog_index-item
 			margin: 0 auto 15px auto
 
+			.item-picture
+				position: relative
+				width: 100%
+				max-height: 350px
+				min-height: 200px
+				height: auto
+				overflow: hidden
+				border-top-left-radius: 3px
+				border-top-right-radius: 3px
+				margin-bottom: 15px
+				+clearfix
+
+				img
+					+position-center-translate
+					width: 100%
+
 			.item-title
 				display: block
 				font:
 					family: $font-headings
 					size: 2.2em
 					weight: 300
-				padding: 5px 0
+				padding: 5px 25px
 
 			.item-info
 				color: $color-text-dark-secondary
 				font-size: .9em
+				padding:
+					left: 25px
+					right: 25px
 
 			.item-content
-				padding: 25px 0 35px 0
+				padding: 25px 25px 35px 25px
 				color: $color-text-dark
 				font:
 					family: $font-body
@@ -56,8 +79,8 @@
 
 		#comments-container
 			padding:
-				left: 0
-				right: 0
+				left: 25px
+				right: 25px
 
 
 	#blog_post-edit-form
@@ -71,6 +94,16 @@
 				min-height: 350px
 		.form-group.picture
 			+text-overflow-ellipsis
+
+			img
+				display: block
+
+			a
+				display: block
+				padding: 10px 0
+				text-align: right
+				color: $color-danger
+
 
 
 

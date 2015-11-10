@@ -28,7 +28,7 @@
 
 					#blog_post-edit-form
 						| {% for field in form %}
-						| {% if field.name in ['picture', 'category', 'status'] %}
+						| {% if field.name in ['picture', 'status'] %}
 
 						.form-group(class="{{field.name}}")
 							| {{ field.label }}
