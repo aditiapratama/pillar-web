@@ -240,8 +240,7 @@ script(type="text/javascript").
 
 		$("#node-edit-form").submit();
 
-		// Don't refresh whole tree, causes additional displayNode() to be called
-		//- $('#project_tree').jstree("refresh");
+		$('#project_tree').jstree("refresh");
 		// XXX only refresh individual node
 		//- $('#project_tree').jstree().refresh_node($('#n_{{node._id}}'));
 	});

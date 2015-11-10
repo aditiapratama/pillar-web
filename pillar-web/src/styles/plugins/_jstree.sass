@@ -41,10 +41,10 @@ $tree-color-highlight-background: $color-primary
 
 .ps-active-y
 	.jstree-default .jstree-node
-		max-width: 96%
+		max-width: 97%
 
 .jstree-default .jstree-leaf
-	padding-left: 3px
+	padding-left: 5px
 
 .jstree-default .jstree-node.jstree-open,
 .jstree-default .jstree-node.jstree-leaf
@@ -76,10 +76,11 @@ $tree-color-highlight-background: $color-primary
 
 .jstree-default .jstree-node.jstree-closed .jstree-icon.jstree-ocl + .jstree-anchor,
 .jstree-default .jstree-node.jstree-open .jstree-icon.jstree-ocl + .jstree-anchor
-	margin-left: 8px !important
+	// margin-left: 8px !important
+	padding-left: 28px !important
 
 .jstree-default .jstree-node.jstree-leaf .jstree-icon.jstree-ocl + .jstree-anchor
-	margin-left: 5px !important
+	margin-left: -5px !important
 
 .jstree .jstree-open > .jstree-children
 	padding-top: 2px
@@ -110,10 +111,10 @@ $tree-color-highlight-background: $color-primary
 	background-color: transparent !important
 	border-radius: 0
 	box-shadow: none
-	margin-left: -5px !important
+	margin-left: 0 !important
 
 	border-bottom: thin solid transparent
-	max-width: 95%
+	// max-width: 95%
 
 .jstree-default .jstree-leaf .jstree-clicked
 	width: 100% !important
@@ -135,7 +136,7 @@ $tree-color-highlight-background: $color-primary
 	color: $tree-color-highlight !important
 
 .jstree-default li[aria-selected='true']
-	background-color: rgba($tree-color-highlight-background, .5)
+	// background-color: rgba($tree-color-highlight-background, .5)
 
 	a.jstree-anchor
 		&:after
@@ -152,6 +153,9 @@ $tree-color-highlight-background: $color-primary
 
 .jstree-default li[aria-expanded='true']
 	background-color: transparent
+
+	a.jstree-anchor.jstree-clicked
+		background-color: rgba($tree-color-highlight-background, .5) !important
 
 
 /* hover an active item */
