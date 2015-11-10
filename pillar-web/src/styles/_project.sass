@@ -233,6 +233,12 @@ $list-node-children-item-width: 160px
 						cursor: default
 						+pulse-75
 
+				&.disabled
+					a
+						pointer-events: none
+						cursor: default
+						background: repeating-linear-gradient(-45deg, darken($color-success, 15%), darken($color-success, 15%) 10px, darken($color-success, 20%) 10px, darken($color-success, 20%) 20px)
+
 			&.button-move
 				&.moving
 					background-color: $color-success
