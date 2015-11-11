@@ -16,7 +16,7 @@
 			.blog_index-item
 				| {% if node.picture %}
 				.item-picture
-					img(src="{{ node.picture.thumbnail('m', api=api) }}")
+					img(src="{{ node.picture.thumbnail('l', api=api) }}")
 				| {% endif %}
 
 				.item-title
