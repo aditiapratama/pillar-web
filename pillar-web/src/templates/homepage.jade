@@ -95,8 +95,7 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 						.info
 							a.title(href="{{ url_for('nodes.view', node_id=n._id, redir=1) }}", data-node_id="{{ n._id }}") {{ n.name }}
 							span.details
-								span.when {{ n._updated }} mins ago by
-								span.who {{ n.user.full_name }}
+								span.when {{ n._updated | pretty_date }}
 					| {% endfor %}
 
 					| {% else %}
@@ -119,7 +118,8 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 						.info
 							a.title(href="{{ url_for('nodes.view', node_id=n._id, redir=1) }}", data-node_id="{{ n._id }}") {{ n.name }}
 							span.details
-								span.who by
+								span.when {{ n._updated | pretty_date }}
+								span.who  by
 									span {{ n.user.full_name }}
 					| {% endfor %}
 
