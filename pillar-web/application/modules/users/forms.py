@@ -3,6 +3,7 @@ from flask_wtf import Form
 from wtforms import StringField
 from wtforms import BooleanField
 from wtforms import PasswordField
+from wtforms import RadioField
 from wtforms.validators import DataRequired
 from wtforms.validators import Length
 from wtforms.validators import NoneOf
@@ -43,3 +44,9 @@ class UserProfileForm(Form):
 
         self.user = user
         return True
+
+
+class UserSettingsEmailsForm(Form):
+    choices = [(0, 'Receive all emails, except those I unsubscribe from.'),
+        (1, 'Only receive account related emails.')]
+    email_communications = RadioField('Notifications', choices=choices, coerce=int)

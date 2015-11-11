@@ -18,6 +18,7 @@ from flask import url_for
 
 from application.modules.users.forms import UserLoginForm
 from application.modules.users.forms import UserProfileForm
+from application.modules.users.forms import UserSettingsEmailsForm
 from application.helpers import Pagination
 
 from application import SystemUtility
@@ -112,7 +113,7 @@ def logout():
     return redirect('/')
 
 
-@users.route("/profile", methods=['GET', 'POST'])
+@users.route("/settings/profile", methods=['GET', 'POST'])
 @login_required
 def profile():
     """Profile view and edit page. This is a temporary implementation.
@@ -136,6 +137,33 @@ def profile():
 
     return render_template('users/profile.html',
             form=form)
+
+
+# @users.route("/settings/emails", methods=['GET', 'POST'])
+# @login_required
+# def settings_emails():
+#     """Main email settings
+#     """
+#     api = SystemUtility.attract_api()
+#     user = User.find(current_user.objectid, api=api)
+#     email_communications = 0 if not user.settings.email_communications else \
+#         user.settings.email_communications
+
+#     form = UserSettingsEmailsForm(
+#         email_communications = email_communications)
+
+#     if form.validate_on_submit():
+#         try:
+#            user.settings.email_communications = email_communications
+#            user.update(api=api)
+#            flash("Profile updated", 'success')
+#         except ResourceInvalid as e:
+#             message = json.loads(e.content)
+#             flash(message)
+
+#     return render_template('users/settings/emails.html',
+#             form=form)
+
 
 
 def type_names():

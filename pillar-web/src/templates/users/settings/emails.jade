@@ -1,0 +1,23 @@
+| {% extends 'layout.html' %}
+| {% block body %}
+.container
+	#profile-container.page-content
+		.profile-title Profile Settings
+
+		.profile-form
+			form#profile-form(method='POST', action="{{url_for('users.settings_emails')}}")
+				.left
+					.form-group
+						| {% for subfield in form.email_communications %}
+						tr
+							td {{ subfield }}
+							td {{ subfield.label }}
+						| {% endfor %}
+
+				.buttons
+					button.btn.btn-default.button-submit(type='submit')
+						i.pi-check
+						| Save Changes
+
+
+| {% endblock %}
