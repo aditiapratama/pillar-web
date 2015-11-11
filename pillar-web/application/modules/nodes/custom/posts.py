@@ -46,7 +46,7 @@ def posts_view(project_id, url=None):
         # the post. If not, return 404.
         if post.properties.status != "published":
             if current_user.is_authenticated():
-                if current_user.objectid != post.user._id:
+                if not post.has_method('PUT'):
                     abort(403)
             else:
                 abort(403)
