@@ -6,6 +6,8 @@ from flask import url_for
 from flask import request
 from flask.ext.login import current_user
 from pillarsdk import File
+from pillarsdk.exceptions import ResourceNotFound
+
 
 
 class Pagination(object):
@@ -62,12 +64,18 @@ def attach_project_pictures(project, api):
     """
     if project.properties.picture_square:
         # Collect the picture square file object
-        project.properties.picture_square = File.find(
-            project.properties.picture_square, api=api)
+        try:
+            project.properties.picture_square = File.find(
+                project.properties.picture_square, api=api)
+        except ResourceNotFound:
+            project.properties.picture_square = None
     if project.properties.picture_header:
         # Collect the picture header file object
-        project.properties.picture_header = File.find(
-            project.properties.picture_header, api=api)
+        try:
+            project.properties.picture_header = File.find(
+                project.properties.picture_header, api=api)
+        except ResourceNotFound:
+            project.properties.picture_header = None
 
 
 def gravatar(email, size=64, consider_settings=True):
