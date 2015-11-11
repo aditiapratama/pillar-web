@@ -30,7 +30,7 @@
 					| {{node.name}}
 
 				.item-info
-					| {{node._updated | pretty_date }} | {{node.properties.category}} by {{node.user.full_name}}
+					| {{node._updated | pretty_date }} | {% if node.properties.category %}{{node.properties.category}}{% endif %} by {{node.user.full_name}}
 					| |
 					a(href="{{ url_for('nodes.view', node_id=node._id, redir=1) }}#comments")  comment
 					| {% if node.properties.status != 'published' %} {{ node.properties.status}} {% endif %}

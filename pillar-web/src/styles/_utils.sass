@@ -224,6 +224,17 @@
 	to
 		background-position: left bottom
 
+=list-bullets
+	ul
+		padding-left: 20px
+		list-style: none
+
+		li:before
+			content: '·'
+			font-weight: 400
+			position: relative
+			left: -10px
+
 =markdown-preview-container
 	border-top: 1px solid $color-background
 	border-bottom: 1px solid $color-background
@@ -234,5 +245,14 @@
 	cursor: default
 	transition: all 150ms ease-in-out
 
+	strong
+		font-weight: 500
+
 	img
 		max-width: 100%
+
+	// Funny, normalize.css doesn't normalize when it's outside
+	h1
+		font-size: 2.8em
+
+	+list-bullets

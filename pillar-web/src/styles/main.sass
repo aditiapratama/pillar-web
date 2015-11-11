@@ -44,7 +44,7 @@ a
 		color: $color-primary-dark
 
 
-$navbar-height: 70px
+$navbar-height: 50px
 $navbar-backdrop-height: 600px
 
 
@@ -203,9 +203,19 @@ header.navbar-header
 	width: 100%
 	background:
 		color: transparent
-		image: url(https://www.blender.org/wp-content/themes/bthree/assets_shared/images/background_gradient_strip_top.png)
 		repeat: repeat-x
 		size: 100% 100% // 'contain' gives a black-line appearing for a few seconds in webkit when scrolling
+
+	+media-xs
+		background-color: rgba($color-background-nav, .8)
+	+media-sm
+		background-color: rgba($color-background-nav, .8)
+	+media-md
+		background-color: rgba($color-background-nav, .8)
+	+media-lg
+		background:
+			color: transparent
+			image: url(https://www.blender.org/wp-content/themes/bthree/assets_shared/images/background_gradient_strip_top.png)
 
 	nav
 		margin-left: auto
