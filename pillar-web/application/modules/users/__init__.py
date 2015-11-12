@@ -115,7 +115,7 @@ def logout():
 
 @users.route("/settings/profile", methods=['GET', 'POST'])
 @login_required
-def profile():
+def settings_profile():
     """Profile view and edit page. This is a temporary implementation.
     """
     api = SystemUtility.attract_api()
@@ -135,7 +135,7 @@ def profile():
             message = json.loads(e.content)
             flash(message)
 
-    return render_template('users/profile.html', form=form)
+    return render_template('users/settings/profile.html', form=form)
 
 
 @users.route("/settings/emails", methods=['GET', 'POST'])

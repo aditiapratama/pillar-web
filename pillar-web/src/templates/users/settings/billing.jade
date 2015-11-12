@@ -1,14 +1,33 @@
 | {% extends 'layout.html' %}
 | {% block body %}
 .container
-	#profile-container.page-content
-		.profile-title Billing
+	#settings
+		include _sidebar
+		#settings-container
+			.settings-header
+				.settings-title Billing
 
-		.profile-form
-			| {% if store_user['cloud_access'] %} Your subscription is active {% else %} You do not have an active subscription {% endif %}
-			a(href="https://store.blender.org/my-account/") store link
-			p Paid balance {{ store_user['paid_balance'] }} {{ store_user['balance_currency'] }}
-			p Expiration date {{ store_user['expiration_date'] }}
+			.settings-content
+
+				| {% if store_user['cloud_access'] %}
+				h3
+					i.pi-check
+					|  Your subscription is active. Thank you for supporting us!
+				hr
+
+				a(href="https://store.blender.org/my-account/") Blender Store link
+				p Expiration date {{ store_user['expiration_date'] }}
+
+				| {% else %}
+				h3
+					| You do not have an active subscription.
+					a(href="https://store.blender.org/product/membership/")  Join now!
+				| {% endif %}
+
+				hr
+
+				.settings-billing-info.
+					Paid balance {{ store_user['paid_balance'] }} {{ store_user['balance_currency'] }}
 
 
 | {% endblock %}

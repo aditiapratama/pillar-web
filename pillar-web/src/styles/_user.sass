@@ -1,5 +1,4 @@
-#login-container,
-#profile-container
+#login-container
 	width: 60%
 	margin: 40px auto
 	padding: 15px 35px 25px 35px
@@ -7,7 +6,7 @@
 	+container-box
 
 	.login-title,
-	.profile-title
+	.settings-title
 		text-align: center
 		color: $color-primary
 		font:
@@ -56,10 +55,66 @@
 			min-width: 150px
 			@include button-rounded($color-primary, 999em)
 
-#profile-container
-	#profile-form
+#settings
+	display: flex
+	align-items: stretch
+	margin: 25px auto
+
+	#settings-sidebar
+		width: 30%
+		+container-box
+		margin-right: 15px
+
+		.settings-content
+			padding: 0
+			ul
+				padding: 0
+				margin: 0
+				list-style: none
+
+			a
+				&:hover
+					li
+						background-color: $color-background
+				li
+					padding: 25px
+					margin: 0
+					border-bottom: thin solid $color-background
+
+
+	#settings-container
+		width: 70%
+		+container-box
+
+
+	.settings-header
+		background-color: $color-background
+
+		.settings-title
+			padding: 25px 15px 5px 15px
+			font:
+				size: 2em
+				family: $font-headings
+				weight: 300
+
+	.settings-content
+		padding: 25px
+
+		.settings-billing-info
+			font-size: 1.2em
+
+	.button-submit
+		display: block
+		clear: both
+		min-width: 200px
+		margin: 0 auto
+		@include button-rounded-filled($color-primary, 999em)
+
+
+#settings-container
+	#settings-form
 		width: 100%
-	.profile-form
+	.settings-form
 		display: flex
 		align-items: center
 		justify-content: center
@@ -76,7 +131,7 @@
 			float: right
 			text-align: center
 
-		.profile-avatar
+		.settings-avatar
 			img
 				border-radius: 999em
 			span
@@ -85,6 +140,6 @@
 				font:
 					size: .9em
 
-		.profile-password
+		.settings-password
 			color: $color-text-dark-primary
 

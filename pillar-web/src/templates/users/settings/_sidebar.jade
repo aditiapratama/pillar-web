@@ -1,0 +1,14 @@
+#settings-sidebar
+	.settings-header
+		.settings-title Settings
+	.settings-content
+		ul
+			a(class="",
+				href="{{ url_for('users.settings_profile') }}")
+				li Profile
+			a(class="",
+					href="{{ url_for('users.settings_emails') }}")
+				li Emails
+			a(class="",
+					href="{{ url_for('users.settings_billing') }}")
+				li Billing

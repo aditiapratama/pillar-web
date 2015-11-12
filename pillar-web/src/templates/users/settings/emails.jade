@@ -1,23 +1,26 @@
 | {% extends 'layout.html' %}
 | {% block body %}
 .container
-	#profile-container.page-content
-		.profile-title Emails Settings
+	#settings
+		include _sidebar
+		#settings-container
+			.settings-header
+				.settings-title Emails
 
-		.profile-form
-			form#profile-form(method='POST', action="{{url_for('users.settings_emails')}}")
-				.left
-					.form-group
+			.settings-content
+
+				.settings-form
+					form#settings-form(method='POST', action="{{url_for('users.settings_emails')}}")
 						| {% for subfield in form.email_communications %}
-						tr
-							td {{ subfield }}
-							td {{ subfield.label }}
+						.form-group.
+							{{ subfield }}
+							{{ subfield.label }}
 						| {% endfor %}
 
-				.buttons
-					button.btn.btn-default.button-submit(type='submit')
-						i.pi-check
-						| Save Changes
+						.buttons
+							button.btn.btn-default.button-submit(type='submit')
+								i.pi-check
+								| Save Changes
 
 
 | {% endblock %}
