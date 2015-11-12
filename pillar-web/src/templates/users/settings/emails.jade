@@ -11,6 +11,7 @@
 
 				.settings-form
 					form#settings-form(method='POST', action="{{url_for('users.settings_emails')}}")
+						| {{ form.csrf_token }}
 						| {% for subfield in form.email_communications %}
 						.form-group.
 							{{ subfield }}

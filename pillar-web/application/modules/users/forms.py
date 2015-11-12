@@ -1,4 +1,5 @@
 from pillarsdk.users import User
+from flask.ext.login import current_user
 from flask_wtf import Form
 from wtforms import StringField
 from wtforms import BooleanField
@@ -36,17 +37,20 @@ class UserProfileForm(Form):
             return False
 
         api = SystemUtility.attract_api()
-        user = User.find_first({'where': '{"username": "%s"}' % (self.username.data)}, api=api)
+        user = User.find(current_user.objectid, api=api)
+        if user.username != self.username.data:
+            username = User.find_first({'where': '{"username": "%s"}' % (self.username.data)},
+                api=api)
 
-        if user:
-            self.username.errors.append('Sorry, username already exists!')
-            return False
+            if username:
+                self.username.errors.append('Sorry, username already exists!')
+                return False
 
         self.user = user
         return True
 
 
 class UserSettingsEmailsForm(Form):
-    choices = [(1, 'Receive all emails, except those I unsubscribe from.'),
-        (0, 'Only receive account related emails.')]
+    choices = [(1, 'Keep me updated with Blender Cloud news.'),
+        (0, 'Do not mail me news update.')]
     email_communications = RadioField('Notifications', choices=choices, coerce=int)

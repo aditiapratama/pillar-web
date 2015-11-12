@@ -148,14 +148,13 @@ def settings_emails():
 
     # Force creation of settings for the user (safely remove this code once
     # implemented on account creation level, and after adding settings to all
-    # existing users )
+    # existing users)
     if not user.settings:
         user.settings = dict(email_communications=1)
         user.update(api=api)
 
-    # If email_communication settings is missing, add it and turn it on
-    if not user.settings.email_communications:
-        user.settings['email_communications'] = 1
+    if user.settings.email_communications == None:
+        user.settings.email_communications = 1
         user.update(api=api)
 
     # Generate form
@@ -164,9 +163,9 @@ def settings_emails():
 
     if form.validate_on_submit():
         try:
-           user.settings.email_communications = email_communications
-           user.update(api=api)
-           flash("Profile updated", 'success')
+            user.settings.email_communications = form.email_communications.data
+            user.update(api=api)
+            flash("Profile updated", 'success')
         except ResourceInvalid as e:
             message = json.loads(e.content)
             flash(message)
