@@ -135,7 +135,7 @@ def settings_profile():
             message = json.loads(e.content)
             flash(message)
 
-    return render_template('users/settings/profile.html', form=form)
+    return render_template('users/settings/profile.html', form=form, title='profile')
 
 
 @users.route("/settings/emails", methods=['GET', 'POST'])
@@ -171,7 +171,7 @@ def settings_emails():
             message = json.loads(e.content)
             flash(message)
 
-    return render_template('users/settings/emails.html', form=form)
+    return render_template('users/settings/emails.html', form=form, title='emails')
 
 
 @users.route("/settings/billing")
@@ -185,7 +185,7 @@ def settings_billing():
     external_subscriptions_server = app.config['EXTERNAL_SUBSCRIPTIONS_MANAGEMENT_SERVER']
     r = requests.get(external_subscriptions_server, params={'blenderid': user.email})
     store_user = r.json()
-    return render_template('users/settings/billing.html', store_user=store_user)
+    return render_template('users/settings/billing.html', store_user=store_user, title='billing')
 
 
 def type_names():

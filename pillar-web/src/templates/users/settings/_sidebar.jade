@@ -3,12 +3,12 @@
 		.settings-title Settings
 	.settings-content
 		ul
-			a(class="",
+			a(class="{% if title == 'profile' %}active{% endif %}",
 				href="{{ url_for('users.settings_profile') }}")
 				li Profile
-			a(class="",
+			a(class="{% if title == 'emails' %}active{% endif %}",
 					href="{{ url_for('users.settings_emails') }}")
 				li Emails
-			a(class="",
+			a(class="{% if title == 'billing' %}active{% endif %}",
 					href="{{ url_for('users.settings_billing') }}")
 				li Billing
