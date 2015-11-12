@@ -81,10 +81,13 @@
 					padding: 25px
 					margin: 0
 					border-bottom: thin solid $color-background
+					border-left: thick solid transparent
+					transition: all 100ms ease-in-out
 
 			.active
 				li
-					background-color: $color-background
+					background-color: lighten($color-background, 5%)
+					border-left: thick solid $color-info
 
 
 	#settings-container
