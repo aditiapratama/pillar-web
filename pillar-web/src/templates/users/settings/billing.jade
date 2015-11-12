@@ -1,0 +1,14 @@
+| {% extends 'layout.html' %}
+| {% block body %}
+.container
+	#profile-container.page-content
+		.profile-title Billing
+
+		.profile-form
+			| {% if store_user['cloud_access'] %} Your subscription is active {% else %} You do not have an active subscription {% endif %}
+			a(href="https://store.blender.org/my-account/") store link
+			p Paid balance {{ store_user['paid_balance'] }} {{ store_user['balance_currency'] }}
+			p Expiration date {{ store_user['expiration_date'] }}
+
+
+| {% endblock %}

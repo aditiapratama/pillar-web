@@ -47,6 +47,6 @@ class UserProfileForm(Form):
 
 
 class UserSettingsEmailsForm(Form):
-    choices = [(0, 'Receive all emails, except those I unsubscribe from.'),
-        (1, 'Only receive account related emails.')]
+    choices = [(1, 'Receive all emails, except those I unsubscribe from.'),
+        (0, 'Only receive account related emails.')]
     email_communications = RadioField('Notifications', choices=choices, coerce=int)

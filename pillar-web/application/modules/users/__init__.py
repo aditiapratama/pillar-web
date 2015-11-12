@@ -135,35 +135,57 @@ def profile():
             message = json.loads(e.content)
             flash(message)
 
-    return render_template('users/profile.html',
-            form=form)
+    return render_template('users/profile.html', form=form)
 
 
-# @users.route("/settings/emails", methods=['GET', 'POST'])
-# @login_required
-# def settings_emails():
-#     """Main email settings
-#     """
-#     api = SystemUtility.attract_api()
-#     user = User.find(current_user.objectid, api=api)
-#     email_communications = 0 if not user.settings.email_communications else \
-#         user.settings.email_communications
+@users.route("/settings/emails", methods=['GET', 'POST'])
+@login_required
+def settings_emails():
+    """Main email settings
+    """
+    api = SystemUtility.attract_api()
+    user = User.find(current_user.objectid, api=api)
 
-#     form = UserSettingsEmailsForm(
-#         email_communications = email_communications)
+    # Force creation of settings for the user (safely remove this code once
+    # implemented on account creation level, and after adding settings to all
+    # existing users )
+    if not user.settings:
+        user.settings = dict(email_communications=1)
+        user.update(api=api)
 
-#     if form.validate_on_submit():
-#         try:
-#            user.settings.email_communications = email_communications
-#            user.update(api=api)
-#            flash("Profile updated", 'success')
-#         except ResourceInvalid as e:
-#             message = json.loads(e.content)
-#             flash(message)
+    # If email_communication settings is missing, add it and turn it on
+    if not user.settings.email_communications:
+        user.settings['email_communications'] = 1
+        user.update(api=api)
 
-#     return render_template('users/settings/emails.html',
-#             form=form)
+    # Generate form
+    form = UserSettingsEmailsForm(
+        email_communications=user.settings.email_communications)
 
+    if form.validate_on_submit():
+        try:
+           user.settings.email_communications = email_communications
+           user.update(api=api)
+           flash("Profile updated", 'success')
+        except ResourceInvalid as e:
+            message = json.loads(e.content)
+            flash(message)
+
+    return render_template('users/settings/emails.html', form=form)
+
+
+@users.route("/settings/billing")
+@login_required
+def settings_billing():
+    """View the subscription status of a user
+    """
+    api = SystemUtility.attract_api()
+    user = User.find(current_user.objectid, api=api)
+    group = Group.find_one({'where': "name=='subscriber'"}, api=api)
+    external_subscriptions_server = app.config['EXTERNAL_SUBSCRIPTIONS_MANAGEMENT_SERVER']
+    r = requests.get(external_subscriptions_server, params={'blenderid': user.email})
+    store_user = r.json()
+    return render_template('users/settings/billing.html', store_user=store_user)
 
 
 def type_names():
