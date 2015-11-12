@@ -7,6 +7,9 @@ meta(property="og:title", content="{{node.name}}")
 // XXX - Replace with actual url
 meta(property="og:url", content="https://cloud.blender.org")
 meta(property="og:type", content="website")
+| {% if node.properties.picture_header %}
+meta(property="og:image", content="{{ node.properties.picture_header.thumbnail('l', api=api) }}")
+| {% endif %}
 | {% endblock %}
 
 | {% block tw %}
