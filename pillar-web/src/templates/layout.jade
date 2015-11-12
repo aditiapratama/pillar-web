@@ -127,14 +127,14 @@ html(lang="en")
 											| Settings
 									li.divider(role="separator")
 									li
-										a(href="/users/logout")
+										a(href="{{ url_for('users.logout') }}")
 											i.pi-log-out(title="Log Out")
 											| Log out
 
 							| {% else %}
 
 							li.nav-item-sign-in
-								a(href="/users/login")
+								a(href="{{ url_for('users.login') }}")
 									i.pi-log-in(title="Sign In")
 									|  Sign In
 							| {% endif %}

@@ -176,7 +176,7 @@ app.jinja_env.globals['url_for_other_page'] = url_for_other_page
 # Register blueprints for the imported controllers
 app.register_blueprint(node_types, url_prefix='/node-types')
 app.register_blueprint(nodes, url_prefix='/nodes')
-app.register_blueprint(users, url_prefix='/users')
+app.register_blueprint(users)
 app.register_blueprint(stats, url_prefix='/stats')
 app.register_blueprint(files, url_prefix='/files')
 app.register_blueprint(organizations, url_prefix='/organizations')
