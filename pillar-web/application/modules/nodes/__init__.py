@@ -632,9 +632,9 @@ def edit(node_id):
                 form, node_id=node_id, node_type=node_type, user=user_id):
             # Handle the specific case of a blog post
             if node_type.name == 'post':
-                project_update_nodes_list(node._id, list_name='blog')
+                project_update_nodes_list(node, list_name='blog')
             else:
-                project_update_nodes_list(node._id)
+                project_update_nodes_list(node)
 
             # Delete cached template fragment
             delete_redis_cache_template('asset_view', node._id)
