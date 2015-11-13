@@ -137,7 +137,7 @@ def get_projects(category):
     projects = Node.all({
         'where': '{"node_type" : "%s", \
             "properties.category": "%s"}' % (node_type._id, category),
-        'embedded': '{"picture":1}',
+        'sort': '-_created'
         }, api=api)
     for project in projects._items:
         attach_project_pictures(project, api)
