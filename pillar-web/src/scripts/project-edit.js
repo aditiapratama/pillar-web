@@ -176,6 +176,24 @@ $('#item_featured').click(function(e){
 });
 
 
+/* Delete */
+$('#item_delete').click(function(e){
+	e.preventDefault;
+	var current_node = document.getElementById("item_edit");
+	var current_node_id = current_node.getAttribute('data-node_id');
+	var parentNodeId = Cookies.get('bcloud_parent_node_id');
+
+	$.post(urlNodeDelete, {node_id : current_node_id},
+		function(data){
+		// Feedback logic
+	})
+	.done(function(){
+		statusBarSet('success', 'Node deleted', 'pi-trash');
+		displayNode(parentNodeId);
+	});
+});
+
+
 /* Status Bar */
 function statusBarSet(classes, html, icon_name){
 	/* Utility to notify the user by temporarily flashing text on the project header

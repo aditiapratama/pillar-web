@@ -120,9 +120,12 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 									i.button-move-icon.pi-move
 									| Move
 
-							//- li.button-delete
-							//- 	a#item_delete(href="#")
-							//- 		i.pi-trash
+							li.button-delete
+								a#item_delete(
+									href="#",
+									title="Delete asset")
+									i.pi-trash
+									| Delete
 
 					// Edit Mode
 					li.button-cancel
@@ -178,6 +181,7 @@ script.
 
 	var urlNodeMove = "{{url_for('nodes.projects_move_node')}}";
 	var urlNodeFeature = "{{url_for('nodes.projects_add_featured_node')}}";
+	var urlNodeDelete = "{{url_for('nodes.projects_delete_node')}}";
 
 	function loadNodeContent(url, nodeId) {
 

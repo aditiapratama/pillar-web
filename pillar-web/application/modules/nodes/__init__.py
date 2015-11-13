@@ -154,13 +154,16 @@ def jstree_get_children(node_id):
         node_id = node_id.split('_')[1]
     try:
         children = Node.all({
-            'projection': '{"name": 1, "parent": 1, "node_type": 1, "properties": 1}',
+            'projection': '{"name": 1, "parent": 1, "node_type": 1, "properties": 1, "user": 1}',
             'embedded': '{"node_type": 1}',
             'where': '{"parent": "%s"}' % node_id}, api=api)
         for child in children._items:
             # Skip nodes of type comment
             if child.node_type.name not in ['comment', 'post']:
-                children_list.append(jstree_parse_node(child))
+                if child.properties.status == 'published':
+                    children_list.append(jstree_parse_node(child))
+                elif current_user.is_authenticated() and child.user == current_user.objectid:
+                    children_list.append(jstree_parse_node(child))
     except ForbiddenAccess:
         pass
 
@@ -465,8 +468,13 @@ def view(node_id):
         parent = None
     # Get children
     try:
+        if node_type_name == 'group':
+            published_status = ',"properties.status": "published"'
+        else:
+            published_status = ''
+
         children = Node.all({
-            'where': '{"parent": "%s"}' % node._id,
+            'where': '{"parent": "%s" %s}' % (node._id, published_status),
             'embedded': '{"picture": 1, "node_type": 1}'}, api=api)
         children = children._items
     except ForbiddenAccess:
@@ -516,7 +524,7 @@ def view(node_id):
     return return_content
 
 
-def project_update_nodes_list(node_id, project_id=None, list_name='latest'):
+def project_update_nodes_list(node, project_id=None, list_name='latest'):
     """Update the project node with the latest edited or favorited node.
     The list value can be 'latest' or 'featured' and it will determined where
     the node reference will be placed in.
@@ -535,7 +543,7 @@ def project_update_nodes_list(node_id, project_id=None, list_name='latest'):
         nodes_list = project.properties.nodes_featured
 
     # Do not allow adding project to lists
-    if node_id == project._id:
+    if node._id == project._id:
         return "fail"
 
     if not nodes_list:
@@ -545,15 +553,15 @@ def project_update_nodes_list(node_id, project_id=None, list_name='latest'):
     elif len(nodes_list) > 5:
         nodes_list.pop(0)
 
-    if node_id in nodes_list:
+    if node._id in nodes_list:
         # Pop to put this back on top of the list
-        nodes_list.remove(node_id)
+        nodes_list.remove(node._id)
         if list_name == 'featured':
             # We treat the action as a toggle and do not att the item back
             project.update(api=api)
             return "removed"
 
-    nodes_list.append(node_id)
+    nodes_list.append(node._id)
     project.update(api=api)
     return "added"
 
@@ -624,9 +632,9 @@ def edit(node_id):
                 form, node_id=node_id, node_type=node_type, user=user_id):
             # Handle the specific case of a blog post
             if node_type.name == 'post':
-                project_update_nodes_list(node_id, list_name='blog')
+                project_update_nodes_list(node._id, list_name='blog')
             else:
-                project_update_nodes_list(node_id)
+                project_update_nodes_list(node._id)
 
             # Delete cached template fragment
             delete_redis_cache_template('asset_view', node._id)

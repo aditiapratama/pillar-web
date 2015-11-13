@@ -115,7 +115,7 @@ def posts_create(project_id):
         post.create(api=api)
         # Only if the node is set as published, push it to the list
         if post.properties.status == 'published':
-            project_update_nodes_list(post._id, project_id=project._id, list_name='blog')
+            project_update_nodes_list(post, project_id=project._id, list_name='blog')
         return redirect(url_for('nodes.view', node_id=post._id, redir=1))
     form.parent.data = blog._id
     return render_template('nodes/custom/post/create.html',
@@ -151,7 +151,7 @@ def posts_edit(post_id):
                             user=current_user.objectid):
             # The the post is published, add it to the list
             if form.status.data == 'published':
-                project_update_nodes_list(post._id, project_id=project._id, list_name='blog')
+                project_update_nodes_list(post, project_id=project._id, list_name='blog')
             return redirect(url_for('nodes.view', node_id=post._id, redir=1))
     form.parent.data = post.parent
     form.name.data = post.name
