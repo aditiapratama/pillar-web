@@ -159,7 +159,7 @@ def jstree_get_children(node_id):
             'where': '{"parent": "%s"}' % node_id}, api=api)
         for child in children._items:
             # Skip nodes of type comment
-            if child.node_type.name != 'comment':
+            if child.node_type.name not in ['comment', 'post']:
                 children_list.append(jstree_parse_node(child))
     except ForbiddenAccess:
         pass
