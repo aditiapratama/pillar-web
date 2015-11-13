@@ -377,7 +377,7 @@ def process_and_create_file(project_id, name, length, mime_type):
     dst_file_path = os.path.join(destination_dir, link[3:])
     # (TODO) Thread this operation
 
-    shutil.copy(src_file_path, dst_file_path)
+    shutil.move(src_file_path, dst_file_path)
 
     api = SystemUtility.attract_api()
     file_item = File({
