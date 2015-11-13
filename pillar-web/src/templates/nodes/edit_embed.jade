@@ -142,15 +142,8 @@ script(type="text/javascript").
 			dataType: 'json',
 			acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
 			replaceFileInput:false,
-			//fileInput: $("input:" + $(this).data('name')),
-			//dropZone: $(this),
 			dropZone: $(this),
 			formData: {},
-			//- done: function (e, data) {
-			//- 	$.each(data.result.files, function (index, file) {
-			//- 		$('<p/>').text(file.name).appendTo(document.body);
-			//- 	});
-			//- },
 			progressall: function (e, data) {
 				// Update progressbar during upload
 				var progress = parseInt(data.loaded / data.total * 100, 10);
