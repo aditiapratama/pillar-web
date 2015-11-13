@@ -58,6 +58,27 @@ def projects_delete_node():
         return abort(403)
 
 
+@nodes.route('/projects/toggle-node-public', methods=['POST'])
+@login_required
+def projects_toggle_node_public():
+    """Give a node GET permissions for the world. Later on this can turn into
+    a more powerful permission management function.
+    """
+    api = SystemUtility.attract_api()
+    node = Node.find(request.form['node_id'], api=api)
+    if node.has_method('PUT'):
+        if node.permissions and 'world' in node.permissions.to_dict():
+            node.permissions = {}
+            message = "Node is not public anymore."
+        else:
+            node.permissions = dict(world=['GET'])
+            message = "Node is now public!"
+        node.update(api=api)
+        return jsonify(status='success', data=dict(message=message))
+    else:
+        return abort(403)
+
+
 @app.route("/<name>/<project>/")
 @cache.cached(timeout=3600, unless=current_user_is_authenticated)
 def project_view(name, project):

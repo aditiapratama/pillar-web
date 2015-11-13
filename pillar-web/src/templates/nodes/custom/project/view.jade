@@ -127,6 +127,13 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 									i.pi-trash
 									| Delete
 
+							li.button-toggle-public
+								a#item_toggle_public(
+									href="#",
+									title="Toggle public")
+									i.pi-trash
+									| Toggle public
+
 					// Edit Mode
 					li.button-cancel
 						a#item_cancel.project-mode-edit(
@@ -182,6 +189,7 @@ script.
 	var urlNodeMove = "{{url_for('nodes.projects_move_node')}}";
 	var urlNodeFeature = "{{url_for('nodes.projects_add_featured_node')}}";
 	var urlNodeDelete = "{{url_for('nodes.projects_delete_node')}}";
+	var urlNodeTogglePublic = "{{url_for('nodes.projects_toggle_node_public')}}";
 
 	function loadNodeContent(url, nodeId) {
 

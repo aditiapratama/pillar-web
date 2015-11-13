@@ -194,6 +194,22 @@ $('#item_delete').click(function(e){
 });
 
 
+/* Toggle public */
+$('#item_toggle_public').click(function(e){
+	e.preventDefault;
+	var current_node = document.getElementById("item_edit");
+	var current_node_id = current_node.getAttribute('data-node_id');
+	var parentNodeId = Cookies.get('bcloud_parent_node_id');
+
+	$.post(urlNodeTogglePublic, {node_id : current_node_id},
+		function(data){
+	})
+	.done(function(data){
+		statusBarSet('success', data.data.message);
+	});
+});
+
+
 /* Status Bar */
 function statusBarSet(classes, html, icon_name){
 	/* Utility to notify the user by temporarily flashing text on the project header
