@@ -20,8 +20,17 @@
 
 				| {% else %}
 				h3
+					| {% if 'demo' in groups %}
+					| Your you have a demo account.
+					a(href="https://store.blender.org/product/membership/")  Join now!
+					| {% else %}
 					| You do not have an active subscription.
 					a(href="https://store.blender.org/product/membership/")  Join now!
+					| {% endif %}
+				| {% endif %}
+
+				| {% if 'demo' in groups %}
+				p You have full access to the Blender Cloud content provided by Blender Blender institute. This account is meant for free evaluation of the service. Get in touch with #[a(href="mailto:cloudsupport@blender.org") cloudsupport@blender.org] if you have any question.
 				| {% endif %}
 
 				hr

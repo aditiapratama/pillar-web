@@ -196,11 +196,16 @@ def settings_billing():
     """
     api = SystemUtility.attract_api()
     user = User.find(current_user.objectid, api=api)
-    group = Group.find_one({'where': "name=='subscriber'"}, api=api)
+    groups = []
+    if user.groups:
+        for group_id in user.groups:
+            group = Group.find(group_id, api=api)
+            groups.append(group.name)
     external_subscriptions_server = app.config['EXTERNAL_SUBSCRIPTIONS_MANAGEMENT_SERVER']
     r = requests.get(external_subscriptions_server, params={'blenderid': user.email})
     store_user = r.json()
-    return render_template('users/settings/billing.html', store_user=store_user, title='billing')
+    return render_template('users/settings/billing.html',
+        store_user=store_user, groups=groups, title='billing')
 
 
 def type_names():
