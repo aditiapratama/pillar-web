@@ -1,3 +1,4 @@
+import os
 import requests
 import json
 from pillarsdk import utils
@@ -58,32 +59,47 @@ def authenticate(username, password):
 
 def user_roles_update(user_id):
     api = SystemUtility.attract_api()
-    db_user = User.find(user_id, api=api)
-    group = Group.find_one({'where': "name=='subscriber'"}, api=api)
+    user = User.find(user_id, api=api)
+    group_subscriber = Group.find_one({'where': "name=='subscriber'"}, api=api)
     external_subscriptions_server = app.config['EXTERNAL_SUBSCRIPTIONS_MANAGEMENT_SERVER']
-    r = requests.get(external_subscriptions_server, params={'blenderid': db_user.email})
+    r = requests.get(external_subscriptions_server, params={'blenderid': user.email})
     store_user = r.json()
 
     if store_user['cloud_access'] == 1:
-        if db_user.roles and 'subscriber' not in db_user.roles:
-            db_user.roles.append('subscriber')
-        elif not db_user.roles:
-            db_user.roles = ['subscriber',]
+        if user.roles and 'subscriber' not in user.roles:
+            user.roles.append('subscriber')
+        elif not user.roles:
+            user.roles = ['subscriber',]
 
-        if db_user.groups and group._id not in db_user.groups:
-            db_user.groups.append(group._id)
-        elif not db_user.groups:
-            db_user.groups = [group._id]
-        db_user.update(api=api)
+        if user.groups and group_subscriber._id not in user.groups:
+            user.groups.append(group_subscriber._id)
+        elif not user.groups:
+            user.groups = [group_subscriber._id]
+        user.update(api=api)
+        return
+    elif user.roles and 'admin' not in user.roles:
+        if user.roles and 'subscriber' in user.roles:
+            user.roles.remove('subscriber')
 
-    elif db_user.roles and 'admin' not in db_user.roles:
-        if db_user.roles and 'subscriber' in db_user.roles:
-            db_user.roles.remove('subscriber')
+        if user.groups and group_subscriber._id in user.groups:
+            user.groups.remove(group_subscriber._id)
+        user.update(api=api)
+        return
 
-        if db_user.groups and group._id in db_user.groups:
-            db_user.groups.remove(group._id)
-
-        db_user.update(api=api)
+    # Custom demo list functionality, only available is a DEMO_USER_LIST is
+    # available. The content of the file is a list of email addresses. One
+    # address per line.
+    if 'DEMO_USERS_LIST' in app.config:
+        users_list_filepath = app.config['DEMO_USERS_LIST']
+        if os.path.isfile(users_list_filepath):
+            group_demo = Group.find_one({'where': "name=='demo'"}, api=api)
+            # Load all emails in a list for lookup
+            emails = [l.rstrip('\n') for l in open(users_list_filepath)]
+            if user.email in emails:
+                if not user.groups:
+                    user.groups = []
+                user.groups.append(group_demo._id)
+                user.update(api=api)
 
 
 @users.route("/login", methods=['GET', 'POST'])
