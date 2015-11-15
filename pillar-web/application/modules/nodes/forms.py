@@ -84,25 +84,6 @@ class NodeTypeForm(Form):
     properties = ModelFieldList(FormField(CustomFieldForm), model=CustomFields)
 
 
-class FileSelect(Select):
-    def __init__(self, **kwargs):
-        self.is_multiple = kwargs.get('multiple')
-        super(FileSelect, self).__init__(**kwargs)
-
-    def __call__(self, field, **kwargs):
-        html =  super(FileSelect, self).__call__(field, **kwargs)
-        if self.is_multiple:
-            multiple_value = 'true';
-        else:
-            multiple_value = 'false';
-        button= """
-
-        <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modal-default">
-          Upload file
-        </button>""".format(field.id, multiple_value)
-        return HTMLString(html + button)
-
-
 class FileSelectText(HiddenInput):
     def __init__(self, **kwargs):
         super(FileSelectText, self).__init__(**kwargs)
@@ -115,9 +96,6 @@ class FileSelectText(HiddenInput):
           <div class="picture-progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
           </div>
         </div>""".format(url_for('files.upload'), field.name)
-        # <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modal-default">
-        #   Upload file!
-        # </button>"""
         return HTMLString(html + button)
 
 
@@ -125,12 +103,6 @@ class FileSelectField(TextField):
     def __init__(self, name, **kwargs):
         super(FileSelectField, self).__init__(name, **kwargs)
         self.widget = FileSelectText()
-
-
-class FileSelectMultipleField(SelectMultipleField):
-    def __init__(self, **kwargs):
-        super(FileSelectMultipleField, self).__init__(**kwargs)
-        self.widget = FileSelect(multiple=True)
 
 
 def get_node_form(node_type):
@@ -152,10 +124,6 @@ def get_node_form(node_type):
         for parent_type in parent_prop['node_types']:
             parent_names = "{0} {1},".format(parent_names, parent_type)
 
-        # setattr(ProceduralForm,
-        #         'parent',
-        #         SelectField('Parent ({0})'.format(parent_names),
-        #                     choices=select))
         setattr(ProceduralForm,
                 'parent',
                 HiddenField('Parent ({0})'.format(parent_names)))
@@ -183,7 +151,7 @@ def get_node_form(node_type):
             # Recursive call if detects a dict
             if schema_prop['type'] == 'dict':
                 # This works if the dictionary schema is hardcoded.
-                # I we define it useing propertyschema dna valueschema, this
+                # If we define it using propertyschema and valueschema, this
                 # validation pattern does not work and crahses.
                 build_form(schema_prop['schema'],
                            form_prop['schema'],
@@ -204,20 +172,18 @@ def get_node_form(node_type):
                     select = []
                     for select_item in items_to_select:
                         select.append((select_item['_id'], select_item[item[1]]))
-                    if item[0] == 'File':
-                        setattr(ProceduralForm,
-                                prop_name,
-                                FileSelectMultipleField(choices=select))
-                    else:
-                        setattr(ProceduralForm,
-                                prop_name,
-                                SelectMultipleField(choices=select, coerce=str))
+                    setattr(ProceduralForm,
+                            prop_name,
+                            SelectMultipleField(choices=select, coerce=str))
             elif schema_prop['type'] == 'list':
                 # Create and empty multiselect field, which will be populated
                 # with choices from the data it's being initialized with.
-                setattr(ProceduralForm,
-                        prop_name,
-                        SelectMultipleField(choices=[]))
+                if prop == 'attachments':
+                    pass
+                else:
+                    setattr(ProceduralForm,
+                            prop_name,
+                            SelectMultipleField(choices=[]))
 
             elif 'allowed' in schema_prop:
                 select = []

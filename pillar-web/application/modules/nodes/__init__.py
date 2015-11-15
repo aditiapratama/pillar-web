@@ -19,26 +19,22 @@ from flask import request
 from flask import jsonify
 from flask import session
 from wtforms import SelectMultipleField
+from flask.ext.login import login_required
+from flask.ext.login import current_user
+from jinja2.exceptions import TemplateNotFound
 
+from application import app
+from application import SystemUtility
+from application import cache
 from application.modules.nodes.forms import get_node_form
 from application.modules.nodes.forms import process_node_form
 from application.modules.nodes.custom.storage import StorageNode
 from application.helpers import Pagination
 from application.helpers.caching import delete_redis_cache_template
 
-from application import app
-from application import SystemUtility
-from application import cache
 
-from flask.ext.login import login_required
-from flask.ext.login import current_user
-
-from jinja2.exceptions import TemplateNotFound
-
-RFC1123_DATE_FORMAT = '%a, %d %b %Y %H:%M:%S GMT'
 
 nodes = Blueprint('nodes', __name__)
-
 
 
 def type_names():
@@ -596,7 +592,7 @@ def edit(node_id):
                 except KeyError:
                     print ("{0} not found in form".format(prop_name))
                 if schema_prop['type'] == 'datetime':
-                    data = datetime.strptime(data, RFC1123_DATE_FORMAT)
+                    data = datetime.strptime(data, app.config['RFC1123_DATE_FORMAT'])
                 if prop_name in form:
                     # Other field types
                     if isinstance(form[prop_name], SelectMultipleField):
