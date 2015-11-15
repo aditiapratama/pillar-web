@@ -21,7 +21,6 @@ from flask import session
 from wtforms import SelectMultipleField
 
 from application.modules.nodes.forms import get_node_form
-from application.modules.nodes.forms import get_comment_form
 from application.modules.nodes.forms import process_node_form
 from application.modules.nodes.custom.storage import StorageNode
 from application.helpers import Pagination

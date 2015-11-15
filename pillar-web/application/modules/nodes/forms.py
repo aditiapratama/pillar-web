@@ -84,22 +84,6 @@ class NodeTypeForm(Form):
     properties = ModelFieldList(FormField(CustomFieldForm), model=CustomFields)
 
 
-def hiddenValue(data):
-    """Function for field._value
-    on custom hidden Fields"""
-    def hidden_value ():
-        return data
-    return hidden_value
-
-
-def set_hidden(field, data):
-    """change field to hidden"""
-    hiddenInput = HiddenInput()
-    field.widget = hiddenInput
-    field.data = data
-    field._value = hiddenValue(data)
-
-
 class FileSelect(Select):
     def __init__(self, **kwargs):
         self.is_multiple = kwargs.get('multiple')
@@ -125,7 +109,7 @@ class FileSelectText(HiddenInput):
 
     def __call__(self, field, **kwargs):
         html =  super(FileSelectText, self).__call__(field, **kwargs)
-        button= """
+        button = """
         <input class="fileupload" type="file" name="file" data-url="{0}" data-field-name="{1}">
         <div class="picture-progress">
           <div class="picture-progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
@@ -149,26 +133,6 @@ class FileSelectMultipleField(SelectMultipleField):
         self.widget = FileSelect(multiple=True)
 
 
-def get_comment_form(node, comment_type):
-    form = get_node_form(comment_type)
-    for field in form:
-        if field.name == 'parent':
-            field = set_hidden(field, str(node._id))
-        elif field.name in ['name',
-                            'description',
-                            'picture',
-                            'picture_file']:
-            data = field.data
-            if field.name == 'name':
-                data = "Comment on {0}".format(node.name)
-            elif field.name == 'description':
-                data = "Comment on {0}, by {1}".format(node.name, node.user)
-            elif field.name == 'attachments':
-                data = ""
-            field = set_hidden(field, data)
-    return form
-
-
 def get_node_form(node_type):
     class ProceduralForm(Form):
         pass
@@ -183,18 +147,6 @@ def get_node_form(node_type):
         TextField('Name', validators=[DataRequired()]))
     # Parenting
     if 'node_types' in parent_prop and len(parent_prop['node_types']) > 0:
-        # select = []
-        # for parent_type in parent_prop['node_types']:
-        #     parent_node_type = pillarsdk.NodeType.all(
-        #         {'where': '{"name" : "%s"}' % parent_type}, api=api)
-        #     nodes = Node.all({
-        #         'where': '{"node_type" : "%s"}' % str(
-        #             parent_node_type._items[0]['_id']),
-        #         'max_results': 999,
-        #         'sort': "order"},
-        #         api=api)
-        #     for option in nodes._items:
-        #         select.append((str(option._id), str(option.name)))
 
         parent_names = ""
         for parent_type in parent_prop['node_types']:
