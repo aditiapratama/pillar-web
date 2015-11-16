@@ -286,7 +286,7 @@ def get_node_children(node_id, node_type_name, user_id):
 @nodes.route("/<node_id>/view")
 def view(node_id):
     api = SystemUtility.attract_api()
-    user_id = 'ANONYMOUS' if current_user.is_authenticated() else str(current_user.objectid)
+    user_id = 'ANONYMOUS' if current_user.is_anonymous() else str(current_user.objectid)
 
     # Get node with embedded picture data
     try:
