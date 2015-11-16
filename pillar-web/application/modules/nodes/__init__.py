@@ -605,7 +605,7 @@ def edit(node_id):
                             # Choices should be a tuple with value and name
                     # Assign data to the field
                     if set_data:
-                        if type(data) == dict or type(data) == list:
+                        if prop_name == 'attachments':
                             # Parse JSON data
                             form[prop_name].data = json.dumps(data)
                         else:
