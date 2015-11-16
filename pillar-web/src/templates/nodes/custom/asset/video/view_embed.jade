@@ -3,6 +3,7 @@ link(rel="stylesheet", href="//releases.flowplayer.org/6.0.3/skin/minimalist.css
 | {% endblock %}
 
 | {% block body %}
+| {% cache 3600, 'asset_view', node._id %}
 
 #node-container
 
@@ -69,7 +70,7 @@ link(rel="stylesheet", href="//releases.flowplayer.org/6.0.3/skin/minimalist.css
 			#comments-list-items-loading
 				i.pi-spin
 
-
+| {% endcache %}
 | {% endblock %}
 
 | {% block footer_scripts %}

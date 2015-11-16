@@ -1,5 +1,8 @@
 | {% block body %}
 
+| {# Heavy caching starts here #}
+| {% cache 60*5, 'project_view_embed', user_string_id, node_id %}
+
 #node-container
 	section.node-preview.project
 		| {% if node.properties.picture_header %}
@@ -94,5 +97,5 @@ script().
 		e.preventDefault();
 		displayNode($(this).data('node_id'));
 	});
-
+| {% endcache %}
 | {% endblock %}

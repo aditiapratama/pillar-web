@@ -1,5 +1,5 @@
 | {% block body %}
-
+| {% cache 3600, 'group_view', node._id %}
 #node-container
 
 	section.node-preview.group
@@ -78,5 +78,6 @@
 
 include ../_scripts
 
+| {% endcache %}
 | {% endblock %}
 

@@ -1,3 +1,4 @@
+import time
 import json
 import os
 from datetime import datetime
@@ -161,7 +162,6 @@ def jstree_get_children(node_id):
                     children_list.append(jstree_parse_node(child))
     except ForbiddenAccess:
         pass
-
     return children_list
 
 
@@ -260,15 +260,40 @@ def get_file(file_id):
     return file_item.to_dict()
 
 
+@cache.memoize(timeout=3600 * 23)
+def get_node(node_id, user_id):
+    api = SystemUtility.attract_api()
+    node = Node.find(node_id + '/?embedded={"picture":1, "node_type":1}', api=api)
+    return node.to_dict()
+
+
+@cache.memoize(timeout=3600 * 23)
+def get_node_children(node_id, node_type_name, user_id):
+    """This function is currently unused since it does not give significant
+    performance improvements.
+    """
+    api = SystemUtility.attract_api()
+    if node_type_name == 'group':
+        published_status = ',"properties.status": "published"'
+    else:
+        published_status = ''
+
+    children = Node.all({
+        'where': '{"parent": "%s" %s}' % (node_id, published_status),
+        'embedded': '{"picture": 1, "node_type": 1}'}, api=api)
+    return children.to_dict()
+
 @nodes.route("/<node_id>/view")
 def view(node_id):
-    #import time
-    #start = time.time()
     api = SystemUtility.attract_api()
+    user_id = 'ANONYMOUS' if current_user.is_authenticated() else str(current_user.objectid)
 
     # Get node with embedded picture data
     try:
-        node = Node.find(node_id + '/?embedded={"picture":1, "node_type":1}', api=api)
+        n = Node()
+        node = n.from_dict(get_node(node_id, user_id))
+        # node = Node.find(node_id + '/?embedded={"picture":1, "node_type":1}', api=api)
+
     except ResourceNotFound:
         return render_template('errors/404.html')
     except ForbiddenAccess:
@@ -352,6 +377,9 @@ def view(node_id):
     if current_user.is_authenticated():
         node.user = User.find(node.user, api=api)
 
+    # print 'Process {0}'.format(node_type_name)
+    # start_t = time.time()
+
     # XXX Code to detect a node of type asset, and aggregate file data
     if node_type_name == 'asset':
         node_file = File.find(node.properties.file, api=api)
@@ -386,10 +414,14 @@ def view(node_id):
     # XXX The node is of type project
     elif node_type_name == 'project':
         if node.properties.picture_square:
-            picture_square = File.find(node.properties.picture_square, api=api)
+            f = File()
+            picture_square = f.from_dict(get_file(node.properties.picture_square))
+            #picture_square = File.find(node.properties.picture_square, api=api)
             node.properties.picture_square = picture_square
         if node.properties.picture_header:
-            picture_header = File.find(node.properties.picture_header, api=api)
+            f = File()
+            picture_header = f.from_dict(get_file(node.properties.picture_header))
+            # picture_header = File.find(node.properties.picture_header, api=api)
             node.properties.picture_header = picture_header
         if node.properties.nodes_latest:
             list_latest = []
@@ -412,7 +444,9 @@ def view(node_id):
                         'embedded': '{"user":1, "node_type":1}',
                         }, api=api)
                     if node_item.picture:
-                        picture = File.find(node_item.picture, api=api)
+                        f = File()
+                        picture = f.from_dict(get_file(node_item.picture))
+                        # picture = File.find(node_item.picture, api=api)
                         node_item.picture = picture
                     list_featured.append(node_item)
                 except ForbiddenAccess:
@@ -450,6 +484,9 @@ def view(node_id):
             node.length = listing['size']
             node.download_link = listing['signed_url']
 
+    # end_t = time.time()
+    # print (end_t - start_t)
+
     # Get previews
     if node.picture:
         f = File()
@@ -462,6 +499,8 @@ def view(node_id):
     except ResourceNotFound:
         parent = None
     # Get children
+    # start = time.time()
+    # print 'Loading children'
     try:
         if node_type_name == 'group':
             published_status = ',"properties.status": "published"'
@@ -472,12 +511,16 @@ def view(node_id):
             'where': '{"parent": "%s" %s}' % (node._id, published_status),
             'embedded': '{"picture": 1, "node_type": 1}'}, api=api)
         children = children._items
+
     except ForbiddenAccess:
         return render_template('errors/403.html')
-
     for child in children:
         if child.picture:
-            child.picture = File.find(child.picture._id, api=api)
+            f = File()
+            child.picture = f.from_dict(get_file(child.picture._id))
+            # child.picture = File.find(child.picture._id, api=api)
+    # end = time.time()
+    # print (end - start)
 
     if request.args.get('format'):
         if request.args.get('format') == 'json':
@@ -505,8 +548,12 @@ def view(node_id):
                                         template_path)
         if not os.path.exists(template_path_full):
             return "Missing template '{0}'".format(template_path)
+        # start = time.time()
+        # print 'Render template'
 
         return_content = render_template(template_path,
+            node_id=node._id,
+            user_string_id=user_id,
             node=node,
             rewrite_url=rewrite_url,
             embedded_node_id=embedded_node_id,
@@ -514,6 +561,8 @@ def view(node_id):
             children=children,
             config=app.config,
             api=api)
+        # end = time.time()
+        # print (end - start)
 
     #print(time.time() - start)
     return return_content
