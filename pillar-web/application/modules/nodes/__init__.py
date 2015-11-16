@@ -524,41 +524,42 @@ def project_update_nodes_list(node, project_id=None, list_name='latest'):
     The list value can be 'latest' or 'featured' and it will determined where
     the node reference will be placed in.
     """
-    if not project_id and 'current_project_id' in session:
-        project_id = session['current_project_id']
-    elif not project_id:
-        return None
-    api = SystemUtility.attract_api()
-    project = Node.find(project_id, api=api)
-    if list_name == 'latest':
-        nodes_list = project.properties.nodes_latest
-    elif list_name == 'blog':
-        nodes_list = project.properties.nodes_blog
-    else:
-        nodes_list = project.properties.nodes_featured
+    if node.properties.status and node.properties.status == 'published':
+        if not project_id and 'current_project_id' in session:
+            project_id = session['current_project_id']
+        elif not project_id:
+            return None
+        api = SystemUtility.attract_api()
+        project = Node.find(project_id, api=api)
+        if list_name == 'latest':
+            nodes_list = project.properties.nodes_latest
+        elif list_name == 'blog':
+            nodes_list = project.properties.nodes_blog
+        else:
+            nodes_list = project.properties.nodes_featured
 
-    # Do not allow adding project to lists
-    if node._id == project._id:
-        return "fail"
+        # Do not allow adding project to lists
+        if node._id == project._id:
+            return "fail"
 
-    if not nodes_list:
-        node_list_name = 'nodes_' + list_name
-        project.properties[node_list_name] = []
-        nodes_list = project.properties[node_list_name]
-    elif len(nodes_list) > 5:
-        nodes_list.pop(0)
+        if not nodes_list:
+            node_list_name = 'nodes_' + list_name
+            project.properties[node_list_name] = []
+            nodes_list = project.properties[node_list_name]
+        elif len(nodes_list) > 5:
+            nodes_list.pop(0)
 
-    if node._id in nodes_list:
-        # Pop to put this back on top of the list
-        nodes_list.remove(node._id)
-        if list_name == 'featured':
-            # We treat the action as a toggle and do not att the item back
-            project.update(api=api)
-            return "removed"
+        if node._id in nodes_list:
+            # Pop to put this back on top of the list
+            nodes_list.remove(node._id)
+            if list_name == 'featured':
+                # We treat the action as a toggle and do not att the item back
+                project.update(api=api)
+                return "removed"
 
-    nodes_list.append(node._id)
-    project.update(api=api)
-    return "added"
+        nodes_list.append(node._id)
+        project.update(api=api)
+        return "added"
 
 
 @nodes.route("/<node_id>/edit", methods=['GET', 'POST'])
