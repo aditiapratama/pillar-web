@@ -1,8 +1,7 @@
+import json
 import pillarsdk
 from pillarsdk import Node
-
 from flask import url_for
-
 from flask_wtf import Form
 from wtforms import FieldList
 from wtforms import FormField
@@ -22,7 +21,6 @@ from wtforms.widgets import HiddenInput
 from wtforms.widgets import HTMLString
 from wtforms.widgets import Select
 from wtforms.widgets import TextInput
-
 from datetime import datetime
 from datetime import date
 
@@ -105,6 +103,27 @@ class FileSelectField(TextField):
         self.widget = FileSelectText()
 
 
+class FileSelectAttachment(HiddenInput):
+    def __init__(self, **kwargs):
+        super(FileSelectAttachment, self).__init__(**kwargs)
+
+    def __call__(self, field, **kwargs):
+        html =  super(FileSelectAttachment, self).__call__(field, **kwargs)
+        button = """
+        <input class="fileupload" type="file" name="file" data-url="{0}" data-field-name="{1}">
+        <div class="picture-progress">
+          <div class="picture-progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+          </div>
+        </div>""".format(url_for('files.upload'), field.name)
+        return HTMLString(html + button)
+
+
+class AttachmentSelectField(TextField):
+    def __init__(self, name, **kwargs):
+        super(AttachmentSelectField, self).__init__(name, **kwargs)
+        self.widget = FileSelectAttachment()
+
+
 def get_node_form(node_type):
     class ProceduralForm(Form):
         pass
@@ -179,12 +198,13 @@ def get_node_form(node_type):
                 # Create and empty multiselect field, which will be populated
                 # with choices from the data it's being initialized with.
                 if prop == 'attachments':
-                    pass
+                    setattr(ProceduralForm,
+                            prop_name,
+                            AttachmentSelectField(prop_name))
                 else:
                     setattr(ProceduralForm,
                             prop_name,
                             SelectMultipleField(choices=[]))
-
             elif 'allowed' in schema_prop:
                 select = []
                 for option in schema_prop['allowed']:
@@ -283,13 +303,16 @@ def process_node_form(form, node_id=None, node_type=None, user=None):
                 if schema_prop['type'] == 'dict':
                     if data == 'None':
                         continue
-                if schema_prop['type'] == 'integer':
+                elif schema_prop['type'] == 'integer':
                     if data == '':
                         data = 0
                     else:
                         data = int(form[prop_name].data)
-                if schema_prop['type'] == 'datetime':
+                elif schema_prop['type'] == 'datetime':
                     data = datetime.strftime(data, RFC1123_DATE_FORMAT)
+                elif schema_prop['type'] == 'list':
+                    if pr == 'attachments':
+                        data = json.loads(data)
                 else:
                     if pr in form:
                         data = form[prop_name].data

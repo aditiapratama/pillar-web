@@ -605,7 +605,11 @@ def edit(node_id):
                             # Choices should be a tuple with value and name
                     # Assign data to the field
                     if set_data:
-                        form[prop_name].data = data
+                        if type(data) != str:
+                            # Parse JSON data
+                            form[prop_name].data = json.dumps(data)
+                        else:
+                            form[prop_name].data = data
 
     api = SystemUtility.attract_api()
     node = Node.find(node_id, api=api)

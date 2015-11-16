@@ -186,6 +186,27 @@ script(type="text/javascript").
 		});
 	});
 
+	/* Render the Attachments custom form */
+	var attachments = $('#attachments');
+	if (attachments.length > 0) {
+		var attachments_data = $.parseJSON(attachments.val());
+		$.each(attachments_data, function(i, v) {
+			//- console.log(v.field);
+			$.each(v.files, function(i_files, v_files) {
+				//- console.log(v_files.slug);
+				//- console.log(v_files.file);
+				var form = $('<div>');
+				form.addClass('form-group');
+				form.append($('<input>').val(v_files.slug).addClass('form-control'));
+				form.append($('<input>').val(v_files.file).addClass('form-control'));
+				form.append($('<span>').text("Delete").addClass('btn').addClass('btn-default'));
+				attachments.after(form);
+			});
+
+			attachments.after($('<div>').text(v.field));
+		});
+	}
+
 	$("#node-edit-form").unbind( "submit" );
 	$("#item_save").unbind( "click" );
 	$("#item_cancel").unbind( "click" );
