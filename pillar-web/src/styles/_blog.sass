@@ -70,10 +70,31 @@
 					size: 1.3em
 					weight: 300
 
-				strong
+				strong, b
 					font-weight: 500
 				p
 					padding-bottom: 20px
+
+				img
+					max-width: 100%
+					padding-top: 25px
+
+				iframe
+					width: 100%
+
+
+				h2
+					margin-bottom: 15px
+
+				+media-lg
+					iframe
+						min-height: 454px
+				+media-sm
+					iframe
+						min-height: 314px
+				+media-xs
+					iframe
+						min-height: 314px
 
 				+list-bullets
 
