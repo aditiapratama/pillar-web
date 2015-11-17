@@ -89,6 +89,11 @@ html(lang="en")
 									title="Blender Cloud Blog")
 									span Blog
 							li
+								a(href="/p/gallery",
+									title="Curated artwork collection",
+									class="{% if category == 'gallery': %}active{% endif %}")
+									span Art Gallery
+							li
 								a(href="/training",
 									title="Browse Training and Tutorials",
 									class="{% if category == 'training': %}active{% endif %}")

@@ -178,3 +178,13 @@ def training():
         title='training',
         projects=projects._items,
         api=SystemUtility.attract_api())
+
+
+@app.route("/gallery")
+def gallery():
+    return redirect('/p/gallery')
+
+
+@app.route("/caminandes")
+def caminandes():
+    return redirect('/p/caminandes-3')
