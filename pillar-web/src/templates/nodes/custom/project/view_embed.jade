@@ -37,11 +37,11 @@
 					| {% endfor %}
 			| {% endif %}
 
+
+			| {% if node.properties.nodes_latest %}
 			.node-updates
 				ul.node-updates-list
 					h3 Updated Assets
-					| {% if node.properties.nodes_latest %}
-
 					| {% for n in node.properties.nodes_latest %}
 					| {% if n.node_type.name not in ['comment'] %}
 					li.node-updates-list-item
@@ -52,15 +52,7 @@
 								span.who {{ n.user.full_name }}
 					| {% endif %}
 					| {% endfor %}
-
-					| {% else %}
-
-					li.node-updates-list-item
-						.info
-							span.details
-								span.when No updates yet.
-
-					| {% endif %}
+			| {% endif %}
 
 			.node-featured
 				h3 Featured Assets

@@ -875,7 +875,7 @@ section.node-details-container
 			&.node-featured-list
 
 				li
-					width: 100%
+					width: 50%
 					float: left
 					border: none
 					padding-right: 20px
@@ -883,7 +883,7 @@ section.node-details-container
 					.image
 						max-width: 100%
 						width: 100%
-						min-height: 80px
+						min-height: 150px
 						overflow: hidden
 						position: relative
 						border-radius: 3px
@@ -927,6 +927,15 @@ section.node-details-container
 				right: 25px
 			margin-left: 25px
 			border-left: thin solid $color-background
+
+
+	.node-updates+.node-featured
+		ul.node-featured-list
+			li
+				width: 100%
+
+				.image
+					min-height: 80px
 
 #homepage
 	.node-updates-list
