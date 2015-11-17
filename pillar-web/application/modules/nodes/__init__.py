@@ -438,7 +438,8 @@ def view(node_id):
             list_featured = []
             for node_id in node.properties.nodes_featured:
                 try:
-                    node_item = Node.find(node_id, {
+                    node_item = Node.find_one({
+                        'where': '{"_id": "%s"}' % node_id,
                         'projection': '{"name":1, "user":1, "picture":1, "node_type":1}',
                         'embedded': '{"user":1, "node_type":1}',
                         }, api=api)
