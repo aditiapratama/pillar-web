@@ -92,6 +92,7 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 
 					| {% for n in latest_posts %}
 					li.node-updates-list-item
+						img.image(src="http://placehold.it/160x160")
 						.info
 							a.title(href="{{ url_for('nodes.view', node_id=n._id, redir=1) }}", data-node_id="{{ n._id }}") {{ n.name }}
 							span.details
@@ -107,30 +108,30 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 
 					| {% endif %}
 
-		section#updates.node-extra
-			.node-featured
-				h3 Latest Assets
-				ul.node-featured-list
-					| {% if latest_assets %}
+		section#updates
+			h3 Latest Assets
+			.latestassets-list
+				| {% if latest_assets %}
 
-					| {% for n in latest_assets %}
-					li.node-featured-list-item
-						.info
-							a.title(href="{{ url_for('nodes.view', node_id=n._id, redir=1) }}", data-node_id="{{ n._id }}") {{ n.name }}
-							span.details
-								span.when {{ n._updated | pretty_date }}
-								span.who  by
-									span {{ n.user.full_name }}
-					| {% endfor %}
+				| {% for n in latest_assets %}
+				a.latestassets-list-item(href="{{ url_for('nodes.view', node_id=n._id, redir=1) }}", data-node_id="{{ n._id }}")
+					img.image(src="http://placehold.it/160x160")
+					.info
+						.title {{ n.name }}
+						span.details
+							span.who  by
+								span  {{ n.user.full_name }}
+							span.when {{ n._updated | pretty_date }}
+				| {% endfor %}
 
-					| {% else %}
+				| {% else %}
 
-					li.node-featured-list-item
-						.info
-							span.details
-								span.when No featured items yet.
+				li.node-featured-list-item
+					.info
+						span.details
+							span.when No featured items yet.
 
-					| {% endif %}
+				| {% endif %}
 | {% endif %}
 
 
