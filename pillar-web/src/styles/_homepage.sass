@@ -21,12 +21,7 @@
 			padding: 15px 15px 0 15px
 			width: 100%
 			height: 100%
-			// background-color: rgba(black, .5)
-			border-radius: 3px
 			color: white
-
-			//text-shadow: 1px 1px 0 rgba(black,.8), 0 0 30px rgba(white,.4), 0 0 50px rgba(white,.5)
-			text-shadow: 1px 1px 0 rgba(black,.8), 0 0 15px black, 0 0 30px black
 
 			display: flex
 			flex-direction: column
@@ -43,10 +38,17 @@
 			.lead
 				text-align: center
 				max-width: 780px
-				font:
-					size: 1.3em
-					weight: 400
-				line-height: 1.6em
+				span
+					font:
+						weight: 400
+					line-height: 1.9em
+					padding:
+						top: 5px
+						bottom: 5px
+
+					background-color: rgba(black, .9)
+					box-shadow: 0.5em 0 0 rgba(black, .9),-0.5em 0 0 rgba(black, .9)
+
 
 			.buttons
 				display: flex
@@ -71,7 +73,7 @@
 						opacity: 1
 
 					&.follow
-						@include button-rounded($color-text-light, 999em)
+						@include button-rounded-filled($color-danger, 999em)
 						opacity: 1
 						padding: 10px 35px
 
