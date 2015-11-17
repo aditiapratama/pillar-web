@@ -354,6 +354,7 @@ script.
 				jstreeAPI.toggle_node(data.node);
 			}
 
+			// Temp fix to only let user add groups when viewing a group
 			if (data.node.original.type === 'group') {
 				$('.button-add').removeClass('disabled');
 			} else {

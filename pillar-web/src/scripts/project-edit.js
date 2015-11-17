@@ -66,6 +66,9 @@ function addGroup(parentId) {
 				window.location.replace("/nodes/" + data.data.asset_id + "/edit");
 			}
 			//alert( "Data Loaded: " + data.message );
+	})
+	.always(function(){
+		$('.button-add-group-icon').addClass('pi-collection-plus').removeClass('pi-spin spinner');
 	});
 }
 
