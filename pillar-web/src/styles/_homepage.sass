@@ -205,6 +205,10 @@
 
 			// Overrides style from _project.sass
 			.node-updates-list-item
+				padding:
+					top: 12px
+					bottom: 12px
+
 				.image
 					width: 65px
 					max-height: 65px
@@ -216,6 +220,7 @@
 				.info
 					float: left
 					width: auto
+					+text-overflow-ellipsis
 
 					.title
 						font-size: 1.5em
