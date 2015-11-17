@@ -230,7 +230,6 @@
 				width: 100%
 				display: flex
 				align-items: center
-				justify-content: space-between
 
 				flex-wrap: wrap
 
@@ -238,8 +237,19 @@
 					position: relative
 					width: 160px
 					height: 160px
-					margin: 10px 0
+					margin: 10px auto
 					overflow: hidden
+
+					+media-lg
+						width: 160px
+						height: 160px
+					+media-md
+						width: 150px
+						height: 150px
+					+media-sm
+						width: 120px
+						height: 120px
+
 
 					.image
 						width: 100%
