@@ -27,21 +27,8 @@ link(rel="stylesheet", href="//releases.flowplayer.org/6.0.3/skin/minimalist.css
 			.node-title
 				| {{node.name}}
 
-		.node-details-description
-			| {{node.description}}
-
-		.node-details-meta
-
+		.node-details-meta.header
 			ul.node-details-meta-list
-				li.node-details-meta-list-item.status
-						| {{node.properties.status}}
-
-				li.node-details-meta-list-item.author
-					| {{ node.user.full_name }}
-
-				li.node-details-meta-list-item.date(title="Created {{ node._updated | pretty_date }}")
-					| {{ node._updated | pretty_date }}
-
 				li.node-details-meta-list-item.type
 					| {{ node.properties.content_type }}
 
@@ -65,6 +52,21 @@ link(rel="stylesheet", href="//releases.flowplayer.org/6.0.3/skin/minimalist.css
 								span.size {{ child.size }}
 
 						| {% endfor %}
+
+		.node-details-description
+			| {{node.description}}
+
+		.node-details-meta.footer
+			ul.node-details-meta-list
+				li.node-details-meta-list-item.status
+						| {{node.properties.status}}
+
+				li.node-details-meta-list-item.author
+					| {{ node.user.full_name }}
+
+				li.node-details-meta-list-item.date(title="Created {{ node._updated | pretty_date }}")
+					| {{ node._updated | pretty_date }}
+
 
 		#comments-container
 			#comments-list-items-loading

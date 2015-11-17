@@ -22,23 +22,21 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 	#header
 		.text
 			.title
-				a(href="/p/gallery")
+				a(href="/p/gallery/")
 					img(src="{{ url_for('static', filename='assets/img/logo_gallery.png')}}")
 
 			.lead
 				span.
-					{% if current_user.is_authenticated() %}
-						Discover 5 stunning artworks by Gleb Alexandrov.
-						<br/>
-						Full sources and documentation available in CC-BY.
-					{% else %}
-						We make films, we build a production pipeline, and we share everything.
-						<br/>Get full access to the Blender Institute's Open Projects and training material.
-					{% endif %}
+					Discover 5 stunning artworks by Gleb Alexandrov.
+					<br/>
+					Full sources and documentation available in CC-BY.
+				//
+					We make films, we build a production pipeline, and we share everything.
+					<br/>Get full access to the Blender Institute's Open Projects and training material.
 
 			.buttons
 				| {% if current_user.is_authenticated() %}
-				a.btn.btn-default.btn-outline.follow(href="/p/gallery")
+				a.btn.btn-default.btn-outline.follow(href="/p/gallery/")
 					| Check it Out
 				| {% else %}
 				a.btn.btn-default.btn-outline.get-started(href="https://store.blender.org/product/membership/")

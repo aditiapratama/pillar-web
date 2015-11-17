@@ -489,7 +489,7 @@ $list-node-children-item-width: 160px
 	font:
 		family: $font-headings
 		size: 2em
-		weight: 300
+		weight: 400
 
 $node-preview-max-height-sm: 300px
 $node-preview-max-height-md: 450px
@@ -585,11 +585,13 @@ section.node-details-container
 		flex: 0
 
 	.node-details-header
+		width: 60%
+		max-width: 60%
+		float: left
 		display: flex
 		align-items: baseline
 		min-height: 50px
 		padding: 15px 20px 5px 20px
-		+clearfix
 
 		.node-title
 			+project-node-title
@@ -616,12 +618,15 @@ section.node-details-container
 
 
 	.node-details-description
-		padding: 5px 20px 25px 20px
+		padding: 15px 20px 25px 20px
 		color: $color-text-dark
 		font:
 			family: $font-body
 			weight: 300
 			size: 1.2em
+
+		clear: both
+		+clearfix
 
 		strong
 			font-weight: 500
@@ -655,6 +660,13 @@ section.node-details-container
 	.node-details-meta
 		font-weight: 300
 		padding: 15px 20px 25px 20px
+
+		&.header
+			float: left
+			width: 40%
+			max-width: 40%
+			padding-top: 25px
+			+clearfix
 
 		ul.node-details-meta-list
 			display: flex
@@ -723,7 +735,7 @@ section.node-details-container
 
 					/* Actual button */
 					button
-						@include button-rounded($color-text-dark-primary, 6px)
+						@include button-rounded($color-primary, 6px)
 						position: relative
 
 						padding:
@@ -740,6 +752,10 @@ section.node-details-container
 					&.video.download
 						button
 							padding-right: 10px
+
+					&.file.download
+						button
+							@include button-rounded-filled($color-primary, 6px)
 
 					/* Download dropdown options */
 					ul.dropdown-menu
@@ -899,7 +915,7 @@ section.node-details-container
 						padding: 5px 10px 0 0
 
 						a.title
-							font-size: 1em
+							font-size: 1.4em
 						span.details
 							width: 100%
 							+text-overflow-ellipsis
@@ -936,6 +952,10 @@ section.node-details-container
 
 				.image
 					min-height: 80px
+
+				.info
+					a.title
+						font-size: 1em
 
 #homepage
 	.node-updates-list
