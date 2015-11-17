@@ -500,6 +500,9 @@ footer
 
 
 .tooltip
+	&.in
+		opacity: 1
+
 	.tooltip-inner
 		max-width: auto
 		white-space: nowrap
@@ -507,9 +510,12 @@ footer
 		color: $color-text-light-primary
 		border-radius: 3px
 
-	&.top .tooltip-arrow,
-	&.bottom .tooltip-arrow,
-	&.left .tooltip-arrow,
+	&.top .tooltip-arrow
+		border-top-color: $color-background-nav
+	&.bottom .tooltip-arrow
+		border-bottom-color: $color-background-nav
+	&.left .tooltip-arrow
+		border-left-color: $color-background-nav
 	&.right .tooltip-arrow
 		border-right-color: $color-background-nav
 

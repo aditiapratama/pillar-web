@@ -86,21 +86,29 @@ html(lang="en")
 							| {% endif %}
 							li
 								a(href="{{ url_for('main_blog') }}",
-									title="Blender Cloud Blog")
+									title="Blender Cloud Blog",
+									data-toggle="tooltip",
+									data-placement="bottom")
 									span Blog
 							li
 								a(href="/p/gallery/",
 									title="Curated artwork collection",
+									data-toggle="tooltip",
+									data-placement="bottom",
 									class="{% if category == 'assets': %}active{% endif %}")
 									span Art Gallery
 							li
 								a(href="/training",
-									title="Browse Training and Tutorials",
+									title="Training & Tutorials",
+									data-toggle="tooltip",
+									data-placement="bottom",
 									class="{% if category == 'training': %}active{% endif %}")
 									span Training
 							li
 								a(href="/open-projects",
-									title="Browse Open Projects",
+									title="Browse all the Open Projects",
+									data-toggle="tooltip",
+									data-placement="bottom",
 									class="{% if category in ['open-projects', 'film']: %}active{% endif %}")
 									span Open Projects
 
