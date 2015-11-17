@@ -54,7 +54,7 @@
 			| {% if project._id != config.MAIN_PROJECT_ID %}
 			.blog_project-card
 				a.item-header(
-					href="{{ url_for('project_view', name='bi', project=project.properties.url) }}")
+					href="{{ url_for('project_view', project_url=project.properties.url) }}")
 
 					.overlay
 					| {% if project.properties.picture_header %}
@@ -62,7 +62,7 @@
 					| {% endif %}
 
 				a.card-thumbnail(
-					href="{{ url_for('project_view', name='bi', project=project.properties.url) }}")
+					href="{{ url_for('project_view', project_url=project.properties.url) }}")
 					| {% if project.properties.picture_square %}
 					img.thumb(src="{{ project.properties.picture_square.thumbnail('m', api=api) }}")
 					| {% endif %}
@@ -70,7 +70,7 @@
 				.item-info
 
 					a.item-title(
-						href="{{ url_for('project_view', name='bi', project=project.properties.url) }}")
+						href="{{ url_for('project_view', project_url=project.properties.url) }}")
 						| {{ project.name }}
 
 					| {% if project.properties.summary %}

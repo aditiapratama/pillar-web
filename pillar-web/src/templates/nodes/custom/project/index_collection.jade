@@ -64,7 +64,7 @@ meta(name="twitter:image", content="{% if title == 'open-projects' %}{{ url_for(
 				.node_index-collection-card-container
 					.node_index-collection-card
 						a.item-header(
-							href="{{ url_for('project_view', name='bi', project=project.properties.url) }}")
+							href="{{ url_for('project_view', project_url=project.properties.url) }}")
 
 							.overlay
 							| {% if project.properties.picture_header %}
@@ -72,7 +72,7 @@ meta(name="twitter:image", content="{% if title == 'open-projects' %}{{ url_for(
 							| {% endif %}
 
 						a.card-thumbnail(
-							href="{{ url_for('project_view', name='bi', project=project.properties.url) }}")
+							href="{{ url_for('project_view', project_url=project.properties.url) }}")
 							| {% if project.properties.picture_header %}
 							img.thumb(src="{{ project.properties.picture_square.thumbnail('m', api=api) }}")
 							| {% endif %}
@@ -80,7 +80,7 @@ meta(name="twitter:image", content="{% if title == 'open-projects' %}{{ url_for(
 						.item-info
 
 							a.item-title(
-								href="{{ url_for('project_view', name='bi', project=project.properties.url) }}")
+								href="{{ url_for('project_view', project_url=project.properties.url) }}")
 								| {{project.name}}
 								| {% if project.properties.status == 'pending' and current_user.is_authenticated() and current_user.has_role('admin') %}
 								small (pending)

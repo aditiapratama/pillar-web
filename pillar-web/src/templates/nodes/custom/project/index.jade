@@ -22,13 +22,13 @@
 				.node_index-list-item
 
 					a.item-image(
-						href="{{ url_for('project_view', name=user.url, project=project.properties.url) }}")
+						href="{{ url_for('project_view', project_url=project.properties.url) }}")
 						img(src="{{ project.properties.picture_square.thumbnail('s', api=api) }}")
 
 					.item-info
 
 						a.item-title(
-							href="{{ url_for('project_view', name=user.url, project=project.properties.url) }}")
+							href="{{ url_for('project_view', project_url=project.properties.url) }}")
 							| {{project.name}}
 
 						p.item-description

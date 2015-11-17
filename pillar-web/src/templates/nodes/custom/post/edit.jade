@@ -53,7 +53,7 @@
 
 					input.btn.btn-default.button-create(type='submit', value='Update {{ node_type.name }}')
 
-					a.btn.btn-default.button-back(href="{{ url_for('project_view', name='bi', project=project.properties.url) }}blog")
+					a.btn.btn-default.button-back(href="{{ url_for('project_view', project_url=project.properties.url) }}blog")
 						| Back to Blog
 
 			#blog_post-edit-container

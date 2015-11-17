@@ -114,29 +114,18 @@ def user_view(name):
         projects=projects._items)
 
 
-@app.route("/<name>/<project>/blog/")
-@app.route("/<name>/<project>/blog/<url>")
+@app.route("/p/<project_url>/blog/")
+@app.route("/p/<project_url>/blog/<url>")
 @cache.memoize(timeout=3600, unless=current_user_is_authenticated)
-def project_blog(name, project, url=None):
+def project_blog(project_url, url=None):
     """View project blog"""
-    user = UserProxy(name)
-    project = user.project(project)
+    api = SystemUtility.attract_api()
+    # user = UserProxy(name)
+    # project = user.project(project)
+    project = Node.find_one({
+        'where': '{"properties.url" : "%s"}' % (project_url)}, api=api)
     session['current_project_id'] = project._id
     return posts_view(project._id, url=url)
-
-
-# @app.route("/<name>/<project>/<node_id>")
-# def node_view(name, project, node_id):
-#     """Entry point to view a project.
-#     """
-#     user = UserProxy(name)
-#     project = user.project(project)
-#     api = SystemUtility.attract_api()
-#     try:
-#         node = Node.find(node_id + '/?embedded={"picture":1,"node_type":1}', api=api)
-#     except ResourceNotFound:
-#         return abort(404)
-#     return node.name
 
 
 def get_projects(category):

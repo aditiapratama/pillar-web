@@ -79,12 +79,15 @@ def projects_toggle_node_public():
         return abort(403)
 
 
-@app.route("/<name>/<project>/")
+@app.route("/p/<project_url>/")
 @cache.cached(timeout=3600, unless=current_user_is_authenticated)
-def project_view(name, project):
+def project_view(project_url):
     """Entry point to view a project.
     """
-    user = UserProxy(name)
-    project = user.project(project)
+    # user = UserProxy(name)
+    # project = user.project(project)
+    api = SystemUtility.attract_api()
+    project = Node.find_one({
+        'where': '{"properties.url" : "%s"}' % (project_url)}, api=api)
     session['current_project_id'] = project._id
     return view(project._id)
