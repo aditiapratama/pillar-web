@@ -15,6 +15,7 @@ from application import SystemUtility
 from application import cache
 from application.modules.nodes import index
 from application.modules.nodes import view
+from application.modules.nodes import get_file
 from application.modules.nodes.custom.posts import posts_view
 from application.modules.nodes.custom.posts import posts_create
 from application.modules.users.model import UserProxy
@@ -33,10 +34,16 @@ def homepage():
             }, api=api)
         latest_posts = Node.all({
             'where': '{"node_type": "%s", "properties.status": "published"}' % (node_type_post._id),
-            'embedded': '{"picture":1, "project":1}',
+            'embedded': '{"user": 1, "project":1}',
             'sort': '-_created',
-            'max_results': '5'
+            'max_results': '6'
             }, api=api)
+
+        # Append picture Files to latst_posts
+        for post in latest_posts._items:
+            if post.picture:
+                f = File()
+                post.picture = f.from_dict(get_file(post.picture))
 
         node_type_asset = NodeType.find_one({
             'where': '{"name" : "asset"}',
@@ -44,15 +51,22 @@ def homepage():
             }, api=api)
         latest_assets = Node.all({
             'where': '{"node_type": "%s", "properties.status": "published"}' % (node_type_asset._id),
-            'embedded': '{"picture":1, "user":1}',
+            'embedded': '{"user":1}',
             'sort': '-_created',
-            'max_results': '5'
+            'max_results': '9'
             }, api=api)
+
+        # Append picture Files to latest_assets
+        for asset in latest_assets._items:
+            if asset.picture:
+                f = File()
+                asset.picture = f.from_dict(get_file(asset.picture))
 
         return render_template(
             'homepage.html',
             latest_posts=latest_posts._items,
-            latest_assets=latest_assets._items)
+            latest_assets=latest_assets._items,
+            api=api)
     else:
         return render_template(
             'homepage.html')

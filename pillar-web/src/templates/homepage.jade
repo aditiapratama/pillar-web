@@ -92,7 +92,9 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 
 					| {% for n in latest_posts %}
 					li.node-updates-list-item
-						img.image(src="http://placehold.it/160x160")
+						| {% if n.picture %}
+						img.image(src="{{ n.picture.thumbnail('s', api=api) }}")
+						| {% endif %}
 						.info
 							a.title(href="{{ url_for('nodes.view', node_id=n._id, redir=1) }}", data-node_id="{{ n._id }}") {{ n.name }}
 							span.details
@@ -114,14 +116,16 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 				| {% if latest_assets %}
 
 				| {% for n in latest_assets %}
+				| {% if n.picture %}
 				a.latestassets-list-item(href="{{ url_for('nodes.view', node_id=n._id, redir=1) }}", data-node_id="{{ n._id }}")
-					img.image(src="http://placehold.it/160x160")
+					img.image(src="{{ n.picture.thumbnail('b', api=api) }}")
 					.info
 						.title {{ n.name }}
 						span.details
 							span.who  by
 								span  {{ n.user.full_name }}
 							span.when {{ n._updated | pretty_date }}
+				| {% endif %}
 				| {% endfor %}
 
 				| {% else %}
