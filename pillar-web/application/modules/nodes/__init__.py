@@ -332,7 +332,7 @@ def view(node_id):
                     return redirect(url_for('project_blog',
                         project_url=node.properties.url,
                         url=session['embedded_node']['properties']['url']))
-            rewrite_url = "/{0}/#{1}".format(node.properties.url,
+            rewrite_url = "/p/{0}/#{1}".format(node.properties.url,
                 session['embedded_node']['_id'])
             embedded_node_id = session['embedded_node']['_id']
 
