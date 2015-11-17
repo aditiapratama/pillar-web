@@ -8,13 +8,12 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 | {% endblock %}
 
 | {% block header_backdrop %}
-.homepage.navbar-backdrop
-	video(loop, muted, autoplay, poster="{{ url_for('static', filename='assets/img/background_join_glass.jpg')}}", class="fullscreen-bg__video")
-		source(src="{{ url_for('static', filename='assets/video/header-glass_half.webm')}}", type="video/webm")
-		source(src="{{ url_for('static', filename='assets/video/header-glass_half.mp4')}}", type="video/mp4")
+.homepage.navbar-backdrop(style="background-image: url({{ url_for('static', filename='assets/img/background_gleb_locomotive.jpg')}})")
+	//
+		video(loop, muted, autoplay, poster="{{ url_for('static', filename='assets/img/background_join_glass.jpg')}}", class="fullscreen-bg__video")
+			source(src="{{ url_for('static', filename='assets/video/header-glass_half.webm')}}", type="video/webm")
+			source(src="{{ url_for('static', filename='assets/video/header-glass_half.mp4')}}", type="video/mp4")
 .homepage.navbar-backdrop-overlay
-
-
 | {% endblock %}
 
 | {% block body %}
