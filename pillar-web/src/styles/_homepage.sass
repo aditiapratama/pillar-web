@@ -25,7 +25,8 @@
 			border-radius: 3px
 			color: white
 
-			text-shadow: 1px 1px 0 rgba(black,.8), 0 0 30px rgba(white,.4), 0 0 50px rgba(white,.5)
+			//text-shadow: 1px 1px 0 rgba(black,.8), 0 0 30px rgba(white,.4), 0 0 50px rgba(white,.5)
+			text-shadow: 1px 1px 0 rgba(black,.8), 0 0 15px black, 0 0 30px black
 
 			display: flex
 			flex-direction: column
@@ -239,6 +240,7 @@
 					height: 160px
 					margin: 10px auto
 					overflow: hidden
+					border-radius: 3px
 
 					+media-lg
 						width: 160px
@@ -255,6 +257,17 @@
 						width: 100%
 						+position-center-translate
 
+					.image-empty
+						width: 100%
+						height: 100%
+						position: relative
+						background-color: $color-background
+
+						i
+							font-size: 3em
+							color: $color-text-light-secondary
+							+position-center-translate
+
 					&:hover
 						.info
 							bottom: 0
@@ -267,7 +280,7 @@
 						width: 100%
 						height: 50%
 						bottom: -15px
-						background-color: rgba(white, .6)
+						background-color: rgba(white, .9)
 						padding: 10px
 
 						.title
@@ -285,7 +298,9 @@
 							.when
 								color: $color-text-dark-secondary
 
-
+					// .image-empty+.info
+					// 	opacity: 1
+					// 	bottom: 0
 
 .homepage.navbar-backdrop
 	// width: 105%

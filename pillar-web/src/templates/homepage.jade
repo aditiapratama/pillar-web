@@ -73,11 +73,13 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 					p.content Full production data and tutorials from all open movies, for you to use freely.
 
 
-				a.links-item.upnext.go-to-upnext
+				a.links-item.upnext.go-to-upnext(href="{{ url_for('gallery') }}")
 					span.bar
-					span.title Up Next
+					span.title Art Gallery
 
-					p.content Assets library, shot management, project management, and more. We've got big plans.
+					p.content.
+						Learn by example - Documentation & source files
+						of the best Blender artwork out there
 
 | {% if current_user.is_authenticated() %}
 
@@ -115,16 +117,30 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 				| {% if latest_assets %}
 
 				| {% for n in latest_assets %}
-				| {% if n.picture %}
+
 				a.latestassets-list-item(href="{{ url_for('nodes.view', node_id=n._id, redir=1) }}", data-node_id="{{ n._id }}")
+					| {% if n.picture %}
 					img.image(src="{{ n.picture.thumbnail('b', api=api) }}")
+					| {% else %}
+					.image-empty
+						| {% if n.properties.content_type == 'video' %}
+						i.pi-film-thick
+						| {% elif n.properties.content_type == 'image' %}
+						i.pi-image
+						| {% elif n.properties.content_type == 'file' %}
+						i.pi-document
+						| {% else %}
+						i.pi-folder
+						| {% endif %}
+					| {% endif %}
+
 					.info
 						.title {{ n.name }}
 						span.details
 							span.who  by
 								span  {{ n.user.full_name }}
 							span.when {{ n._updated | pretty_date }}
-				| {% endif %}
+
 				| {% endfor %}
 
 				| {% else %}
