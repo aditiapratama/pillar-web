@@ -89,6 +89,8 @@
 
 					| {% endif %}
 
+| {% endcache %}
+
 include ../_scripts
 
 script().
@@ -97,5 +99,4 @@ script().
 		e.preventDefault();
 		displayNode($(this).data('node_id'));
 	});
-| {% endcache %}
 | {% endblock %}
