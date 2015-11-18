@@ -91,7 +91,9 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 						.info
 							a.title(href="{{ url_for('nodes.view', node_id=n._id, redir=1) }}", data-node_id="{{ n._id }}") {{ n.name }}
 							span.details
-								span.when {{ n._updated | pretty_date }}
+								span.where
+									a(href="{{ url_for('project_view', project_url=n.project.properties.url) }}") {{ n.project.name }}
+								span.when  · by {{ n.user.full_name }} · {{ n._updated | pretty_date }}
 					| {% endfor %}
 
 					| {% else %}
@@ -100,6 +102,29 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 						.info
 							span.details
 								span.when No updates yet.
+
+					| {% endif %}
+
+				h3 Latest Comments
+				ul.node-updates-list
+					| {% if latest_posts %}
+
+					| {% for n in latest_posts %}
+					li.node-updates-list-item.comments
+						.info
+							a.title(href="{{ url_for('nodes.view', node_id=n._id, redir=1) }}", data-node_id="{{ n._id }}") {{ n.properties.content }}
+							span.details
+								span.where
+									a(href="{{ url_for('project_view', project_url=n.project.properties.url) }}") {{ n.project.name }}
+								span.when  · by {{ n.user.full_name }} · {{ n._updated | pretty_date }}
+					| {% endfor %}
+
+					| {% else %}
+
+					li.node-updates-list-item
+						.info
+							span.details
+								span.when No comments yet.
 
 					| {% endif %}
 

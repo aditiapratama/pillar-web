@@ -228,6 +228,23 @@
 					.title
 						font-size: 1.5em
 
+				&.comments
+					padding:
+						top: 6px
+						bottom: 6px
+
+					.info
+						float: left
+						width: 100%
+						+text-overflow-ellipsis
+
+						.title
+							font-size: 1em
+							color: $color-text-dark-primary
+							+text-overflow-ellipsis
+
+							&:hover
+								color: $color-primary
 
 			.latestassets-list
 				width: 100%
