@@ -26,50 +26,68 @@ from application.helpers import current_user_is_authenticated
 @cache.cached(timeout=3600, unless=current_user_is_authenticated)
 def homepage():
     """Homepage"""
-    if current_user.is_authenticated():
-        api = SystemUtility.attract_api()
-        node_type_post = NodeType.find_one({
-            'where': '{"name" : "post"}',
-            'projection': '{"permissions": 1}'
-            }, api=api)
-        latest_posts = Node.all({
-            'where': '{"node_type": "%s", "properties.status": "published"}' % (node_type_post._id),
-            'embedded': '{"user": 1, "project":1}',
-            'sort': '-_created',
-            'max_results': '6'
-            }, api=api)
 
-        # Append picture Files to latst_posts
-        for post in latest_posts._items:
-            if post.picture:
-                f = File()
-                post.picture = f.from_dict(get_file(post.picture))
+    # Get latest blog posts
+    api = SystemUtility.attract_api()
+    node_type_post = NodeType.find_one({
+        'where': '{"name" : "post"}',
+        'projection': '{"permissions": 1}'
+        }, api=api)
+    latest_posts = Node.all({
+        'where': '{"node_type": "%s", "properties.status": "published"}' % (node_type_post._id),
+        'embedded': '{"user": 1, "project":1}',
+        'sort': '-_created',
+        'max_results': '3'
+        }, api=api)
 
-        node_type_asset = NodeType.find_one({
-            'where': '{"name" : "asset"}',
-            'projection': '{"permissions": 1}'
-            }, api=api)
-        latest_assets = Node.all({
-            'where': '{"node_type": "%s", "properties.status": "published"}' % (node_type_asset._id),
-            'embedded': '{"user":1}',
-            'sort': '-_created',
-            'max_results': '9'
-            }, api=api)
+    # Append picture Files to latst_posts
+    for post in latest_posts._items:
+        if post.picture:
+            f = File()
+            post.picture = f.from_dict(get_file(post.picture))
 
-        # Append picture Files to latest_assets
-        for asset in latest_assets._items:
-            if asset.picture:
-                f = File()
-                asset.picture = f.from_dict(get_file(asset.picture))
+    # Get latest assets added to any project
+    node_type_asset = NodeType.find_one({
+        'where': '{"name" : "asset"}',
+        'projection': '{"permissions": 1}'
+        }, api=api)
+    latest_assets = Node.all({
+        'where': '{"node_type": "%s", "properties.status": "published"}' % (node_type_asset._id),
+        'embedded': '{"user":1}',
+        'sort': '-_created',
+        'max_results': '12'
+        }, api=api)
 
-        return render_template(
-            'homepage.html',
-            latest_posts=latest_posts._items,
-            latest_assets=latest_assets._items,
-            api=api)
-    else:
-        return render_template(
-            'homepage.html')
+    # Append picture Files to latest_assets
+    for asset in latest_assets._items:
+        if asset.picture:
+            f = File()
+            asset.picture = f.from_dict(get_file(asset.picture))
+
+    # Get latest comments to any node
+    node_type_comment = NodeType.find_one({
+        'where': '{"name" : "comment"}',
+        'projection': '{"permissions": 1}'
+        }, api=api)
+    latest_comments = Node.all({
+        'where': '{"node_type": "%s", "properties.status": "published"}' % (node_type_comment._id),
+        'embedded': '{"user": 1, "project": 1, "parent": 1}',
+        'sort': '-_created',
+        'max_results': '6'
+        }, api=api)
+
+    # Parse results for replies
+    for comment in latest_comments._items:
+        if comment.properties.is_reply:
+            comment.parent = comment.parent.parent
+
+    return render_template(
+        'homepage.html',
+        latest_posts=latest_posts._items,
+        latest_assets=latest_assets._items,
+        latest_comments=latest_comments._items,
+        api=api)
+
 
 
 @app.route("/join")

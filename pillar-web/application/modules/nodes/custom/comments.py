@@ -7,6 +7,7 @@ from pillarsdk import Node
 from pillarsdk import NodeType
 from application.modules.nodes import nodes
 from application.helpers import gravatar
+from application.helpers import pretty_date
 from application import SystemUtility
 
 
@@ -37,6 +38,13 @@ def comments_create():
 
     if parent_id:
         node_asset_props['parent'] = parent_id
+
+    # Get the parent node and check if it's a comment. In which case we flag
+    # the current comment as a reply.
+    parent_node = Node.find(parent_id, api=api)
+    if parent_node.node_type == node_type._id:
+        node_asset_props['properties']['is_reply'] = True
+
     node_asset = Node(node_asset_props)
     node_asset.create(api=api)
 
@@ -64,10 +72,10 @@ def format_comment(comment, is_reply=False, is_team=False, replies=None):
                 continue
     return dict(_id=comment._id,
         gravatar=gravatar(comment.user.email),
-        time_published=comment._created,
+        time_published=pretty_date(comment._created),
         rating_up=comment.properties.rating_positive,
         rating_down=comment.properties.rating_negative,
-        author=comment.user.username,
+        author=comment.user.full_name,
         content=comment.properties.content,
         is_reply=is_reply,
         is_own=is_own,
@@ -93,7 +101,6 @@ def comments_index():
 
         comments = []
         for comment in nodes._items:
-
             # Query for first level children (comment replies)
             replies = Node.all({
                 'where': '{"node_type" : "%s", "parent": "%s"}' % (node_type._id, comment._id),

@@ -89,7 +89,7 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 						img.image(src="{{ n.picture.thumbnail('s', api=api) }}")
 						| {% endif %}
 						.info
-							a.title(href="{{ url_for('nodes.view', node_id=n._id, redir=1) }}", data-node_id="{{ n._id }}") {{ n.name }}
+							a.title(href="{{ url_for('nodes.view', node_id=n._id, redir=1) }}") {{ n.name }}
 							span.details
 								span.where
 									a(href="{{ url_for('project_view', project_url=n.project.properties.url) }}") {{ n.project.name }}
@@ -107,12 +107,12 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 
 				h3 Latest Comments
 				ul.node-updates-list
-					| {% if latest_posts %}
+					| {% if latest_comments %}
 
-					| {% for n in latest_posts %}
+					| {% for n in latest_comments %}
 					li.node-updates-list-item.comments
 						.info
-							a.title(href="{{ url_for('nodes.view', node_id=n._id, redir=1) }}", data-node_id="{{ n._id }}") {{ n.properties.content }}
+							a.title(href="{{ url_for('nodes.view', node_id=n.parent, redir=1) }}") {{ n.properties.content }}
 							span.details
 								span.where
 									a(href="{{ url_for('project_view', project_url=n.project.properties.url) }}") {{ n.project.name }}
