@@ -112,7 +112,7 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 					| {% for n in latest_comments %}
 					li.node-updates-list-item.comments
 						.info
-							a.title(href="{{ url_for('nodes.view', node_id=n.parent, redir=1) }}") {{ n.properties.content }}
+							a.title(href="{{ url_for('nodes.view', node_id=n.parent._id, redir=1) }}") {{ n.properties.content }}
 							span.details
 								span.where
 									a(href="{{ url_for('project_view', project_url=n.project.properties.url) }}") {{ n.project.name }}
