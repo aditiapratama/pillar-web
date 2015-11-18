@@ -1,5 +1,5 @@
 $(function () {
-	$('[data-toggle="tooltip"]').tooltip()
+	$('[data-toggle="tooltip"]').tooltip({'delay' : {'show': 1250, 'hide': 250}})
 })
 
 function NavbarTransparent() {
