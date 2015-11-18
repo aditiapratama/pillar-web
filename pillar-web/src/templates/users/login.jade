@@ -36,4 +36,14 @@
 
 | {% endblock %}
 
+| {% block footer_scripts %}
+script.
+	$('.button-login').on('click', function(e){
+		e.preventDefault();
+		$(this).html('<i class="pi-spin spin"></i> Hold on...');
+
+		$('#login-form').submit();
+	});
+| {% endblock %}
+
 | {% block footer_container %}{% endblock %}
