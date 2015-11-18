@@ -115,7 +115,7 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 							span.details
 								span.where
 									a(href="{{ url_for('project_view', project_url=n.project.properties.url) }}") {{ n.project.name }}
-								span.when  · by {{ n.user.full_name }} · {{ n._updated | pretty_date }}
+								span.when  · by {{ n.user.full_name }} · {{ n._created | pretty_date }}
 					| {% endfor %}
 
 					| {% else %}
