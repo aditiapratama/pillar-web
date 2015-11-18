@@ -339,6 +339,7 @@
 					button.comment-action-submit
 						margin-left: auto
 						min-width: 200px
+						transition: all 200ms ease-in-out
 
 						@include button-rounded($color-success, 6px)
 
@@ -360,6 +361,7 @@
 
 						&.button-field-error
 							@include button-rounded($color-danger, 6px)
+							background: transparent
 
 							pointer-events: none
 

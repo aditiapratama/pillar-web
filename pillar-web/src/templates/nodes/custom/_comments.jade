@@ -250,10 +250,20 @@ script.
 			parent_id = commentField.getAttribute('data-parent_id');
 
 			$.post("{{url_for('nodes.comments_create')}}",
-
 				// Submit content and parent_id for comment creation
 				{'content': $('#comment_field').val(), 'parent_id': parent_id}
 			)
+			.fail(function(){
+				$this.addClass('button-field-error');
+				$textarea.addClass('field-error')
+				$this.html("Houston! Try again?");
+
+				setTimeout(function(){
+					$this.html('Post Comment');
+					$this.removeClass('button-field-error');
+					$textarea.removeClass('field-error');
+				}, 2500);
+			})
 			.done(function(){
 				// Load the comments
 				var url = "{{url_for('nodes.comments_index')}}?parent_id={{ parent_id }}";
@@ -267,7 +277,7 @@ script.
 			// No content in the textarea
 			$this.addClass('button-field-error');
 			$textarea.addClass('field-error')
-			$this.html("<i class='ion-android-happy'></i> Say something...");
+			$this.html("Say something...");
 
 			setTimeout(function(){
 				$this.html('Post Comment');
