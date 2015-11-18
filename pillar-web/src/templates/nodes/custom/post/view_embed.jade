@@ -22,8 +22,13 @@
 				.item-title
 					| {{node.name}}
 
-				.item-info
-					| {{node._updated | pretty_date }} | {% if node.properties.category %}{{node.properties.category}}{% endif %} by {{node.user.full_name}}
+				.item-info.
+					<span title="{{node._created}}">{{node._created | pretty_date }}</span>
+					{% if node._created != node._updated %}
+					<span title="{{node._updated}}">(updated {{node._updated | pretty_date }})</span>
+					{% endif %}
+					{% if node.properties.category %}| {{node.properties.category}}{% endif %}
+					| by {{node.user.full_name}}
 
 				.item-content
 					| {{node.properties.content }}
