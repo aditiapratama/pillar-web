@@ -80,6 +80,8 @@ def homepage():
     for comment in latest_comments._items:
         if comment.properties.is_reply:
             comment.parent = comment.parent.parent
+        else:
+            comment.parent = comment.parent._id
 
     return render_template(
         'homepage.html',
