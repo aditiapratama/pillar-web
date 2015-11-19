@@ -154,8 +154,9 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 					.info
 						.title {{ n.name }}
 						span.details
-							span.who  by
-								span  {{ n.user.full_name }}
+							span.who
+								span.what {{ n.properties.content_type }}
+								span by  {{ n.user.full_name }}
 							span.when {{ n._updated | pretty_date }}
 
 				| {% endfor %}

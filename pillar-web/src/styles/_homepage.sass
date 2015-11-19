@@ -316,13 +316,17 @@
 
 							.when, .who
 								display: block
+								padding-top: 2px
+								+text-overflow-ellipsis
 
 							.when
 								color: $color-text-dark-secondary
 
-					// .image-empty+.info
-					// 	opacity: 1
-					// 	bottom: 0
+							.who
+								.what
+									text-transform: capitalize
+									margin-right: 3px
+
 
 .homepage.navbar-backdrop
 	// width: 105%
