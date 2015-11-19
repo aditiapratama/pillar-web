@@ -199,7 +199,7 @@ def caminandes():
     return redirect('/p/caminandes-3')
 
 # Shameful redirects
-@app.route("/p/blender-cloud")
+@app.route("/p/blender-cloud/")
 def redirect_cloud_blog():
     return redirect('/blog')
 
