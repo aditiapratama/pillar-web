@@ -27,11 +27,10 @@ def groups_create():
         user=current_user.objectid,
         node_type=node_type._id,
         project=project_id,
+        parent=parent_id,
         properties=dict(
             status='published'))
 
-    if parent_id:
-        node_asset_props['parent'] = parent_id
     node_asset = Node(node_asset_props)
     node_asset.create(api=api)
     return jsonify(status='success',

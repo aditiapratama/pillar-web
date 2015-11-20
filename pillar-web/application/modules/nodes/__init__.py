@@ -152,7 +152,8 @@ def jstree_get_children(node_id):
         children = Node.all({
             'projection': '{"name": 1, "parent": 1, "node_type": 1, "properties": 1, "user": 1}',
             'embedded': '{"node_type": 1}',
-            'where': '{"parent": "%s"}' % node_id}, api=api)
+            'where': '{"parent": "%s"}' % node_id,
+            'sort': 'properties.order'}, api=api)
         for child in children._items:
             # Skip nodes of type comment
             if child.node_type.name not in ['comment', 'post']:
@@ -509,7 +510,8 @@ def view(node_id):
 
         children = Node.all({
             'where': '{"parent": "%s" %s}' % (node._id, published_status),
-            'embedded': '{"picture": 1, "node_type": 1}'}, api=api)
+            'embedded': '{"picture": 1, "node_type": 1}',
+            'sort': 'properties.order'}, api=api)
         children = children._items
 
     except ForbiddenAccess:
@@ -616,8 +618,8 @@ def project_update_nodes_list(node, project_id=None, list_name='latest'):
 def edit(node_id):
     """Generic node editing form
     """
-    def set_properties(
-            dyn_schema, form_schema, node_properties, form, prefix="", set_data=True):
+    def set_properties(dyn_schema, form_schema, node_properties, form, prefix="",
+        set_data=True):
         """Initialize custom properties for the form. We run this function once
         before validating the function with set_data=False, so that we can set
         any multiselect field that was originally specified empty and fill it
@@ -687,6 +689,8 @@ def edit(node_id):
 
             # Delete cached template fragment
             delete_redis_cache_template('asset_view', node._id)
+            # Delete cached parent template fragment
+            delete_redis_cache_template('group_view', node.parent)
             # Delete memoized File object
             cache.delete_memoized(get_file, node._id)
             # Emergency hardcore cache flush
