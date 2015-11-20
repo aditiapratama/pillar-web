@@ -44,17 +44,17 @@ $list-node-children-item-width: 160px
 
 /* Container for navigation on the left */
 #project_nav
-
 	overflow: hidden
 	width: $project_nav-width
 	padding: auto 0
-	margin-bottom: $project_footer-height
+	// margin-bottom: $project_footer-height
 	position: relative
 
 	color: white
 	border-right: thick solid $color-background-nav
 
 	user-select: none
+	z-index: 2
 
 	left: 0
 	transition: all 250ms ease-in-out
@@ -95,9 +95,20 @@ $list-node-children-item-width: 160px
 	clear: both
 	background-color: $color-background-nav
 
+	position: absolute
+	top: 0
+	z-index: 1
+
+	&.navigation
+		width: 100%
+		left: 0
+
+	&.context
+		right: 0
+
 	span#project-statusbar
 		position: absolute
-		left: 0
+		left: $project_nav-width
 		top: 10px
 		min-width: 50%
 		padding: 5px 15px
@@ -388,6 +399,14 @@ $list-node-children-item-width: 160px
 			+spin
 			position: relative
 			top: 2px
+
+
+#project_nav #project-header
+	z-index: 3
+
+#project-header+#project_tree,
+#project-header+#project_context
+	margin-top: $project_header-height
 
 
 .project_nav-collapse-btn,

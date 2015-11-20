@@ -40,7 +40,7 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 	#project-flex
 
 		#project_nav
-			#project-header
+			#project-header.navigation
 				ul.breadcrumb
 
 					li.project-title
@@ -67,8 +67,9 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 				data-toggle="tooltip",
 				data-placement="right")
 				i.pi-angle-double-right
+
 			| {% if node.has_method('PUT') %}
-			#project-header
+			#project-header.context
 				ul.breadcrumb.context
 					li.project-title
 						a(href="") {{ node.name }}
@@ -184,7 +185,7 @@ script.
 
 	/* Initialize scrollbars */
 	Ps.initialize(document.getElementById('project_context-container'), {suppressScrollX: true});
-	Ps.initialize(document.getElementById('project_nav'), {suppressScrollX: true});
+	Ps.initialize(document.getElementById('project_tree'), {suppressScrollX: true});
 
 	var urlNodeMove = "{{url_for('nodes.projects_move_node')}}";
 	var urlNodeFeature = "{{url_for('nodes.projects_add_featured_node')}}";
@@ -362,16 +363,16 @@ script.
 			};
 
 			/* Update scrollbar */
-			Ps.update(document.getElementById('project_nav'));
+			Ps.update(document.getElementById('project_tree'));
 		});
 
 		$('#project_tree').on("open_node.jstree", function () {
 			/* Update scrollbar */
-			Ps.update(document.getElementById('project_nav'));
+			Ps.update(document.getElementById('project_tree'));
 		});
 		$('#project_tree').on("close_node.jstree", function () {
 			/* Update scrollbar */
-			Ps.update(document.getElementById('project_nav'));
+			Ps.update(document.getElementById('project_tree'));
 		});
 
 	};
@@ -394,14 +395,14 @@ script.
 		var container_height = window_height - container_offset.top;
 
 		if (container_height > parseInt($('#project-flex').css("min-height"))) {
-			$('#project-flex, #project_nav, #project_context-container').css(
+			$('#project-flex, #project_tree, #project_context-container').css(
 				{'max-height': container_height + 'px',
 				 'height': container_height + 'px'}
 			);
 		};
 
 		Ps.update(document.getElementById('project_context-container'));
-		Ps.update(document.getElementById('project_nav'));
+		Ps.update(document.getElementById('project_tree'));
 	};
 
 	$(window).on("load resize",function(){
@@ -412,8 +413,8 @@ script.
 		Ps.update(document.getElementById('project_context-container'));
 	});
 
-	$("#project_nav").hover(function(){
-		Ps.update(document.getElementById('project_nav'));
+	$("#project_tree").hover(function(){
+		Ps.update(document.getElementById('project_tree'));
 	});
 
 | {% endblock %}
