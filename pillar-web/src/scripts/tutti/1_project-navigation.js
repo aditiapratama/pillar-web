@@ -13,7 +13,7 @@ function projectNavCollapse() {
 	$("ul.breadcrumb.context").addClass('active');
 
 	if (typeof Ps !== 'undefined'){
-		Ps.destroy(document.getElementById('project_nav'));
+		Ps.destroy(document.getElementById('project_tree'));
 	};
 };
 
@@ -31,7 +31,7 @@ function projectNavExpand() {
 	$("ul.breadcrumb.context").removeClass('active');
 
 	if (typeof Ps !== 'undefined'){
-		Ps.initialize(document.getElementById('project_nav'), {suppressScrollX: true});
+		Ps.initialize(document.getElementById('project_tree'), {suppressScrollX: true});
 	};
 };
 

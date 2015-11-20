@@ -54,7 +54,7 @@ $list-node-children-item-width: 160px
 	border-right: thick solid $color-background-nav
 
 	user-select: none
-	z-index: 2
+	z-index: 14
 
 	left: 0
 	transition: all 250ms ease-in-out
@@ -97,11 +97,12 @@ $list-node-children-item-width: 160px
 
 	position: absolute
 	top: 0
-	z-index: 1
+	z-index: 13
 
 	&.navigation
 		width: 100%
 		left: 0
+		z-index: 15
 
 	&.context
 		right: 0
@@ -401,8 +402,8 @@ $list-node-children-item-width: 160px
 			top: 2px
 
 
-#project_nav #project-header
-	z-index: 3
+// #project_nav #project-header
+// 	z-index: 15
 
 #project-header+#project_tree,
 #project-header+#project_context
