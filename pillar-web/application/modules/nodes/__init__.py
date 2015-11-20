@@ -400,6 +400,9 @@ def view(node_id):
                     sources.append(dict(
                         type=f.content_type,
                         src=f.link))
+                    # Build a link that triggers download with proper filename
+                    if f.backend == 'cdnsun':
+                        f.link = "{0}&name={1}.{2}".format(f.link, node.name, f.format)
 
             setattr(node, 'video_sources', json.dumps(sources))
             setattr(node, 'file_children', node_file_children)
