@@ -2,8 +2,12 @@
 | {% block header_backdrop %}
 | {% if project.properties.picture_header %}
 .navbar-backdrop(style="background-image: url({{ project.properties.picture_header.thumbnail('m', api=api) }})")
-.navbar-backdrop-overlay
+| {% elif node.picture %}
+.navbar-backdrop(style="background-image: url({{ node.picture.thumbnail('m', api=api) }})")
+| {% else %}
+.navbar-backdrop
 | {% endif %}
+.navbar-backdrop-overlay
 | {% endblock %}
 
 | {% block body %}
