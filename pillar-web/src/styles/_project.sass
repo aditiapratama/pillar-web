@@ -1071,6 +1071,17 @@ section.node-children
 			font-size: 4em
 			color: $color-text-light-hint
 
+		& .list-node-children-item-status
+			color: $color-text-light-primary
+			background-color: rgba($color-background-nav, .2)
+			padding: 2px 6px
+			border-radius: 3px
+			font-size: .8em
+
+			position: absolute
+			top: 10px
+			right: 10px
+
 	& .list-node-children-item-name
 		z-index: 1
 		position: relative
@@ -1099,7 +1110,6 @@ section.node-children
 				left: 5px
 				right: 3px
 			+text-overflow-ellipsis
-
 
 
 #node_index-container

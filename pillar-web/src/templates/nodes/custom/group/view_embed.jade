@@ -42,6 +42,10 @@
 						i.pi-folder
 						| {% endif %}
 
+					| {% if child.properties.status != 'published' %}
+					.list-node-children-item-status {{ child.properties.status }}
+					| {% endif %}
+
 				.list-node-children-item-name
 
 					| {% if child.properties.content_type == 'video' %}
