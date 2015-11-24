@@ -47,6 +47,15 @@
 					+position-center-translate
 					width: 100%
 
+				+media-xs
+					min-height: 150px
+				+media-sm
+					min-height: 150px
+				+media-md
+					min-height: 150px
+				+media-lg
+					min-height: 200px
+
 			.item-title
 				display: block
 				font:
@@ -75,13 +84,18 @@
 				p
 					padding-bottom: 20px
 
-				img
+				img,
+				ul li img
 					max-width: 100%
 					padding-top: 25px
 
+				ul li img
+					padding:
+						top: 25px
+						bottom: 10px
+
 				iframe
 					width: 100%
-
 
 				h2
 					margin-bottom: 15px
