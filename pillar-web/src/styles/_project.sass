@@ -598,8 +598,11 @@ section.node-preview
 
 
 section.node-details-container
-	flex: 1
 	background-color: white
+
+section.node-details-container,
+section.node-preview.group
+	flex: 1
 
 	&.group, &.storage
 		flex: 0
@@ -717,6 +720,25 @@ section.node-details-container
 	.node-details-meta
 		font-weight: 300
 		padding: 15px 20px 25px 20px
+
+		&.preview
+			padding: 0
+			color: $color-text-light-primary
+			position: absolute
+			right: 10px
+			bottom: 20px
+
+			ul.node-details-meta-list
+				li.node-details-meta-list-item
+					&.date
+						&:before
+							content: ''
+					&.author
+						color: $color-text-light-primary
+
+					&.status
+						color: $color-text-light
+
 
 		&.header
 			float: left
