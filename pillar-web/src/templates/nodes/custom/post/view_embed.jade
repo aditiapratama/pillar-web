@@ -1,3 +1,11 @@
+| {% block og %}
+meta(property="og:title", content="{{ node.name }} - {{ project.name }} - Blender Cloud")
+| {% if project and project.properties.picture_header %}
+meta(property="og:image", content="{{ project.properties.picture_header.thumbnail('l', api=api) }}")
+| {% elif node and node.picture %}
+meta(property="og:image", content="{{ node.picture.thumbnail('l', api=api) }}")
+| {% endif %}
+| {% endblock %}
 
 | {% block header_backdrop %}
 | {% if project and project.properties.picture_header %}
