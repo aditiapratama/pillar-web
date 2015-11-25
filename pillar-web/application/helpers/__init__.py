@@ -13,7 +13,7 @@ from application import SystemUtility
 
 @cache.memoize(timeout=3600 * 23)
 def _get_file_cached(file_id):
-    print "getting files"
+    """Leverage caching and return a dictionary-formatted version of a file"""
     api = SystemUtility.attract_api()
     try:
         file_item = File.find(file_id, api=api)
