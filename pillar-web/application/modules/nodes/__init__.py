@@ -403,7 +403,7 @@ def view(node_id):
             template_path = os.path.join(template_path, asset_type)
         elif asset_type == 'image':
             # Process image type and select image template
-            setattr(node, 'file_variations', node_file_children)
+            setattr(node, 'file_variations', node_file.variations)
             template_path = os.path.join(template_path, asset_type)
         else:
             # Treat it as normal file (zip, blend, application, etc)
