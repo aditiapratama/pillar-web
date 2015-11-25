@@ -61,6 +61,90 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 
 		.project_split(title="Toggle Navigation [T]")
 
+		| {% if node.has_method('PUT') %}
+		#project-header.context
+			ul.breadcrumb.context
+				li.project-title
+					a(href="") {{ node.name }}
+
+			span#project-statusbar
+
+			ul.project-edit-tools
+				li.button-add-group
+					a#item_add_group.project-mode-view(
+						href="#",
+						title="Add new folder")
+						i.button-add-group-icon.pi-collection-plus
+						| Create Folder
+
+				li.button-add
+					a#item_add.project-mode-view(
+						href="#",
+						title="Add new asset")
+						i.button-add-icon.pi-collection-plus
+						| Add Asset
+
+				li.button-edit
+					a#item_edit.project-mode-view(
+						href="#",
+						title="Edit asset")
+						i.button-edit-icon.pi-edit
+						| Edit
+
+				li.button-dropdown
+					a.dropdown-toggle.project-mode-view(
+						type="button",
+						data-toggle="dropdown",
+						aria-haspopup="true",
+						aria-expanded="false")
+						i.pi-more-vertical
+
+					ul.dropdown-menu
+						li.button-featured
+							a#item_featured(
+								href="#",
+								title="Feature on project's homepage")
+								i.button-featured-icon.pi-star
+								| Toggle Featured
+
+						li.button-move
+							a#item_move(
+								href="#",
+								title="Move asset into a folder...")
+								i.button-move-icon.pi-move
+								| Move
+
+						li.button-delete
+							a#item_delete(
+								href="#",
+								title="Delete asset")
+								i.pi-trash
+								| Delete
+
+						li.button-toggle-public
+							a#item_toggle_public(
+								href="#",
+								title="Toggle public")
+								i.pi-trash
+								| Toggle public
+
+				// Edit Mode
+				li.button-cancel
+					a#item_cancel.project-mode-edit(
+						href="#",
+						title="Cancel changes")
+						i.button-cancel-icon.pi-cancel
+						| Cancel
+
+				li.button-save
+					a#item_save.project-mode-edit(
+						href="#",
+						title="Save changes")
+						i.button-save-icon.pi-check
+						| Save Changes
+
+		| {% endif %}
+
 		#project_context-container
 			.project_nav-expand-btn(
 				title="Expand Navigation [T]",
@@ -68,89 +152,6 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 				data-placement="right")
 				i.pi-angle-double-right
 
-			| {% if node.has_method('PUT') %}
-			#project-header.context
-				ul.breadcrumb.context
-					li.project-title
-						a(href="") {{ node.name }}
-
-				span#project-statusbar
-
-				ul.project-edit-tools
-					li.button-add-group
-						a#item_add_group.project-mode-view(
-							href="#",
-							title="Add new folder")
-							i.button-add-group-icon.pi-collection-plus
-							| Create Folder
-
-					li.button-add
-						a#item_add.project-mode-view(
-							href="#",
-							title="Add new asset")
-							i.button-add-icon.pi-collection-plus
-							| Add Asset
-
-					li.button-edit
-						a#item_edit.project-mode-view(
-							href="#",
-							title="Edit asset")
-							i.button-edit-icon.pi-edit
-							| Edit
-
-					li.button-dropdown
-						a.dropdown-toggle.project-mode-view(
-							type="button",
-							data-toggle="dropdown",
-							aria-haspopup="true",
-							aria-expanded="false")
-							i.pi-more-vertical
-
-						ul.dropdown-menu
-							li.button-featured
-								a#item_featured(
-									href="#",
-									title="Feature on project's homepage")
-									i.button-featured-icon.pi-star
-									| Toggle Featured
-
-							li.button-move
-								a#item_move(
-									href="#",
-									title="Move asset into a folder...")
-									i.button-move-icon.pi-move
-									| Move
-
-							li.button-delete
-								a#item_delete(
-									href="#",
-									title="Delete asset")
-									i.pi-trash
-									| Delete
-
-							li.button-toggle-public
-								a#item_toggle_public(
-									href="#",
-									title="Toggle public")
-									i.pi-trash
-									| Toggle public
-
-					// Edit Mode
-					li.button-cancel
-						a#item_cancel.project-mode-edit(
-							href="#",
-							title="Cancel changes")
-							i.button-cancel-icon.pi-cancel
-							| Cancel
-
-					li.button-save
-						a#item_save.project-mode-edit(
-							href="#",
-							title="Save changes")
-							i.button-save-icon.pi-check
-							| Save Changes
-
-			| {% endif %}
 
 			#project_context
 			#overlay-mode-move-container
@@ -393,12 +394,23 @@ script.
 	function containerResizeY(window_height){
 
 		var container_height = window_height - container_offset.top;
+		var container_height_wheader = window_height - container_offset.top - $('#project-header').height();
 
 		if (container_height > parseInt($('#project-flex').css("min-height"))) {
-			$('#project-flex, #project_tree, #project_context-container').css(
+			$('#project-flex, #project_context-container').css(
 				{'max-height': container_height + 'px',
 				 'height': container_height + 'px'}
 			);
+			$('#project_tree').css(
+				{'max-height': container_height_wheader + 'px',
+				 'height': container_height_wheader + 'px'}
+			);
+			if ($('#project_context-container').prev('#project-header')) {
+				$('#project_context-container').css(
+					{'max-height': container_height_wheader + 'px',
+					 'height': container_height_wheader + 'px'}
+				);
+			}
 		};
 
 		Ps.update(document.getElementById('project_context-container'));

@@ -46,14 +46,11 @@ $list-node-children-item-width: 160px
 #project_nav
 	overflow: hidden
 	width: $project_nav-width
-	padding: auto 0
-	// margin-bottom: $project_footer-height
 	position: relative
 
 	color: white
 	border-right: thick solid $color-background-nav
 
-	user-select: none
 	z-index: 14
 
 	left: 0
@@ -406,9 +403,8 @@ $list-node-children-item-width: 160px
 // 	z-index: 15
 
 #project-header+#project_tree,
-#project-header+#project_context
+#project-header+#project_context-container
 	margin-top: $project_header-height
-
 
 .project_nav-collapse-btn,
 .project_nav-expand-btn
@@ -469,7 +465,7 @@ $list-node-children-item-width: 160px
 /* Project context on the right of the navigation */
 /* Contains #project_context */
 #project_context-container
-	// position: relative
+	position: relative // for perfect scrollbars alignment
 	overflow: hidden
 	display: flex
 
@@ -485,6 +481,7 @@ $list-node-children-item-width: 160px
 /* The actual navigation tree container */
 #project_tree
 	padding: 5px 0 // some padding on top and bottom of jstree
+	position: relative // for scrollbar alignment
 
 /* Clickable bar between navtree and context view, to collapse tree */
 .project_split
