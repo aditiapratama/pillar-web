@@ -484,7 +484,7 @@ def view(node_id):
     # print (end_t - start_t)
 
     # Get previews
-    node.picture = get_file(node.picture._id) if node.picture else None
+    node.picture = get_file(node.picture) if node.picture else None
     # Get Parent
     try:
         parent = Node.find(node['parent'], api=api)
