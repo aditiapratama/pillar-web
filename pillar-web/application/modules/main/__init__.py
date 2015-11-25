@@ -138,12 +138,13 @@ def user_view(name):
 def project_blog(project_url, url=None):
     """View project blog"""
     api = SystemUtility.attract_api()
-    # user = UserProxy(name)
-    # project = user.project(project)
-    project = Node.find_one({
-        'where': '{"properties.url" : "%s"}' % (project_url)}, api=api)
-    session['current_project_id'] = project._id
-    return posts_view(project._id, url=url)
+    try:
+        project = Node.find_one({
+            'where': '{"properties.url" : "%s"}' % (project_url)}, api=api)
+        session['current_project_id'] = project._id
+        return posts_view(project._id, url=url)
+    except ResourceNotFound:
+        return abort(404)
 
 
 def get_projects(category):
