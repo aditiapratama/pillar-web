@@ -224,7 +224,7 @@ def get_node_form(node_type):
             elif schema_prop['type'] == 'integer':
                 setattr(ProceduralForm,
                         prop_name,
-                        IntegerField(prop_name))
+                        IntegerField(prop_name, default=0))
             elif schema_prop['type'] == 'boolean':
                 setattr(ProceduralForm,
                         prop_name,
