@@ -407,10 +407,11 @@ def create():
     project_id = session['current_project_id']
     file_item = process_and_create_file(project_id, name, size, content_type)
     api = SystemUtility.attract_api()
-    thumbnail = file_item.thumbnail_file('s', api=api)
+    f = File.find(file_item['_id'], api=api)
+    thumbnail_link = f.thumbnail_file('s', api=api)
 
     return jsonify(status='success', data=dict(id=file_item._id,
-        link=thumbnail.link, field_name=field_name))
+        link=thumbnail_link, field_name=field_name))
 
 
 @files.route('/delete/<item_id>', methods=['POST'])
