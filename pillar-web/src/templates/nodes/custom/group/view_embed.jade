@@ -58,6 +58,11 @@
 					.list-node-children-item-status {{ child.properties.status }}
 					| {% endif %}
 
+					| {% if child.permissions.world %}
+					.list-node-children-item-ribbon
+						span free
+					| {% endif %}
+
 				.list-node-children-item-name
 
 					| {% if child.properties.content_type == 'video' %}

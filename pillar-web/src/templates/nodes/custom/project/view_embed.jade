@@ -65,6 +65,7 @@
 						a.image(href="#", data-node_id="{{ n._id }}")
 							img(src="{{ n.picture.thumbnail('m', api=api) }}")
 						| {% endif %}
+
 						.info
 							a.title(href="#", data-node_id="{{ n._id }}") {{ n.name }}
 							span.details

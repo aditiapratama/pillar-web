@@ -990,6 +990,9 @@ section.node-details-container
 							left: 50%
 							transform: translate(-50%, -50%)
 
+					.ribbon
+						+ribbon
+
 					.info
 						padding: 5px 10px 0 0
 
@@ -1031,6 +1034,9 @@ section.node-details-container
 
 				.image
 					min-height: 80px
+
+				.ribbon
+					+ribbon
 
 				.info
 					a.title
@@ -1103,6 +1109,10 @@ section.node-children
 			position: absolute
 			top: 10px
 			right: 10px
+
+		& .list-node-children-item-ribbon
+			+ribbon
+
 
 	& .list-node-children-item-name
 		z-index: 1

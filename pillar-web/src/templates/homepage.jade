@@ -151,7 +151,12 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 						| {% endif %}
 					| {% endif %}
 
-					.info
+					| {% if n.permissions.world %}
+					.ribbon
+						span free
+					| {% endif %}
+
+					.info(title="{{ n.name }}")
 						.title {{ n.name }}
 						span.details
 							span.who
