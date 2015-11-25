@@ -7,7 +7,29 @@ from flask import request
 from flask.ext.login import current_user
 from pillarsdk import File
 from pillarsdk.exceptions import ResourceNotFound
+from application import cache
+from application import SystemUtility
 
+
+@cache.memoize(timeout=3600 * 23)
+def _get_file_cached(file_id):
+    print "getting files"
+    api = SystemUtility.attract_api()
+    try:
+        file_item = File.find(file_id, api=api)
+        return file_item.to_dict()
+    except ResourceNotFound:
+        return None
+
+
+def get_file(file_id):
+    f = File()
+    cached_file = _get_file_cached(file_id)
+    if cached_file:
+        f.from_dict(cached_file)
+        return f
+    else:
+        return None
 
 
 class Pagination(object):
@@ -64,18 +86,12 @@ def attach_project_pictures(project, api):
     """
     if project.properties.picture_square:
         # Collect the picture square file object
-        try:
-            project.properties.picture_square = File.find(
-                project.properties.picture_square, api=api)
-        except ResourceNotFound:
-            project.properties.picture_square = None
+        project.properties.picture_square = get_file(
+            project.properties.picture_square)
     if project.properties.picture_header:
         # Collect the picture header file object
-        try:
-            project.properties.picture_header = File.find(
-                project.properties.picture_header, api=api)
-        except ResourceNotFound:
-            project.properties.picture_header = None
+        project.properties.picture_header = get_file(
+            project.properties.picture_header)
 
 
 def gravatar(email, size=64, consider_settings=True):

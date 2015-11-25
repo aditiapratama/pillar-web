@@ -32,6 +32,7 @@ from application.modules.nodes.forms import process_node_form
 from application.modules.nodes.custom.storage import StorageNode
 from application.helpers import Pagination
 from application.helpers.caching import delete_redis_cache_template
+from application.helpers import get_file
 
 
 
@@ -255,13 +256,6 @@ class FakeNodeAsset(Node):
 
 
 @cache.memoize(timeout=3600 * 23)
-def get_file(file_id):
-    api = SystemUtility.attract_api()
-    file_item = File.find(file_id, api=api)
-    return file_item.to_dict()
-
-
-@cache.memoize(timeout=3600 * 23)
 def get_node(node_id, user_id):
     api = SystemUtility.attract_api()
     node = Node.find(node_id + '/?embedded={"picture":1, "node_type":1}', api=api)
@@ -383,7 +377,7 @@ def view(node_id):
     # XXX Code to detect a node of type asset, and aggregate file data
     if node_type_name == 'asset':
         node_file = File.find(node.properties.file, api=api)
-        node_file_children = node_file.children(api=api)
+        #node_file_children = node_file.children(api=api)
         # Attach the file node to the asset node
         setattr(node, 'file', node_file)
 
@@ -395,8 +389,8 @@ def view(node_id):
         if asset_type == 'video':
             # Process video type and select video template
             sources = []
-            if node_file_children:
-                for f in node_file_children._items:
+            if node_file.variations:
+                for f in node_file.variations:
                     sources.append(dict(
                         type=f.content_type,
                         src=f.link))
@@ -405,11 +399,11 @@ def view(node_id):
                         f.link = "{0}&name={1}.{2}".format(f.link, node.name, f.format)
 
             setattr(node, 'video_sources', json.dumps(sources))
-            setattr(node, 'file_children', node_file_children)
+            setattr(node, 'file_variations', node_file.variations)
             template_path = os.path.join(template_path, asset_type)
         elif asset_type == 'image':
             # Process image type and select image template
-            #setattr(node, 'file_children', node_file_children)
+            setattr(node, 'file_variations', node_file_children)
             template_path = os.path.join(template_path, asset_type)
         else:
             # Treat it as normal file (zip, blend, application, etc)
@@ -417,13 +411,11 @@ def view(node_id):
     # XXX The node is of type project
     elif node_type_name == 'project':
         if node.properties.picture_square:
-            f = File()
-            picture_square = f.from_dict(get_file(node.properties.picture_square))
+            picture_square = get_file(node.properties.picture_square)
             #picture_square = File.find(node.properties.picture_square, api=api)
             node.properties.picture_square = picture_square
         if node.properties.picture_header:
-            f = File()
-            picture_header = f.from_dict(get_file(node.properties.picture_header))
+            picture_header = get_file(node.properties.picture_header)
             # picture_header = File.find(node.properties.picture_header, api=api)
             node.properties.picture_header = picture_header
         if node.properties.nodes_latest:
@@ -448,8 +440,7 @@ def view(node_id):
                         'embedded': '{"user":1, "node_type":1}',
                         }, api=api)
                     if node_item.picture:
-                        f = File()
-                        picture = f.from_dict(get_file(node_item.picture))
+                        picture = get_file(node_item.picture)
                         # picture = File.find(node_item.picture, api=api)
                         node_item.picture = picture
                     list_featured.append(node_item)
@@ -492,9 +483,7 @@ def view(node_id):
     # print (end_t - start_t)
 
     # Get previews
-    if node.picture:
-        f = File()
-        node.picture = f.from_dict(get_file(node.picture._id))
+    node.picture = get_file(node.picture._id) if node.picture else None
     # Get Parent
     try:
         parent = Node.find(node['parent'], api=api)
@@ -520,10 +509,7 @@ def view(node_id):
     except ForbiddenAccess:
         return render_template('errors/403.html')
     for child in children:
-        if child.picture:
-            f = File()
-            child.picture = f.from_dict(get_file(child.picture._id))
-            # child.picture = File.find(child.picture._id, api=api)
+        child.picture = get_file(child.picture._id) if child.picture else None
     # end = time.time()
     # print (end - start)
 
@@ -695,7 +681,7 @@ def edit(node_id):
             # Delete cached parent template fragment
             delete_redis_cache_template('group_view', node.parent)
             # Delete memoized File object
-            cache.delete_memoized(get_file, node._id)
+            cache.delete_memoized(_get_file_cached, node._id)
             # Emergency hardcore cache flush
             # cache.clear()
             return redirect(url_for('nodes.view', node_id=node_id, embed=1,
@@ -718,9 +704,7 @@ def edit(node_id):
     set_properties(dyn_schema, form_schema, node_properties, form)
 
     # Get previews
-    if node.picture:
-        f = File()
-        node.picture = f.from_dict(get_file(node.picture))
+    node.picture = get_file(node.picture) if node.picture else None
 
     # Get Parent
     try:

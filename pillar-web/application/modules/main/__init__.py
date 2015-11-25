@@ -15,12 +15,12 @@ from application import SystemUtility
 from application import cache
 from application.modules.nodes import index
 from application.modules.nodes import view
-from application.modules.nodes import get_file
 from application.modules.nodes.custom.posts import posts_view
 from application.modules.nodes.custom.posts import posts_create
 from application.modules.users.model import UserProxy
 from application.helpers import attach_project_pictures
 from application.helpers import current_user_is_authenticated
+from application.helpers import get_file
 
 @app.route("/")
 @cache.cached(timeout=3600, unless=current_user_is_authenticated)
@@ -43,8 +43,7 @@ def homepage():
     # Append picture Files to latst_posts
     for post in latest_posts._items:
         if post.picture:
-            f = File()
-            post.picture = f.from_dict(get_file(post.picture))
+            post.picture = get_file(post.picture)
 
     # Get latest assets added to any project
     node_type_asset = NodeType.find_one({
@@ -61,8 +60,7 @@ def homepage():
     # Append picture Files to latest_assets
     for asset in latest_assets._items:
         if asset.picture:
-            f = File()
-            asset.picture = f.from_dict(get_file(asset.picture))
+            asset.picture = get_file(asset.picture)
 
     # Get latest comments to any node
     node_type_comment = NodeType.find_one({
