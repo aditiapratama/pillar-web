@@ -33,6 +33,7 @@ from application.modules.nodes.custom.storage import StorageNode
 from application.helpers import Pagination
 from application.helpers.caching import delete_redis_cache_template
 from application.helpers import get_file
+from application.helpers import _get_file_cached
 
 
 
@@ -285,9 +286,9 @@ def view(node_id):
 
     # Get node with embedded picture data
     try:
-        n = Node()
-        node = n.from_dict(get_node(node_id, user_id))
-        # node = Node.find(node_id + '/?embedded={"picture":1, "node_type":1}', api=api)
+        # n = Node()
+        # node = n.from_dict(get_node(node_id, user_id))
+        node = Node.find(node_id + '/?embedded={"node_type":1}', api=api)
 
     except ResourceNotFound:
         return render_template('errors/404.html')
