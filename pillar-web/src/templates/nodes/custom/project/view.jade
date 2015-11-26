@@ -397,7 +397,7 @@ script.
 		var container_height_wheader = window_height - container_offset.top - $('#project-header').height();
 
 		if (container_height > parseInt($('#project-flex').css("min-height"))) {
-			$('#project-flex, #project_context-container').css(
+			$('#project-flex').css(
 				{'max-height': container_height + 'px',
 				 'height': container_height + 'px'}
 			);
@@ -405,10 +405,15 @@ script.
 				{'max-height': container_height_wheader + 'px',
 				 'height': container_height_wheader + 'px'}
 			);
-			if ($('#project_context-container').prev('#project-header')) {
+			if ($('#project_context-container').prev('#project-header').length) {
 				$('#project_context-container').css(
 					{'max-height': container_height_wheader + 'px',
 					 'height': container_height_wheader + 'px'}
+				);
+			} else {
+				$('#project_context-container').css(
+					{'max-height': container_height + 'px',
+					 'height': container_height + 'px'}
 				);
 			}
 		};
