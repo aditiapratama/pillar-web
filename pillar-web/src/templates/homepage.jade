@@ -78,6 +78,11 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 	#content
 		section#updates.node-extra
 			.node-updates
+				a(href="{{ url_for('feeds_blogs') }}",
+					title="Cloud & Project Blogs Feed",
+					data-toggle="tooltip",
+					data-placement="left").feed
+					i.pi-rss
 				h3 Blog Updates
 				ul.node-updates-list
 					| {% if latest_posts %}

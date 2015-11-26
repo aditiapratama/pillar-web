@@ -261,6 +261,7 @@ $list-node-children-item-width: 160px
 			&.button-edit
 				min-width: 80px
 
+
 			&.button-dropdown
 				min-width: 50px
 				cursor: pointer
@@ -272,6 +273,10 @@ $list-node-children-item-width: 160px
 					a.dropdown-toggle
 						color: $color-primary
 						background-color: lighten($color-background-nav, 10%)
+
+					li.button-delete:hover
+						a
+							color: $color-danger
 
 			&.featured
 				a
@@ -1008,6 +1013,17 @@ section.node-details-container
 									+text-overflow-ellipsis
 									font-weight: 500
 									margin-left: 3px
+
+	.feed
+		font-size: 1.8em
+		position: absolute
+		top: 15px
+		right: 10px
+		color: lighten($color-text-dark-hint, 10%)
+
+		&:hover
+			color: $color-primary
+
 
 	.node-blog
 		min-width: 35%

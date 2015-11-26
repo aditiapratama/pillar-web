@@ -5,10 +5,16 @@
 		ul
 			a(class="{% if title == 'profile' %}active{% endif %}",
 				href="{{ url_for('users.settings_profile') }}")
-				li Profile
+				li
+					i.pi-vcard
+					| Profile
 			a(class="{% if title == 'emails' %}active{% endif %}",
 					href="{{ url_for('users.settings_emails') }}")
-				li Emails
+				li
+					i.pi-email
+					| Emails
 			a(class="{% if title == 'billing' %}active{% endif %}",
 					href="{{ url_for('users.settings_billing') }}")
-				li Billing
+				li
+					i.pi-credit-card
+					| Billing

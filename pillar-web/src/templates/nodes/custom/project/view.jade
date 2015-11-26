@@ -103,30 +103,38 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 						li.button-featured
 							a#item_featured(
 								href="#",
-								title="Feature on project's homepage")
+								title="Feature on project's homepage",
+								data-toggle="tooltip",
+								data-placement="left")
 								i.button-featured-icon.pi-star
 								| Toggle Featured
+
+						li.button-toggle-public
+							a#item_toggle_public(
+								href="#",
+								title="Toggle public",
+								data-toggle="tooltip",
+								data-placement="left")
+								i.pi-lock-open
+								| Toggle public
 
 						li.button-move
 							a#item_move(
 								href="#",
-								title="Move asset into a folder...")
+								title="Move asset into a folder...",
+								data-toggle="tooltip",
+								data-placement="left")
 								i.button-move-icon.pi-move
 								| Move
 
 						li.button-delete
 							a#item_delete(
 								href="#",
-								title="Delete asset")
+								title="Delete asset",
+								data-toggle="tooltip",
+								data-placement="left")
 								i.pi-trash
 								| Delete
-
-						li.button-toggle-public
-							a#item_toggle_public(
-								href="#",
-								title="Toggle public")
-								i.pi-trash
-								| Toggle public
 
 				// Edit Mode
 				li.button-cancel
