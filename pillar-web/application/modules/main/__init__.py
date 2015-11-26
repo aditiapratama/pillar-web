@@ -231,7 +231,7 @@ def feeds_blogs():
         updated = post._updated if post._updated else post._created
         url = url_for('nodes.view', node_id=post._id, redir=1, _external=True)
         content = post.properties.content[:500]
-        content = '<p>{0}... <a href="{1}">Read more</a></p>'.format(content, url)
+        content = u'<p>{0}... <a href="{1}">Read more</a></p>'.format(content, url)
         feed.add(post.name, unicode(content),
                  content_type='html',
                  author=author,
