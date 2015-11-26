@@ -151,6 +151,7 @@ $("#item_move_accept").click(function(e) {
 		Cookies.remove('bcloud_moving_node_id');
 		moveModeExit();
 
+		$('#project_tree').jstree("refresh");
 	});
 });
 
