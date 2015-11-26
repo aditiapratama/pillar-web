@@ -98,7 +98,7 @@ script(src="{{ url_for('static', filename='jquery-file-upload/js/jquery.fileuplo
 script(src= "{{ url_for('static', filename='jquery-file-upload/js/main.js') }}")
 
 script().
-	$(".create").unbind("click");
+	$("body").unbind("click");
 	$("body").on("click", ".create", function(event) {
 		// Start the asset creation process
 		event.preventDefault();
