@@ -39,10 +39,13 @@ def projects_move_node():
 
     api = SystemUtility.attract_api()
     node = Node.find(node_id, api=api)
+    # Get original parent id for clearing template fragment on success
+    previous_parent_id = node.parent
     node.parent = dest_parent_node_id
     node.update(api=api)
     # Delete cached parent template fragment
     delete_redis_cache_template('group_view', node.parent)
+    delete_redis_cache_template('group_view', previous_parent_id)
     return jsonify(status='success', data=dict(message='node moved'))
 
 
