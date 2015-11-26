@@ -18,8 +18,10 @@
 				li.node-details-meta-list-item.author
 					| {{ node.user.full_name }}
 
+				| {% if node.properties.status != 'published' %}
 				li.node-details-meta-list-item.status
-						| {{node.properties.status}}
+					| {{node.properties.status}}
+				| {% endif %}
 
 
 	section.node-details-container.group

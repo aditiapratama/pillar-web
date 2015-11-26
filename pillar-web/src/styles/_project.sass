@@ -3,10 +3,11 @@ $project_header-height: 50px
 $project_footer-height: 30px
 
 $list-node-children-item-width: 160px
+$z-index-base: 12
 
 /* Child of container, contains project-flex */
 #project_container
-	z-index: 12
+	z-index: $z-index-base
 	margin: 0 auto
 	border-radius: 0
 
@@ -51,7 +52,7 @@ $list-node-children-item-width: 160px
 	color: white
 	border-right: thick solid $color-background-nav
 
-	z-index: 14
+	z-index: $z-index-base + 2
 
 	left: 0
 	transition: all 250ms ease-in-out
@@ -67,7 +68,6 @@ $list-node-children-item-width: 160px
 /* Header with name, breadcrumbs and node edit tools */
 #project-header,
 #project_nav-footer
-	border-right: thick solid $color-background-nav
 	display: flex
 	align-items: center
 
@@ -81,6 +81,7 @@ $list-node-children-item-width: 160px
 	position: absolute
 	left: $project_nav-width - 30px
 	bottom: 0
+	z-index: $z-index-base + 2
 
 	+media-lg
 		border-bottom-left-radius: 3px
@@ -94,12 +95,12 @@ $list-node-children-item-width: 160px
 
 	position: absolute
 	top: 0
-	z-index: 13
+	z-index: $z-index-base +1
 
 	&.navigation
 		width: 100%
 		left: 0
-		z-index: 15
+		z-index: $z-index-base + 3
 
 	&.context
 		right: 0
@@ -246,7 +247,7 @@ $list-node-children-item-width: 160px
 				&.disabled
 					a
 						pointer-events: none
-						cursor: default
+						cursor: not-allowed
 						background: repeating-linear-gradient(-45deg, darken($color-success, 15%), darken($color-success, 15%) 10px, darken($color-success, 20%) 10px, darken($color-success, 20%) 20px)
 
 			&.button-move
@@ -291,6 +292,7 @@ $list-node-children-item-width: 160px
 					opacity: .6
 					background: repeating-linear-gradient(-45deg, lighten($color-background-nav, 15%), lighten($color-background-nav, 15%) 10px, lighten($color-background-nav, 5%) 10px, lighten($color-background-nav, 5%) 20px)
 					pointer-events: none
+					cursor: not-allowed
 
 		a
 			margin: 5px
@@ -404,9 +406,6 @@ $list-node-children-item-width: 160px
 			top: 2px
 
 
-// #project_nav #project-header
-// 	z-index: 15
-
 #project-header+#project_tree,
 #project-header+#project_context-container
 	margin-top: $project_header-height
@@ -496,7 +495,7 @@ $list-node-children-item-width: 160px
 	margin-left: -8px
 	top: 0
 	bottom: 0
-	z-index: 10
+	z-index: $z-index-base
 	cursor: w-resize
 	user-select: none
 	transition: background-color 250ms ease-in-out
@@ -1524,7 +1523,7 @@ section.node-children
 	right: 0
 	width: 80%
 	height: 45px
-	z-index: 13
+	z-index: $z-index-base + 1
 	opacity: 0
 	margin: 0 auto
 	border-bottom-left-radius: 3px
@@ -1602,6 +1601,7 @@ section.node-children
 
 				&.disabled
 					pointer-events: none
+					cursor: not-allowed
 					background: repeating-linear-gradient(-45deg, darken($color-success, 15%), darken($color-success, 15%) 10px, darken($color-success, 20%) 10px, darken($color-success, 20%) 20px)
 
 
