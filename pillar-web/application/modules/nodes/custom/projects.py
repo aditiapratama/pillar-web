@@ -13,6 +13,8 @@ from application.modules.nodes import project_update_nodes_list
 from application.modules.nodes import view
 from application.modules.users.model import UserProxy
 from application.helpers import current_user_is_authenticated
+from application.helpers.caching import delete_redis_cache_template
+
 
 
 @nodes.route('/projects/add-featured-node', methods=['POST'])
@@ -39,6 +41,8 @@ def projects_move_node():
     node = Node.find(node_id, api=api)
     node.parent = dest_parent_node_id
     node.update(api=api)
+    # Delete cached parent template fragment
+    delete_redis_cache_template('group_view', node.parent)
     return jsonify(status='success', data=dict(message='node moved'))
 
 
@@ -54,6 +58,8 @@ def projects_delete_node():
         # status from the properties later on.
         node.name = u"[D] {0}".format(node.name)
         node.update(api=api)
+        # Delete cached parent template fragment
+        delete_redis_cache_template('group_view', node.parent)
         return jsonify(status='success', data=dict(message='Node delete'))
     else:
         return abort(403)
@@ -75,6 +81,8 @@ def projects_toggle_node_public():
             node.permissions = dict(world=['GET'])
             message = "Node is now public!"
         node.update(api=api)
+        # Delete cached parent template fragment
+        delete_redis_cache_template('group_view', node.parent)
         return jsonify(status='success', data=dict(message=message))
     else:
         return abort(403)
