@@ -8,8 +8,11 @@ from flask import abort
 from flask import render_template
 from flask import session
 from flask import redirect
+from flask import request
+from flask import url_for
 from flask.ext.login import login_required
 from flask.ext.login import current_user
+from werkzeug.contrib.atom import AtomFeed
 from application import app
 from application import SystemUtility
 from application import cache
@@ -201,4 +204,39 @@ def caminandes():
 @app.route("/p/blender-cloud/")
 def redirect_cloud_blog():
     return redirect('/blog')
+
+
+@app.route('/feeds/blogs.atom')
+@cache.cached(60*5)
+def feeds_blogs():
+    """Global feed generator for latest blogposts across all projects"""
+    feed = AtomFeed('Blender Cloud - Latest updates',
+                    feed_url=request.url, url=request.url_root)
+    # Get latest blog posts
+    api = SystemUtility.attract_api()
+    node_type_post = NodeType.find_one({
+        'where': '{"name" : "post"}',
+        'projection': '{"permissions": 1}'
+        }, api=api)
+    latest_posts = Node.all({
+        'where': '{"node_type": "%s", "properties.status": "published"}' % (node_type_post._id),
+        'embedded': '{"user": 1, "project":1}',
+        'sort': '-_created',
+        'max_results': '15'
+        }, api=api)
+
+    # Populate the feed
+    for post in latest_posts._items:
+        author = post.user.fullname
+        updated = post._updated if post._updated else post._created
+        url = url_for('nodes.view', node_id=post._id, redir=1, _external=True)
+        content = unicode(post.properties.content)[:500]
+        content = '<p>{0}... <a href="{1}">Read more</a></p>'.format(content, url)
+        feed.add(post.name, content,
+                 content_type='html',
+                 author=author,
+                 url=url,
+                 updated=updated,
+                 published=post._created)
+    return feed.get_response()
 
