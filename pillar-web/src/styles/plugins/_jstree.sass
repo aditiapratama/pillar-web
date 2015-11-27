@@ -162,8 +162,11 @@ a.jstree-anchor.jstree-clicked+ul li a.jstree-anchor.jstree-clicked+ul li a.jstr
 
 a.jstree-anchor+ul
 	background-color: rgba($color-background-nav, .33) !important
+	border:
+		top: thin solid rgba($color-background-nav, .8) !important
+		bottom: thin solid rgba($color-background-nav, .8) !important
 	a.jstree-anchor
-		color: $color-text-light-primary !important
+		color: darken($color-text-light-primary, 10%) !important
 
 		&.jstree-hovered,
 		&.jstree-clicked
@@ -171,7 +174,7 @@ a.jstree-anchor+ul
 
 		&+ul
 			a.jstree-anchor
-				color: $color-text-light-secondary !important
+				color: darken($color-text-light-primary, 10%) !important
 
 				&.jstree-hovered,
 				&.jstree-clicked
