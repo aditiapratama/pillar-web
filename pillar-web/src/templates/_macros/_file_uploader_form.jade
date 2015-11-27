@@ -59,11 +59,12 @@
 		ul
 			li
 				| The maximum file size for this interface is
-				strong  1 GB
+				strong  {{ config.MAX_CONTENT_LENGTH | filesizeformat }}
 				| .
 			li
 				| Only the following formats are allowed:
 				br
 				strong.text-uppercase
-					| {% set formats = config.ALLOWED_EXTENSIONS|string %}
-					| {{formats[5:-2]}}
+					| {% for f in config.ALLOWED_EXTENSIONS %}
+					|	{{f}}
+					| {% endfor %}
