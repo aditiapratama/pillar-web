@@ -28,6 +28,19 @@ script(type="text/javascript").
 		{% else %}
 			$('.project-mode-view').hide();
 		{% endif %}
+
+		$(function (){
+			var node_id = document.getElementById("item_edit");
+			var moving_node_id = Cookies.get('bcloud_moving_node_id');
+
+			if (moving_node_id){
+				if (node_id.getAttribute('data-project_id') == node_id.getAttribute('data-node_id')) {
+					$('#item_move_accept').removeClass('disabled');
+					$('#item_move_accept').html('<i class="pi-check"></i> Move to Root');
+				};
+			};
+		});
+
 	{% endif %}
 
 

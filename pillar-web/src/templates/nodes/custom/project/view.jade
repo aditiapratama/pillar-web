@@ -87,7 +87,8 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 				li.button-edit
 					a#item_edit.project-mode-view(
 						href="#",
-						title="Edit asset")
+						title="Edit asset",
+						data-project_id="{{node._id}}")
 						i.button-edit-icon.pi-edit
 						| Edit
 
@@ -441,6 +442,7 @@ script.
 	$("#project_tree").hover(function(){
 		Ps.update(document.getElementById('project_tree'));
 	});
+
 
 | {% endblock %}
 
