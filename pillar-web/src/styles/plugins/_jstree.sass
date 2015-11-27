@@ -1,6 +1,6 @@
 /* jsTree overrides */
 
-$tree-color-text: white
+$tree-color-text: $color-text-light-primary
 $tree-color-highlight: white
 $tree-color-highlight-background: $color-primary
 
@@ -33,7 +33,7 @@ $tree-color-highlight-background: $color-primary
 	margin: 0 0 0 5px !important
 	font-weight: 400 !important
 	padding: 2px 0
-	color: rgba($tree-color-text, .9)
+	color: $tree-color-text
 	min-height: 12px !important
 	line-height: 12px !important
 	+media-xs
@@ -159,6 +159,21 @@ a.jstree-anchor.jstree-clicked+ul li a.jstree-anchor.jstree-clicked
 
 a.jstree-anchor.jstree-clicked+ul li a.jstree-anchor.jstree-clicked+ul li a.jstree-anchor.jstree-clicked
 	background-color: rgba($tree-color-highlight-background, .8) !important
+
+a.jstree-anchor+ul
+	background-color: rgba($color-background-nav, .33) !important
+	a.jstree-anchor
+		color: $color-text-light-primary !important
+
+		&.jstree-clicked
+			color: white !important
+
+		&+ul
+			a.jstree-anchor
+				color: $color-text-light-secondary !important
+
+				&.jstree-clicked
+					color: white !important
 
 /* hover an active item */
 .jstree-default .jstree-clicked.jstree-hovered,
