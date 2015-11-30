@@ -650,6 +650,8 @@ def edit(node_id):
                         if prop_name == 'attachments':
                             # Parse JSON data
                             form[prop_name].data = json.dumps(data)
+                        elif prop_name == 'tags':
+                            form[prop_name].data = ', '.join(data)
                         else:
                             form[prop_name].data = data
 

@@ -201,6 +201,10 @@ def get_node_form(node_type):
                     setattr(ProceduralForm,
                             prop_name,
                             AttachmentSelectField(prop_name))
+                elif prop == 'tags':
+                    setattr(ProceduralForm,
+                            prop_name,
+                            TextField(prop_name))
                 else:
                     setattr(ProceduralForm,
                             prop_name,
@@ -313,6 +317,8 @@ def process_node_form(form, node_id=None, node_type=None, user=None):
                 elif schema_prop['type'] == 'list':
                     if pr == 'attachments':
                         data = json.loads(data)
+                    elif pr == 'tags':
+                        data = [tag.strip() for tag in data.split(',')]
                 else:
                     if pr in form:
                         data = form[prop_name].data
