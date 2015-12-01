@@ -11,6 +11,7 @@ from flask.ext.login import current_user
 from application import app
 from application import SystemUtility
 from application.helpers import attach_project_pictures
+from application.helpers import get_file
 from application.modules.nodes import nodes
 from application.modules.nodes import project_update_nodes_list
 from application.modules.nodes.forms import get_node_form
@@ -38,7 +39,7 @@ def posts_view(project_id, url=None):
                 'embedded': '{"node_type": 1, "user": 1}',
                 }, api=api)
             if post.picture:
-                post.picture = File.find(post.picture, api=api)
+                post.picture = get_file(post.picture)
         except ResourceNotFound:
             return abort(404)
 
