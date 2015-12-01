@@ -92,6 +92,10 @@ def homepage():
         api=api)
 
 
+@app.errorhandler(500)
+def error_500():
+    return render_template('errors/500.html'), 500
+
 
 @app.route("/join")
 @cache.cached(timeout=3600, unless=current_user_is_authenticated)
