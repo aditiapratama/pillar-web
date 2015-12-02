@@ -293,9 +293,9 @@ def view(node_id):
         node = Node.find(node_id + '/?embedded={"node_type":1}', api=api)
 
     except ResourceNotFound:
-        return render_template('errors/404.html')
+        return render_template('errors/404_embed.html')
     except ForbiddenAccess:
-        return render_template('errors/403.html')
+        return render_template('errors/403_embed.html')
 
     node_type_name = node.node_type.name
 
