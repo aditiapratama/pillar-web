@@ -505,7 +505,8 @@ def view(node_id):
 
         children = Node.all({
             'projection': '{"name": 1, "picture": 1, "parent": 1, "node_type": 1, \
-                "properties.order": 1, "properties.status": 1, "user": 1}',
+                "properties.order": 1, "properties.status": 1, "user": 1, \
+                "properties.content_type": 1}',
             'where': '{"parent": "%s" %s}' % (node._id, published_status),
             'embedded': '{"picture": 1, "node_type": 1}',
             'sort': 'properties.order'}, api=api)
