@@ -19,6 +19,7 @@ from flask import url_for
 from flask import request
 from flask import jsonify
 from flask import session
+from flask import g
 from wtforms import SelectMultipleField
 from flask.ext.login import login_required
 from flask.ext.login import current_user
@@ -302,12 +303,13 @@ def view(node_id):
     rewrite_url = None
     embedded_node_id = None
     if request.args.get('redir') and request.args.get('redir') == '1':
-        # Check the project propety for the node. The only case when the prop is
+        # Check the project property for the node. The only case when the prop is
         # None is if the node is a project, which usually means we are at the
         # second stage of redirection.
         if node.project:
             # Set node to embed in the session
-            session['embedded_node'] = node.to_dict()
+            # session['embedded_node'] = node.to_dict()
+            g.embedded_node = node.to_dict()
             # Render the project node (which will get the redir arg)
             return view(node.project)
         # We double check that the node is indeed of type project
@@ -320,19 +322,19 @@ def view(node_id):
                 name = node.user.url
             # Handle special cases (will be mainly used for items that are part
             # of the blog, or attract)
-            if session['embedded_node']['node_type']['name'] == 'post':
+            if g.get('embedded_node')['node_type']['name'] == 'post':
                 # Very special case of the post belonging to the main project,
                 # which is read from the configuration.
                 if node._id == app.config['MAIN_PROJECT_ID']:
                     return redirect(url_for('main_blog',
-                        url=session['embedded_node']['properties']['url']))
+                        url=g.get('embedded_node')['properties']['url']))
                 else:
                     return redirect(url_for('project_blog',
                         project_url=node.properties.url,
-                        url=session['embedded_node']['properties']['url']))
+                        url=g.get('embedded_node')['properties']['url']))
             rewrite_url = "/p/{0}/#{1}".format(node.properties.url,
-                session['embedded_node']['_id'])
-            embedded_node_id = session['embedded_node']['_id']
+                g.get('embedded_node')['_id'])
+            embedded_node_id = g.get('embedded_node')['_id']
 
 
     # JsTree functionality.
