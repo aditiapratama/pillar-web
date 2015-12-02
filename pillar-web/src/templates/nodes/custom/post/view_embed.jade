@@ -23,9 +23,19 @@ meta(property="og:image", content="{{ node.picture.thumbnail('l', api=api) }}")
 | {% block body %}
 
 .container.box
-	#blog_container
+	#blog_container(class="{% if project._id == config.MAIN_PROJECT_ID %}cloud-blog{% endif %}")
 
 		#blog_post-container
+			| {% if project._id == config.MAIN_PROJECT_ID %}
+			a.btn.btn-default.button-back(href="{{ url_for('project_view', project_url=project.properties.url) }}blog")
+				| Back to Blog
+
+			| {% if node.has_method('PUT') %}
+			a.btn.btn-default.button-create(href="{{url_for('nodes.posts_edit', post_id=node._id)}}")
+				| Edit Post
+			| {% endif %}
+			.clearfix
+			| {% endif %}
 
 			.blog_index-item
 				| {% if node.picture %}
@@ -52,8 +62,8 @@ meta(property="og:image", content="{{ node.picture.thumbnail('l', api=api) }}")
 				#comments-list-items-loading
 					i.pi-spin
 
+		| {% if project._id != config.MAIN_PROJECT_ID %}
 		#blog_index-sidebar
-			| {% if project._id != config.MAIN_PROJECT_ID %}
 			.blog_project-card
 				a.item-header(
 					href="{{ url_for('project_view', project_url=project.properties.url) }}")
@@ -79,7 +89,6 @@ meta(property="og:image", content="{{ node.picture.thumbnail('l', api=api) }}")
 					p.item-description
 						| {{project.properties.summary|safe}}
 					| {% endif %}
-			| {% endif %}
 			.blog_project-sidebar
 				| {% if node.has_method('PUT') %}
 				a.btn.btn-default.button-create(href="{{url_for('nodes.posts_edit', post_id=node._id)}}")
@@ -88,6 +97,7 @@ meta(property="og:image", content="{{ node.picture.thumbnail('l', api=api) }}")
 
 				a.btn.btn-default.button-back(href="{{ url_for('project_view', project_url=project.properties.url) }}blog")
 					| Back to Blog
+		| {% endif %}
 
 
 | {% endblock %}

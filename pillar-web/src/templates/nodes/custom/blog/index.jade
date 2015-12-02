@@ -15,9 +15,14 @@
 | {% block body %}
 
 .container.box
-	#blog_container
+	#blog_container(class="{% if project._id == config.MAIN_PROJECT_ID %}cloud-blog{% endif %}")
 
 		#blog_index-container
+
+			| {% if project._id == config.MAIN_PROJECT_ID and node_type_post and node_type_post.has_method('POST') %}
+			a.btn.btn-default.button-create(href="{{url_for('nodes.posts_create', project_id=project._id)}}")
+				| Create New Post
+			| {% endif %}
 
 			| {% if posts %}
 
@@ -45,6 +50,8 @@
 				.item-meta
 					a(href="{{ url_for('nodes.view', node_id=node._id, redir=1) }}#comments") Leave a comment
 
+			| {% if not loop.last %}<hr/>{% endif %}
+
 			| {% endfor %}
 
 			| {% else %}
@@ -54,8 +61,8 @@
 
 			| {% endif %}
 
+		| {% if project._id != config.MAIN_PROJECT_ID %}
 		#blog_index-sidebar
-			| {% if project._id != config.MAIN_PROJECT_ID %}
 			.blog_project-card
 				a.item-header(
 					href="{{ url_for('project_view', project_url=project.properties.url) }}")
@@ -81,13 +88,13 @@
 					p.item-description
 						| {{project.properties.summary|safe}}
 					| {% endif %}
-			| {% endif %}
 
 			| {% if node_type_post and node_type_post.has_method('POST') %}
 			.blog_project-sidebar
 				a.btn.btn-default.button-create(href="{{url_for('nodes.posts_create', project_id=project._id)}}")
 					| Create New Post
 			| {% endif %}
+		| {% endif %}
 
 | {% endblock %}
 

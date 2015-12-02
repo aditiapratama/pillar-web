@@ -175,6 +175,8 @@
 		weight: 300
 	margin: 0 20px 15px 0
 
+
+
 #blog_index-sidebar
 	width: 25%
 	padding: 0 15px
@@ -296,3 +298,28 @@
 				&:hover
 					text-decoration: none
 					color: $color-primary
+
+#blog_post-container
+	.button-create
+		float: right
+		display: inline-block
+		+button-rounded($color-success, 6px)
+		margin: 15px 15px 0 0 !important
+	.button-back
+		float: right
+		display: inline-block
+		+button-rounded($color-info, 6px)
+		margin: 15px 15px 0 0
+
+#blog_container
+	&.cloud-blog
+		#blog_index-container,
+		#blog_post-container,
+		#blog_post-create-container,
+		#blog_post-edit-container
+			width: 90%
+			padding: 25px 30px 20px 30px
+
+		#blog_index-container+#blog_index-sidebar,
+		#blog_post-container+#blog_index-sidebar
+			display: none
