@@ -37,6 +37,8 @@ def homepage():
         'projection': '{"permissions": 1}'
         }, api=api)
     latest_posts = Node.all({
+        'projection': '{"name":1, "project": 1, "user":1, "node_type":1, \
+            "picture": 1, "properties.status": 1}',
         'where': '{"node_type": "%s", "properties.status": "published"}' % (node_type_post._id),
         'embedded': '{"user": 1, "project":1}',
         'sort': '-_created',
@@ -54,6 +56,8 @@ def homepage():
         'projection': '{"permissions": 1}'
         }, api=api)
     latest_assets = Node.all({
+        'projection': '{"name":1, "project": 1, "user":1, "node_type":1, \
+            "picture": 1, "properties.status": 1}',
         'where': '{"node_type": "%s", "properties.status": "published"}' % (node_type_asset._id),
         'embedded': '{"user":1}',
         'sort': '-_created',
@@ -71,6 +75,8 @@ def homepage():
         'projection': '{"permissions": 1}'
         }, api=api)
     latest_comments = Node.all({
+        'projection': '{"project": 1, "parent": 1, "user": 1, \
+            "properties.content": 1 ,"node_type": 1, "properties.status": 1}',
         'where': '{"node_type": "%s", "properties.status": "published"}' % (node_type_comment._id),
         'embedded': '{"user": 1, "project": 1, "parent": 1}',
         'sort': '-_created',

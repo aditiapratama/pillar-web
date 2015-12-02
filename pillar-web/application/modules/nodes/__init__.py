@@ -152,7 +152,8 @@ def jstree_get_children(node_id):
         node_id = node_id.split('_')[1]
     try:
         children = Node.all({
-            'projection': '{"name": 1, "parent": 1, "node_type": 1, "properties": 1, "user": 1}',
+            'projection': '{"name": 1, "parent": 1, "node_type": 1, \
+                "properties.order": 1, "properties.status": 1, "user": 1}',
             'embedded': '{"node_type": 1}',
             'where': '{"parent": "%s"}' % node_id,
             'sort': 'properties.order'}, api=api)
@@ -502,6 +503,8 @@ def view(node_id):
             published_status = ''
 
         children = Node.all({
+            'projection': '{"name": 1, "picture": 1, "parent": 1, "node_type": 1, \
+                "properties.order": 1, "properties.status": 1, "user": 1}',
             'where': '{"parent": "%s" %s}' % (node._id, published_status),
             'embedded': '{"picture": 1, "node_type": 1}',
             'sort': 'properties.order'}, api=api)
