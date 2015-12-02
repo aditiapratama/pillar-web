@@ -153,7 +153,8 @@ def jstree_get_children(node_id):
     try:
         children = Node.all({
             'projection': '{"name": 1, "parent": 1, "node_type": 1, \
-                "properties.order": 1, "properties.status": 1, "user": 1}',
+                "properties.order": 1, "properties.status": 1, \
+                "properties.content_type": 1, "user": 1}',
             'embedded': '{"node_type": 1}',
             'where': '{"parent": "%s"}' % node_id,
             'sort': 'properties.order'}, api=api)
