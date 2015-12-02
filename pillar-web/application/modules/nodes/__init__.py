@@ -164,6 +164,8 @@ def jstree_get_children(node_id):
             if child.node_type.name not in ['comment', 'post']:
                 if child.properties.status == 'published':
                     children_list.append(jstree_parse_node(child))
+                elif child.node_type.name == 'blog':
+                    children_list.append(jstree_parse_node(child))
                 elif current_user.is_authenticated() and child.user == current_user.objectid:
                     children_list.append(jstree_parse_node(child))
     except ForbiddenAccess:
