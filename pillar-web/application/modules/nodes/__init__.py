@@ -685,7 +685,8 @@ def edit(node_id):
             # Delete cached template fragment
             delete_redis_cache_template('asset_view', node._id)
             # Delete cached parent template fragment
-            delete_redis_cache_template('group_view', node.parent)
+            if node.parent:
+                delete_redis_cache_template('group_view', node.parent)
             # Delete memoized File object
             cache.delete_memoized(_get_file_cached, node._id)
             # Emergency hardcore cache flush
