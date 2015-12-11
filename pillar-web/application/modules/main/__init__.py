@@ -57,7 +57,8 @@ def homepage():
         }, api=api)
     latest_assets = Node.all({
         'projection': '{"name":1, "project": 1, "user":1, "node_type":1, \
-            "picture": 1, "properties.status": 1}',
+            "picture": 1, "properties.status": 1, "properties.content_type": 1, \
+            "permissions.world": 1}',
         'where': '{"node_type": "%s", "properties.status": "published"}' % (node_type_asset._id),
         'embedded': '{"user":1}',
         'sort': '-_created',
