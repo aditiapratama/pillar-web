@@ -109,6 +109,11 @@ def error_404(e):
     return render_template('errors/404.html'), 404
 
 
+@app.errorhandler(403)
+def error_404(e):
+    return render_template('errors/403_embed.html'), 403
+
+
 @app.route("/join")
 @cache.cached(timeout=3600, unless=current_user_is_authenticated)
 def join():
@@ -138,6 +143,7 @@ def main_blog(url=None):
 def main_posts_create():
     project_id = app.config['MAIN_PROJECT_ID']
     return posts_create(project_id)
+
 
 @app.route("/<name>/")
 @cache.memoize(timeout=3600, unless=current_user_is_authenticated)
@@ -215,6 +221,18 @@ def gallery():
 @app.route("/caminandes")
 def caminandes():
     return redirect('/p/caminandes-3')
+
+
+@app.route("/cf2")
+def cf2():
+    return redirect('/p/creature-factory-2')
+
+
+@app.route("/403")
+def error_403():
+    """Custom entry point to display the not allowed template"""
+    return render_template('errors/403_embed.html')
+
 
 # Shameful redirects
 @app.route("/p/blender-cloud/")

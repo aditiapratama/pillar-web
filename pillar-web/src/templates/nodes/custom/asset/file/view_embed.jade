@@ -23,9 +23,16 @@
 					| {{ node.file.length | filesizeformat }}
 
 				li.node-details-meta-list-item.file.download
-					a(href="{% if node.has_method('GET') %}{{ node.file.link }}{% else %}{{ url_for('users.login') }}{% endif %}")
+					| {% if node.file.link %}
+					a(href="{{ node.file.link }}")
 						button.btn.btn-default(type="button")
 							| Download File
+					| {% else %}
+					a(href="#")
+						button.btn.btn-default.disabled(type="button")
+							| Download File
+					| {% endif %}
+
 
 		.node-details-description
 			| {{node.description}}
@@ -45,15 +52,23 @@
 			#comments-list-items-loading
 				i.pi-spin
 
-
 | {% endcache %}
 include ../../_scripts
 | {% endblock %}
 
 | {% block footer_scripts %}
 script.
+	// Generate GA pageview
+	ga('send', 'pageview', (location.pathname + '#' + '{{node._id}}'));
+
 	if ($('.node-preview-thumbnail').width() > 750) {
 		$('.node-preview.file, .node-preview-thumbnail').css({'max-height': '100%', 'width': '100%'});
 	}
+	$('.btn-default').click(function() {
+		$.get('/403', function(data) {
+			$('#node-container').html(data);
+			$('#error_container').css('display', 'flex');
+		})
+	});
 
 | {% endblock %}

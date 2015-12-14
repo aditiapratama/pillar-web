@@ -32,6 +32,7 @@ link(rel="stylesheet", href="//releases.flowplayer.org/6.0.3/skin/minimalist.css
 				li.node-details-meta-list-item.type
 					| {{ node.properties.content_type }}
 
+				| {% if node.file_variations %}
 				li.btn-group.node-details-meta-list-item.video.download
 					button.btn.btn-default.dropdown-toggle(
 						type="button",
@@ -52,6 +53,11 @@ link(rel="stylesheet", href="//releases.flowplayer.org/6.0.3/skin/minimalist.css
 								span.size {{ child.size }}
 
 						| {% endfor %}
+				| {% else %}
+				a(href="#")
+					button.btn.btn-default.disabled(type="button")
+						| Download Video
+				| {% endif %}
 
 		.node-details-description
 			| {{node.description}}
@@ -78,16 +84,32 @@ link(rel="stylesheet", href="//releases.flowplayer.org/6.0.3/skin/minimalist.css
 | {% block footer_scripts %}
 
 script(type="text/javascript").
+	// Generate GA pageview
+	ga('send', 'pageview', (location.pathname + '#' + '{{node._id}}'));
+
 	var container = document.getElementById("flowplayer_container");
 
 	flowplayer(container, {
 		key: "{{config.FLOWPLAYER_KEY}}",
 		embed: false,
 		splash: true,
-			clip: {
-				sources: {{ node.video_sources | safe }}
-			}
+		{% if node.video_sources %}
+		clip: {
+			sources: {{ node.video_sources | safe }}
+		}
+		{% else %}
+		disabled: true
+		{% endif %}
 	});
+
+	{% if not node.video_sources %}
+	$('#flowplayer_container').click(function() {
+		$.get('/403', function(data) {
+			$('#node-container').html(data);
+			$('#error_container').css('display', 'flex');
+		})
+	});
+	{% endif %}
 
 include ../../_scripts
 

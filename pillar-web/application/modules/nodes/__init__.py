@@ -368,6 +368,24 @@ def view(node_id):
             return jsonify(items=jstree_build_from_node(node))
     # Continue to process the node (for HTML, HTML embeded and JSON responses)
 
+
+    def allow_link(node):
+        """Helper function to cross check if the user is authenticated, and it
+        is has the 'subscriber' role. Also, we check if the node has world GET
+        permissions, which means it's free.
+        """
+
+        # Check if node permissions for the world exist (if node is free)
+        if node.permissions and node.permissions.world:
+            if 'GET' in node.permissions.world:
+                return True
+        else:
+            if current_user.is_authenticated() and 'subscriber' in current_user.roles:
+                return True
+            else:
+                # The user is not authenticated and the node is not free
+                return False
+
     # Set the default name of the template path based on the node name
     template_path = os.path.join('nodes', 'custom', node_type_name)
     # Set the default action for a template. By default is view and we override
@@ -383,7 +401,13 @@ def view(node_id):
 
     # XXX Code to detect a node of type asset, and aggregate file data
     if node_type_name == 'asset':
+
         node_file = File.find(node.properties.file, api=api)
+
+        # Check if the user and node status to determine if the file link should
+        # be added.
+        if not allow_link(node):
+            node_file.link = None
         #node_file_children = node_file.children(api=api)
         # Attach the file node to the asset node
         setattr(node, 'file', node_file)
@@ -396,7 +420,7 @@ def view(node_id):
         if asset_type == 'video':
             # Process video type and select video template
             sources = []
-            if node_file.variations:
+            if node_file and node_file.variations:
                 for f in node_file.variations:
                     sources.append(dict(
                         type=f.content_type,
@@ -404,13 +428,17 @@ def view(node_id):
                     # Build a link that triggers download with proper filename
                     if f.backend == 'cdnsun':
                         f.link = "{0}&name={1}.{2}".format(f.link, node.name, f.format)
-
-            setattr(node, 'video_sources', json.dumps(sources))
-            setattr(node, 'file_variations', node_file.variations)
+            # If the user is allowed, attach video variations to the node data
+            # so that the player can function.
+            if allow_link(node):
+                file_variations = node_file.variations
+                video_sources = json.dumps(sources)
+            else:
+                file_variations = video_sources = None
+            setattr(node, 'video_sources', video_sources)
+            setattr(node, 'file_variations', file_variations)
             template_path = os.path.join(template_path, asset_type)
         elif asset_type == 'image':
-            # Process image type and select image template
-            setattr(node, 'file_variations', node_file.variations)
             template_path = os.path.join(template_path, asset_type)
         else:
             # Treat it as normal file (zip, blend, application, etc)

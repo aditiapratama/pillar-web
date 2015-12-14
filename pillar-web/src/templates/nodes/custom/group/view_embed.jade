@@ -83,6 +83,9 @@
 		| {% endif %}
 
 	script.
+		// Generate GA pageview
+		ga('send', 'pageview', (location.pathname + '#' + '{{node._id}}'));
+
 		$('a.item_icon').unbind("click");
 		$('a.item_icon').click(function(e){
 			e.preventDefault;

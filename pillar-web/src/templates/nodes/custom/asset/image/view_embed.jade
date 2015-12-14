@@ -23,9 +23,15 @@
 					| {{ node.file.length | filesizeformat }}
 
 				li.node-details-meta-list-item.image.download
+					| {% if node.file.link %}
 					a(href="{{ node.file.link }}")
 						button.btn.btn-default(type="button")
 							| Download Image
+					| {% else %}
+					a(href="#")
+						button.btn.btn-default.disabled(type="button")
+							| Download Image
+					| {% endif %}
 
 
 		.node-details-description
@@ -54,8 +60,18 @@ include ../../_scripts
 
 | {% block footer_scripts %}
 script.
+	// Generate GA pageview
+	ga('send', 'pageview', (location.pathname + '#' + '{{node._id}}'));
+
 	if ($('.node-preview-thumbnail').width() > 750) {
 		$('.node-preview, .node-preview-thumbnail').css({'max-height': '100%', 'width': '100%'});
 	}
+	$('.btn-default').click(function() {
+		$.get('/403', function(data) {
+			$('#node-container').html(data);
+			$('#error_container').css('display', 'flex');
+		})
+	});
+
 | {% endblock %}
 
