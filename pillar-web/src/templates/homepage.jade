@@ -8,7 +8,7 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 | {% endblock %}
 
 | {% block header_backdrop %}
-.homepage.navbar-backdrop(style="background-image: url({{ url_for('static', filename='assets/img/background_gleb_locomotive.jpg')}})")
+.homepage.navbar-backdrop(style="background-image: url({{ url_for('static', filename='assets/img/background_caminandes_3_01.jpg')}})")
 	//
 		video(loop, muted, autoplay, poster="{{ url_for('static', filename='assets/img/background_join_glass.jpg')}}", class="fullscreen-bg__video")
 			source(src="{{ url_for('static', filename='assets/video/header-glass_half.webm')}}", type="video/webm")
@@ -18,16 +18,20 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 
 | {% block body %}
 
-#homepage.page-content
+
+| {% if current_user.is_authenticated() %}
+
+.homepage_container.page-content
 	#header
 		.text
-			.title
-				a(href="/p/gallery/")
-					img(src="{{ url_for('static', filename='assets/img/logo_gallery.png')}}")
+			.title Caminandes 3
+					//- img(src="{{ url_for('static', filename='assets/img/logo_gallery.png')}}")
 
 			.lead
 				span.
-					Discover 5 stunning artworks by Gleb Alexandrov.
+					Snowy environment and animated furry characters,
+					<br/>
+					a great winter adventure awaits!
 					<br/>
 					Full sources and documentation available in CC-BY.
 				//
@@ -35,46 +39,10 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 					<br/>Get full access to the Blender Institute's Open Projects and training material.
 
 			.buttons
-				| {% if current_user.is_authenticated() %}
-				a.btn.btn-default.btn-outline.follow(href="/p/gallery/")
+				a.btn.btn-default.btn-outline.follow(href="/p/caminandes-3/")
 					| Check it Out
-				| {% else %}
-				a.btn.btn-default.btn-outline.get-started(href="https://store.blender.org/product/membership/")
-					| Subscribe Now
-				a.btn.btn-default.btn-outline.learn-more(href="/p/gallery/")
-					| Check it Out
-				| {% endif %}
 
-	#content
-		section#homepage.links
-			#links-container
-
-				a.links-item.training(href="{{ url_for('training') }}")
-					span.bar
-					span.title Training
-
-					p.content.
-						Learn from the masters - production quality
-						training videos by 3d professionals.
-
-
-				a.links-item.open_projects(href="{{ url_for('open_projects') }}")
-					span.bar
-					span.title Open Movies
-
-					p.content Full production data and tutorials from all open movies, for you to use freely.
-
-
-				a.links-item.artgallery(href="{{ url_for('gallery') }}")
-					span.bar
-					span.title Art Gallery
-
-					p.content.
-						Learn by example - Documentation & source files
-						of the best Blender artwork out there
-
-
-#homepage.page-content
+.homepage_container.page-content
 	#content
 		section#updates.node-extra
 			.node-updates
@@ -180,88 +148,147 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 
 				| {% endif %}
 
-
-section#homepage.bullets
-
-	h1 Up Next
-
-	.lead Below is a brief of the projects we have planned for the near future, exciting times ahead!
-
-	.bullets-list
-		.bullets-list-item
-			.bullets-list-item-icon
-				i.pi-film
-			.bullets-list-item-title Glass Half
-			.bullets-list-item-content.
-				In this fun cartoon short we explore NPR Rendering and motion graphics production.
-
-		.bullets-list-item
-			.bullets-list-item-icon
-				i.pi-body-outline
-			.bullets-list-item-title Character Department
-			.bullets-list-item-content.
-				Oct '15: A new section around the Blenrig character rigging tool, many tutorials and ready to use characters.
-		.bullets-list-item
-			.bullets-list-item-icon
-				i.pi-film
-			.bullets-list-item-title Caminandes Xmas edition
-			.bullets-list-item-content.
-				Dec '15: The Llama is back! And we'll pick up work on Cycles, Asset managing and Shot Management.
+| {% elif current_user.is_anonymous() %}
 
 
-		.bullets-list-item
-			.bullets-list-item-icon
-				i.pi-box-outline
-			.bullets-list-item-title Asset Libraries
-			.bullets-list-item-content.
-				Dec '15: A huge public domain Texture Library and a CC-BY Character Library, ready to animate.
+.homepage_container.page-content
+	#header
+		.text
+			.title Learn the magic
+					//- img(src="{{ url_for('static', filename='assets/img/logo_gallery.png')}}")
 
-		.bullets-list-item
-			.bullets-list-item-icon
-				i.pi-camera-shots-outline
-			.bullets-list-item-title Shot Management
-			.bullets-list-item-content.
-				Q1 '16: Attract shot management tool available for subscribers.
+			.lead
+				span.
+					Snowy environment and animated furry characters,
+					<br/>
+					dive into high quality computer graphics!
+					<br/>
+					Full sources and documentation available in CC-BY.
+				//
+					We make films, we build a production pipeline, and we share everything.
+					<br/>Get full access to the Blender Institute's Open Projects and training material.
 
-		.bullets-list-item
-			.bullets-list-item-icon
-				i.pi-people-outline
-			.bullets-list-item-title Project Management
-			.bullets-list-item-content.
-				Q3 '16: Versioning and storage available for subscribers.
+			.buttons
+				a.btn.btn-default.btn-outline.get-started(href="https://store.blender.org/product/membership/")
+					| Sign up now
+				a.btn.btn-default.btn-outline.learn-more(href="/p/caminandes-3/")
+					| Explore
 
-		.bullets-list-item
-			.bullets-list-item-icon
-				i.pi-film
-			.bullets-list-item-title Cosmos Laundromat
-			.bullets-list-item-content.
-				Production of the 2nd Cycle for Cosmos Laundromat will start when we hit 4K subscribers.
 
-		.bullets-list-item
-			.bullets-list-item-icon
-				i.pi-blender
-			.bullets-list-item-title Blender Development
-			.bullets-list-item-content.
-				Blender Institute will host the core team working on the 2.8 Workflow project.
+section.homepage_container.statement
 
-| {% if not current_user.is_authenticated() or not current_user.has_role('subscriber') %}
+	h2.
+		Blender Cloud is our open production platform where we share our work on 3D content and provide professional training.
+	h2.
+		Our mission is to improve 3D creation with free/open source software by making compelling 3D media content - empowering artists and developers to shine and tell their own stories.
+	//- .buttons
+	//- 	a.btn.btn-default.btn-outline.learn-more(href="/p/gallery/")
+	//- 		| Learn more
 
-section#homepage.supported-by
+.container.pricing
+	.row-fluid
+		.col-md-12
+			h2 Simple Pricing. Any payment method.
+	.row-fluid
+		.col-md-4.col-md-offset-2
+			.box
+				h3 Monthly
+				.pricing-display
+					span.currency-sign $
+					span.digit-int 9
+					span.digit-dec .90 / month*
+
+				.pricing-caption
+					p * With a 3-month minimum period
+
+				ul
+					li Hundreds of hours of training videos
+					li Production quality assets free to use
+					li New content added regularly
+					li Full access to all Blender Open Movies
+					li Comment and interact with the team
+					li Downloadable assets and videos
+
+				a.btn.btn-default.btn-outline.sign-up-now(href="https://store.blender.org/product/membership/")
+					| Sign up now
+
+		.col-md-4
+			.box
+				h3 Yearly
+				.pricing-display
+					span.currency-sign $
+					span.digit-int 99
+					span.digit-dec .00 / year*
+				.pricing-caption
+					p * Save 20% on the monthly price!
+
+				ul
+					li Hundreds of hours of training videos
+					li Production quality assets free to use
+					li New content added regularly
+					li Full access to all Blender Open Movies
+					li Comment and interact with the team
+					li Downloadable assets and videos
+					li A free pick from the Blender Store!
+
+				a.btn.btn-default.btn-outline.sign-up-now(href="https://store.blender.org/product/membership/")
+					| Sign up now
+
+	.row
+		.col-md-8.col-md-offset-2.groups-text.
+			<strong>For groups:</strong> we also provide flexible options for group subscription
+			ideal for schools or teams. Get in touch to discuss direct support, custom solutions,
+			team management tools and Single sign-on
+
+
+.container-fluid.our-content
+	.row-fluid
+		.col-md-12.text-center
+			h2 Check out our content
+	.row-fluid
+		#links-container
+			a.links-item.training(href="{{ url_for('training') }}")
+				img.logos(src="{{ url_for('static', filename='assets/img/frontpage_link_training.jpg') }}")
+				span.bar
+				span.title Training
+
+				p.content.
+					Learn from the masters - production quality
+					training videos by 3d professionals.
+
+
+			a.links-item.open_projects(href="{{ url_for('open_projects') }}")
+				img.logos(src="{{ url_for('static', filename='assets/img/frontpage_link_openprojects.jpg') }}")
+				span.bar
+				span.title Open Movies
+
+				p.content Full production data and tutorials from all open movies, for you to use freely.
+
+
+			a.links-item.artgallery(href="{{ url_for('gallery') }}")
+				img.logos(src="{{ url_for('static', filename='assets/img/frontpage_link_gallery.jpg') }}")
+				span.bar
+				span.title Art Gallery
+
+				p.content.
+					Learn by example - Documentation & source files
+					of the best Blender artwork out there
+
+
+
+section.homepage_container.supported-by
 
 	h1 Our Open Projects were supported by
 
 	img.logos(src="{{ url_for('static', filename='assets/img/support_logos.png') }}")
 
 
-section#homepage.get-started
-
-	h2 Only $10 per month*
-
-	a.btn.btn-default.btn-outline.get-started(href="https://store.blender.org/product/membership/")
-		| Subscribe Now
-
-	.notes
-		| * no sign-up fee · cancel anytime · 3 months minimum
+.container-fluid.get-started
+	.row-fluid
+		.col-md-12.text-center
+			h2 Join us, for only $9.90/month!
+			a.btn.btn-default.btn-outline.get-started(href="https://store.blender.org/product/membership/")
+				| Sign up Now
 
 | {% endif %}
 

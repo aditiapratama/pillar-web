@@ -1,5 +1,5 @@
 
-#homepage
+.homepage_container
 	display: flex
 	flex-direction: column
 	justify-content: space-around
@@ -18,25 +18,25 @@
 
 
 		.text
-			padding: 15px 15px 0 15px
-			width: 100%
+			padding: 100px 15px 0 30px
+			// width: 100%
 			height: 100%
 			color: white
 
-			display: flex
-			flex-direction: column
-			justify-content: center
-			align-items: center
+			// display: flex
+			// flex-direction: column
+			// justify-content: center
+			// align-items: center
 
 			.title
 				padding-bottom: 25px
 				font:
 					family: $font-headings
-					size: 3.5em
+					size: 4.5em
 					weight: 400
 
 			.lead
-				text-align: center
+				// text-align: center
 				max-width: 780px
 				span
 					font:
@@ -51,12 +51,12 @@
 
 
 			.buttons
-				display: flex
-				justify-content: space-around
+				// display: flex
+				// justify-content: space-around
 				margin: 25px auto
 
-				width: 100%
-				max-width: 450px
+				// width: 100%
+				// max-width: 450px
 
 				a
 					min-width: 200px
@@ -69,8 +69,8 @@
 
 					&.get-started
 						@include button-rounded-filled($color-primary, 999em)
-
 						opacity: 1
+						margin-right: 10px
 
 					&.follow
 						@include button-rounded-filled($color-danger, 999em)
@@ -328,7 +328,6 @@
 									text-transform: capitalize
 									margin-right: 3px
 
-
 .homepage.navbar-backdrop
 	// width: 105%
 	// width: 105%
@@ -346,16 +345,107 @@
 	// background: linear-gradient(to bottom, rgba(black, 0) 0%, rgba(black, 0) 25%, rgba(black,.6) 90%, rgba(black,.5) 100%)
 	background: linear-gradient(to bottom, rgba(black, .5) 0%, rgba(black, .2) 25%, transparent 56%, rgba($color-background,.4) 90%, $color-background 100%)
 
-section#homepage.links
+.container.pricing
 	height: initial
-	padding: 0
+	padding: 50px 0
 	margin-bottom: 25px
+
+	h2
+		text-align: center
+		font-size: 2.8em
+		margin:
+			top: 20px
+			bottom: 50px
+		padding: 0
+
+	.box
+		// background-color: rgba(white, .9)
+		padding: 0 15px
+		border: 1px solid rgba(black, .4)
+		height: 450px
+		position: relative
+
+		h3
+			font-size: 1.8em
+			padding-bottom: 0
+			margin: 10px 0 0 10px
+
+
+
+		.pricing-display
+			position: relative
+			margin-top: -15x
+
+			.currency-sign,
+			.digit-dec
+				font-size: 1.7em
+				position: relative
+				top: -25px
+				font-weight: 100
+
+			.digit-int
+				font-size: 4.5em
+				font-weight: 100
+
+		.pricing-caption
+			border-bottom: 1px solid rgba(black, .4)
+
+		ul
+			color: rgba(black, .3)
+			list-style: none
+			padding-left: 10px
+			margin-top: 15px
+
+			li
+				padding-bottom: 8px
+
+		.sign-up-now
+			// margin-left: -10px
+			position: absolute
+			bottom: 25px
+			width: 50%
+			left: 50%
+			transform: translateX(-50%)
+			@include button-rounded($color-text-light, 999em)
+			@include button-rounded-filled($color-primary, 999em)
+			margin-right: 10px
+			&:hover
+				border-color: $color-info
+				background-color: transparent
+				color: $color-info
+				text-decoration: none
+
+	.groups-text
+		margin-top: 20px
+
+
+.container-fluid.our-content
+	background-color: $color-background-nav
+	height: initial
+	padding: 50px 0
 
 	display: flex
 	flex-direction: column
 	align-items: stretch
 
+	h2
+		font-size: 2.8em
+		margin:
+			top: 20px
+			bottom: 80px
+		padding: 0
+		color: #FFF
+
 	#links-container
+
+		color: white
+
+		display: flex
+		align-items: center
+		justify-content: center
+
+		min-height: 350px
+
 		display: flex
 		justify-content: space-around
 		align-items: stretch
@@ -453,9 +543,46 @@ section#homepage.links
 				span.bar
 					background-color: $color-upvote
 
+section.homepage_container.statement
+	padding: 80px 0
+	border-top: 5px solid $color-background-dark
+	background-color: white
+	h2
+		text-align: center
+		margin:
+			top: 0
+			bottom: 30px
+		padding: 0 150px
 
-section#homepage.bullets,
-section#homepage.supported-by
+	.buttons
+		display: flex
+		justify-content: space-around
+		margin: 25px auto
+
+		width: 100%
+		max-width: 450px
+
+		a
+			min-width: 200px
+			font-size: 1.2em
+			padding: 10px 25px
+
+
+			@include button-rounded($color-text-light, 999em)
+			opacity: 1
+
+			&.learn-more
+				@include button-rounded-filled($color-primary, 999em)
+
+				opacity: 1
+
+			&.follow
+				@include button-rounded-filled($color-danger, 999em)
+				opacity: 1
+				padding: 10px 35px
+
+section.homepage_container.bullets,
+section.homepage_container.supported-by
 	padding: 80px 0
 	border-top: 5px solid $color-background-dark
 	background-color: white
@@ -514,7 +641,7 @@ section#homepage.supported-by
 				font:
 					size: 3.6em
 
-section#homepage.supported-by
+section.homepage_container.supported-by
 	background-color: $color-background
 	padding: 50px 0
 
@@ -530,8 +657,7 @@ section#homepage.supported-by
 	img.logos
 		padding: 60px 0 100px 0
 
-
-section#homepage.get-started
+.container-fluid.get-started,
 	background-color: $color-background-nav
 	color: white
 
@@ -556,8 +682,4 @@ section#homepage.get-started
 		padding: 15px 50px
 		font-size: 1.5em
 
-#homepage_container
-	margin: 0 auto 15px auto
-	display: flex
-	justify-content: center
-	+container-box
+
