@@ -375,13 +375,20 @@ def view(node_id):
         permissions, which means it's free.
         """
 
+        allowed_roles = ['subscriber', 'demo', 'admin']
+
         # Check if node permissions for the world exist (if node is free)
         if node.permissions and node.permissions.world:
             if 'GET' in node.permissions.world:
                 return True
         else:
-            if current_user.is_authenticated() and 'subscriber' in current_user.roles:
-                return True
+            if current_user.is_authenticated() and current_user.roles:
+                for role in allowed_roles:
+                    if role in current_user.roles:
+                        return True
+                # If no role is found, just return
+                return False
+
             else:
                 # The user is not authenticated and the node is not free
                 return False
