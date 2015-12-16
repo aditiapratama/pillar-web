@@ -1,7 +1,6 @@
 | {% block body %}
 
 #node-container
-	| {% cache 3600, 'asset_view', node._id %}
 	| {% if node.picture %}
 	section.node-preview.image
 		img.node-preview-thumbnail(src="{{ node.picture.thumbnail('l', api=api) }}")
@@ -52,7 +51,6 @@
 		#comments-container
 			#comments-list-items-loading
 				i.pi-spin
-		| {% endcache %}
 
 include ../../_scripts
 

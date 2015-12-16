@@ -3,10 +3,8 @@ link(rel="stylesheet", href="//releases.flowplayer.org/6.0.3/skin/minimalist.css
 | {% endblock %}
 
 | {% block body %}
-| {% cache 3600, 'asset_view', node._id %}
 
 #node-container
-
 	section.node-preview.video
 		#flowplayer_container.is-splash.play-button(
 			style="{% if node.picture %}background-image:url({{node.picture.thumbnail('l', api=api)}}); background-repeat:no-repeat; {% endif %}")
@@ -78,7 +76,6 @@ link(rel="stylesheet", href="//releases.flowplayer.org/6.0.3/skin/minimalist.css
 			#comments-list-items-loading
 				i.pi-spin
 
-| {% endcache %}
 | {% endblock %}
 
 | {% block footer_scripts %}

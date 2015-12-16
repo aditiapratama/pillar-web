@@ -1,6 +1,5 @@
 | {% block body %}
 
-| {% cache 3600, 'asset_view', node._id %}
 #node-container
 	| {% if node.picture %}
 	section.node-preview.file
@@ -52,7 +51,6 @@
 			#comments-list-items-loading
 				i.pi-spin
 
-| {% endcache %}
 include ../../_scripts
 | {% endblock %}
 
