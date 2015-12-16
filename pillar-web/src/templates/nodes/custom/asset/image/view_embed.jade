@@ -66,7 +66,7 @@ script.
 	if ($('.node-preview-thumbnail').width() > 750) {
 		$('.node-preview, .node-preview-thumbnail').css({'max-height': '100%', 'width': '100%'});
 	}
-	$('.btn-default').click(function() {
+	$('.join-us').click(function() {
 		$.get('/403', function(data) {
 			$('#node-container').html(data);
 			$('#error_container').css('display', 'flex');

@@ -55,7 +55,7 @@ link(rel="stylesheet", href="//releases.flowplayer.org/6.0.3/skin/minimalist.css
 						| {% endfor %}
 				| {% else %}
 				a(href="#")
-					button.btn.btn-default.disabled(type="button")
+					button.btn.btn-default.join-us(type="button")
 						| Download Video
 				| {% endif %}
 
@@ -103,7 +103,7 @@ script(type="text/javascript").
 	});
 
 	{% if not node.video_sources %}
-	$('#flowplayer_container').click(function() {
+	$('#flowplayer_container, .join-us').click(function() {
 		$.get('/403', function(data) {
 			$('#node-container').html(data);
 			$('#error_container').css('display', 'flex');
