@@ -445,20 +445,20 @@
 		justify-content: center
 
 		min-height: 350px
+		max-width: $screen-lg
 
 		display: flex
 		justify-content: space-around
 		align-items: stretch
-		margin: 0
 
 		+media-sm
-			margin: 0
+			margin: 0 auto
 		+media-sm
 			margin: 0 10px
 		+media-md
 			margin: 0 20px
 		+media-lg
-			margin: 0
+			margin: 0 auto
 
 		.links-item
 			width: 100%
@@ -549,10 +549,11 @@ section.homepage_container.statement
 	background-color: white
 	h2
 		text-align: center
-		margin:
-			top: 0
-			bottom: 30px
+		max-width: 80%
+		margin: 0 auto 30px auto
 		padding: 0 150px
+		line-height: 1.4em
+		font-size: 2em
 
 	.buttons
 		display: flex
@@ -657,7 +658,7 @@ section.homepage_container.supported-by
 	img.logos
 		padding: 60px 0 100px 0
 
-.container-fluid.get-started,
+.container-fluid.get-started
 	background-color: $color-background-nav
 	color: white
 
@@ -683,3 +684,86 @@ section.homepage_container.supported-by
 		font-size: 1.5em
 
 
+.team
+	background: white
+	padding: 40px 0
+
+	h2
+		padding-bottom: 20px
+		color: $color-primary
+
+	.people-container
+		max-width: $screen-lg
+		margin: 0 auto 60px auto
+
+		.people-intro
+			opacity: 1
+			position: relative
+			top: 0
+			transition: opacity 100ms ease-in-out, top 150ms ease-out
+			&.active
+				opacity: 0
+				top: 15px
+
+		.people-faces
+			margin-top: 20px
+			display: flex
+			flex: row flex
+			align-items: stretch
+			justify-content: center
+			width: 100%
+
+			.face
+				background-color: white
+				opacity: 1
+				width: 128px
+				height: 128px
+				z-index: 0
+				position: relative
+				transition: transform 150ms ease-in-out
+
+				&:hover
+
+					transform: scale(1.1)
+					z-index: 1
+
+					img
+						opacity: .9
+
+				img
+					position: relative
+					width: 100%
+					opacity: 1
+					transition: opacity 150ms ease-out
+
+
+		.people-bio
+			display: block
+			width: 100%
+			position: relative
+
+			.bio
+				opacity: 0
+				visibility: hidden
+				margin: 0
+				padding: 0
+				position: absolute
+				top: -200px
+				left: 50%
+				transform: translateX(-50%)
+
+				transition: opacity 100ms ease-in-out, top 150ms ease-out
+
+				&.active
+					top: -225px
+					opacity: 1
+					visibility: visible
+
+				h3
+					position: relative
+					small
+						position: absolute
+						left: 105%
+						bottom: 2px
+						white-space: nowrap
+						color: $color-text-dark-hint

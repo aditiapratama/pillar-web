@@ -42,6 +42,7 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 				a.btn.btn-default.btn-outline.follow(href="/p/caminandes-3/")
 					| Check it Out
 
+
 .homepage_container.page-content
 	#content
 		section#updates.node-extra
@@ -147,6 +148,7 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 							span.when No featured items yet.
 
 				| {% endif %}
+
 
 | {% elif current_user.is_anonymous() %}
 
@@ -275,12 +277,114 @@ section.homepage_container.statement
 					of the best Blender artwork out there
 
 
-
 section.homepage_container.supported-by
 
 	h1 Our Open Projects were supported by
 
 	img.logos(src="{{ url_for('static', filename='assets/img/support_logos.png') }}")
+
+
+.container-fluid.team
+	.row-fluid
+		.col-md-12.text-center
+			h2.
+				A restless team of artists and developers <br/>
+				wants to share their work with you
+
+			.people-container
+				.people-intro
+					h3 Blender Institute
+					span Amsterdam, The Netherlands
+
+				.people-faces
+					.face(data-blenderhead='ton')
+						img(src="http://placehold.it/128x128/aabbaa")
+					.face(data-blenderhead='francesco')
+						img(src="http://placehold.it/128x128/bbaabb")
+					.face(data-blenderhead='pablo')
+						img(src="http://placehold.it/128x128/aabbbb")
+					.face(data-blenderhead='andy')
+						img(src="http://placehold.it/128x128/bbbbaa")
+					.face(data-blenderhead='hjalti')
+						img(src="http://placehold.it/128x128/aaaabb")
+					.face(data-blenderhead='sarah')
+						img(src="http://placehold.it/128x128/aababa")
+					.face(data-blenderhead='sergey')
+						img(src="http://placehold.it/128x128/babaab")
+
+				.people-bio
+					.bio#ton
+						h3 Ton Roosendaal
+							small (The Netherlands)
+						span.
+							lorem ipsum
+					.bio#francesco
+						h3 Francesco Siddi
+							small (Italy)
+						span.
+							lorem ipsum
+					.bio#pablo
+						h3 Pablo Vázquez
+							small (Argentina)
+						span.
+							lorem ipsum
+					.bio#andy
+						h3 Andy Goralczyk
+							small (Germany)
+						span.
+							lorem ipsum
+					.bio#hjalti
+						h3 Hjalti Hjálmarsson
+							small (Iceland)
+						span.
+							lorem ipsum
+					.bio#sarah
+						h3 Sarah Feldlaufer
+							small (Belgium)
+						span.
+							lorem ipsum
+					.bio#sergey
+						h3 Sergey Sharybin
+							small (Russia)
+						span.
+							lorem ipsum
+
+			.people-container
+				.people-intro
+					h3 Online Collaborators
+					span from all over the world
+
+				.people-faces
+					.face(data-blenderhead='gleb')
+						img(src="http://placehold.it/128x128/aabbaa")
+					.face(data-blenderhead='david')
+						img(src="http://placehold.it/128x128/bbaabb")
+					.face(data-blenderhead='jpbouza')
+						img(src="http://placehold.it/128x128/aabbbb")
+					.face(data-blenderhead='bassam')
+						img(src="http://placehold.it/128x128/bbbbaa")
+
+				.people-bio
+					.bio#gleb
+						h3 Gleb Alexandrov
+							small (Belarus)
+						span.
+							Lighting & Shading
+					.bio#david
+						h3 David Revoy
+							small (France)
+						span.
+							Illustrator
+					.bio#jpbouza
+						h3 Juan Pablo Bouza
+							small (Argentina)
+						span.
+							Rigging
+					.bio#bassam
+						h3 Bassam Kurdali
+							small (United States)
+						span.
+							Rigging
 
 
 .container-fluid.get-started
@@ -290,12 +394,24 @@ section.homepage_container.supported-by
 			a.btn.btn-default.btn-outline.get-started(href="https://store.blender.org/product/membership/")
 				| Sign up Now
 
+
 | {% endif %}
 
 | {% endblock %}
 
 | {% block footer_scripts %}
 script.
+	$('.people-faces .face').hover(
+		function(){
+			var who = $(this).data('blenderhead');
+			$('#' + who).addClass('active');
+			$(this).parent().prev().addClass('active');
+		},
+		function(){
+			$('.bio, .people-intro').removeClass('active');
+		}
+	);
+
 	$('.go-to-upnext').on('click', function(e){
 		e.preventDefault;
 		$("html, body").animate({scrollTop: $('.bullets').offset().top }, 350);
