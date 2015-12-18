@@ -714,7 +714,7 @@ section.homepage_container.supported-by
 			width: 100%
 
 			.face
-				background-color: white
+				background-color: $color-primary
 				opacity: 1
 				width: 128px
 				height: 128px
@@ -728,13 +728,14 @@ section.homepage_container.supported-by
 					z-index: 1
 
 					img
-						opacity: .9
+						opacity: .8
 
 				img
 					position: relative
 					width: 100%
-					opacity: 1
-					transition: opacity 150ms ease-out
+					transition: opacity 150ms ease-in-out
+
+
 
 
 		.people-bio
@@ -752,7 +753,7 @@ section.homepage_container.supported-by
 				left: 50%
 				transform: translateX(-50%)
 
-				transition: opacity 100ms ease-in-out, top 150ms ease-out
+				transition: opacity 180ms ease-in-out, top 150ms ease-out
 
 				&.active
 					top: -225px
