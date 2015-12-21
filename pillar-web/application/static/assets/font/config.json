@@ -461,9 +461,27 @@
       "src": "typicons"
     },
     {
+      "uid": "cdfalpadi7huwv9ah4fef2gpfpb4c6qm",
+      "css": "resize-full",
+      "code": 59451,
+      "src": "typicons"
+    },
+    {
+      "uid": "8d2bc2d959a55e76466bbef6e84c8373",
+      "css": "resize-normal",
+      "code": 59452,
+      "src": "typicons"
+    },
+    {
       "uid": "jskdfgyhjwd003ndercv4r08h0ai3dfg",
       "css": "replay",
       "code": 59422,
+      "src": "typicons"
+    },
+    {
+      "uid": "xoidjr6q3rzi7tpw6hci1k6srz15g11l",
+      "css": "puzzle",
+      "code": 59448,
       "src": "typicons"
     },
     {
@@ -530,6 +548,18 @@
       "uid": "3ab2abf6f936d3e53ee8c184cedaed82",
       "css": "trash",
       "code": 59396,
+      "src": "elusive"
+    },
+    {
+      "uid": "68c7be0f4cab6b82d5725b1ba7cec4d6",
+      "css": "zoom-in",
+      "code": 59449,
+      "src": "elusive"
+    },
+    {
+      "uid": "295287b96e50d494ba38a1ed9e06d8db",
+      "css": "zoom-out",
+      "code": 59450,
       "src": "elusive"
     }
   ]

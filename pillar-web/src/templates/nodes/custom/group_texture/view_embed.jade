@@ -1,0 +1,92 @@
+| {% block body %}
+| {% cache 3600, 'group_view', node._id %}
+#node-container
+
+	section.node-preview.group
+		| {% if node.picture %}
+		img.backdrop(src="{{ node.picture.thumbnail('l', api=api) }}")
+		.overlay
+		| {% endif %}
+		.node-title
+			| {{node.name}}
+
+		.node-details-meta.preview
+			ul.node-details-meta-list
+				li.node-details-meta-list-item.date(title="Created {{ node._created | pretty_date }}")
+					| {{ node._updated | pretty_date }}
+
+				li.node-details-meta-list-item.author
+					| {{ node.user.full_name }}
+
+				| {% if node.properties.status != 'published' %}
+				li.node-details-meta-list-item.status
+					| {{node.properties.status}}
+				| {% endif %}
+
+	section.node-children.group.texture
+
+		| {% if children %}
+		| 	{% for child in children %}
+
+		a(href="#", data-node_id="{{ child._id }}", class="item_icon")
+			.list-node-children-item.texture
+				.list-node-children-item-thumbnail
+
+					| {% if child.picture %}
+					img(
+						src="{{ child.picture.thumbnail('b', api=api)}} ")
+					| {% endif %}
+
+					| {% if child.properties.status != 'published' %}
+					.list-node-children-item-status {{ child.properties.status }}
+					| {% endif %}
+
+					| {% if child.permissions.world %}
+					.list-node-children-item-ribbon
+						span free
+					| {% endif %}
+
+					.list-node-children-item-name
+						span.sizes
+							| {{ child.picture.width }}
+							small x
+							| {{ child.picture.height }}
+						span.icons
+							i.pi-puzzle(title="Seamless", data-toggle="tooltip", data-placement="bottom", data-delay=0)
+						span.variations
+							span Color
+							span Specular
+							span Normal Map
+							span Bump
+							span Emission
+
+
+
+		| 	{% endfor %}
+		| {% endif %}
+
+	script.
+		// Generate GA pageview
+		ga('send', 'pageview', (location.pathname + '#' + '{{node._id}}'));
+
+		$('a.item_icon').unbind("click");
+		$('a.item_icon').click(function(e){
+			e.preventDefault;
+			// When clicking on a node preview, we load its content
+			var nodeId = $(this).data('node_id');
+			// displayNode will run asynchronously and set the bcloud_current_node_id
+			// as well, but we set it manually in the next line as well, to make sure
+			// that select_node on jstree works as expected, preventing the node to be
+			// loaded twice.
+			Cookies.set('bcloud_current_node_id', nodeId);
+			displayNode(nodeId);
+			// Update tree with current selection
+			$('#project_tree').jstree('select_node', 'n_' + nodeId);
+
+		});
+
+| {% endcache %}
+include ../_scripts
+
+| {% endblock %}
+

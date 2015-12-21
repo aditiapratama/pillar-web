@@ -1155,6 +1155,65 @@ section.node-children
 				left: 5px
 				right: 3px
 			+text-overflow-ellipsis
+	&.texture
+		margin: 5px 10px 5px 0
+
+		.list-node-children-item-thumbnail
+			background-color: black
+
+		&:hover
+			opacity: 1
+
+			img
+				opacity: .25
+				transform: scale(1.1)
+
+			.list-node-children-item-name
+				opacity: 1
+
+		img
+			transition: transform 150ms ease-out, opacity 100ms ease-out
+
+		.list-node-children-item-name
+			font-family: $font-headings
+			text-shadow: 1px 1px 2px rgba(black, .5)
+			display: block
+			opacity: 0
+			background-color: transparent
+			position: absolute
+			z-index: 2
+			top: 5px
+			left: 10px
+			color: white
+			font-size: 1em
+			height: 100%
+
+			span
+				padding: 0
+				display: block
+
+				&.sizes
+					small
+						padding: 0 5px
+						font-size: .8em
+						color: $color-text-light-primary
+
+				&.variations
+					padding-top: 5px
+					margin:
+						top: 5px
+						right: 20px
+					font-size: .9
+
+				&.icons
+					position: absolute
+					top: 0
+					right: 12px
+					font-size: 1.2em
+
+					i
+						color: white
+
 
 
 #node_index-container
