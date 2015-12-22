@@ -218,6 +218,11 @@ def gallery():
     return redirect('/p/gallery')
 
 
+@app.route("/textures")
+def redir_textures():
+    return redirect('/p/textures')
+
+
 @app.route("/caminandes")
 def caminandes():
     return redirect('/p/caminandes-3')
