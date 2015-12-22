@@ -1,52 +1,53 @@
 | {% block body %}
 
 #node-container.texture
-	each val in [1,2,3,4,5]
-		section.node-row
-			section.node-preview.texture
-				| {% if node.picture %}
-				img.node-preview-thumbnail(src="{{ node.picture.thumbnail('l', api=api) }}")
-				| {% endif %}
+	| {% for f in node.properties.files %}
+	section.node-row
+		section.node-preview.texture
+			img.node-preview-thumbnail(
+				src="{{ f.file.thumbnail('m', api=api) }}",
+				data-high_res="{{ f.file.thumbnail('l', api=api) }}")
 
 
-			section.node-details-container.texture
+		section.node-details-container.texture
 
-				.node-details-header
-					.node-title
-						| {{node.name}}
+			.node-details-header
+				.node-title
+					| {{f.file.filename}}
 
-				.node-details-attributes
-					span.sizes
-						| {{ node.picture.width }}
-						small x
-						| {{ node.picture.height }}
+			.node-details-attributes
+				span.sizes
+					| {{ f.file.width }}
+					small x
+					| {{ f.file.height }}
 
-					span.variations
-						span Color
+				span.variations
+					span Color
 
-					span.extra
-						i.pi-puzzle
-						| Seamless
+				span.extra
+					i.pi-puzzle
+					| Seamless
 
 
-				.node-details-meta
-					ul.node-details-meta-list
-						li.node-details-meta-list-item.type
-							| {{ node.properties.content_type }}
+			.node-details-meta
+				ul.node-details-meta-list
+					li.node-details-meta-list-item.type
+						| {{ f.file.content_type }}
 
-						li.node-details-meta-list-item.image.length
-							| {{ node.file.length | filesizeformat }}
+					li.node-details-meta-list-item.image.length
+						| {{ f.file.length | filesizeformat }}
 
-						li.node-details-meta-list-item.image.download
-							| {% if node.file.link %}
-							a(href="{{ node.file.link }}")
-								button.btn.btn-default(type="button")
-									| Download Texture
-							| {% else %}
-							a(href="#")
-								button.btn.btn-default.disabled(type="button")
-									| Download Texture
-							| {% endif %}
+					li.node-details-meta-list-item.image.download
+						| {% if f.file.link %}
+						a(href="{{ f.file.link }}")
+							button.btn.btn-default(type="button")
+								| Download Texture
+						| {% else %}
+						a(href="#")
+							button.btn.btn-default.disabled(type="button")
+								| Download Texture
+						| {% endif %}
+	| {% endfor %}
 
 	#comments-container.texture
 		#comments-list-items-loading
@@ -72,7 +73,7 @@ script.
 				var preview = $(this);
 
 				/* Replace image src with larger one */
-				$(this).attr('src', src_xl);
+				$(this).attr('src', $(this).data('high_res'));
 
 				/* Make dummy img in memory otherwise we have css issues */
 				$("<img/>")

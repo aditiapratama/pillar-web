@@ -521,6 +521,10 @@ def view(node_id):
             node.length = listing['size']
             node.download_link = listing['signed_url']
 
+    elif node_type_name == 'texture':
+        for f in node.properties.files:
+            f.file = get_file(f.file)
+
     # end_t = time.time()
     # print (end_t - start_t)
 
