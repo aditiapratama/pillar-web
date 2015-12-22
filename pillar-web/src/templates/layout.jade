@@ -90,13 +90,38 @@ html(lang="en")
 									data-toggle="tooltip",
 									data-placement="bottom")
 									span Blog
-							li
-								a(href="/p/gallery/",
-									title="Curated artwork collection",
-									data-toggle="tooltip",
-									data-placement="bottom",
-									class="{% if category == 'assets': %}active{% endif %}")
-									span Art Gallery
+
+							li(class="dropdown libraries")
+								a.dropdown-toggle(
+									href="#",
+									data-toggle="dropdown",
+									title="Libraries")
+									span Libraries
+
+								ul.dropdown-menu
+									li
+										a(href="/p/gallery/",
+											title="Curated artwork collection",
+											data-toggle="tooltip",
+											data-placement="left")
+											i.pi-angle-right
+											| Art Gallery
+									li
+										a(href="/p/textures/",
+											title="Textures Library",
+											data-toggle="tooltip",
+											data-placement="left")
+											i.pi-angle-right
+											| Textures
+											small   (beta)
+									li.divider(role="separator")
+
+									li.disabled
+										a
+											i.pi-angle-right
+											| Characters
+											small   (coming soon)
+
 							li
 								a(href="/training",
 									title="Training & Tutorials",
