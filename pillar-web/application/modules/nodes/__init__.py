@@ -524,6 +524,8 @@ def view(node_id):
     elif node_type_name == 'texture':
         for f in node.properties.files:
             f.file = get_file(f.file)
+            if not allow_link(node):
+                f.file.link = None
 
     # end_t = time.time()
     # print (end_t - start_t)
