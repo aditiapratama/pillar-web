@@ -578,6 +578,17 @@ section.node-row
 			span
 				display: block
 
+				&.sizes, &.variations
+					font:
+						size: 1.4em
+						weight: 300
+					small
+						padding: 0 5px
+
+				&.variations
+					padding-top: 25px
+
+
 		.node-details-meta
 			display: flex
 			width: 100%
@@ -1165,17 +1176,19 @@ section.node-children
 		opacity: 0
 
 		z-index: 2
-		max-height: 250px
-		max-width: 300px
+		max-height: 260px
+		min-height: 50px
+		min-width: 100px
+		max-width: 320px
 		border-radius: 3px
 
 		transition: opacity .1s ease-in-out
 
 		img.texture-preview
 			width: auto
-			max-height: 250px
-			max-width: 300px
-			padding: 3px
+			margin: 0 auto
+			max-height: 260px
+			max-width: 320px
 
 		span.texture-name
 			display: block
@@ -1193,7 +1206,7 @@ section.node-children
 			top: 0
 			left: 0
 			right: 0
-			@include overlay(rgba($color-background-nav, .9), 0%, transparent, 45%)
+			@include overlay(rgba($color-background-nav, .9), 0%, transparent, 25%)
 
 			+text-overflow-ellipsis
 

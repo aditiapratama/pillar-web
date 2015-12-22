@@ -6,7 +6,8 @@
 		section.node-preview.texture
 			img.node-preview-thumbnail(
 				src="{{ f.file.thumbnail('m', api=api) }}",
-				data-high_res="{{ f.file.thumbnail('l', api=api) }}")
+				data-preview="{{ f.file.thumbnail('l', api=api) }}",
+				data-aspect_ratio="{{ node.properties.aspect_ratio }}")
 
 
 		section.node-details-container.texture
@@ -22,11 +23,30 @@
 					| {{ f.file.height }}
 
 				span.variations
-					span Color
+					span.
+						{% if f.map_type == 'col' %}
+						Color
+						{% elif f.map_type == 'bump' %}
+						Bump
+						{% elif f.map_type == 'spec' %}
+						Specular
+						{% elif f.map_type == 'nor' %}
+						Normal Map
+						{% elif f.map_type == 'translucency' %}
+						Translucency
+						{% elif f.map_type == 'emission' %}
+						Emission
+						{% elif f.map_type == 'alpha' %}
+						Alpha
+						{% endif %}
 
-				span.extra
-					i.pi-puzzle
-					| Seamless
+				span.extra.
+					{% if f.is_tileable %}
+						<i class="pi-puzzle"></i> Seamless
+					{% else %}
+						Not Seamless
+					{% endif %}
+
 
 
 			.node-details-meta
@@ -49,9 +69,6 @@
 						| {% endif %}
 	| {% endfor %}
 
-	#comments-container.texture
-		#comments-list-items-loading
-			i.pi-spin
 
 include ../_scripts
 
@@ -62,18 +79,21 @@ script.
 	// Generate GA pageview
 	ga('send', 'pageview', (location.pathname + '#' + '{{node._id}}'));
 
-	var src = $('.node-preview-thumbnail').attr('src');
-	var src_xl = src.replace('-l', '-h');
-	var src_xl_width, src_xl_height;
 
 	$('.node-preview-thumbnail').each(function(i){
+		$(this).closest('.node-preview').css({'height' : $(this).width() * $(this).data('aspect_ratio')});
+
+		var thumbnail = $(this);
+		var src = $(this).attr('src');
+		var src_xl = $(thumbnail).data('preview');
+		var src_xl_width, src_xl_height;
 
 		$(this).hover(
 			function(){
 				var preview = $(this);
 
 				/* Replace image src with larger one */
-				$(this).attr('src', $(this).data('high_res'));
+				$(thumbnail).attr('src', src_xl);
 
 				/* Make dummy img in memory otherwise we have css issues */
 				$("<img/>")

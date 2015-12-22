@@ -31,7 +31,7 @@
 		a.list-node-children-container(href="#", data-node_id="{{ child._id }}", class="item_icon")
 			.list-node-children-item-preview
 				span.texture-name {{child.name}}
-				img.texture-preview(src="#")
+				img.texture-preview(src="#", data-preview="{{ child.picture.thumbnail('m', api=api)}}")
 			.list-node-children-item.texture
 				.list-node-children-item-thumbnail
 
@@ -54,77 +54,92 @@
 							small x
 							| {{ child.picture.height }}
 						span.icons
-							i.pi-puzzle(title="Seamless", data-toggle="tooltip", data-placement="bottom", data-delay=0)
+							| {% if child.is_tileable %}
+							i.pi-puzzle(title="Tileable", data-toggle="tooltip", data-placement="bottom", data-delay=0)
+							| {% endif %}
 						span.variations
+							| {% for f in child.properties.files %}
+							| {% if f.map_type == 'col' %}
 							span Color
-							span Specular
-							span Normal Map
+							| {% elif f.map_type == 'bump' %}
 							span Bump
+							| {% elif f.map_type == 'spec' %}
+							span Specular
+							| {% elif f.map_type == 'nor' %}
+							span Normal Map
+							| {% elif f.map_type == 'translucency' %}
+							span Translucency
+							| {% elif f.map_type == 'emission' %}
 							span Emission
+							| {% elif f.map_type == 'alpha' %}
+							span Alpha
+							| {% endif %}
+							| {% endfor %}
 
 
 		| 	{% endfor %}
 		| {% endif %}
 
-	script.
-		// Generate GA pageview
-		ga('send', 'pageview', (location.pathname + '#' + '{{node._id}}'));
-
-		// Display texture preview on mouse hover
-		$('a.list-node-children-container').hover(
-			function(){
-
-				var src = $(this).find('.texture-thumbnail').attr('src');
-				var src_xl = src.replace('-b', '-m');
-
-				// Load the bigger preview
-				$(this).find('.texture-preview').attr('src', src_xl);
-
-				var preview = $(this).find('.list-node-children-item-preview');
-
-				// Positioning stuff
-				var offset = $(this).offset();
-				var offset_min_x = $('.node-children').width() - preview.width();
-				var offset_min_y = $('.node-children').height() - preview.height();
-
-				if (offset.left > offset_min_x) {
-					$(preview).css({'right': 0});
-				};
-
-				if (offset.top > offset_min_y) {
-					$(preview).css({'top': (preview.height() * (-1))});
-				};
-
-				$(preview).addClass('active');
-
-			},
-			function(){
-				$('.list-node-children-item-preview').removeClass('active');
-		});
-
-		// hide preview on mouse hover itself
-		$('.list-node-children-item-preview').hover(function(){
-			$(this).removeClass('active');
-		});
-
-
-		$('a.item_icon').unbind("click");
-		$('a.item_icon').click(function(e){
-			e.preventDefault;
-			// When clicking on a node preview, we load its content
-			var nodeId = $(this).data('node_id');
-			// displayNode will run asynchronously and set the bcloud_current_node_id
-			// as well, but we set it manually in the next line as well, to make sure
-			// that select_node on jstree works as expected, preventing the node to be
-			// loaded twice.
-			Cookies.set('bcloud_current_node_id', nodeId);
-			displayNode(nodeId);
-			// Update tree with current selection
-			$('#project_tree').jstree('select_node', 'n_' + nodeId);
-
-		});
-
 | {% endcache %}
+
+script.
+	// Generate GA pageview
+	ga('send', 'pageview', (location.pathname + '#' + '{{node._id}}'));
+
+	// Display texture preview on mouse hover
+	$('a.list-node-children-container').hover(
+		function(){
+
+			var src = $(this).find('.texture-thumbnail').attr('src');
+			var src_xl = $(this).find('.texture-preview').data('preview');
+
+			// Load the bigger preview
+			$(this).find('.texture-preview').attr('src', src_xl);
+
+			var preview = $(this).find('.list-node-children-item-preview');
+
+			// Positioning stuff
+			var offset = $(this).offset();
+			var offset_min_x = $('.node-children').width() - preview.width();
+			var offset_min_y = $('.node-children').height() - preview.height();
+
+			if (offset.left > offset_min_x) {
+				$(preview).css({'right': 0});
+			};
+
+			if (offset.top > offset_min_y) {
+				$(preview).css({'top': (preview.height() * (-1))});
+			};
+
+			$(preview).addClass('active');
+
+		},
+		function(){
+			$('.list-node-children-item-preview').removeClass('active');
+	});
+
+	// hide preview on mouse hover itself
+	$('.list-node-children-item-preview').hover(function(){
+		$(this).removeClass('active');
+	});
+
+
+	$('a.item_icon').unbind("click");
+	$('a.item_icon').click(function(e){
+		e.preventDefault;
+		// When clicking on a node preview, we load its content
+		var nodeId = $(this).data('node_id');
+		// displayNode will run asynchronously and set the bcloud_current_node_id
+		// as well, but we set it manually in the next line as well, to make sure
+		// that select_node on jstree works as expected, preventing the node to be
+		// loaded twice.
+		Cookies.set('bcloud_current_node_id', nodeId);
+		displayNode(nodeId);
+		// Update tree with current selection
+		$('#project_tree').jstree('select_node', 'n_' + nodeId);
+
+	});
+
 include ../_scripts
 
 | {% endblock %}
