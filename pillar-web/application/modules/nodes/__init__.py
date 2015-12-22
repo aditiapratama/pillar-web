@@ -264,7 +264,7 @@ class FakeNodeAsset(Node):
 @cache.memoize(timeout=3600 * 23)
 def get_node(node_id, user_id):
     api = SystemUtility.attract_api()
-    node = Node.find(node_id + '/?embedded={"picture":1, "node_type":1}', api=api)
+    node = Node.find(node_id + '/?embedded={"node_type":1}', api=api)
     return node.to_dict()
 
 
@@ -281,7 +281,7 @@ def get_node_children(node_id, node_type_name, user_id):
 
     children = Node.all({
         'where': '{"parent": "%s" %s}' % (node_id, published_status),
-        'embedded': '{"picture": 1, "node_type": 1}'}, api=api)
+        'embedded': '{"node_type": 1}'}, api=api)
     return children.to_dict()
 
 @nodes.route("/<node_id>/view")
@@ -551,7 +551,7 @@ def view(node_id):
                 "properties.order": 1, "properties.status": 1, "user": 1, \
                 "properties.content_type": 1}',
             'where': '{"parent": "%s" %s}' % (node._id, published_status),
-            'embedded': '{"picture": 1, "node_type": 1}',
+            'embedded': '{"node_type": 1}',
             'sort': 'properties.order'}, api=api)
         children = children._items
 
