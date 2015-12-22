@@ -12,6 +12,7 @@ from wtforms import SelectField
 from wtforms import HiddenField
 from wtforms import BooleanField
 from wtforms import IntegerField
+from wtforms import FloatField
 from wtforms import TextAreaField
 from wtforms import DateTimeField
 from wtforms import SelectMultipleField
@@ -229,6 +230,10 @@ def get_node_form(node_type):
                 setattr(ProceduralForm,
                         prop_name,
                         IntegerField(prop_name, default=0))
+            elif schema_prop['type'] == 'float':
+                setattr(ProceduralForm,
+                        prop_name,
+                        FloatField(prop_name, default=0))
             elif schema_prop['type'] == 'boolean':
                 setattr(ProceduralForm,
                         prop_name,
