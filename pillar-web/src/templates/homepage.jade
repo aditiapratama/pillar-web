@@ -356,13 +356,15 @@ section.homepage_container.supported-by
 
 				.people-faces
 					.face(data-blenderhead='gleb')
-						img(src="http://placehold.it/128x128/aabbaa")
+						img(src="{{ url_for('static', filename='assets/img/people/gleb.jpg')}}")
 					.face(data-blenderhead='david')
-						img(src="http://placehold.it/128x128/bbaabb")
+						img(src="{{ url_for('static', filename='assets/img/people/david.jpg')}}")
 					.face(data-blenderhead='jpbouza')
-						img(src="http://placehold.it/128x128/aabbbb")
+						img(src="{{ url_for('static', filename='assets/img/people/jpbouza.jpg')}}")
 					.face(data-blenderhead='bassam')
-						img(src="http://placehold.it/128x128/bbbbaa")
+						img(src="{{ url_for('static', filename='assets/img/people/bassam.jpg')}}")
+					.face(data-blenderhead='sebastian')
+						img(src="{{ url_for('static', filename='assets/img/people/sebastian.jpg')}}")
 
 				.people-bio
 					.bio#gleb
@@ -385,6 +387,12 @@ section.homepage_container.supported-by
 							small (United States)
 						span.
 							Rigging
+					.bio#sebastian
+						h3 Sebastian König
+							small (Germany)
+						span.
+							VFX
+
 
 
 .container-fluid.get-started
