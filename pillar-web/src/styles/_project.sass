@@ -1144,6 +1144,66 @@ section.node-children
 
 		+clearfix
 
+.list-node-children-container
+	position: relative
+	width: $list-node-children-item-width
+	height: $list-node-children-item-width
+	float: left
+	margin: 10px 15px 10px 0
+
+	.list-node-children-item-preview
+		margin: 0
+		position: absolute
+		top: $list-node-children-item-width + 10px
+		width: auto
+		height: auto
+		background: black
+		box-shadow: 1px 1px 1px rgba(black, .5), 2px 2px 15px rgba(black, .5)
+
+		visibility: hidden
+		display: none
+		opacity: 0
+
+		z-index: 2
+		max-height: 250px
+		max-width: 300px
+		border-radius: 3px
+
+		transition: opacity .1s ease-in-out
+
+		img.texture-preview
+			width: auto
+			max-height: 250px
+			max-width: 300px
+			padding: 3px
+
+		span.texture-name
+			display: block
+			width: 100%
+			padding: 8px 10px 0 10px
+			color: white
+			font:
+				size: 1.1em
+				family: $font-headings
+			border-top-left-radius: 3px
+			border-top-right-radius: 3px
+			text-shadow: 1px 1px 1px rgba(black, .5)
+
+			position: absolute
+			top: 0
+			left: 0
+			right: 0
+			@include overlay(rgba($color-background-nav, .9), 0%, transparent, 45%)
+
+			+text-overflow-ellipsis
+
+		&:hover
+			display: none
+
+		&.active
+			opacity: 1
+			visibility: visible
+			display: block
 
 .list-node-children-item
 	float: left
@@ -1162,6 +1222,9 @@ section.node-children
 	&:hover
 		opacity: .9
 		color: darken($color-primary, 20%)
+
+		& .list-node-children-item-name i
+			color: darken($color-primary, 20%)
 
 	& .list-node-children-item-thumbnail
 		display: flex
@@ -1218,33 +1281,34 @@ section.node-children
 		i
 			color: $color-text-dark-secondary
 			padding:
-				left: 10px
+				left: 7px
 				right: 3px
 			font-size: .9em
 
 		span
 			padding:
-				left: 5px
+				left: 0
 				right: 3px
 			+text-overflow-ellipsis
 	&.texture
 		margin: 5px 10px 5px 0
+		position: relative
+		height: $list-node-children-item-width
 
 		.list-node-children-item-thumbnail
-			background-color: black
+			background-color: $color-background-nav
 
 		&:hover
 			opacity: 1
 
 			img
-				opacity: .25
-				transform: scale(1.1)
+				opacity: .15
 
 			.list-node-children-item-name
 				opacity: 1
 
 		img
-			transition: transform 150ms ease-out, opacity 100ms ease-out
+			transition: opacity 100ms ease-out
 
 		.list-node-children-item-name
 			font-family: $font-headings
@@ -1265,6 +1329,7 @@ section.node-children
 				display: block
 
 				&.sizes
+					font-weight: bold
 					small
 						padding: 0 5px
 						font-size: .8em
@@ -1276,6 +1341,7 @@ section.node-children
 						top: 5px
 						right: 20px
 					font-size: .9
+					color: $color-text-light-primary
 
 				&.icons
 					position: absolute

@@ -28,13 +28,15 @@
 		| {% if children %}
 		| 	{% for child in children %}
 
-		a(href="#", data-node_id="{{ child._id }}", class="item_icon")
+		a.list-node-children-container(href="#", data-node_id="{{ child._id }}", class="item_icon")
+			.list-node-children-item-preview
+				span.texture-name {{child.name}}
+				img.texture-preview(src="#")
 			.list-node-children-item.texture
 				.list-node-children-item-thumbnail
 
 					| {% if child.picture %}
-					img(
-						src="{{ child.picture.thumbnail('b', api=api)}} ")
+					img.texture-thumbnail(src="{{ child.picture.thumbnail('b', api=api)}}")
 					| {% endif %}
 
 					| {% if child.properties.status != 'published' %}
@@ -61,13 +63,50 @@
 							span Emission
 
 
-
 		| 	{% endfor %}
 		| {% endif %}
 
 	script.
 		// Generate GA pageview
 		ga('send', 'pageview', (location.pathname + '#' + '{{node._id}}'));
+
+		// Display texture preview on mouse hover
+		$('a.list-node-children-container').hover(
+			function(){
+
+				var src = $(this).find('.texture-thumbnail').attr('src');
+				var src_xl = src.replace('-b', '-m');
+
+				// Load the bigger preview
+				$(this).find('.texture-preview').attr('src', src_xl);
+
+				var preview = $(this).find('.list-node-children-item-preview');
+
+				// Positioning stuff
+				var offset = $(this).offset();
+				var offset_min_x = $('.node-children').width() - preview.width();
+				var offset_min_y = $('.node-children').height() - preview.height();
+
+				if (offset.left > offset_min_x) {
+					$(preview).css({'right': 0});
+				};
+
+				if (offset.top > offset_min_y) {
+					$(preview).css({'top': (preview.height() * (-1))});
+				};
+
+				$(preview).addClass('active');
+
+			},
+			function(){
+				$('.list-node-children-item-preview').removeClass('active');
+		});
+
+		// hide preview on mouse hover itself
+		$('.list-node-children-item-preview').hover(function(){
+			$(this).removeClass('active');
+		});
+
 
 		$('a.item_icon').unbind("click");
 		$('a.item_icon').click(function(e){
