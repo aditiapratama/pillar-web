@@ -22,6 +22,13 @@
 					small x
 					| {{ f.file.height }}
 
+				span.extra.
+					{% if f.is_tileable %}
+						<i class="pi-puzzle"></i> Seamless
+					{% else %}
+						Not Seamless
+					{% endif %}
+
 				span.variations
 					span.
 						{% if f.map_type == 'col' %}
@@ -40,12 +47,6 @@
 						Alpha
 						{% endif %}
 
-				span.extra.
-					{% if f.is_tileable %}
-						<i class="pi-puzzle"></i> Seamless
-					{% else %}
-						Not Seamless
-					{% endif %}
 
 
 

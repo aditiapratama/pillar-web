@@ -522,6 +522,10 @@ section.node-row
 	flex: row
 	clear: both
 
+	padding: 20px
+	margin-bottom: 20px
+	border-bottom: thin solid rgba($color-text-dark, .2)
+
 	section.node-preview.texture
 		overflow: hidden
 
@@ -561,7 +565,6 @@ section.node-row
 				visibility: visible
 
 	section.node-details-container.texture
-		border-bottom: thin solid rgba($color-text-dark, .2)
 		width: 100%
 		flex: 1
 		position: relative
@@ -578,7 +581,7 @@ section.node-row
 			span
 				display: block
 
-				&.sizes, &.variations
+				&.sizes, &.variations, &.extra
 					font:
 						size: 1.4em
 						weight: 300
@@ -598,6 +601,9 @@ section.node-row
 			position: absolute
 			bottom: 0
 			padding-bottom: 20px
+
+			.node-details-meta-list-item.type
+				text-transform: uppercase
 
 section.node-preview
 	overflow: hidden
