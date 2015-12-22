@@ -409,7 +409,7 @@ def view(node_id):
     # XXX Code to detect a node of type asset, and aggregate file data
     if node_type_name == 'asset':
 
-        node_file = File.find(node.properties.file, api=api)
+        node_file = get_file(node.properties.file)
 
         # Check if the user and node status to determine if the file link should
         # be added.
@@ -543,13 +543,15 @@ def view(node_id):
     try:
         if node_type_name == 'group':
             published_status = ',"properties.status": "published"'
+            node_type_projection = ''
         else:
             published_status = ''
+            node_type_projection = ', "properties.files": 1'
 
         children = Node.all({
             'projection': '{"name": 1, "picture": 1, "parent": 1, "node_type": 1, \
                 "properties.order": 1, "properties.status": 1, "user": 1, \
-                "properties.content_type": 1}',
+                "properties.content_type": 1 %s}' % (node_type_projection),
             'where': '{"parent": "%s" %s}' % (node._id, published_status),
             'embedded': '{"node_type": 1}',
             'sort': 'properties.order'}, api=api)
@@ -558,7 +560,7 @@ def view(node_id):
     except ForbiddenAccess:
         return render_template('errors/403.html')
     for child in children:
-        child.picture = get_file(child.picture._id) if child.picture else None
+        child.picture = get_file(child.picture) if child.picture else None
     # end = time.time()
     # print (end - start)
 

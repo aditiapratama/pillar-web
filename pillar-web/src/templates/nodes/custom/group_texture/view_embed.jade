@@ -1,5 +1,4 @@
 | {% block body %}
-| {% cache 3600, 'group_view', node._id %}
 #node-container
 
 	section.node-preview.group
@@ -79,8 +78,6 @@
 
 		| 	{% endfor %}
 		| {% endif %}
-
-| {% endcache %}
 
 script.
 	// Generate GA pageview
