@@ -548,7 +548,7 @@ def view(node_id):
             node_type_projection = ''
         else:
             published_status = ''
-            node_type_projection = ', "properties.files": 1'
+            node_type_projection = ', "properties.files": 1, "properties.is_tileable": 1'
 
         children = Node.all({
             'projection': '{"name": 1, "picture": 1, "parent": 1, "node_type": 1, \
