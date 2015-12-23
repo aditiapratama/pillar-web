@@ -79,6 +79,9 @@
 
 					input.btn.btn-default.button-create(type='submit', value='Update {{ node_type.name }}')
 
+					a.btn.btn-default.button-back(href="{{ url_for('nodes.view', node_id=post._id, redir=1) }}")
+						| Back to Post
+
 					a.btn.btn-default.button-back(href="{{ url_for('project_view', project_url=project.properties.url) }}blog")
 						| Back to Blog
 
