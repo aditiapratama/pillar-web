@@ -1,6 +1,8 @@
 | {% block body %}
 
 #node-container.texture
+	h1.texture-title {{node.name}}
+
 	| {% for f in node.properties.files %}
 	section.node-row
 		section.node-preview.texture
@@ -9,12 +11,25 @@
 				data-preview="{{ f.file.thumbnail('l', api=api) }}",
 				data-aspect_ratio="{{ node.properties.aspect_ratio }}")
 
-
 		section.node-details-container.texture
 
 			.node-details-header
-				.node-title
-					| {{f.file.filename}}
+				.node-title.
+					{% if f.map_type == 'col' %}
+					Color
+					{% elif f.map_type == 'bump' %}
+					Bump
+					{% elif f.map_type == 'spec' %}
+					Specular
+					{% elif f.map_type == 'nor' %}
+					Normal Map
+					{% elif f.map_type == 'translucency' %}
+					Translucency
+					{% elif f.map_type == 'emission' %}
+					Emission
+					{% elif f.map_type == 'alpha' %}
+					Alpha
+					{% endif %}
 
 			.node-details-attributes
 				span.sizes
@@ -24,31 +39,8 @@
 
 				span.extra.
 					{% if f.is_tileable %}
-						<i class="pi-puzzle"></i> Seamless
-					{% else %}
-						Not Seamless
+						Tileable (seamless)
 					{% endif %}
-
-				span.variations
-					span.
-						{% if f.map_type == 'col' %}
-						Color
-						{% elif f.map_type == 'bump' %}
-						Bump
-						{% elif f.map_type == 'spec' %}
-						Specular
-						{% elif f.map_type == 'nor' %}
-						Normal Map
-						{% elif f.map_type == 'translucency' %}
-						Translucency
-						{% elif f.map_type == 'emission' %}
-						Emission
-						{% elif f.map_type == 'alpha' %}
-						Alpha
-						{% endif %}
-
-
-
 
 			.node-details-meta
 				ul.node-details-meta-list
@@ -80,14 +72,29 @@ script.
 	// Generate GA pageview
 	ga('send', 'pageview', (location.pathname + '#' + '{{node._id}}'));
 
+	var str = $('.texture-title').text();
+	var to_replace = /_col|_bump|_spec|_nor|_translucency|_emission|_alpha|_tileable|.jpg|.png/g;
+	$('.texture-title').text(str.replace(to_replace,'').replace(/_/g,' '));
 
 	$('.node-preview-thumbnail').each(function(i){
-		$(this).closest('.node-preview').css({'height' : $(this).width() * $(this).data('aspect_ratio')});
+		$(this).closest('.node-preview').css({'height' : $(this).width() / $(this).data('aspect_ratio')});
 
 		var thumbnail = $(this);
 		var src = $(this).attr('src');
 		var src_xl = $(thumbnail).data('preview');
 		var src_xl_width, src_xl_height;
+
+		/* Make dummy img in memory otherwise we have css issues */
+		$("<img/>")
+			.attr('src', src_xl)
+			.load(function(){
+				src_xl_width = this.width;
+				src_xl_height = this.height;
+		});
+
+		$(this).on('click', function(e){
+			e.preventDefault();
+		});
 
 		$(this).hover(
 			function(){
@@ -96,25 +103,21 @@ script.
 				/* Replace image src with larger one */
 				$(thumbnail).attr('src', src_xl);
 
-				/* Make dummy img in memory otherwise we have css issues */
-				$("<img/>")
-					.attr('src', src_xl)
-					.load(function(){
-						src_xl_width = this.width;
-						src_xl_height = this.height;
-				});
-
 				$(preview).css({width: src_xl_width + 'px', height: src_xl_height + 'px'});
 
 				var parent = $(preview).parent();
 				var parentOffset = parent.offset();
 
-				$(document).on('mousemove', function(e){
-					$(preview).css({
-						left:  e.pageX - parentOffset.left - (src_xl_width / 2),
-						top:   e.pageY - parentOffset.top - (src_xl_height / 2)
+				if (src_xl_width > 600 || src_xl_height > 300) {
+
+					$(document).on('mousemove', function(e){
+						$(preview).css({
+							left:  e.pageX - parentOffset.left - (src_xl_width / 2),
+							top:   e.pageY - parentOffset.top - (src_xl_height / 2)
+						});
 					});
-				});
+				};
+
 			},
 			function(){
 				$(document).off('mousemove');

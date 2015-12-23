@@ -26,11 +26,14 @@
 
 		| {% if children %}
 		| 	{% for child in children %}
+		| 	{% if child.properties.status == 'published' %}
 
 		a.list-node-children-container(href="#", data-node_id="{{ child._id }}", class="item_icon")
 			.list-node-children-item-preview
 				span.texture-name {{child.name}}
+				| {% if child.picture %}
 				img.texture-preview(src="#", data-preview="{{ child.picture.thumbnail('m', api=api)}}")
+				| {% endif %}
 			.list-node-children-item.texture
 				.list-node-children-item-thumbnail
 
@@ -57,6 +60,7 @@
 							i.pi-puzzle(title="Tileable", data-toggle="tooltip", data-placement="bottom", data-delay=0)
 							| {% endif %}
 						span.variations
+							| {% if child.properties.files %}
 							| {% for f in child.properties.files %}
 							| {% if f.map_type == 'col' %}
 							span Color
@@ -74,8 +78,9 @@
 							span Alpha
 							| {% endif %}
 							| {% endfor %}
+							| {% endif %}
 
-
+		| 	{% endif %}
 		| 	{% endfor %}
 		| {% endif %}
 

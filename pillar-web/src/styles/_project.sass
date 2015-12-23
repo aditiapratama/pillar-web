@@ -516,6 +516,13 @@ $node-preview-max-height-sm: 300px
 $node-preview-max-height-md: 450px
 $node-preview-max-height-lg: 500px
 
+#node-container.texture
+	.texture-title
+		padding: 20px 20px 0 20px
+		margin: 0
+
+		text-transform: capitalize
+
 section.node-row
 	display: flex
 	width: 100%
@@ -523,20 +530,26 @@ section.node-row
 	clear: both
 
 	padding: 20px
-	margin-bottom: 20px
+	margin-bottom: 0
 	border-bottom: thin solid rgba($color-text-dark, .2)
 
 	section.node-preview.texture
 		overflow: hidden
 
-		width: 33%
-		max-height: 350px
+		width: 50%
+		max-height: 500px
 		float: left
 		position: relative
+		background-color: $color-background
+		border-radius: 3px
+		user-select: none
 
 		img.node-preview-thumbnail
 			position: absolute
 			width: 100%
+			border-radius: 3px
+			user-select: none
+			cursor: grabbing
 
 		.loading
 			position: absolute
@@ -574,6 +587,16 @@ section.node-row
 			max-width: 100%
 			display: block
 			float: none
+			padding-top: 0
+
+			.node-title
+				font:
+					family: $font-body
+					weight: 300
+					size: 1.8em
+				+text-overflow-ellipsis
+
+
 
 		.node-details-attributes
 			padding: 0 20px 20px
@@ -581,15 +604,13 @@ section.node-row
 			span
 				display: block
 
-				&.sizes, &.variations, &.extra
+				&.sizes, &.extra
+					padding: 5px 0
 					font:
 						size: 1.4em
 						weight: 300
 					small
 						padding: 0 5px
-
-				&.variations
-					padding-top: 25px
 
 
 		.node-details-meta
