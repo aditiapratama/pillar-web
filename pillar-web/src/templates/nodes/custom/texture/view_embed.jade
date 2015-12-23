@@ -11,25 +11,26 @@
 				data-preview="{{ f.file.thumbnail('l', api=api) }}",
 				data-aspect_ratio="{{ node.properties.aspect_ratio }}")
 
+		| {% if f.map_type == 'col' %}
+		| {% set map_type = 'Color Map' %}
+		| {% elif f.map_type == 'bump' %}
+		| {% set map_type = 'Bump Map' %}
+		| {% elif f.map_type == 'spec' %}
+		| {% set map_type = 'Specular Map' %}
+		| {% elif f.map_type == 'nor' %}
+		| {% set map_type = 'Normal Map' %}
+		| {% elif f.map_type == 'translucency' %}
+		| {% set map_type = 'Translucency' %}
+		| {% elif f.map_type == 'emission' %}
+		| {% set map_type = 'Emission' %}
+		| {% elif f.map_type == 'alpha' %}
+		| {% set map_type = 'Alpha' %}
+		| {% endif %}
+
 		section.node-details-container.texture
 
 			.node-details-header
-				.node-title.
-					{% if f.map_type == 'col' %}
-					Color
-					{% elif f.map_type == 'bump' %}
-					Bump
-					{% elif f.map_type == 'spec' %}
-					Specular
-					{% elif f.map_type == 'nor' %}
-					Normal Map
-					{% elif f.map_type == 'translucency' %}
-					Translucency
-					{% elif f.map_type == 'emission' %}
-					Emission
-					{% elif f.map_type == 'alpha' %}
-					Alpha
-					{% endif %}
+				.node-title {{map_type}}
 
 			.node-details-attributes
 				span.sizes
@@ -54,11 +55,11 @@
 						| {% if f.file.link %}
 						a(href="{{ f.file.link }}")
 							button.btn.btn-default(type="button")
-								| Download Texture
+								| Download {{map_type}}
 						| {% else %}
 						a(href="#")
 							button.btn.btn-default.disabled(type="button")
-								| Download Texture
+								| Download {{map_type}}
 						| {% endif %}
 	| {% endfor %}
 
