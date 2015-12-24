@@ -8,6 +8,22 @@ meta(property="og:image", content="{{ project.properties.picture_header.thumbnai
 meta(property="og:image", content="{{ node.picture.thumbnail('l', api=api) }}")
 | {% endif %}
 | {% endblock %}
+| {% block tw %}
+meta(name="twitter:card", content="summary_large_image")
+| {% if project._id == config.MAIN_PROJECT_ID %}
+meta(property="twitter:title", content="{{ node.name }} - Blog - Blender Cloud")
+| {% else %}
+meta(property="twitter:title", content="{{ node.name }} - {{ project.name }} Blog - Blender Cloud")
+| {% endif %}
+| {% if project and project.properties.picture_header %}
+meta(name="twitter:image", content="{{ project.properties.picture_header.thumbnail('m', api=api) }}")
+| {% elif node and node.picture %}
+meta(name="twitter:image", content="{{ node.picture.thumbnail('m', api=api) }}")
+| {% else %}
+meta(name="twitter:image", content="{{ url_for('static', filename='assets/img/background_caminandes_3_02.jpg')}}")
+| {% endif %}
+meta(name="twitter:description", content="{{ node.properties.content }}")
+| {% endblock %}
 
 | {% block header_backdrop %}
 | {% if project and project.properties.picture_header %}
@@ -55,7 +71,7 @@ meta(property="og:image", content="{{ node.picture.thumbnail('l', api=api) }}")
 					| by {{node.user.full_name}}
 
 				.item-content
-					| {{node.properties.content }}
+					| {{ node.properties.content }}
 
 
 			#comments-container
