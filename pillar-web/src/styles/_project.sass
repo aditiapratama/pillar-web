@@ -831,7 +831,7 @@ section.node-preview.group
 
 
 	.node-details-meta
-		font-weight: 300
+		font-weight: 400
 		padding: 15px 20px 25px 20px
 
 		&.preview
@@ -852,12 +852,13 @@ section.node-preview.group
 					&.status
 						color: $color-text-light
 
-
 		&.header
 			float: left
 			width: 40%
 			max-width: 40%
-			padding-top: 25px
+			padding:
+				top: 25px
+				left: 0
 			+clearfix
 
 		ul.node-details-meta-list
@@ -900,13 +901,38 @@ section.node-preview.group
 					border-radius: 3px
 					cursor: default
 
+				&.access
+					margin: 0 0 0 auto
+					color: $color-text-dark-primary
+					cursor: default
+					opacity: .5
+
+					&:hover
+						opacity: 1
+
+					&.public
+						border-color: $color-success
+						color: $color-success
+						padding: 0
+						i
+							font-size: 1.2em
+							position: relative
+							top: 1px
+
+						span
+							display: inline-block
+
+
 				&.type
 					margin-left: auto
-					text-transform: capitalize
+					text-transform: uppercase
 					padding: 0 5px 0 15px
 					cursor: default
 					font-weight: 400
 					color: $color-text-dark-hint
+
+				&.access+li.node-details-meta-list-item.type
+					margin-left: 0
 
 				&.length
 					// margin-left: auto

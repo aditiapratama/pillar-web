@@ -15,8 +15,17 @@
 
 		.node-details-meta.header
 			ul.node-details-meta-list
+				| {% if node.permissions.world %}
+				li.node-details-meta-list-item.access.public(
+					data-toggle="tooltip",
+					data-placement="left",
+					title="Anybody can download. Share it!")
+					i.pi-lock-open
+					span Public
+				| {% endif %}
+
 				li.node-details-meta-list-item.type
-					| {{ node.properties.content_type }}
+					| {{ node.file.content_type }}
 
 				li.node-details-meta-list-item.file.length
 					| {{ node.file.length | filesizeformat }}
@@ -39,13 +48,14 @@
 		.node-details-meta.footer
 			ul.node-details-meta-list
 				li.node-details-meta-list-item.status
-						| {{node.properties.status}}
+					| {{node.properties.status}}
 
 				li.node-details-meta-list-item.author
 					| {{ node.user.full_name }}
 
 				li.node-details-meta-list-item.date(title="Created {{ node._created | pretty_date }}")
 					| {{ node._updated | pretty_date }}
+
 
 		#comments-container
 			#comments-list-items-loading
@@ -58,6 +68,11 @@ include ../../_scripts
 script.
 	// Generate GA pageview
 	ga('send', 'pageview', (location.pathname + '#' + '{{node._id}}'));
+
+	$('[data-toggle="tooltip"]').tooltip({'delay' : {'show': 1250, 'hide': 250}})
+
+	var content_type = $("li.node-details-meta-list-item.type").text();
+	$("li.node-details-meta-list-item.type").text(content_type.substring(content_type.indexOf("/") + 1));
 
 	if ($('.node-preview-thumbnail').width() > 750) {
 		$('.node-preview.file, .node-preview-thumbnail').css({'max-height': '100%', 'width': '100%'});

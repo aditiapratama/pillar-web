@@ -209,6 +209,7 @@ $('#item_toggle_public').click(function(e){
 	})
 	.done(function(data){
 		statusBarSet('success', data.data.message);
+		displayNode(current_node_id);
 	});
 });
 
