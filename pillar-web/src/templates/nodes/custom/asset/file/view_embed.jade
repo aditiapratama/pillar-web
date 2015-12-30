@@ -72,7 +72,13 @@ script.
 	$('[data-toggle="tooltip"]').tooltip({'delay' : {'show': 1250, 'hide': 250}})
 
 	var content_type = $("li.node-details-meta-list-item.type").text();
-	$("li.node-details-meta-list-item.type").text(content_type.substring(content_type.indexOf("/") + 1));
+	var type_trimmed = content_type.substring(content_type.indexOf("/") + 1);
+	if (type_trimmed == 'blend'){
+		type_trimmed = '<span class="blend"><i class="pi-blender-logo"></i></span>';
+		$('li.file.download button').html('Download Blend');
+	};
+
+	$("li.node-details-meta-list-item.type").html(type_trimmed);
 
 	if ($('.node-preview-thumbnail').width() > 750) {
 		$('.node-preview.file, .node-preview-thumbnail').css({'max-height': '100%', 'width': '100%'});
