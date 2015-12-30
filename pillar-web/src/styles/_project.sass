@@ -942,11 +942,11 @@ section.node-preview.group
 				&.access+li.node-details-meta-list-item.type
 					margin-left: 0
 
-				&.access+li.node-details-meta-list-item.video.download
+				&.access+li.node-details-meta-list-item.video.download,
+				.tooltip+li.node-details-meta-list-item.video.download
 					margin-left: 10px
 
 				&.length
-					// margin-left: auto
 					padding: 0 5px 0 15px
 					cursor: default
 					font-weight: 400
@@ -956,12 +956,7 @@ section.node-preview.group
 				/* Download button */
 				&.download
 					align-self: flex-end
-					// margin-left: auto
 					padding: 0 0 0 10px
-
-					&.video, &.image
-						// margin-left: auto
-
 
 					/* Actual button */
 					button
@@ -980,6 +975,8 @@ section.node-preview.group
 
 					/* Videos have dropdown caret, so paddit 5px less */
 					&.video.download
+						margin-left: auto
+
 						button
 							padding-right: 10px
 
@@ -1299,7 +1296,7 @@ section.node-children
 	width: $list-node-children-item-width
 	overflow: hidden
 	text-overflow: ellipsis
-	transition: opacity .1s ease-in-out
+	transition: opacity .1s ease-in-out, color .1s ease-in-out
 
 	&:hover
 		opacity: .9
@@ -1307,6 +1304,17 @@ section.node-children
 
 		& .list-node-children-item-name i
 			color: darken($color-primary, 20%)
+
+		& .list-node-children-item-thumbnail
+			& .list-node-children-item-thumbnail-icon
+				transform: translate(-50%, -50%) scale(1.1)
+
+	&:active
+		opacity: .8
+		color: $color-primary
+		& .list-node-children-item-name i
+			color: $color-primary
+
 
 	& .list-node-children-item-thumbnail
 		display: flex
@@ -1327,7 +1335,9 @@ section.node-children
 			left: 50%
 			transform: translate(-50%, -50%)
 			font-size: 4em
-			color: $color-text-light-hint
+			color: rgba(white, .75)
+			text-shadow: 1px 1px 1px rgba(black, .2)
+			transition: transform .1s ease-in-out
 
 		& .list-node-children-item-status
 			color: $color-text-light-primary
@@ -1366,6 +1376,7 @@ section.node-children
 				left: 7px
 				right: 3px
 			font-size: .9em
+			transition: color .1s ease-in-out
 
 		span
 			padding:
