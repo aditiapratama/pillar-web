@@ -545,7 +545,7 @@ def view(node_id):
     try:
         if node_type_name == 'group':
             published_status = ',"properties.status": "published"'
-            node_type_projection = ''
+            node_type_projection = ', "permissions.world": 1'
         else:
             published_status = ''
             node_type_projection = ', "properties.files": 1, "properties.is_tileable": 1'
