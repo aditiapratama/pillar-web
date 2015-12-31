@@ -130,13 +130,13 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 						span free
 					| {% endif %}
 
-					.info(title="{{ n.name }}")
-						.title {{ n.name }}
+					.info
+						.title(title="{{ n.name }}") {{ n.name }}
 						span.details
-							span.who
+							span.when
 								span.what {{ n.properties.content_type }}
-								span by  {{ n.user.full_name }}
-							span.when {{ n._updated | pretty_date }}
+								span · {{ n._updated | pretty_date }}
+							span.who by {{ n.user.full_name }}
 
 				| {% endfor %}
 
