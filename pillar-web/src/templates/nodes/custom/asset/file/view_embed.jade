@@ -56,7 +56,7 @@
 				li.node-details-meta-list-item.date(title="Created {{ node._created }}")
 					| {{ node._created | pretty_date }}
 					| {% if (node._created | pretty_date) != (node._updated | pretty_date) %}
-					| (updated {{ node._updated | pretty_date }})
+					span(title="Updated {{ node._updated }}") (updated {{ node._updated | pretty_date }})
 					| {% endif %}
 
 

@@ -128,7 +128,7 @@ def pretty_date(time=False):
         if second_diff < 120:
             return  "a minute ago"
         if second_diff < 3600:
-            return str( second_diff / 60 ) + " minutes ago"
+            return str( second_diff / 60 ) + " mins ago"
         if second_diff < 7200:
             return "an hour ago"
         if second_diff < 86400:
@@ -144,10 +144,19 @@ def pretty_date(time=False):
         else:
             return str(week_count) + " weeks ago"
     if day_diff <= 365:
-        if day_diff < 32:
-            return str(day_diff/30) + " month ago"
+        month_diff = day_diff/32
+        if month_diff == 1:
+            return str(month_diff) + " month ago"
         else:
-            return str(day_diff/30) + " month ago"
+            return str(month_diff) + " months ago"
+
+    if day_diff > 365:
+        year_diff = day_diff/365
+        if year_diff == 1:
+            return str(year_diff) + " year ago"
+        else:
+            return str(year_diff) + " years ago"
+
     return str(day_diff/365) + " years ago"
 
 
