@@ -53,8 +53,11 @@
 				li.node-details-meta-list-item.author
 					| {{ node.user.full_name }}
 
-				li.node-details-meta-list-item.date(title="Created {{ node._created | pretty_date }}")
-					| {{ node._updated | pretty_date }}
+				li.node-details-meta-list-item.date(title="Created {{ node._created }}")
+					| {{ node._created | pretty_date }}
+					| {% if (node._created | pretty_date) != (node._updated | pretty_date) %}
+					| (updated {{ node._updated | pretty_date }})
+					| {% endif %}
 
 
 		#comments-container
