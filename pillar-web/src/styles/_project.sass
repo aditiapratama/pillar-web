@@ -753,63 +753,8 @@ section.node-preview.group
 
 
 	.node-details-description
-		padding: 15px 0 25px 0
-		color: darken($color-text-dark, 5%)
-		font:
-			family: $font-body
-			weight: 300
-			size: 1.2em
+		+node-details-description
 
-		clear: both
-		+clearfix
-
-		strong
-			font-weight: 500
-
-		a
-			font-weight: 400
-
-		p
-			padding:
-				left: 20px
-				right: 20px
-			margin-bottom: 20px
-			line-height: 1.5em
-
-		h1, h2, h3, h4, h5, h6
-			font-weight: 400
-			padding:
-				top: 20px
-				left: 20px
-				right: 20px
-			color: $color-secondary
-
-		blockquote
-			background-color: lighten($color-background, 5%)
-			text-shadow: 1px 1px 0 rgba(white, .2)
-			margin-left: 20px
-			font-size: 1em
-
-			p
-				padding: 0
-				margin: 0
-
-
-		img
-			padding-bottom: 25px
-			max-width: 100%
-
-		/* e.g. YouTube embed */
-		iframe
-			margin-top: 20px
-			max-width: 100%
-			height: auto
-			min-height: 354px
-
-		+list-bullets
-
-		ul
-			padding-left: 40px
 
 	&.group, &.project
 		.node-details-header
@@ -891,9 +836,7 @@ section.node-preview.group
 						color: $color-text-dark-hint
 						margin-left: 3px
 						font-size: .9em
-						position: relative
-						bottom: 1px
-
+						text-transform: lowercase
 
 				&.author
 					color: $color-text-dark-primary
@@ -1771,20 +1714,20 @@ section.node-children
 
 				+markdown-preview-container
 
+				margin:
+					left: -20px
+					right: -20px
+
 				padding:
 					top: 20px
 					left: 0
 					right: 0
-				color: $color-text-dark
-				font:
-					family: $font-body
-					size: 1.3em
-					weight: 300
 
 				&:before
 					content: 'Live Preview'
 					position: absolute
 					top: -25px
+					left: 20px
 					font-size: .7em
 					color: $color-text-dark-secondary
 					transition: color 150ms ease-in-out
@@ -1793,7 +1736,7 @@ section.node-children
 					content: 'Markdown Supported'
 					position: absolute
 					top: -25px
-					right: 0
+					right: 20px
 					font-size: .7em
 					color: $color-text-dark-hint
 					transition: color 150ms ease-in-out

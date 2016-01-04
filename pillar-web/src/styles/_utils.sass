@@ -234,37 +234,60 @@
 			position: relative
 			left: -10px
 
-=markdown-preview-container
-	border-top: 1px solid $color-background
-	border-bottom: 1px solid $color-background
-	position: relative
-	margin: 40px auto 25px auto
-	padding: 10px 10px 25px 10px
-	color: $color-text-dark-primary
-	cursor: default
-	transition: all 150ms ease-in-out
+
+=node-details-description
+	padding: 15px 0 25px 0
+	color: darken($color-text-dark, 5%)
+	font:
+		family: $font-body
+		weight: 300
+		size: 1.2em
+
+	clear: both
+	+clearfix
 
 	strong, b
 		font-weight: 400
+
+	a
+		font-weight: 400
+
 	p
-		padding-bottom: 20px
+		padding:
+			left: 20px
+			right: 20px
+		margin-bottom: 20px
+		line-height: 1.5em
 		word-wrap: break-word
+
+	h1, h2, h3, h4, h5, h6
+		font-weight: 400
+		padding:
+			top: 20px
+			left: 20px
+			right: 20px
+		color: $color-secondary
+
+	blockquote
+		background-color: lighten($color-background, 5%)
+		text-shadow: 1px 1px 0 rgba(white, .2)
+		margin:
+			left: 20px
+			right: 20px
+			bottom: 30px
+		font-size: 1em
+
+		p
+			padding: 0
+			margin: 0
 
 	img,
 	p img
 		max-width: 100%
 		padding:
 			top: 25px
-			bottom: 10px
-
-	ul li
-		margin-bottom: 15px
-
-	ul li img
-		display: block
-		padding:
-			top: 25px
-			bottom: 10px
+			// bottom: 10px
+			bottom: 25px
 
 	/* e.g. YouTube embed */
 	iframe
@@ -277,13 +300,67 @@
 	iframe[src^="https://w.soundcloud"]
 		min-height: auto
 
+	+list-bullets
+
+	ul
+		padding-left: 40px
+		margin-bottom: 25px
+
+		li
+			margin-bottom: 15px
+			img
+				display: block
+				padding:
+					top: 25px
+					bottom: 10px
+
+	code, kbd, pre, samp
+		font-size: 1.3rem
+
+	pre
+		background-color: lighten($color-background, 5%)
+		border-color: $color-background
+		border-radius: 3px
+		color: $color-text
+
+		/* when <pre> is outside <p> */
+		margin:
+			left: 20px
+			right: 20px
+	pre+p
+		margin-top: 30px
+
+	p+pre
+		/* a <pre> right after a <p> usually are related, remove some spacing */
+		margin-top: -10px
+
+	p
+		pre
+			/* We already have spacing on the sides inside <p> */
+			margin:
+				left: 0
+				right: 0
+
+
+=markdown-preview-container
+	border:
+		top: 1px solid $color-background
+		bottom: 1px solid $color-background
+	position: relative
+	margin: 40px auto 25px auto
+	padding: 10px 10px 25px 10px
+	color: $color-text-dark-primary
+	cursor: default
+	transition: all 150ms ease-in-out
+
+	+node-details-description
+
 	// Funny, normalize.css doesn't normalize when it's outside
 	h1
 		font-size: 2.8em
 	h2
 		margin-bottom: 15px
 
-	+list-bullets
 
 =ribbon
 	background-color: $color-success
