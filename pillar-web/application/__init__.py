@@ -37,6 +37,20 @@ bugsnag.configure(
     api_key=app.config['BUGSNAG_API_KEY'],
     project_root="/data/dev/pillar-web/pillar-web",
 )
+
+def bugsnag_notify_callback(notification):
+    # If we return False, the notification will not be sent to Bugsnag.
+    if isinstance(notification.exception, KeyboardInterrupt):
+        return False
+    if current_user.is_authenticated():
+        notification.user = dict(
+            id=current_user.id,
+            name=current_user.full_name,
+            email=current_user.email)
+        notification.add_tab("account", {"roles": current_user.roles})
+
+bugsnag.before_notify(bugsnag_notify_callback)
+
 handle_exceptions(app)
 
 
