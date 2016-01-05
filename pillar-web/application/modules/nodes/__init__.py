@@ -732,12 +732,12 @@ def edit(node_id):
                 project_update_nodes_list(node)
 
             # Delete cached template fragment
-            delete_redis_cache_template('asset_view', node._id)
+            # delete_redis_cache_template('asset_view', node._id)
             # Delete cached parent template fragment
-            if node.parent:
-                delete_redis_cache_template('group_view', node.parent)
+            # if node.parent:
+            #     delete_redis_cache_template('group_view', node.parent)
             # Delete memoized File object
-            cache.delete_memoized(_get_file_cached, node._id)
+            cache.delete_memoized(_get_file_cached, node_id)
             # Emergency hardcore cache flush
             # cache.clear()
             return redirect(url_for('nodes.view', node_id=node_id, embed=1,

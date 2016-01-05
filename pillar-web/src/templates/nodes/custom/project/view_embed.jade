@@ -1,8 +1,5 @@
 | {% block body %}
 
-| {# Heavy caching starts here #}
-| {% cache 60*5, 'project_view_embed', user_string_id, node_id %}
-
 #node-container
 	section.node-preview.project
 		| {% if node.properties.picture_header %}
@@ -81,8 +78,6 @@
 								span.when No featured items yet.
 
 					| {% endif %}
-
-| {% endcache %}
 
 include ../_scripts
 
