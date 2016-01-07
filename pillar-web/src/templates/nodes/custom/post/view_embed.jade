@@ -1,6 +1,6 @@
 | {% block og %}
 | {% if project %}
-meta(property="og:title", content="{{ node.name }} - {{ project.name }} - Blender Cloud")
+meta(property="og:title", content="{{ node.name }} - {{ project.name }} — Blender Cloud")
 | {% endif %}
 | {% if project and project.properties.picture_header %}
 meta(property="og:image", content="{{ project.properties.picture_header.thumbnail('l', api=api) }}")
@@ -11,14 +11,14 @@ meta(property="og:image", content="{{ node.picture.thumbnail('l', api=api) }}")
 | {% block tw %}
 meta(name="twitter:card", content="summary_large_image")
 | {% if project._id == config.MAIN_PROJECT_ID %}
-meta(property="twitter:title", content="{{ node.name }} - Blog - Blender Cloud")
+meta(property="twitter:title", content="{{ node.name }} — Blender Cloud Blog")
 | {% else %}
-meta(property="twitter:title", content="{{ node.name }} - {{ project.name }} Blog - Blender Cloud")
+meta(property="twitter:title", content="{{ node.name }} - {{ project.name }} Blog — Blender Cloud")
 | {% endif %}
 | {% if project and project.properties.picture_header %}
-meta(name="twitter:image", content="{{ project.properties.picture_header.thumbnail('m', api=api) }}")
+meta(name="twitter:image", content="{{ project.properties.picture_header.thumbnail('l', api=api) }}")
 | {% elif node and node.picture %}
-meta(name="twitter:image", content="{{ node.picture.thumbnail('m', api=api) }}")
+meta(name="twitter:image", content="{{ node.picture.thumbnail('l', api=api) }}")
 | {% else %}
 meta(name="twitter:image", content="{{ url_for('static', filename='assets/img/background_caminandes_3_02.jpg')}}")
 | {% endif %}
