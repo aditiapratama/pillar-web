@@ -1,6 +1,6 @@
 | {% block og %}
 | {% if project %}
-meta(property="og:title", content="{{ node.name }} - {{ project.name }} — Blender Cloud")
+meta(property="og:title", content="{{ node.name }}{% if project._id == config.MAIN_PROJECT_ID %} — Blender Cloud Blog{% else%} - {{ project.name }} — Blender Cloud{% endif %}")
 | {% endif %}
 | {% if project and project.properties.picture_header %}
 meta(property="og:image", content="{{ project.properties.picture_header.thumbnail('l', api=api) }}")
