@@ -19,7 +19,7 @@ from application.modules.files import process_and_create_file
 @nodes.route('/assets/create', methods=['POST'])
 @login_required
 def assets_create():
-    project_id = session['current_project_id']
+    project_id = request.form['project_id']
     name = request.form['name']
     parent_id = request.form.get('parent_id')
     # Detect filetype by extension (improve by detectin real file type)
