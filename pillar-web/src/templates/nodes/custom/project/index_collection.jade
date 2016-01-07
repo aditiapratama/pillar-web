@@ -60,7 +60,7 @@ meta(name="twitter:image", content="{% if title == 'open-projects' %}{{ url_for(
 			.node_index-collection
 
 				| {% for project in projects %}
-				| {% if (project.properties.status == 'published') or (project.properties.status == 'pending' and current_user.is_authenticated() and current_user.has_role('admin'))%}
+				| {% if (project.properties.status == 'published') or (project.properties.status == 'pending' and current_user.is_authenticated() and current_user.has_role('admin')) and project._id != config.MAIN_PROJECT_ID %}
 				.node_index-collection-card-container
 					.node_index-collection-card
 						a.item-header(
