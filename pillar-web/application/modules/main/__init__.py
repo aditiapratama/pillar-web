@@ -233,6 +233,11 @@ def cf2():
     return redirect('/p/creature-factory-2')
 
 
+@app.route("/characters")
+def redir_characters():
+    return redirect('/p/characters')
+
+
 @app.route("/403")
 def error_403():
     """Custom entry point to display the not allowed template"""
