@@ -7,7 +7,14 @@ meta(property="og:image", content="{{ project.properties.picture_header.thumbnai
 | {% elif node and node.picture %}
 meta(property="og:image", content="{{ node.picture.thumbnail('l', api=api) }}")
 | {% endif %}
+meta(property="og:description", content="{{ node.properties.content }}")
+meta(property="og:type", content="article")
+meta(property="article:type", content="{{node.user.full_name}}")
+meta(property="article:published_time", content="{{node._created | pretty_date }}")
+meta(property="og:see_also", content="https://cloud.blender.org/blog")
+meta(property="og:url", content="https://cloud.blender.org{{ url_for('nodes.view', node_id=node._id, redir=1) }}")
 | {% endblock %}
+
 | {% block tw %}
 meta(name="twitter:card", content="summary_large_image")
 | {% if project._id == config.MAIN_PROJECT_ID %}
