@@ -77,53 +77,9 @@
 					right: 25px
 
 			.item-content
-				padding: 25px 25px 35px 25px
-				color: $color-text-dark
-				font:
-					family: $font-body
-					size: 1.3em
-					weight: 300
-
-				strong, b
-					font-weight: 400
-				p
-					padding-bottom: 20px
-					word-wrap: break-word
-
-				img,
-				p img,
-				ul li img
-					max-width: 100%
-					padding:
-						top: 25px
-						bottom: 10px
-
-				ul li img
-					padding:
-						top: 25px
-						bottom: 10px
-
-				iframe
-					margin-top: 20px
-					width: 100%
-
-				h2
-					margin-bottom: 15px
-
-				+media-lg
-					iframe
-						min-height: 454px
-				+media-sm
-					iframe
-						min-height: 314px
-				+media-xs
-					iframe
-						min-height: 314px
-
-				iframe[src^="https://w.soundcloud"]
-					min-height: auto
-
-				+list-bullets
+				+node-details-description
+				padding: 25px 5px 35px 5px
+				font-size: 1.3em
 
 			.item-meta
 				color: $color-text-dark-secondary
