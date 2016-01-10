@@ -38,6 +38,7 @@
 
 			.lead
 				// text-align: center
+				padding-left: 15px
 				max-width: 780px
 				span
 					font:
@@ -69,15 +70,16 @@
 					@include button-rounded($color-text-light, 999em)
 					opacity: 1
 
-					&.get-started
+					&.blue
 						@include button-rounded-filled($color-primary, 999em)
 						opacity: 1
-						margin-right: 10px
+						margin-right: 15px
 
-					&.follow
+					&.orange
 						@include button-rounded-filled($color-danger, 999em)
 						opacity: 1
 						padding: 10px 35px
+						margin-right: 15px
 
 	#content
 		display: flex
@@ -681,7 +683,7 @@ section.homepage_container.supported-by
 		padding: 60px 0 0 0
 		color: lighten($color-background-nav, 20%)
 
-	a.get-started
+	a.blue
 		@include button-rounded-filled($color-primary, 999em)
 
 		padding: 15px 50px

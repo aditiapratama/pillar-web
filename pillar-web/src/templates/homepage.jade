@@ -39,13 +39,15 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 					<br/>Get full access to the Blender Institute's Open Projects and training material.
 
 			.buttons
-				a.btn.btn-default.btn-outline.follow(href="/p/caminandes-3/")
-					| Check it Out
+				a.btn.btn-default.btn-outline.orange(href="/p/caminandes-3/")
+					| Explore
+				a.btn.btn-default.btn-outline.blue(href="https://www.youtube.com/watch?v=6U1bsPCLLEg")
+					| Watch the Trailer
 
 | {% elif current_user.is_anonymous() %}
 .homepage_container.page-content
 	#header
-		.text
+		.text3
 			.title Learn the magic.
 					//- img(src="{{ url_for('static', filename='assets/img/logo_gallery.png')}}")
 
@@ -61,9 +63,9 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 					<br/>Get full access to the Blender Institute's Open Projects and training material.
 
 			.buttons
-				a.btn.btn-default.btn-outline.get-started.go-to-pricing
+				a.btn.btn-default.btn-outline.orange.go-to-pricing
 					| Sign up
-				a.btn.btn-default.btn-outline.follow(href="/p/caminandes-3/")
+				a.btn.btn-default.btn-outline.blue(href="/p/caminandes-3/")
 					| Explore
 
 
@@ -394,7 +396,7 @@ section.homepage_container.supported-by
 	.row-fluid
 		.col-md-12.text-center
 			h2 Join us, for only $9.90/month!
-			a.btn.btn-default.btn-outline.get-started(href="https://store.blender.org/product/membership/")
+			a.btn.btn-default.btn-outline.blue(href="https://store.blender.org/product/membership/")
 				| Sign up Now
 
 
