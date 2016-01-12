@@ -41,9 +41,10 @@
 							| Download Image
 					| {% endif %}
 
-
+		| {% if node.description %}
 		.node-details-description
 			| {{node.description}}
+		| {% endif %}
 
 		.node-details-meta.footer
 			ul.node-details-meta-list

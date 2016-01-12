@@ -63,8 +63,10 @@ link(rel="stylesheet", href="//releases.flowplayer.org/6.0.3/skin/minimalist.css
 						| Download Video
 				| {% endif %}
 
+		| {% if node.description %}
 		.node-details-description
 			| {{node.description}}
+		| {% endif %}
 
 		.node-details-meta.footer
 			ul.node-details-meta-list
