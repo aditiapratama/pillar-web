@@ -9,7 +9,8 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 
 
 | {% block header_backdrop %}
-.homepage.navbar-backdrop(style="background-image: url({{ url_for('static', filename='assets/img/background_caminandes_3_02.jpg')}})")
+.homepage.navbar-backdrop(
+	style="background-image: url({{ url_for('static', filename='assets/img/background_gleb_dappledlight.jpg')}})")
 	//
 		video(loop, muted, autoplay, poster="{{ url_for('static', filename='assets/img/background_join_glass.jpg')}}", class="fullscreen-bg__video")
 			source(src="{{ url_for('static', filename='assets/video/header-glass_half.webm')}}", type="video/webm")
@@ -20,15 +21,21 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 
 | {% block body %}
 
-| {% if current_user.is_authenticated() %}
+
 .homepage_container.page-content
 	#header
 		.text
-			.title Caminandes 3
-					//- img(src="{{ url_for('static', filename='assets/img/logo_gallery.png')}}")
+			.title
+				img(src="{{ url_for('static', filename='assets/img/logo_gallery.png')}}")
 
 			.lead
 				span.
+					Create epic and emotional scenes,
+					<br/>
+					dive into high quality computer graphics!
+					<br/>
+					Full sources and documentation available in CC-BY.
+				//
 					Snowy environments and furry characters,
 					<br/>
 					a great winter adventure awaits!
@@ -39,37 +46,19 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 					<br/>Get full access to the Blender Institute's Open Projects and training material.
 
 			.buttons
-				a.btn.btn-default.btn-outline.orange(href="/p/caminandes-3/")
+				| {% if current_user.is_authenticated() %}
+				a.btn.btn-default.btn-outline.orange(href="https://cloud.blender.org/p/gallery/#5697bbf8c379cf44546122f9")
 					| Explore
-				a.btn.btn-default.btn-outline.blue(href="https://www.youtube.com/watch?v=6U1bsPCLLEg")
-					| Watch the Trailer
-
-| {% elif current_user.is_anonymous() %}
-.homepage_container.page-content
-	#header
-		.text
-			.title Learn the magic.
-					//- img(src="{{ url_for('static', filename='assets/img/logo_gallery.png')}}")
-
-			.lead
-				span.
-					Snowy environments and furry characters,
-					<br/>
-					dive into high quality computer graphics!
-					<br/>
-					Full sources and documentation available in CC-BY.
 				//
-					We make films, we build a production pipeline, and we share everything.
-					<br/>Get full access to the Blender Institute's Open Projects and training material.
+					a.btn.btn-default.btn-outline.blue(href="https://www.youtube.com/watch?v=6U1bsPCLLEg")
+						| Watch the Trailer
 
-			.buttons
+				| {% elif current_user.is_anonymous() %}
 				a.btn.btn-default.btn-outline.orange.go-to-pricing
 					| Sign up
-				a.btn.btn-default.btn-outline.blue(href="/p/caminandes-3/")
+				a.btn.btn-default.btn-outline.blue(href="https://cloud.blender.org/p/gallery/#5697bbf8c379cf44546122f9")
 					| Explore
-
-
-| {% endif %}
+				| {% endif %}
 
 .homepage_container.page-content
 	#content
