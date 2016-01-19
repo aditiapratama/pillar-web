@@ -77,7 +77,8 @@ def homepage():
         }, api=api)
     latest_comments = Node.all({
         'projection': '{"project": 1, "parent": 1, "user": 1, \
-            "properties.content": 1 ,"node_type": 1, "properties.status": 1}',
+            "properties.content": 1 ,"node_type": 1, "properties.status": 1, \
+            "properties.is_reply": 1}',
         'where': '{"node_type": "%s", "properties.status": "published"}' % (node_type_comment._id),
         'embedded': '{"user": 1, "project": 1, "parent": 1}',
         'sort': '-_created',
@@ -87,9 +88,9 @@ def homepage():
     # Parse results for replies
     for comment in latest_comments._items:
         if comment.properties.is_reply:
-            comment.parent = comment.parent.parent
+            comment.parent = Node.find(comment.parent.parent, api=api)
         else:
-            comment.parent = comment.parent._id
+            comment.parent = comment.parent
 
     return render_template(
         'homepage.html',
