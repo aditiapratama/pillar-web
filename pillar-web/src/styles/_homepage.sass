@@ -253,6 +253,18 @@
 							&:hover
 								color: $color-primary
 
+						.details
+							+text-overflow-ellipsis
+							.where
+								.parent
+									padding-right: 5px
+								.project
+									color: $color-text-dark-secondary
+									padding-left: 5px
+
+									&:hover
+										color: $color-primary
+
 			.latestassets-list
 				width: 100%
 				display: flex
@@ -330,6 +342,7 @@
 							.what
 								text-transform: capitalize
 								margin-right: 3px
+
 
 .homepage.navbar-backdrop
 	// width: 105%
