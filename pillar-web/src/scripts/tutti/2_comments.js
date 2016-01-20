@@ -1,6 +1,7 @@
 
 	/* Reply */
-	$('body').on('click', '.comment-action-reply', function(){
+	$('body').on('click', '.comment-action-reply', function(e){
+		e.preventDefault();
 
 		// container of the comment we are replying to
 		var parentDiv = $(this).closest('.comment-container');
@@ -19,18 +20,45 @@
 		var commentField = document.getElementById('comment_field');
 		commentField.setAttribute('data-parent_id', parentNodeId);
 
+		// Start the comment field with @authorname:
+		var replyAuthor = $(this).parent().parent().find('.comment-author:first').html();
+		$(commentField).val("**@" + replyAuthor + ":** ");
+
 		// Add class for styling
 		parentDiv.addClass('is-replying');
+
+		// Rename Post Comment button to Reply
+		var commentSubmitButton = document.getElementById('comment_submit');
+		$(commentSubmitButton).text('Post Reply');
 
 		// Move comment-reply container field after the parent container
 		var commentForm = $('.comment-reply-container').detach();
 		parentDiv.after(commentForm);
+		// document.getElementById('comment_field').focus();
+		$(commentField).focus();
+
+		// Convert Markdown
+		var convert = new Markdown.getSanitizingConverter().makeHtml;
+		var preview = $('.comment-reply-preview');
+		preview.html(convert($(commentField).val()));
+		$('.comment-reply-form').addClass('filled');
 	});
 
 
 	/* Cancel Reply */
 	$('body').on('click', '.comment-action-cancel', function(){
 		$('.comment-reply-container').detach().prependTo('#comments-list');
+		var commentField = document.getElementById('comment_field');
+		$(commentField).val('');
+		// Convert Markdown
+		var convert = new Markdown.getSanitizingConverter().makeHtml;
+		var preview = $('.comment-reply-preview');
+		preview.html(convert($(commentField).val()));
+
+		var commentSubmitButton = document.getElementById('comment_submit');
+		$(commentSubmitButton).text('Post Comment');
+
+		$('.comment-reply-form').removeClass('filled');
 	});
 
 

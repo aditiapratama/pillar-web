@@ -27,7 +27,7 @@
 									i.pi-markdown
 
 							.comment-author
-								| commenting as
+								span.commenting-as commenting as
 								span.author-name {{ current_user.full_name }}
 
 						button.comment-action-cancel.btn.btn-outline(
@@ -35,6 +35,7 @@
 							title="Cancel")
 							i.pi-cancel
 						button.comment-action-submit.btn.btn-outline(
+							id="comment_submit",
 							type="button",
 							title="Post Comment")
 							| Post Comment
