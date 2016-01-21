@@ -417,7 +417,7 @@ script.
 	})
 
 	/* cleanup mentions in comments  */
-	$('li.node-updates-list-item.comments a.title').each(function(e){
-		$(this).eq(e).text($(this).eq(e).text().replace(/\*/g, ''));
+	$('li.node-updates-list-item.comments a.title').each(function(){
+		$(this).text($(this).text().replace(/\*/g, ''));
 	});
 | {% endblock %}
