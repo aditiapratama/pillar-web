@@ -415,4 +415,9 @@ script.
 		e.preventDefault;
 		$("html, body").animate({scrollTop: $('.pricing').offset().top }, 350);
 	})
+
+	/* cleanup mentions in comments  */
+	$('li.node-updates-list-item.comments a.title').each(function(e){
+		$(this).eq(e).text($(this).eq(e).text().replace(/\*/g, ''));
+	});
 | {% endblock %}
