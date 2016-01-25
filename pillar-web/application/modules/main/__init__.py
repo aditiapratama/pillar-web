@@ -1,5 +1,6 @@
 from pillarsdk import Node
 from pillarsdk import NodeType
+from pillarsdk import Project
 from pillarsdk.users import User
 from pillarsdk import File
 from pillarsdk.organizations import Organization
@@ -16,7 +17,6 @@ from werkzeug.contrib.atom import AtomFeed
 from application import app
 from application import SystemUtility
 from application import cache
-from application.modules.nodes import index
 from application.modules.nodes import view
 from application.modules.nodes.custom.posts import posts_view
 from application.modules.nodes.custom.posts import posts_create
@@ -32,14 +32,14 @@ def homepage():
 
     # Get latest blog posts
     api = SystemUtility.attract_api()
-    node_type_post = NodeType.find_one({
-        'where': '{"name" : "post"}',
-        'projection': '{"permissions": 1}'
-        }, api=api)
+    # node_type_post = NodeType.find_one({
+    #     'where': '{"name" : "post"}',
+    #     'projection': '{"permissions": 1}'
+    #     }, api=api)
     latest_posts = Node.all({
         'projection': '{"name":1, "project": 1, "user":1, "node_type":1, \
             "picture": 1, "properties.status": 1}',
-        'where': '{"node_type": "%s", "properties.status": "published"}' % (node_type_post._id),
+        'where': '{"node_type": "post", "properties.status": "published"}',
         'embedded': '{"user": 1, "project":1}',
         'sort': '-_created',
         'max_results': '3'
@@ -51,16 +51,12 @@ def homepage():
             post.picture = get_file(post.picture)
 
     # Get latest assets added to any project
-    node_type_asset = NodeType.find_one({
-        'where': '{"name" : "asset"}',
-        'projection': '{"permissions": 1}'
-        }, api=api)
     latest_assets = Node.all({
         'projection': '{"name":1, "project": 1, "user":1, "node_type":1, \
             "picture": 1, "properties.status": 1, "properties.content_type": 1, \
             "permissions.world": 1}',
-        'where': '{"node_type": "%s", "properties.status": "published"}' % (node_type_asset._id),
-        'embedded': '{"user":1}',
+        'where': '{"node_type": "asset", "properties.status": "published"}',
+        'embedded': '{"user":1, "project":1}',
         'sort': '-_created',
         'max_results': '12'
         }, api=api)
@@ -71,14 +67,10 @@ def homepage():
             asset.picture = get_file(asset.picture)
 
     # Get latest comments to any node
-    node_type_comment = NodeType.find_one({
-        'where': '{"name" : "comment"}',
-        'projection': '{"permissions": 1}'
-        }, api=api)
     latest_comments = Node.all({
         'projection': '{"project": 1, "parent": 1, "user": 1, \
             "properties.content": 1 ,"node_type": 1, "properties.status": 1}',
-        'where': '{"node_type": "%s", "properties.status": "published"}' % (node_type_comment._id),
+        'where': '{"node_type": "comment", "properties.status": "published"}',
         'embedded': '{"user": 1, "project": 1, "parent": 1}',
         'sort': '-_created',
         'max_results': '6'
@@ -164,9 +156,8 @@ def project_blog(project_url, url=None):
     """View project blog"""
     api = SystemUtility.attract_api()
     try:
-        project = Node.find_one({
-            'where': '{"properties.url" : "%s"}' % (project_url)}, api=api)
-        session['current_project_id'] = project._id
+        project = Project.find_one({
+            'where': '{"url" : "%s"}' % (project_url)}, api=api)
         return posts_view(project._id, url=url)
     except ResourceNotFound:
         return abort(404)
@@ -177,13 +168,8 @@ def get_projects(category):
     and improved with more extensive filtering capabilities.
     """
     api = SystemUtility.attract_api()
-    node_type = NodeType.find_one({
-        'where': '{"name" : "project"}',
-        'projection': '{"name": 1, "permissions": 1}'
-        }, api=api)
-    projects = Node.all({
-        'where': '{"node_type" : "%s", \
-            "properties.category": "%s"}' % (node_type._id, category),
+    projects = Project.all({
+        'where': '{"category": "%s"}' % category,
         'sort': '-_created'
         }, api=api)
     for project in projects._items:
@@ -196,7 +182,7 @@ def get_projects(category):
 def open_projects():
     projects = get_projects('film')
     return render_template(
-        'nodes/custom/project/index_collection.html',
+        'projects/index_collection.html',
         title='open-projects',
         projects=projects._items,
         api=SystemUtility.attract_api())
@@ -207,7 +193,7 @@ def open_projects():
 def training():
     projects = get_projects('training')
     return render_template(
-        'nodes/custom/project/index_collection.html',
+        'projects/index_collection.html',
         title='training',
         projects=projects._items,
         api=SystemUtility.attract_api())
@@ -258,12 +244,8 @@ def feeds_blogs():
                     feed_url=request.url, url=request.url_root)
     # Get latest blog posts
     api = SystemUtility.attract_api()
-    node_type_post = NodeType.find_one({
-        'where': '{"name" : "post"}',
-        'projection': '{"permissions": 1}'
-        }, api=api)
     latest_posts = Node.all({
-        'where': '{"node_type": "%s", "properties.status": "published"}' % (node_type_post._id),
+        'where': '{"node_type": "post", "properties.status": "published"}',
         'embedded': '{"user": 1, "project":1}',
         'sort': '-_created',
         'max_results': '15'

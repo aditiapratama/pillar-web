@@ -18,18 +18,19 @@ def groups_create():
     parent_id = request.form.get('parent_id')
 
     api = SystemUtility.attract_api()
-    node_type = NodeType.find_first({
-        'where': '{"name" : "group"}',
-        }, api=api)
     # We will create the Node object later on, after creating the file object
     node_asset_props = dict(
         name=name,
         user=current_user.objectid,
-        node_type=node_type._id,
+        node_type='group',
         project=project_id,
-        parent=parent_id,
         properties=dict(
             status='published'))
+    # Add parent_id only if provided (we do not provide it when creating groups
+    # at the Project root)
+    if parent_id:
+        node_asset_props['parent'] = parent_id
+    print parent_id
 
     node_asset = Node(node_asset_props)
     node_asset.create(api=api)

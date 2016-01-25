@@ -1,5 +1,5 @@
 from pillarsdk import Node
-from pillarsdk import NodeType
+from pillarsdk import Project
 from pillarsdk import File
 from pillarsdk.exceptions import ResourceNotFound
 from flask import abort
@@ -13,24 +13,20 @@ from application import SystemUtility
 from application.helpers import attach_project_pictures
 from application.helpers import get_file
 from application.modules.nodes import nodes
-from application.modules.nodes import project_update_nodes_list
 from application.modules.nodes.forms import get_node_form
 from application.modules.nodes.forms import process_node_form
+from application.modules.projects import project_update_nodes_list
 
 def posts_view(project_id, url=None):
     """View individual blogpost"""
     api = SystemUtility.attract_api()
     # Fetch project (for backgroud images and links generation)
-    project = Node.find(project_id, api=api)
+    project = Project.find(project_id, api=api)
     attach_project_pictures(project, api)
 
-    node_type = NodeType.find_one({
-        'where': '{"name" : "blog"}',
-        'projection': '{"name": 1, "permissions":1}'
-        }, api=api)
     blog = Node.find_one({
-        'where': '{"node_type" : "%s", \
-            "parent": "%s"}' % (node_type._id, project_id),
+        'where': '{"node_type" : "blog", \
+            "project": "%s"}' % (project_id),
         }, api=api)
     if url:
         try:
@@ -59,11 +55,8 @@ def posts_view(project_id, url=None):
             project=project,
             api=api)
     else:
-        # Render all posts
-        node_type_post = NodeType.find_one({
-            'where': '{"name": "post"}',
-            'projection': '{"permissions":1}'
-            }, api=api)
+        node_type_post = project.get_node_type('post')
+        print node_type_post
 
         status_query = "" if blog.has_method('PUT') else ', "properties.status": "published"'
         posts = Node.all({
@@ -83,7 +76,10 @@ def posts_view(project_id, url=None):
 @login_required
 def posts_create(project_id):
     api = SystemUtility.attract_api()
-    project = Node.find(project_id, api=api)
+    try:
+        project = Node.find(project_id, api=api)
+    except ResourceNotFound:
+        return abort(404)
     attach_project_pictures(project, api)
 
     node_type = NodeType.find_one({
@@ -133,7 +129,7 @@ def posts_edit(post_id):
 
     try:
         post = Node.find(post_id, {
-            'embedded': '{"node_type": 1, "user": 1}'}, api=api)
+            'embedded': '{"user": 1}'}, api=api)
         if post.picture:
             post.picture = File.find(post.picture, api=api)
         node_type = post.node_type
@@ -143,9 +139,10 @@ def posts_edit(post_id):
     if not post.has_method('PUT'):
         return abort(403)
 
-    project = Node.find(post.project, api=api)
+    project = Project.find(post.project, api=api)
     attach_project_pictures(project, api)
 
+    node_type = project.get_node_type(post.node_type)
     form = get_node_form(node_type)
     if form.validate_on_submit():
         if process_node_form(form, node_id=post_id, node_type=node_type,

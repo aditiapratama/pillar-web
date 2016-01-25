@@ -45,12 +45,6 @@
 
 		.form-group(class="{{field.name}}")
 			| {{ field.label }}
-			| {% if field.name == 'picture' %}
-			| {% if node.picture %}
-			img.node-preview-thumbnail(src="{{ node.picture.thumbnail('m', api=api) }}")
-			a(href="#", id="file_delete", data-file_id="{{node.picture._id}}") Delete
-			| {% endif %}
-			| {% endif %}
 			| {{ field(class='form-control') }}
 
 		| {% endif %}
@@ -248,7 +242,6 @@ script(type="text/javascript").
 
 			/* Load content*/
 			$('#project_context').html(dataHtml);
-
 			statusBarSet('success', 'Saved Successfully');
 
 			/* Style button */
@@ -263,18 +256,14 @@ script(type="text/javascript").
 	});
 
 	$('#item_save').click(function(e){
-
 		$("#node-edit-form").submit();
-
 		$('#project_tree').jstree("refresh");
 		// XXX only refresh individual node
 		//- $('#project_tree').jstree().refresh_node($('#n_{{node._id}}'));
 	});
 
 	$('#item_cancel').click(function(e){
-
 		displayNode('{{node._id}}');
-
 		$('.project-mode-view').show();
 		$('.project-mode-edit').hide();
 	});

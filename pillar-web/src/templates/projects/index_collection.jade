@@ -60,36 +60,36 @@ meta(name="twitter:image", content="{% if title == 'open-projects' %}{{ url_for(
 			.node_index-collection
 
 				| {% for project in projects %}
-				| {% if (project.properties.status == 'published') or (project.properties.status == 'pending' and current_user.is_authenticated() and current_user.has_role('admin'))%}
+				| {% if (project.status == 'published') or (project.status == 'pending' and current_user.is_authenticated() and current_user.has_role('admin'))%}
 				.node_index-collection-card-container
 					.node_index-collection-card
 						a.item-header(
-							href="{{ url_for('project_view', project_url=project.properties.url) }}")
+							href="{{ url_for('projects.view', project_url=project.url) }}")
 
 							.overlay
-							| {% if project.properties.picture_header %}
-							img.background(src="{{ project.properties.picture_header.thumbnail('m', api=api) }}")
+							| {% if project.picture_header %}
+							img.background(src="{{ project.picture_header.thumbnail('m', api=api) }}")
 							| {% endif %}
 
 						a.card-thumbnail(
-							href="{{ url_for('project_view', project_url=project.properties.url) }}")
-							| {% if project.properties.picture_header %}
-							img.thumb(src="{{ project.properties.picture_square.thumbnail('m', api=api) }}")
+							href="{{ url_for('projects.view', project_url=project.url) }}")
+							| {% if project.picture_header %}
+							img.thumb(src="{{ project.picture_square.thumbnail('m', api=api) }}")
 							| {% endif %}
 
 						.item-info
 
 							a.item-title(
-								href="{{ url_for('project_view', project_url=project.properties.url) }}")
+								href="{{ url_for('projects.view', project_url=project.url) }}")
 								| {{project.name}}
-								| {% if project.properties.status == 'pending' and current_user.is_authenticated() and current_user.has_role('admin') %}
+								| {% if project.status == 'pending' and current_user.is_authenticated() and current_user.has_role('admin') %}
 								small (pending)
 								| {% endif %}
 
 
-							| {% if project.properties.summary %}
+							| {% if project.summary %}
 							p.item-description
-								| {{project.properties.summary|safe}}
+								| {{project.summary|safe}}
 							| {% endif %}
 				| {% endif %}
 				| {% endfor %}

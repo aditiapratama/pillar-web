@@ -1,24 +1,24 @@
 | {% extends 'layout.html' %}
 
-| {% block page_title %}{{node.name}}{% endblock%}
+| {% block page_title %}{{project.name}}{% endblock%}
 
 | {% block og %}
-meta(property="og:title", content="{{node.name}}")
+meta(property="og:title", content="{{project.name}}")
 // XXX - Replace with actual url
 meta(property="og:url", content="https://cloud.blender.org")
 meta(property="og:type", content="website")
-| {% if node.properties.picture_header %}
-meta(property="og:image", content="{{ node.properties.picture_header.thumbnail('l', api=api) }}")
+| {% if project.picture_header %}
+meta(property="og:image", content="{{ project.picture_header.thumbnail('l', api=api) }}")
 | {% endif %}
 | {% endblock %}
 
 | {% block tw %}
 meta(name="twitter:card", content="summary_large_image")
 meta(name="twitter:site", content="@Blender_Cloud")
-meta(name="twitter:title", content="{{node.name}} on Blender Cloud")
-meta(name="twitter:description", content="{{node.properties.summary}}")
-| {% if node.properties.picture_header %}
-meta(name="twitter:image", content="{{ node.properties.picture_header.thumbnail('l', api=api) }}")
+meta(name="twitter:title", content="{{project.name}} on Blender Cloud")
+meta(name="twitter:description", content="{{project.summary}}")
+| {% if project.picture_header %}
+meta(name="twitter:image", content="{{ project.picture_header.thumbnail('l', api=api) }}")
 | {% endif %}
 | {% endblock %}
 
@@ -27,15 +27,15 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 | {% endblock %}
 
 | {% block header_backdrop %}
-| {% if node.properties.picture_header %}
-.navbar-backdrop(style="background-image: url({{ node.properties.picture_header.thumbnail('l', api=api) }})")
+| {% if project.picture_header %}
+.navbar-backdrop(style="background-image: url({{ project.picture_header.thumbnail('l', api=api) }})")
 | {% endif %}
 .navbar-backdrop-overlay
 | {% endblock %}
 
 | {% block body %}
 
-#project_container(data-project_id="{{node._id}}")
+#project_container(data-project_id="{{project._id}}", data-is_project="", data-node_id="")
 
 	#project-flex
 
@@ -44,7 +44,7 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 				ul.breadcrumb
 
 					li.project-title
-						a(href="") {{ node.name }}
+						a(href="") {{ project.name }}
 
 				#project-loading
 					i.pi-spin
@@ -61,11 +61,11 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 
 		.project_split(title="Toggle Navigation [T]")
 
-		| {% if node.has_method('PUT') %}
+		| {% if project.has_method('PUT') %}
 		#project-header.context
 			ul.breadcrumb.context
 				li.project-title
-					a(href="") {{ node.name }}
+					a(href="") {{ project.name }}
 
 			span#project-statusbar
 
@@ -88,7 +88,7 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 					a#item_edit.project-mode-view(
 						href="#",
 						title="Edit asset",
-						data-project_id="{{node._id}}")
+						data-project_id="{{project._id}}")
 						i.button-edit-icon.pi-edit
 						| Edit
 
@@ -186,7 +186,7 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 script(src="//cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js")
 script(src="//releases.flowplayer.org/6.0.3/flowplayer.min.js", async)
 
-| {% if node.has_method('PUT') %}
+| {% if project.has_method('PUT') %}
 | {# JS containing the Edit, Add, Featured, and Move functions #}
 script(type="text/javascript", src="{{ url_for('static', filename='assets/js/project-edit.min.js') }}")
 | {% endif %}
@@ -197,15 +197,14 @@ script.
 	Ps.initialize(document.getElementById('project_context-container'), {suppressScrollX: true});
 	Ps.initialize(document.getElementById('project_tree'), {suppressScrollX: true});
 
-	var urlNodeMove = "{{url_for('nodes.projects_move_node')}}";
-	var urlNodeFeature = "{{url_for('nodes.projects_add_featured_node')}}";
-	var urlNodeDelete = "{{url_for('nodes.projects_delete_node')}}";
-	var urlNodeTogglePublic = "{{url_for('nodes.projects_toggle_node_public')}}";
+	var urlNodeMove = "{{url_for('projects.move_node')}}";
+	var urlNodeFeature = "{{url_for('projects.add_featured_node')}}";
+	var urlNodeDelete = "{{url_for('projects.delete_node')}}";
+	var urlNodeTogglePublic = "{{url_for('projects.toggle_node_public')}}";
 
 	function loadNodeContent(url, nodeId) {
 
 		$.get(url, function(dataHtml) {
-
 			$("#node-edit-form").unbind( "submit" );
 			$("#item_save").unbind( "click" );
 			$("#item_cancel").unbind( "click" );
@@ -223,10 +222,28 @@ script.
 			if (typeof(nodeId) != 'undefined') {
 				window.location.replace('#' + nodeId);
 			};
-			// This cookies is accessed anytime we need to know the context of our
-			// actions, usueally together with the project_id
-			Cookies.set('bcloud_current_node_id', nodeId);
+		})
+		.fail(function(dataResponse) {
+			$('#project_context').html($('<iframe id="server_error"/>'));
+			$('#server_error').attr('src', url);
+		});
+	}
 
+	function loadProjectContent(url) {
+		$.get(url, function(dataHtml) {
+
+			$("#node-edit-form").unbind( "submit" );
+			$("#item_save").unbind( "click" );
+			$("#item_cancel").unbind( "click" );
+
+			// Prevent flicker by scrolling to top before showing anything
+			$("#project_context-container").scrollTop(0);
+
+			// Update the DOM injecting the generated HTML into the page
+			$('#project_context').html(dataHtml);
+
+			// Update scrollbars
+			Ps.update(document.getElementById('project_context-container'));
 		})
 		.fail(function(dataResponse) {
 			$('#project_context').html($('<iframe id="server_error"/>'));
@@ -246,49 +263,49 @@ script.
 		if (nodeId.substring(0, 2) == 'n_') {
 			nodeId = nodeId.substr(2);
 		}
-		//- var currentNodeId = location.hash.substring(1);
-		//- var currentNodeId = Cookies.get('bcloud_current_node_id');
-
-		//- if (currentNodeId != nodeId) {
-		//- 	var url = '/nodes/' + nodeId + '/view?embed=1'
-		//- 	loadNodeContent(url, nodeId);
-
-		//- 	$('.project-mode-view').show();
-		//- 	$('.project-mode-edit').hide();
-		//- }
 		var url = '/nodes/' + nodeId + '/view?embed=1'
 		loadNodeContent(url, nodeId);
-
 		$('.project-mode-view').show();
 		$('.project-mode-edit').hide();
 	}
 
 
+	function displayProject(projectUrl) {
+		var url = "{{url_for('projects.view', project_url=project.url, embed=1)}}"
+		loadProjectContent(url, projectUrl);
+		$('.project-mode-view').show();
+		$('.project-mode-edit').hide();
+	}
+
 	/* Loaded once, on page load */
 	function loadContent() {
+
 		// If the loaded URL has an asset id hashed, arrange the view accordingly
 		var nodeId = undefined;
 		{% if embedded_node_id %}
 			nodeId = '{{embedded_node_id}}';
 			window.history.pushState({},'', '{{rewrite_url}}');
+			displayNode(nodeId);
 		{% else %}
-		if (location.hash) {
-			nodeId = location.hash.substring(1);
-		} else {
-			nodeId = '{{node._id}}';
-		}
+			if (location.hash) {
+				nodeId = location.hash.substring(1);
+				displayNode(nodeId);
+			} else {
+				nodeId = '{{project._id}}';
+				displayProject(nodeId);
+			}
 		{% endif %}
 
-		Cookies.set('bcloud_current_project_id', '{{node._id}}');
 
-		displayNode(nodeId);
+
+
 		Ps.initialize(document.getElementById('project_context-container'));
 
 		$('#project_tree').jstree({
 				'core': {
 						'data': function (obj, callback) {
 								if(obj.id === '#') { //tree root
-										$.getJSON('/nodes/' + nodeId + '/view?format=jstree', function(jsonObject) {
+										$.getJSON("{{url_for('projects.view', project_url=project.url, format='jstree')}}", function(jsonObject) {
 												callback.call(this, jsonObject['items']);
 										});
 

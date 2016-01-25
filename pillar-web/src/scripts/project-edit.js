@@ -1,5 +1,3 @@
-
-
 /* Edit Node */
 function editNode(nodeId) {
 
@@ -52,20 +50,15 @@ function addNode() {
 	});
 }
 
+
 /* Add Group */
 function addGroup(parentId) {
-	var url = '/nodes/groups/create'
-	$.post(url, {
-		name: "New Folder",
-		parent_id: parentId})
+	var url = '/nodes/groups/create';
+	var group = {name: "New Folder"};
+	if (typeof(parentId) != 'undefined') {group.parent_id = parentId};
+	$.post(url, group)
 		.done(function(data) {
-			if (parentId) {
-				// We are in embedded mode and try to call the editNode function
-				editNode(data.data.asset_id);
-			} else {
-				window.location.replace("/nodes/" + data.data.asset_id + "/edit");
-			}
-			//alert( "Data Loaded: " + data.message );
+			editNode(data.data.asset_id);
 	})
 	.always(function(){
 		$('.button-add-group-icon').addClass('pi-collection-plus').removeClass('pi-spin spinner');
@@ -78,8 +71,13 @@ $('#item_edit').click(function(e){
 	$('.button-edit-icon').addClass('pi-spin spinner').removeClass('pi-edit');
 	// When clicking on the edit icon, embed the edit
 	e.preventDefault;
-	node_id = document.getElementById("item_edit");
-	editNode(node_id.getAttribute('data-node_id'));
+	var projectContainer = document.getElementById('project_container');
+	if (projectContainer.getAttribute('data-is_project') === 'True') {
+		url = window.location.href + 'edit';
+		window.location.replace(url);
+	} else {
+		editNode(projectContainer.getAttribute('data-node_id'));
+	}
 });
 
 
@@ -95,12 +93,18 @@ $('#item_add').click(function(e){
 $('#item_add_group').click(function(e){
 	$('.button-add-group-icon').addClass('pi-spin spinner').removeClass('pi-collection-plus');
 	e.preventDefault;
-	parentNodeId = Cookies.get('bcloud_current_node_id');
-	addGroup(parentNodeId);
+	var projectContainer = document.getElementById('project_container');
+	if (projectContainer.getAttribute('data-is_project') === 'True') {
+		addGroup();
+	} else {
+		parentNodeId = projectContainer.getAttribute('data-parent_node_id');
+		addGroup(parentNodeId);
+	}
+
 });
 
 /* Move Node */
-moving_node_id = Cookies.get('bcloud_moving_node_id');
+var movingNodeId = Cookies.get('bcloud_moving_node_id');
 
 function moveModeEnter() {
 	$('#overlay-mode-move-container').addClass('visible');
@@ -109,16 +113,18 @@ function moveModeEnter() {
 
 function moveModeExit() {
 	/* Remove cookie, display current node, remove UI */
-	var current_node = document.getElementById("item_edit");
-	displayNode(current_node.getAttribute('data-node_id'));
-
+	var projectContainer = document.getElementById('project_container');
+	if (projectContainer.getAttribute('data-is_project') === 'True') {
+		displayProject(projectContainer.getAttribute('data-project_id'));
+	} else {
+		displayNode(projectContainer.getAttribute('data-node_id'));
+	}
 	$('#overlay-mode-move-container').removeClass('visible');
 	$('.button-move').removeClass('disabled');
-
 	Cookies.remove('bcloud_moving_node_id');
 };
 
-if (moving_node_id) {
+if (movingNodeId) {
 	moveModeEnter();
 } else {
 	$('#overlay-mode-move-container').removeClass('visible');
@@ -127,30 +133,29 @@ if (moving_node_id) {
 
 $('#item_move').click(function(e){
 	e.preventDefault;
-
 	moveModeEnter();
-
-	node_id = document.getElementById("item_edit");
-	moving_node_id = Cookies.get('bcloud_moving_node_id');
-
-	Cookies.set('bcloud_moving_node_id', node_id.getAttribute('data-node_id'));
+	var projectContainer = document.getElementById('project_container');
+	// Set the nodeId in the cookie
+	Cookies.set('bcloud_moving_node_id', projectContainer.getAttribute('data-node_id'));
 });
 
 $("#item_move_accept").click(function(e) {
-
 	e.preventDefault();
+	var movingNodeId = Cookies.get('bcloud_moving_node_id');
+	var projectContainer = document.getElementById('project_container');
+	var moveNodeParams = {node_id: movingNodeId};
+	// If we are not at the root of the project, add the parent node id to the
+	// request params
+	if (projectContainer.getAttribute('data-is_project') != 'True') {
+		moveNodeParams.dest_parent_node_id = projectContainer.getAttribute('data-node_id')
+	}
 
-	var current_node = document.getElementById("item_edit");
-	var moving_node_id = Cookies.get('bcloud_moving_node_id');
-
-	$.post(urlNodeMove, {
-		node_id: moving_node_id, dest_parent_node_id: current_node.getAttribute('data-node_id')},
+	$.post(urlNodeMove, moveNodeParams,
 		function(data){
 	}).done(function() {
 		statusBarSet('success', 'Moved just fine');
 		Cookies.remove('bcloud_moving_node_id');
 		moveModeExit();
-
 		$('#project_tree').jstree("refresh");
 	});
 });
@@ -164,10 +169,9 @@ $("#item_move_cancel").click(function(e) {
 /* Featured Toggle */
 $('#item_featured').click(function(e){
 	e.preventDefault;
-	var current_node = document.getElementById("item_edit");
-	var current_node_id = current_node.getAttribute('data-node_id');
-
-	$.post(urlNodeFeature, {node_id : current_node_id},
+	var projectContainer = document.getElementById('project_container');
+	var currentNodeId = projectContainer.getAttribute('data-node_id');
+	$.post(urlNodeFeature, {node_id : currentNodeId},
 		function(data){
 		// Feedback logic
 	})
@@ -182,17 +186,23 @@ $('#item_featured').click(function(e){
 /* Delete */
 $('#item_delete').click(function(e){
 	e.preventDefault;
-	var current_node = document.getElementById("item_edit");
-	var current_node_id = current_node.getAttribute('data-node_id');
-	var parentNodeId = Cookies.get('bcloud_parent_node_id');
+	var projectContainer = document.getElementById('project_container');
+	var currentNodeId = projectContainer.getAttribute('data-node_id');
+	var parentNodeId = projectContainer.getAttribute('data-parent_node_id');
+	var projectId = projectContainer.getAttribute('data-project_id');
 
-	$.post(urlNodeDelete, {node_id : current_node_id},
+	$.post(urlNodeDelete, {node_id : currentNodeId},
 		function(data){
 		// Feedback logic
 	})
 	.done(function(){
 		statusBarSet('success', 'Node deleted', 'pi-trash');
-		displayNode(parentNodeId);
+		if (parentNodeId != '') {
+			displayNode(parentNodeId);
+		} else {
+			// Display the project when the group is at the root of the tree
+			displayProject(projectId);
+		}
 	});
 });
 
@@ -200,16 +210,15 @@ $('#item_delete').click(function(e){
 /* Toggle public */
 $('#item_toggle_public').click(function(e){
 	e.preventDefault;
-	var current_node = document.getElementById("item_edit");
-	var current_node_id = current_node.getAttribute('data-node_id');
-	var parentNodeId = Cookies.get('bcloud_parent_node_id');
-
-	$.post(urlNodeTogglePublic, {node_id : current_node_id},
+	var projectContainer = document.getElementById('project_container');
+	var currentNodeId = projectContainer.getAttribute('data-node_id');
+	$.post(urlNodeTogglePublic, {node_id : currentNodeId},
 		function(data){
+		// Feedback logic
 	})
 	.done(function(data){
 		statusBarSet('success', data.data.message);
-		displayNode(current_node_id);
+		displayNode(currentNodeId);
 	});
 });
 

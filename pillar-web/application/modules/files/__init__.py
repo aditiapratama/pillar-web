@@ -22,10 +22,7 @@ from werkzeug import secure_filename
 #from application.controllers.admin import *
 
 import os
-# from pillarsdk import Node
 from pillarsdk import File
-# from pillarsdk import NodeType
-
 from flask import jsonify
 from flask import Blueprint
 from flask import request

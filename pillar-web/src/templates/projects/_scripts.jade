@@ -1,0 +1,64 @@
+script(type="text/javascript").
+
+	/* Convert Markdown */
+	var convert = new Markdown.getSanitizingConverter().makeHtml;
+	var convert_fields = '.node-details-description, .blog_index-item .item-content';
+
+	/* Parse description/content fields to convert markdown */
+	$(convert_fields).each(function(i){
+		$(convert_fields).eq(i).html(convert($(convert_fields).eq(i).text()));
+	});
+
+	var projectContainer = document.getElementById("project_container");
+	projectContainer.setAttribute('data-is_project', 'True');
+	projectContainer.setAttribute('data-node_id', '');
+	projectContainer.setAttribute('data-parent_node_id', '');
+	{% if project.has_method('PUT') %}
+		//- console.log('puto');
+	{% endif %}
+
+	var movingNodeId = Cookies.get('bcloud_moving_node_id');
+
+	if (movingNodeId){
+		$('#item_move_accept').removeClass('disabled');
+		$('#item_move_accept').html('<i class="pi-check"></i> Move to Root');
+	};
+
+
+
+	//- {% if node %}
+	//- 	console.log('never');
+	//- 	var url = "{{url_for('nodes.comments_index')}}?parent_id={{node._id}}"
+	//- 	$.get(url, function(dataHtml) {
+	//- 		// Update the DOM injecting the generate HTML into the page
+	//- 		$('#comments-container').replaceWith(dataHtml);
+	//- 	})
+
+	//- 	{% if node.has_method('PUT') %}
+	//- 		$('#item_edit').attr('data-node_id', '{{node._id}}');
+	//- 		$('#project_container').data('node_id', '{{node._id}}');
+	//- 		{% if node.node_type != 'post' %}
+	//- 		// We might get rid of this soon, in favor of using cookies, in the next line
+	//- 		//- $('#item_add').attr('data-parent_node_id', '{{parent._id}}');
+	//- 		$('#project_container').data('parent_node_id', '{{parent._id}}');
+	//- 		{% endif %}
+	//- 		$('.project-mode-view').fadeIn(100);
+	//- 	{% else %}
+	//- 		$('.project-mode-view').hide();
+	//- 	{% endif %}
+
+	//- 	$(function (){
+	//- 		var node_id = document.getElementById("item_edit");
+	//- 		var moving_node_id = Cookies.get('bcloud_moving_node_id');
+
+	//- 		if (moving_node_id){
+	//- 			if (node_id.getAttribute('data-project_id') == node_id.getAttribute('data-node_id')) {
+	//- 				$('#item_move_accept').removeClass('disabled');
+	//- 				$('#item_move_accept').html('<i class="pi-check"></i> Move to Root');
+	//- 			};
+	//- 		};
+	//- 	});
+
+	//- {% endif %}
+
+
