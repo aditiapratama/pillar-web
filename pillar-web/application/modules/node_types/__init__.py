@@ -5,7 +5,6 @@ from flask import url_for
 from flask.ext.login import login_required
 from pillarsdk import NodeType
 from application import SystemUtility
-from application.modules.nodes.forms import NodeTypeForm
 
 # Name of the Blueprint
 node_types = Blueprint('node_types', __name__)

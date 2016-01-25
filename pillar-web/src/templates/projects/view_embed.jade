@@ -2,29 +2,29 @@
 
 #node-container
 	section.node-preview.project
-		| {% if node.properties.picture_header %}
-		img.header(src="{{ node.properties.picture_header.thumbnail('l', api=api) }}")
+		| {% if project.picture_header %}
+		img.header(src="{{ project.picture_header.thumbnail('l', api=api) }}")
 		| {% endif %}
 
 	section.node-details-container.project
 
 		.node-details-header
 			.node-title-details
-				.date(title="Last updated {{ node._updated | pretty_date }}") {{ node._created | pretty_date }}
+				.date(title="Last updated {{ project._updated | pretty_date }}") {{ project._created | pretty_date }}
 
-				| {% if node.properties.status %}
-				.status {{node.properties.status}}
+				| {% if project.status %}
+				.status {{project.status}}
 				| {% endif %}
 
 		.node-details-description
-			| {{node.description}}
+			| {{project.description}}
 
 		.node-extra
-			| {% if node.properties.nodes_blog %}
+			| {% if project.nodes_blog %}
 			.node-blog
 				ul.node-blog-list
 					h3 Blog
-					| {% for n in node.properties.nodes_blog %}
+					| {% for n in project.nodes_blog %}
 					li.node-blog-list-item
 						.info
 							a.title(href="{{ url_for('nodes.view', node_id=n._id, redir=1) }}", data-node_id="{{ n._id }}") {{ n.name }}
@@ -35,12 +35,12 @@
 			| {% endif %}
 
 
-			| {% if node.properties.nodes_latest %}
+			| {% if project.nodes_latest %}
 			.node-updates
 				ul.node-updates-list
 					h3 Updated Assets
-					| {% for n in node.properties.nodes_latest %}
-					| {% if n.node_type.name not in ['comment'] %}
+					| {% for n in project.nodes_latest %}
+					| {% if n.node_type not in ['comment'] %}
 					li.node-updates-list-item
 						.info
 							a.title(href="#", data-node_id="{{ n._id }}") {{ n.name }}
@@ -54,9 +54,9 @@
 			.node-featured
 				h3 Featured Assets
 				ul.node-featured-list
-					| {% if node.properties.nodes_featured %}
+					| {% if project.nodes_featured %}
 
-					| {% for n in node.properties.nodes_featured %}
+					| {% for n in project.nodes_featured %}
 					li.node-featured-list-item
 						| {% if n.picture %}
 						a.image(href="#", data-node_id="{{ n._id }}")
@@ -79,7 +79,7 @@
 
 					| {% endif %}
 
-include ../_scripts
+include _scripts
 
 script().
 	$(".node-updates-list-item a.title, .node-featured-list-item a.title, .node-featured-list-item a.image").unbind('click');

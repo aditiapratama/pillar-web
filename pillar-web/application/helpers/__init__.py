@@ -84,14 +84,14 @@ def attach_project_pictures(project, api):
     properties, this is the reason why this exists.
     This function should be moved in the API, attached to a new Project object.
     """
-    if project.properties.picture_square:
+    if project.picture_square:
         # Collect the picture square file object
-        project.properties.picture_square = get_file(
-            project.properties.picture_square)
-    if project.properties.picture_header:
+        project.picture_square = get_file(
+            project.picture_square)
+    if project.picture_header:
         # Collect the picture header file object
-        project.properties.picture_header = get_file(
-            project.properties.picture_header)
+        project.picture_header = get_file(
+            project.picture_header)
 
 
 def gravatar(email, size=64, consider_settings=True):

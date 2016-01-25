@@ -177,7 +177,7 @@ from application.modules.organizations import organizations
 from application.modules.nodes.custom import shots
 from application.modules.nodes.custom import tasks
 from application.modules.nodes.custom import comments
-from application.modules.nodes.custom import projects
+from application.modules.projects import projects
 from helpers import gravatar
 from helpers import pretty_date
 
@@ -195,6 +195,7 @@ app.register_blueprint(users)
 app.register_blueprint(stats, url_prefix='/stats')
 app.register_blueprint(files, url_prefix='/files')
 app.register_blueprint(organizations, url_prefix='/organizations')
+app.register_blueprint(projects, url_prefix='/p')
 
 
 @app.errorhandler(UnauthorizedAccess)

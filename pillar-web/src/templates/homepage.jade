@@ -83,7 +83,7 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 							a.title(href="{{ url_for('nodes.view', node_id=n._id, redir=1) }}") {{ n.name }}
 							span.details
 								span.where
-									a(href="{{ url_for('project_view', project_url=n.project.properties.url) }}") {{ n.project.name }}
+									a(href="{{ url_for('projects.view', project_url=n.project.url) }}") {{ n.project.name }}
 								span.when(title="Updated {{ n._updated | pretty_date }}")  · by {{ n.user.full_name }} · {{ n._created | pretty_date }}
 					| {% endfor %}
 
@@ -112,7 +112,8 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 									|  ·
 									a.parent(href="{{ url_for('nodes.view', node_id=n.parent._id, redir=1) }}") {{ n.parent.name }}
 									| ·
-									a.project(href="{{ url_for('project_view', project_url=n.project.properties.url) }}") {{ n.project.name }}
+									a.project(href="{{ url_for('projects.view', project_url=n.project.url) }}") {{ n.project.name }}
+
 					| {% endfor %}
 
 					| {% else %}

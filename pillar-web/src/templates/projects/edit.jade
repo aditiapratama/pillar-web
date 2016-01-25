@@ -1,12 +1,10 @@
 | {% extends 'layout.html' %}
 
-| {% block page_title %}New {{ node_type.name }}{% endblock %}
+| {% block page_title %}Project {{ project.name }}{% endblock %}
 
 | {% block header_backdrop %}
-| {% if project and project.picture_header %}
+| {% if project.picture_header %}
 .navbar-backdrop(style="background-image: url({{ project.picture_header.thumbnail('m', api=api) }})")
-| {% elif node and node.picture %}
-.navbar-backdrop(style="background-image: url({{ node.picture.thumbnail('m', api=api) }})")
 | {% else %}
 .navbar-backdrop
 | {% endif %}
@@ -18,7 +16,7 @@
 .container.box
 	form(
 		method='POST',
-		action="{{url_for('nodes.posts_edit', post_id=post._id)}}")
+		action="{{url_for('projects.edit', project_url=project.url)}}")
 
 		#blog_container.post-create
 
@@ -35,53 +33,32 @@
 			| 		{% endwith %}
 
 			#blog_index-sidebar
-				| {% if project._id != config.MAIN_PROJECT_ID %}
-				.blog_project-card
-					a.item-header(
-						href="{{ url_for('projects.view', project_url=project.url) }}")
-
-						.overlay
-						| {% if project.picture_header %}
-						img.background(src="{{ project.picture_header.thumbnail('m', api=api) }}")
-						| {% endif %}
-
-					a.card-thumbnail(
-						href="{{ url_for('projects.view', project_url=project.url) }}")
-						| {% if project.picture_square %}
-						img.thumb(src="{{ project.picture_square.thumbnail('m', api=api) }}")
-						| {% endif %}
-
-					.item-info
-
-						a.item-title(
-							href="{{ url_for('projects.view', project_url=project.url) }}")
-							| {{ project.name }}
-
-				| {% endif %}
-
 				.blog_project-sidebar
 					#blog_post-edit-form
 						| {% for field in form %}
-						| {% if field.name in ['picture', 'status'] %}
+						| {% if field.name in sidebar_selection %}
 
 						.form-group(class="{{field.name}}")
 							| {{ field.label }}
+							| {% if field.name == 'picture' %}
+							| {% if post.picture %}
+							img.node-preview-thumbnail(src="{{ post.picture.thumbnail('m', api=api) }}")
+							a(href="#", class="file_delete", data-field-name="picture", data-file_id="{{post.picture._id}}") Delete
+							| {% endif %}
+							| {% endif %}
 							| {{ field(class='form-control') }}
 
 						| {% endif %}
 						| {% endfor %}
 
-					input.btn.btn-default.button-create(type='submit', value='Update {{ node_type.name }}')
+					input.btn.btn-default.button-create(type='submit', value='Update {{ project.name }}')
 
-					a.btn.btn-default.button-back(href="{{ url_for('nodes.view', node_id=post._id, redir=1) }}")
-						| Back to Post
-
-					a.btn.btn-default.button-back(href="{{ url_for('projects.view', project_url=project.url) }}blog")
-						| Back to Blog
+					a.btn.btn-default.button-back(href="{{ url_for('projects.view', project_url=project.url) }}")
+						| Back to Project
 
 			#blog_post-edit-container
 				#blog_post-edit-title
-					| Edit {{ node_type.name }}
+					| Edit {{ project.name }}
 
 				#blog_post-edit-form
 					| {% for field in form %}
@@ -92,7 +69,7 @@
 					| {{ field }}
 					| {% else %}
 
-					| {% if field.name not in ['description', 'picture', 'category', 'status'] %}
+					| {% if field.name not in sidebar_selection %}
 
 					.form-group(class="{{field.name}}")
 						| {{ field.label }}

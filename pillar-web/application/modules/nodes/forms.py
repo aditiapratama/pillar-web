@@ -1,4 +1,6 @@
 import json
+from datetime import datetime
+from datetime import date
 import pillarsdk
 from pillarsdk import Node
 from flask import url_for
@@ -22,128 +24,29 @@ from wtforms.widgets import HiddenInput
 from wtforms.widgets import HTMLString
 from wtforms.widgets import Select
 from wtforms.widgets import TextInput
-from datetime import datetime
-from datetime import date
-
 from application import SystemUtility
-
-
-RFC1123_DATE_FORMAT = '%a, %d %b %Y %H:%M:%S GMT'
-
-
-class CustomFieldForm(BasicForm):
-    id = HiddenField()
-    field_type = TextField('Field Type', validators=[DataRequired()])
-    name = TextField('Name', validators=[DataRequired()])
-    name_url = TextField('Url', validators=[DataRequired()])
-    description = TextAreaField('Description')
-    parent = TextField('Parent')
-    is_required = BooleanField('Is extended')
-    def __init__(self, csrf_enabled=False, *args, **kwargs):
-        super(CustomFieldForm, self).__init__(csrf_enabled=False, *args, **kwargs)
-
-
-class CustomFields():
-    id = 1
-    node_id = 2
-    custom_field_id = 3
-    custom_field = 4
-    calue = "Value"
-
-
-class ModelFieldList(FieldList):
-    def __init__(self, *args, **kwargs):
-        self.model = kwargs.pop("model", None)
-        super(ModelFieldList, self).__init__(*args, **kwargs)
-        if not self.model:
-            raise ValueError("ModelFieldList requires model to be set")
-
-    def populate_obj(self, obj, name):
-        """while len(getattr(obj, name)) < len(self.entries):
-            newModel = self.model()
-            # db.session.add(newModel)
-            getattr(obj, name).append(newModel)
-        while len(getattr(obj, name)) > len(self.entries):
-            # db.session.delete(getattr(obj, name).pop())
-            pass"""
-        testModel = CustomFields()
-        getattr(obj, name).append(testModel)
-        super(ModelFieldList, self).populate_obj(obj, name)
-
-
-class ChildInline(Form):
-    title = TextField('Title',)
-
-
-class NodeTypeForm(Form):
-    name = TextField('Name', validators=[DataRequired()])
-    url = TextField('Url', validators=[DataRequired()])
-    description = TextAreaField('Description', validators=[DataRequired()])
-    is_extended = BooleanField('Is extended')
-    properties = ModelFieldList(FormField(CustomFieldForm), model=CustomFields)
-
-
-class FileSelectText(HiddenInput):
-    def __init__(self, **kwargs):
-        super(FileSelectText, self).__init__(**kwargs)
-
-    def __call__(self, field, **kwargs):
-        html =  super(FileSelectText, self).__call__(field, **kwargs)
-        button = """
-        <input class="fileupload" type="file" name="file" data-url="{0}" data-field-name="{1}">
-        <div class="picture-progress">
-          <div class="picture-progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
-          </div>
-        </div>""".format(url_for('files.upload'), field.name)
-        return HTMLString(html + button)
-
-
-class FileSelectField(TextField):
-    def __init__(self, name, **kwargs):
-        super(FileSelectField, self).__init__(name, **kwargs)
-        self.widget = FileSelectText()
-
-
-class FileSelectAttachment(HiddenInput):
-    def __init__(self, **kwargs):
-        super(FileSelectAttachment, self).__init__(**kwargs)
-
-    def __call__(self, field, **kwargs):
-        html =  super(FileSelectAttachment, self).__call__(field, **kwargs)
-        button = """
-        <input class="fileupload" type="file" name="file" data-url="{0}" data-field-name="{1}">
-        <div class="picture-progress">
-          <div class="picture-progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
-          </div>
-        </div>""".format(url_for('files.upload'), field.name)
-        return HTMLString(html + button)
-
-
-class AttachmentSelectField(TextField):
-    def __init__(self, name, **kwargs):
-        super(AttachmentSelectField, self).__init__(name, **kwargs)
-        self.widget = FileSelectAttachment()
+from application import app
+from application.helpers.forms import FileSelectField
+from application.helpers.forms import AttachmentSelectField
 
 
 def get_node_form(node_type):
-    class ProceduralForm(Form):
-        pass
+    """Get a procedurally generated WTForm, based on the dyn_schema and
+    node_schema of a specific node_type.
+    """
+    class ProceduralForm(Form): pass
 
     api = SystemUtility.attract_api()
     node_schema = node_type['dyn_schema'].to_dict()
     form_prop = node_type['form_schema'].to_dict()
-    parent_prop = node_type['parent'].to_dict()
+    parent_prop = node_type['parent']
 
     setattr(ProceduralForm,
         'name',
         TextField('Name', validators=[DataRequired()]))
     # Parenting
-    if 'node_types' in parent_prop and len(parent_prop['node_types']) > 0:
-
-        parent_names = ""
-        for parent_type in parent_prop['node_types']:
-            parent_names = "{0} {1},".format(parent_names, parent_type)
-
+    if parent_prop:
+        parent_names = ", ".join(parent_prop)
         setattr(ProceduralForm,
                 'parent',
                 HiddenField('Parent ({0})'.format(parent_names)))
@@ -276,7 +179,7 @@ def process_node_form(form, node_id=None, node_type=None, user=None):
     """Generic function used to process new nodes, as well as edits
     """
     if not user:
-        print ("User is None")
+        print("User is None")
         return False
     api = SystemUtility.attract_api()
     node_schema = node_type['dyn_schema'].to_dict()
@@ -292,7 +195,9 @@ def process_node_form(form, node_id=None, node_type=None, user=None):
             if node.picture == "None":
                 node.picture = None
         if 'parent' in form:
-            node.parent = form.parent.data
+            if form.parent.data != "":
+                node.parent = form.parent.data
+
         def update_data(node_schema, form_schema, prefix=""):
             for pr in node_schema:
                 schema_prop = node_schema[pr]
@@ -318,7 +223,7 @@ def process_node_form(form, node_id=None, node_type=None, user=None):
                     else:
                         data = int(form[prop_name].data)
                 elif schema_prop['type'] == 'datetime':
-                    data = datetime.strftime(data, RFC1123_DATE_FORMAT)
+                    data = datetime.strftime(data, app.config['RFC1123_DATE_FORMAT'])
                 elif schema_prop['type'] == 'list':
                     if pr == 'attachments':
                         data = json.loads(data)
@@ -386,7 +291,7 @@ def process_node_form(form, node_id=None, node_type=None, user=None):
                     if data == '':
                         data = []
                 if schema_prop['type'] == 'datetime':
-                    data = datetime.strftime(data, RFC1123_DATE_FORMAT)
+                    data = datetime.strftime(data, app.config['RFC1123_DATE_FORMAT'])
                 if schema_prop['type'] == 'objectid':
                     if data == '':
                         data = None

@@ -29,6 +29,7 @@ gulp.task('styles', function() {
 /* Templates - Jade */
 gulp.task('templates', function() {
     gulp.src('pillar-web/src/templates/**/*.jade')
+        .pipe(plumber())
         .pipe(jade({
             pretty: false
         }))
@@ -40,6 +41,7 @@ gulp.task('templates', function() {
 /* Individual Uglified Scripts */
 gulp.task('scripts', function() {
     gulp.src('pillar-web/src/scripts/*.js')
+        .pipe(plumber())
         .pipe(sourcemaps.init())
         .pipe(uglify())
         .pipe(rename({suffix: '.min'}))
@@ -54,6 +56,7 @@ gulp.task('scripts', function() {
 /* Since it's always loaded, it's only for functions that we want site-wide */
 gulp.task('scripts_concat_tutti', function() {
     gulp.src('pillar-web/src/scripts/tutti/**/*.js')
+        .pipe(plumber())
         .pipe(sourcemaps.init())
         .pipe(concat("tutti.min.js"))
         .pipe(uglify())
@@ -65,6 +68,7 @@ gulp.task('scripts_concat_tutti', function() {
 
 gulp.task('scripts_concat_markdown', function() {
     gulp.src('pillar-web/src/scripts/markdown/**/*.js')
+        .pipe(plumber())
         .pipe(sourcemaps.init())
         .pipe(concat("markdown.min.js"))
         .pipe(uglify())

@@ -3,8 +3,8 @@
 | {% block page_title %}Blog{% endblock%}
 
 | {% block header_backdrop %}
-| {% if project.properties.picture_header %}
-.navbar-backdrop(style="background-image: url({{ project.properties.picture_header.thumbnail('m', api=api) }})")
+| {% if project.picture_header %}
+.navbar-backdrop(style="background-image: url({{ project.picture_header.thumbnail('m', api=api) }})")
 .navbar-backdrop-overlay
 | {% else %}
 .navbar-backdrop
@@ -15,14 +15,15 @@
 | {% block body %}
 
 .container.box
+	#project_container
 	#blog_container(class="{% if project._id == config.MAIN_PROJECT_ID %}cloud-blog{% endif %}")
 
 		#blog_index-container
 
-			| {% if project._id == config.MAIN_PROJECT_ID and node_type_post and node_type_post.has_method('POST') %}
-			a.btn.btn-default.button-create(href="{{url_for('nodes.posts_create', project_id=project._id)}}")
-				| Create New Post
-			| {% endif %}
+			//- | {% if project._id == config.MAIN_PROJECT_ID and node_type_post and node_type_post.has_method('POST') %}
+			//- a.btn.btn-default.button-create(href="{{url_for('nodes.posts_create', project_id=project._id)}}")
+			//- 	| Create New Post
+			//- | {% endif %}
 
 			| {% if posts %}
 
@@ -65,35 +66,35 @@
 		#blog_index-sidebar
 			.blog_project-card
 				a.item-header(
-					href="{{ url_for('project_view', project_url=project.properties.url) }}")
+					href="{{ url_for('projects.view', project_url=project.url) }}")
 
 					.overlay
-					| {% if project.properties.picture_header %}
-					img.background(src="{{ project.properties.picture_header.thumbnail('m', api=api) }}")
+					| {% if project.picture_header %}
+					img.background(src="{{ project.picture_header.thumbnail('m', api=api) }}")
 					| {% endif %}
 
 				a.card-thumbnail(
-					href="{{ url_for('project_view', project_url=project.properties.url) }}")
-					| {% if project.properties.picture_square %}
-					img.thumb(src="{{ project.properties.picture_square.thumbnail('m', api=api) }}")
+					href="{{ url_for('projects.view', project_url=project.url) }}")
+					| {% if project.picture_square %}
+					img.thumb(src="{{ project.picture_square.thumbnail('m', api=api) }}")
 					| {% endif %}
 
 				.item-info
 
 					a.item-title(
-						href="{{ url_for('project_view', project_url=project.properties.url) }}")
+						href="{{ url_for('projects.view', project_url=project.url) }}")
 						| {{ project.name }}
 
-					| {% if project.properties.summary %}
+					| {% if project.summary %}
 					p.item-description
-						| {{project.properties.summary|safe}}
+						| {{project.summary|safe}}
 					| {% endif %}
 
-			| {% if node_type_post and node_type_post.has_method('POST') %}
-			.blog_project-sidebar
-				a.btn.btn-default.button-create(href="{{url_for('nodes.posts_create', project_id=project._id)}}")
-					| Create New Post
-			| {% endif %}
+			//- | {% if node_type_post and node_type_post.has_method('POST') %}
+			//- .blog_project-sidebar
+			//- 	a.btn.btn-default.button-create(href="{{url_for('nodes.posts_create', project_id=project._id)}}")
+			//- 		| Create New Post
+			//- | {% endif %}
 		| {% endif %}
 
 | {% endblock %}

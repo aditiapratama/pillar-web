@@ -29,3 +29,4 @@ pillar-web/application/templates/errors/
 pillar-web/application/templates/nodes/
 pillar-web/application/templates/users/
 pillar-web/application/templates/_macros/
+pillar-web/application/templates/projects/
