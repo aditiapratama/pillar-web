@@ -58,9 +58,10 @@ link(rel="stylesheet", href="//releases.flowplayer.org/6.0.3/skin/minimalist.css
 
 						| {% endfor %}
 				| {% else %}
-				a(href="#")
+				li.btn-group.node-details-meta-list-item.video.download.disabled
 					button.btn.btn-default.join-us(type="button")
 						| Download Video
+						i.pi-angle-down.icon-dropdown-menu
 				| {% endif %}
 
 		| {% if node.description %}
