@@ -27,7 +27,6 @@ from application.helpers.caching import delete_redis_cache_template
 projects = Blueprint('projects', __name__)
 
 @projects.route('/<project_url>/')
-@cache.cached(timeout=3600, unless=current_user_is_authenticated)
 def view(project_url):
     """Entry point to view a project"""
     api = SystemUtility.attract_api()
