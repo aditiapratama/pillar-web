@@ -69,7 +69,8 @@ def homepage():
     # Get latest comments to any node
     latest_comments = Node.all({
         'projection': '{"project": 1, "parent": 1, "user": 1, \
-            "properties.content": 1 ,"node_type": 1, "properties.status": 1}',
+            "properties.content": 1 ,"node_type": 1, "properties.status": 1, \
+            "properties.is_reply": 1}',
         'where': '{"node_type": "comment", "properties.status": "published"}',
         'embedded': '{"user": 1, "project": 1, "parent": 1}',
         'sort': '-_created',
