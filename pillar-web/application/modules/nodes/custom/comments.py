@@ -1,10 +1,11 @@
+import bugsnag
 from flask import request
 from flask import jsonify
 from flask import render_template
 from flask.ext.login import login_required
 from flask.ext.login import current_user
 from pillarsdk import Node
-from pillarsdk import NodeType
+from pillarsdk import Project
 from application.modules.nodes import nodes
 from application.helpers import gravatar
 from application.helpers import pretty_date
@@ -16,19 +17,14 @@ from application import SystemUtility
 def comments_create():
     content = request.form['content']
     parent_id = request.form.get('parent_id')
-
     api = SystemUtility.attract_api()
-    node_type = NodeType.find_first({
-        'where': '{"name" : "comment"}',
-        }, api=api)
+    parent_node = Node.find(parent_id, api=api)
 
     node_asset_props = dict(
+        project=parent_node.project,
         name='Comment',
-        #description=a.description,
-        #picture=picture,
         user=current_user.objectid,
-        node_type=node_type._id,
-        #parent=node_parent,
+        node_type='comment',
         properties=dict(
             content=content,
             status='published',
@@ -42,7 +38,7 @@ def comments_create():
     # Get the parent node and check if it's a comment. In which case we flag
     # the current comment as a reply.
     parent_node = Node.find(parent_id, api=api)
-    if parent_node.node_type == node_type._id:
+    if parent_node.node_type == 'comment':
         node_asset_props['properties']['is_reply'] = True
 
     node_asset = Node(node_asset_props)
@@ -61,7 +57,14 @@ def format_comment(comment, is_reply=False, is_team=False, replies=None):
     :param is_team: True if the author belongs to the group that owns the node
     :param replies: list of replies (formatted with this function)
     """
-    is_own = (current_user.objectid == comment.user._id) if current_user.is_authenticated() else False
+    try:
+        is_own = (current_user.objectid == comment.user._id) \
+            if current_user.is_authenticated() else False
+    except AttributeError:
+        bugsnag.notify(Exception('Missing user for embedded user ObjectId'),
+            meta_data={'nodes_info':
+                {'node_id': comment['_id']}})
+        return
     is_rated = False
     is_rated_positive = None
     if comment.properties.ratings:
@@ -90,23 +93,18 @@ def comments_index():
     parent_id = request.args.get('parent_id')
     # Get data only if we format it
     api = SystemUtility.attract_api()
-    node_type = NodeType.find_one({
-        'where': '{"name" : "comment"}',
-        }, api=api)
-
     if request.args.get('format'):
         nodes = Node.all({
-            'where': '{"node_type" : "%s", "parent": "%s"}' % (node_type._id, parent_id),
+            'where': '{"node_type" : "comment", "parent": "%s"}' % (parent_id),
             'embedded': '{"user":1}'}, api=api)
 
         comments = []
         for comment in nodes._items:
             # Query for first level children (comment replies)
             replies = Node.all({
-                'where': '{"node_type" : "%s", "parent": "%s"}' % (node_type._id, comment._id),
+                'where': '{"node_type" : "comment", "parent": "%s"}' % (comment._id),
                 'embedded': '{"user":1}'}, api=api)
             replies = replies._items if replies._items else None
-
             if replies:
                 replies = [format_comment(reply, is_reply=True) for reply in replies]
 
@@ -114,12 +112,15 @@ def comments_index():
                 format_comment(comment, is_reply=False, replies=replies))
 
         if request.args.get('format') == 'json':
-            return_content = jsonify(items=comments)
+            return_content = jsonify(items=[c for c in comments if c is not None])
     else:
+        parent_node = Node.find(parent_id, api=api)
+        project = Project.find(parent_node.project, api=api)
+        has_method_POST = project.node_type_has_method('comment', 'POST', api=api)
         # Data will be requested via javascript
         return_content = render_template('nodes/custom/_comments.html',
             parent_id=parent_id,
-            comment_node_type=node_type)
+            has_method_POST=has_method_POST)
     return return_content
 
 

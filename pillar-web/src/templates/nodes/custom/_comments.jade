@@ -6,7 +6,7 @@
 		.comment-reply-container
 			| {% if current_user.is_authenticated() %}
 
-			| {% if comment_node_type.has_method('POST') %}
+			| {% if has_method_POST %}
 			.comment-reply-avatar
 				img(src="{{ current_user.gravatar }}")
 
