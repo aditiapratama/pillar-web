@@ -13,9 +13,8 @@ script(type="text/javascript").
 	projectContainer.setAttribute('data-is_project', 'True');
 	projectContainer.setAttribute('data-node_id', '');
 	projectContainer.setAttribute('data-parent_node_id', '');
-	{% if project.has_method('PUT') %}
-		//- console.log('puto');
-	{% endif %}
+	//- {% if project.has_method('PUT') %}
+	//- {% endif %}
 
 	var movingNodeId = Cookies.get('bcloud_moving_node_id');
 

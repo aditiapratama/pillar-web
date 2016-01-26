@@ -203,6 +203,7 @@ script.
 	var urlNodeTogglePublic = "{{url_for('projects.toggle_node_public')}}";
 
 	function loadNodeContent(url, nodeId) {
+		$('#project-loading').show();
 
 		$.get(url, function(dataHtml) {
 			$("#node-edit-form").unbind( "submit" );
@@ -222,14 +223,20 @@ script.
 			if (typeof(nodeId) != 'undefined') {
 				window.location.replace('#' + nodeId);
 			};
+
+			$('#project-loading').hide();
 		})
 		.fail(function(dataResponse) {
 			$('#project_context').html($('<iframe id="server_error"/>'));
 			$('#server_error').attr('src', url);
+
+			$('#project-loading').hide();
 		});
 	}
 
 	function loadProjectContent(url) {
+		$('#project-loading').show();
+
 		$.get(url, function(dataHtml) {
 
 			$("#node-edit-form").unbind( "submit" );
@@ -244,10 +251,14 @@ script.
 
 			// Update scrollbars
 			Ps.update(document.getElementById('project_context-container'));
+
+			$('#project-loading').hide();
 		})
 		.fail(function(dataResponse) {
 			$('#project_context').html($('<iframe id="server_error"/>'));
 			$('#server_error').attr('src', url);
+
+			$('#project-loading').hide();
 		});
 	}
 
@@ -409,13 +420,6 @@ script.
 	loadContent();
 
 	/* UI Stuff */
-	// Binding for ajax event
-	$(document).bind("ajaxSend", function(){
-		$('#project-loading').show();
-	}).bind("ajaxComplete", function(){
-		$('#project-loading').hide();
-	});
-
 	container_offset = $('#project-flex').offset();
 
 	function containerResizeY(window_height){
