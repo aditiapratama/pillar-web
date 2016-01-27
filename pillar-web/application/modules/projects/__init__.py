@@ -150,9 +150,19 @@ def edit(project_url):
     if form.validate_on_submit():
         project = Project.find(project._id, api=api)
         project.name = form.name.data
+        project.url = form.url.data
+        project.summary = form.summary.data
+        project.description = form.description.data
+        project.is_private = form.is_private.data
+        project.category = form.category.data
+        project.status = form.status.data
         if form.picture_square.data:
             project.picture_square = form.picture_square.data
+        if form.picture_header.data:
+            project.picture_header = form.picture_header.data
         project.update(api=api)
+        # Reattach the pictures
+        attach_project_pictures(project, api)
     else:
         form.project_id.data = project._id
         form.name.data = project.name
