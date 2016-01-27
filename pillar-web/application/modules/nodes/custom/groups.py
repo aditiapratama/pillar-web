@@ -13,8 +13,8 @@ from application.modules.nodes import nodes
 @login_required
 def groups_create():
     # Use current_project_id from the session instead of the cookie
-    project_id = session['current_project_id']
     name = request.form['name']
+    project_id = request.form['project_id']
     parent_id = request.form.get('parent_id')
 
     api = SystemUtility.attract_api()

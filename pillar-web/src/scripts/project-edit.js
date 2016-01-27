@@ -53,8 +53,10 @@ function addNode() {
 
 /* Add Group */
 function addGroup(parentId) {
+	var projectContainer = document.getElementById('project_container');
+	var project_id = projectContainer.getAttribute('data-project_id');
 	var url = '/nodes/groups/create';
-	var group = {name: "New Folder"};
+	var group = {name: "New Folder", project_id: project_id};
 	if (typeof(parentId) != 'undefined') {group.parent_id = parentId};
 	$.post(url, group)
 		.done(function(data) {
@@ -97,7 +99,7 @@ $('#item_add_group').click(function(e){
 	if (projectContainer.getAttribute('data-is_project') === 'True') {
 		addGroup();
 	} else {
-		parentNodeId = projectContainer.getAttribute('data-parent_node_id');
+		parentNodeId = projectContainer.getAttribute('data-node_id');
 		addGroup(parentNodeId);
 	}
 
