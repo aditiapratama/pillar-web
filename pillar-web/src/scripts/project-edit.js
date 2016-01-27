@@ -54,9 +54,9 @@ function addNode() {
 /* Add Group */
 function addGroup(parentId) {
 	var projectContainer = document.getElementById('project_container');
-	var project_id = projectContainer.getAttribute('data-project_id');
+	var projectId = projectContainer.getAttribute('data-project_id');
 	var url = '/nodes/groups/create';
-	var group = {name: "New Folder", project_id: project_id};
+	var group = {name: "New Folder", projectId: projectId};
 	if (typeof(parentId) != 'undefined') {group.parent_id = parentId};
 	$.post(url, group)
 		.done(function(data) {

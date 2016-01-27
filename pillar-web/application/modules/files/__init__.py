@@ -401,7 +401,7 @@ def create():
     size = request.form['size']
     content_type = request.form['type']
     field_name = request.form['field_name']
-    project_id = session['current_project_id']
+    project_id = request.form['project_id']
     file_item = process_and_create_file(project_id, name, size, content_type)
     api = SystemUtility.attract_api()
     f = File.find(file_item['_id'], api=api)
