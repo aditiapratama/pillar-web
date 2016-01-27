@@ -82,13 +82,9 @@ def posts_create(project_id):
         return abort(404)
     attach_project_pictures(project, api)
 
-    node_type = NodeType.find_one({
-        'where': '{"name" : "blog"}',
-        'projection': '{"name": 1, "permissions": 1}'
-        }, api=api)
     blog = Node.find_first({
-        'where': '{"node_type" : "%s", \
-            "parent": "%s"}' % (node_type._id, project_id),
+        'where': '{"node_type" : "blog", \
+            "parent": "%s"}' % (project_id),
         }, api=api)
     node_type = NodeType.find_one({'where': '{"name" : "post"}',}, api=api)
     # Check if user is allowed to create a post in the blog

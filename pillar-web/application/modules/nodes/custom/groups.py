@@ -4,7 +4,6 @@ from flask import session
 from flask.ext.login import login_required
 from flask.ext.login import current_user
 from pillarsdk import Node
-from pillarsdk import NodeType
 from application import SystemUtility
 from application.modules.nodes import nodes
 

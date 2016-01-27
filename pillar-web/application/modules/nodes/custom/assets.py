@@ -8,7 +8,6 @@ from flask import session
 from flask.ext.login import login_required
 from flask.ext.login import current_user
 from pillarsdk import Node
-from pillarsdk import NodeType
 from pillarsdk import File
 from application import app
 from application import SystemUtility
@@ -34,15 +33,12 @@ def assets_create():
         filetype = 'file'
 
     api = SystemUtility.attract_api()
-    node_type = NodeType.find_first({
-        'where': '{"name" : "asset"}',
-        }, api=api)
     # We will create the Node object later on, after creating the file object
     node_asset_props = dict(
         name=name,
         project=project_id,
         user=current_user.objectid,
-        node_type=node_type._id,
+        node_type='asset',
         properties=dict(
             content_type=filetype,
             status='processing'))
