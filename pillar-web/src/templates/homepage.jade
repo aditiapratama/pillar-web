@@ -419,6 +419,6 @@ script.
 
 	/* cleanup mentions in comments  */
 	$('li.node-updates-list-item.comments a.title').each(function(){
-		$(this).text($(this).text().replace(/\*|\@/g, ''));
+		$(this).text($(this).text().replace(/\*|\@|\<(.*?)\>/g, ''));
 	});
 | {% endblock %}
