@@ -77,24 +77,24 @@ def posts_view(project_id, url=None):
 def posts_create(project_id):
     api = SystemUtility.attract_api()
     try:
-        project = Node.find(project_id, api=api)
+        project = Project.find(project_id, api=api)
     except ResourceNotFound:
         return abort(404)
     attach_project_pictures(project, api)
 
     blog = Node.find_first({
         'where': '{"node_type" : "blog", \
-            "parent": "%s"}' % (project_id),
+            "project": "%s"}' % (project_id),
         }, api=api)
-    node_type = NodeType.find_one({'where': '{"name" : "post"}',}, api=api)
+    node_type = project.get_node_type('post')
     # Check if user is allowed to create a post in the blog
-    if not node_type.has_method('POST'):
+    if not project.node_type_has_method('post', 'POST', api=api):
         return abort(403)
     form = get_node_form(node_type)
     if form.validate_on_submit():
         # Create new post object from scratch
         post_props = dict(
-            node_type=node_type._id,
+            node_type='post',
             name=form.name.data,
             picture=form.picture.data,
             user=current_user.objectid,
