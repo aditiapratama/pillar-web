@@ -169,12 +169,10 @@ script(type="text/javascript").
 			done: function (e, data) {
 				// Get the first file upload result (we only need one)
 				var file_data = data.result.files[0]
-				var projectContainer = document.getElementById("project_container");
-				var projectId = projectContainer.getAttribute('data-project_id');
 				// Create a file object on the server and retrieve its id
 				$.post("{{url_for('files.create')}}",
 					{name : file_data.name, size: file_data.size, type: file_data.type,
-					field_name: $(this).data('field-name'), project_id: projectId})
+					field_name: $(this).data('field-name'), project_id: ProjectUtils.projectId()})
 					.done(function(data) {
 					if (data.status === 'success') {
 						// If successful, add id to the picture hidden field

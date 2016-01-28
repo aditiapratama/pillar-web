@@ -35,7 +35,7 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 
 | {% block body %}
 
-#project_container(data-project_id="{{project._id}}", data-is_project="", data-node_id="")
+#project_container
 
 	#project-flex
 
@@ -193,6 +193,7 @@ script(type="text/javascript", src="{{ url_for('static', filename='assets/js/pro
 
 script.
 
+	ProjectUtils.setProjectAttributes({projectId: "{{project._id}}", isProject: "", nodeId: ""});
 	/* Initialize scrollbars */
 	Ps.initialize(document.getElementById('project_context-container'), {suppressScrollX: true});
 	Ps.initialize(document.getElementById('project_tree'), {suppressScrollX: true});

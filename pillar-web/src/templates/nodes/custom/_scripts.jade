@@ -9,13 +9,12 @@ script(type="text/javascript").
 		$(convert_fields).eq(i).html(convert($(convert_fields).eq(i).text()));
 	});
 
-	var projectContainer = document.getElementById("project_container");
-	projectContainer.setAttribute('data-is_project', '');
+	ProjectUtils.setProjectAttributes({isProject: ''});
 
 	{% if node %}
-		projectContainer.setAttribute('data-node_id', '{{node._id}}');
+		ProjectUtils.setProjectAttributes({nodeId: '{{node._id}}'});
 		{% if parent %}
-		projectContainer.setAttribute('data-parent_node_id', '{{parent._id}}');
+		ProjectUtils.setProjectAttributes({parentNodeId: '{{parent._id}}'});
 		{% endif %}
 		var url = "{{url_for('nodes.comments_index')}}?parent_id={{node._id}}"
 		$.get(url, function(dataHtml) {
@@ -24,12 +23,6 @@ script(type="text/javascript").
 		})
 
 		{% if node.has_method('PUT') %}
-
-			//- {% if node.node_type != 'post' %}
-			//- // We might get rid of this soon, in favor of using cookies, in the next line
-			//- //- $('#item_add').attr('data-parent_node_id', '{{parent._id}}');
-			//- $('#project_container').data('parent_node_id', '{{parent._id}}');
-			//- {% endif %}
 			$('.project-mode-view').show();
 		{% else %}
 			$('.project-mode-view').hide();

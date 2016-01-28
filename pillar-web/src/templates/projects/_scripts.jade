@@ -9,13 +9,7 @@ script(type="text/javascript").
 		$(convert_fields).eq(i).html(convert($(convert_fields).eq(i).text()));
 	});
 
-	var projectContainer = document.getElementById("project_container");
-	projectContainer.setAttribute('data-is_project', 'True');
-	projectContainer.setAttribute('data-node_id', '');
-	projectContainer.setAttribute('data-parent_node_id', '');
-	//- {% if project.has_method('PUT') %}
-	//- {% endif %}
-
+	ProjectUtils.setProjectAttributes({isProject: 'True', nodeId: '', parentNodeId: ''});
 	var movingNodeId = Cookies.get('bcloud_moving_node_id');
 
 	if (movingNodeId){

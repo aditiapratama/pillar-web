@@ -106,7 +106,7 @@ script().
 		$('#node-add-form').text('Please wait...');
 		$.post('{{url_for('nodes.assets_create')}}', {
 			name: $(this).attr('data-name'),
-			project_id: $('#project_container').data('project_id'),
+			project_id: ProjectUtils.projectId(),
 			type: $(this).attr('data-type'),
 			parent_id: parent_id})
 			.done(function(data) {

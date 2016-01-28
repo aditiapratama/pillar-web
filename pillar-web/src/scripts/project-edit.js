@@ -53,10 +53,8 @@ function addNode() {
 
 /* Add Group */
 function addGroup(parentId) {
-	var projectContainer = document.getElementById('project_container');
-	var projectId = projectContainer.getAttribute('data-project_id');
 	var url = '/nodes/groups/create';
-	var group = {name: "New Folder", projectId: projectId};
+	var group = {name: "New Folder", projectId: ProjectUtils.projectId()};
 	if (typeof(parentId) != 'undefined') {group.parent_id = parentId};
 	$.post(url, group)
 		.done(function(data) {
@@ -73,12 +71,11 @@ $('#item_edit').click(function(e){
 	$('.button-edit-icon').addClass('pi-spin spinner').removeClass('pi-edit');
 	// When clicking on the edit icon, embed the edit
 	e.preventDefault;
-	var projectContainer = document.getElementById('project_container');
-	if (projectContainer.getAttribute('data-is_project') === 'True') {
+	if (ProjectUtils.isProject() === 'True') {
 		url = window.location.href + 'edit';
 		window.location.replace(url);
 	} else {
-		editNode(projectContainer.getAttribute('data-node_id'));
+		editNode(ProjectUtils.nodeId());
 	}
 });
 
@@ -95,12 +92,10 @@ $('#item_add').click(function(e){
 $('#item_add_group').click(function(e){
 	$('.button-add-group-icon').addClass('pi-spin spinner').removeClass('pi-collection-plus');
 	e.preventDefault;
-	var projectContainer = document.getElementById('project_container');
-	if (projectContainer.getAttribute('data-is_project') === 'True') {
+	if (ProjectUtils.isProject() === 'True') {
 		addGroup();
 	} else {
-		parentNodeId = projectContainer.getAttribute('data-node_id');
-		addGroup(parentNodeId);
+		addGroup(ProjectUtils.nodeId());
 	}
 
 });
@@ -115,11 +110,10 @@ function moveModeEnter() {
 
 function moveModeExit() {
 	/* Remove cookie, display current node, remove UI */
-	var projectContainer = document.getElementById('project_container');
-	if (projectContainer.getAttribute('data-is_project') === 'True') {
-		displayProject(projectContainer.getAttribute('data-project_id'));
+	if (ProjectUtils.isProject() === 'True') {
+		displayProject(ProjectUtils.projectId());
 	} else {
-		displayNode(projectContainer.getAttribute('data-node_id'));
+		displayNode(ProjectUtils.nodeId());
 	}
 	$('#overlay-mode-move-container').removeClass('visible');
 	$('.button-move').removeClass('disabled');
@@ -136,20 +130,18 @@ if (movingNodeId) {
 $('#item_move').click(function(e){
 	e.preventDefault;
 	moveModeEnter();
-	var projectContainer = document.getElementById('project_container');
 	// Set the nodeId in the cookie
-	Cookies.set('bcloud_moving_node_id', projectContainer.getAttribute('data-node_id'));
+	Cookies.set('bcloud_moving_node_id', ProjectUtils.nodeId());
 });
 
 $("#item_move_accept").click(function(e) {
 	e.preventDefault();
 	var movingNodeId = Cookies.get('bcloud_moving_node_id');
-	var projectContainer = document.getElementById('project_container');
 	var moveNodeParams = {node_id: movingNodeId};
 	// If we are not at the root of the project, add the parent node id to the
 	// request params
-	if (projectContainer.getAttribute('data-is_project') != 'True') {
-		moveNodeParams.dest_parent_node_id = projectContainer.getAttribute('data-node_id')
+	if (ProjectUtils.isProject() != 'True') {
+		moveNodeParams.dest_parent_node_id = ProjectUtils.nodeId();
 	}
 
 	$.post(urlNodeMove, moveNodeParams,
@@ -171,9 +163,7 @@ $("#item_move_cancel").click(function(e) {
 /* Featured Toggle */
 $('#item_featured').click(function(e){
 	e.preventDefault;
-	var projectContainer = document.getElementById('project_container');
-	var currentNodeId = projectContainer.getAttribute('data-node_id');
-	$.post(urlNodeFeature, {node_id : currentNodeId},
+	$.post(urlNodeFeature, {node_id : ProjectUtils.nodeId()},
 		function(data){
 		// Feedback logic
 	})
@@ -188,22 +178,17 @@ $('#item_featured').click(function(e){
 /* Delete */
 $('#item_delete').click(function(e){
 	e.preventDefault;
-	var projectContainer = document.getElementById('project_container');
-	var currentNodeId = projectContainer.getAttribute('data-node_id');
-	var parentNodeId = projectContainer.getAttribute('data-parent_node_id');
-	var projectId = projectContainer.getAttribute('data-project_id');
-
-	$.post(urlNodeDelete, {node_id : currentNodeId},
+	$.post(urlNodeDelete, {node_id : ProjectUtils.nodeId()},
 		function(data){
 		// Feedback logic
 	})
 	.done(function(){
 		statusBarSet('success', 'Node deleted', 'pi-trash');
-		if (parentNodeId != '') {
-			displayNode(parentNodeId);
+		if (ProjectUtils.parentNodeId() != '') {
+			displayNode(ProjectUtils.parentNodeId());
 		} else {
 			// Display the project when the group is at the root of the tree
-			displayProject(projectId);
+			displayProject(ProjectUtils.projectId());
 		}
 	});
 });
@@ -212,8 +197,7 @@ $('#item_delete').click(function(e){
 /* Toggle public */
 $('#item_toggle_public').click(function(e){
 	e.preventDefault;
-	var projectContainer = document.getElementById('project_container');
-	var currentNodeId = projectContainer.getAttribute('data-node_id');
+	var currentNodeId = ProjectUtils.nodeId();
 	$.post(urlNodeTogglePublic, {node_id : currentNodeId},
 		function(data){
 		// Feedback logic
