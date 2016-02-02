@@ -4,13 +4,13 @@
 | {% block og %}
 meta(property="og:title", content="Blender Cloud")
 meta(property="og:url", content="https://cloud.blender.org/")
-meta(property="og:image", content="https://cloud.blender.org/static/assets/img/background_gleb_locomotive.jpg")
+meta(property="og:image", content="https://cloud.blender.org/static/assets/img/background_caminandes_3_02.jpg")
 | {% endblock %}
 
 
 | {% block header_backdrop %}
 .homepage.navbar-backdrop(
-	style="background-image: url({{ url_for('static', filename='assets/img/background_gleb_dappledlight.jpg')}})")
+	style="background-image: url({{ url_for('static', filename='assets/img/background_caminandes_3_02.jpg')}})")
 	//
 		video(loop, muted, autoplay, poster="{{ url_for('static', filename='assets/img/background_join_glass.jpg')}}", class="fullscreen-bg__video")
 			source(src="{{ url_for('static', filename='assets/video/header-glass_half.webm')}}", type="video/webm")
@@ -20,8 +20,6 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 
 
 | {% block body %}
-
-
 .homepage_container.page-content
 	#header
 		.text

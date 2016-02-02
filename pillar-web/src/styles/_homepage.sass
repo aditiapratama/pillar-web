@@ -10,11 +10,24 @@
 		+container-behavior
 
 	#header
-		height: 550px
+		min-height: 550px
 
 		background:
 			size: 100% 100%
 			repeat: no-repeat
+
+		iframe
+			width: 100%
+			position: relative
+			left: 15px
+			margin: 25px auto
+
+			+media-sm
+				height: 500px
+			+media-md
+				height: 520px
+			+media-lg
+				height: 580px
 
 
 		.text
@@ -357,6 +370,9 @@
 	max-height: 800px
 	background-image: none
 	background-color: #afbfcc // glasshalf
+
+	&.blur
+		filter: blur(10px)
 
 .homepage.navbar-backdrop-overlay
 	height: 800px
