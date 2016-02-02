@@ -143,27 +143,47 @@ html(lang="en")
 									title="Register") Register
 							| {% endif %}
 
-
 							| {% if current_user.is_authenticated() %}
+
+							| {% if current_user.has_role('demo') %}
+							| {% set subscription = 'demo' %}
+							| {% elif current_user.has_role('subscriber') %}
+							| {% set subscription = 'subscriber' %}
+							| {% else %}
+							| {% set subscription = 'none' %}
+							| {% endif %}
 
 							li(class="dropdown{% if title in ['profile', 'billing-address', 'pledges', 'manage-collection']: %} active{% endif %}")
 								a.dropdown-toggle(href="#", data-toggle="dropdown", title="{{ current_user.email }}")
-									img.gravatar(src="{{ current_user.gravatar }}")
+									img.gravatar(
+										src="{{ current_user.gravatar }}",
+										class="{{ subscription }}")
 
 								ul.dropdown-menu
-									| {# {% if current_user.has_role('admin') %}
-									li
-										a(href="#",
-											title="Whoosh!")
-											i.pi-whoosh
-											| Whoosh!
-									| {% endif %} #}
+									li.subscription-status(class="{{ subscription }}")
+										a(href="{{url_for('users.settings_billing')}}"
+											title="Billing")
+											| {% if subscription == 'demo' %}
+											i.pi-star
+											span You have a demo account.
+											| {% elif subscription == 'subscriber' %}
+											i.pi-star-filled
+											span Your subscription is active.
+											| {% else %}
+											i.pi-warning
+											span Your subscription is not active.
+											| {% endif %}
 
 									li
 										a(href="{{url_for('users.settings_profile')}}"
 											title="Settings")
-											i.pi-cog
-											| Settings
+											i.pi-vcard
+											| Profile
+									li
+										a(href="{{url_for('users.settings_billing')}}"
+											title="Billing")
+											i.pi-credit-card
+											| Billing
 									li.divider(role="separator")
 									li
 										a(href="{{ url_for('users.logout') }}")

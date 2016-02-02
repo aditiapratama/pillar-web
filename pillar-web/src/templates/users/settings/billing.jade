@@ -5,37 +5,49 @@
 		include _sidebar
 		#settings-container
 			.settings-header
-				.settings-title Billing
+				.settings-title Subscription
 
 			.settings-content
 
 				| {% if store_user['cloud_access'] %}
-				h3
+				h3.subscription-active
 					i.pi-check
-					|  Your subscription is active. Thank you for supporting us!
+					|  Your subscription is active
+				h4 Thank you for supporting us!
+
 				hr
 
-				a(href="https://store.blender.org/my-account/") Blender Store link
-				p Expiration date {{ store_user['expiration_date'] }}
-
-				| {% else %}
-				h3
-					| {% if 'demo' in groups %}
-					| You have a demo account.
-					| {% else %}
-					| You do not have an active subscription.
-					a(href="https://store.blender.org/product/membership/")  Join now!
-					| {% endif %}
-				| {% endif %}
-
-				| {% if 'demo' in groups %}
-				p You have full access to the Blender Cloud, provided by the Blender Institute. This account is meant for free evaluation of the service. Get in touch with #[a(href="mailto:cloudsupport@blender.org") cloudsupport@blender.org] if you have any questions.
-				| {% endif %}
+				p Subscription expires on: <strong>{{ store_user['expiration_date'][:10] }}</strong>
+				a(href="https://store.blender.org/my-account/") Manage your subscription on Blender Store
 
 				hr
 
 				.settings-billing-info.
-					Paid balance {{ store_user['paid_balance'] }} {{ store_user['balance_currency'] }}
+					Paid balance: {{ store_user['paid_balance'] }} {{ store_user['balance_currency'] }}
+
+				| {% else %}
+
+				| {% if 'demo' in groups %}
+				h3.subscription-demo
+					i.pi-star
+					| You have a demo account
+
+				hr
+
+				p You have full access to the Blender Cloud, provided by the Blender Institute. This account is meant for free evaluation of the service. Get in touch with #[a(href="mailto:cloudsupport@blender.org") cloudsupport@blender.org] if you have any questions.
+
+				| {% else %}
+				h3.subscription-missing
+					i.pi-info
+					| You do not have an active subscription.
+				h3
+					a(href="https://store.blender.org/product/membership/") Get full access to Blender Cloud now!
+				| {% endif %}
+
+				| {% endif %}
+
+
+
 
 
 | {% endblock %}

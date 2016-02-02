@@ -279,6 +279,18 @@ header.navbar-header
 			width: 32px
 			box-shadow: 1px 1px 0 rgba(black, .2)
 
+			&.none, &.demo, &.subscriber
+				padding: 3px
+				height: 35px
+				width: 35px
+
+			&.subscriber
+				background-color: $color-success
+			&.demo
+				background-color: $color-info
+			&.none
+				background-color: $color-danger
+
 
 	.navbar-brand
 		height: $navbar-height
@@ -316,26 +328,46 @@ header.navbar-header
 			transform: translate(-50%, -50%)
 
 		&.open
-			a
-				background-color: rgba(white, .3)
-				text-shadow: none
 
-			li
+			ul.dropdown-menu
+				min-width: 220px
+				padding-top: 0
+
 				a
-					height: initial
-					border-bottom: none
-					font:
-						family: $font-body
-						size: .9em
-					padding: 5px 15px 5px 5px
-					color: rgba($color-text, .8)
+					background-color: rgba(white, .3)
+					text-shadow: none
 
-					&:hover
-						color: $color-primary
+				li
+					a
+						height: initial
+						border-bottom: none
+						font:
+							family: $font-body
+							size: .9em
+						padding: 5px 15px 5px 5px
+						color: rgba($color-text, .8)
+
+						&:hover
+							color: $color-primary
 
 					i
 						width: 35px
 						text-align: center
+
+					&.subscription-status
+						padding:
+							top: 10px
+							bottom: 10px
+						a
+							text-transform: initial
+
+						&.none a
+							color: $color-danger
+						&.subscriber a
+							color: $color-success
+						&.demo a
+							color: $color-info
+
 
 		&.libraries
 			ul.dropdown-menu
@@ -345,7 +377,7 @@ header.navbar-header
 				small
 					padding-left: 5px
 
-			&.open
+			&.open // libraries open
 				ul.dropdown-menu
 					li
 						a
