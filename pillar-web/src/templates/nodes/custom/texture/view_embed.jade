@@ -1,6 +1,8 @@
 | {% block body %}
 
 #node-container.texture
+	#node-overlay
+
 	h1.texture-title {{node.name}}
 
 	| {% for f in node.properties.files %}
@@ -57,9 +59,8 @@
 							button.btn.btn-default(type="button")
 								| Download {{map_type}}
 						| {% else %}
-						a(href="#")
-							button.btn.btn-default.disabled(type="button")
-								| Download {{map_type}}
+						button.btn.btn-default.disabled.sorry(type="button")
+							| Download {{map_type}}
 						| {% endif %}
 	| {% endfor %}
 
@@ -131,12 +132,14 @@ script.
 
 	});
 
-
-	$('.join-us').click(function() {
+	$('.sorry').click(function() {
 		$.get('/403', function(data) {
-			$('#node-container').html(data);
-			$('#error_container').css('display', 'flex');
+			$('#node-overlay').html(data).show().addClass('active');
 		})
+	});
+
+	$('#node-overlay').click(function(){
+		$(this).removeClass('active').hide().html();
 	});
 
 | {% endblock %}

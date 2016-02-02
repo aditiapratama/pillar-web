@@ -465,6 +465,14 @@ $z-index-base: 12
 
 	color: $color-text-dark
 
+	/* For error messages (403) and other overlaid text*/
+	#node-overlay
+		z-index: $z-index-base + 2
+		opacity: 0
+		transition: opacity 250ms ease-in-out
+		&.active
+			opacity: 1
+
 
 /* Project context on the right of the navigation */
 /* Contains #project_context */

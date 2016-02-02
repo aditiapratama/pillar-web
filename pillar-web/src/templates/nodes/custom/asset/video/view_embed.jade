@@ -5,6 +5,8 @@ link(rel="stylesheet", href="//releases.flowplayer.org/6.0.3/skin/minimalist.css
 | {% block body %}
 
 #node-container
+	#node-overlay
+
 	section.node-preview.video
 		#flowplayer_container.is-splash.play-button(
 			style="{% if node.picture %}background-image:url({{node.picture.thumbnail('l', api=api)}}); background-repeat:no-repeat; {% endif %}")
@@ -59,7 +61,7 @@ link(rel="stylesheet", href="//releases.flowplayer.org/6.0.3/skin/minimalist.css
 						| {% endfor %}
 				| {% else %}
 				li.btn-group.node-details-meta-list-item.video.download.disabled
-					button.btn.btn-default.join-us(type="button")
+					button.btn.btn-default.sorry(type="button")
 						| Download Video
 						i.pi-angle-down.icon-dropdown-menu
 				| {% endif %}
@@ -117,13 +119,16 @@ script(type="text/javascript").
 	});
 
 	{% if not node.video_sources %}
-	$('#flowplayer_container, .join-us').click(function() {
+	$('#flowplayer_container, .sorry').click(function() {
 		$.get('/403', function(data) {
-			$('#node-container').html(data);
-			$('#error_container').css('display', 'flex');
+			$('#node-overlay').html(data).addClass('active');
 		})
 	});
 	{% endif %}
+
+	$('#node-overlay').click(function(){
+		$(this).removeClass('active').hide().html();
+	});
 
 include ../../_scripts
 

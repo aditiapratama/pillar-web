@@ -97,3 +97,16 @@ body.error
 				&.sign-in
 					@include button-rounded($color-background, 999em)
 
+
+#node-overlay
+	#error_container
+		@include overlay(rgba($color-background-nav, .8), 0%, transparent, 60%)
+
+		#error_box
+			top: 50px
+			position: absolute
+			left: 50%
+			transform: translateX(-50%)
+			border-radius: 3px
+			box-shadow: 0 0 100px rgba(black, .85)
+			overflow: hidden
