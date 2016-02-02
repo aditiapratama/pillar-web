@@ -4,7 +4,7 @@
 	#node-overlay
 
 	| {% if node.picture %}
-	section.node-preview.file
+	section#node-preview.node-preview.file
 		img.node-preview-thumbnail(src="{{ node.picture.thumbnail('l', api=api) }}")
 	| {% endif %}
 
@@ -86,7 +86,7 @@ script.
 
 	$("li.node-details-meta-list-item.type").html(type_trimmed);
 
-	if ($('.node-preview-thumbnail').width() > 750) {
+	if (document.getElementById("node-preview").offsetWidth > 750) {
 		$('.node-preview.file, .node-preview-thumbnail').css({'max-height': '100%', 'width': '100%'});
 	}
 	$('.sorry').click(function() {

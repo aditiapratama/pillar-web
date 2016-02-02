@@ -4,7 +4,7 @@
 	#node-overlay
 
 	| {% if node.picture %}
-	section.node-preview.image
+	section#node-preview.node-preview.image
 		img.node-preview-thumbnail(src="{{ node.picture.thumbnail('l', api=api) }}")
 	| {% endif %}
 
@@ -80,7 +80,7 @@ script.
 	var content_type = $("li.node-details-meta-list-item.type").text();
 	$("li.node-details-meta-list-item.type").text(content_type.substring(content_type.indexOf("/") + 1));
 
-	if ($('.node-preview-thumbnail').width() > 750) {
+	if (document.getElementById("node-preview").offsetWidth > 750) {
 		$('.node-preview, .node-preview-thumbnail').css({'max-height': '100%', 'width': '100%'});
 	}
 	$('.sorry').click(function() {
