@@ -162,16 +162,16 @@ html(lang="en")
 								ul.dropdown-menu
 									li.subscription-status(class="{{ subscription }}")
 										a(href="{{url_for('users.settings_billing')}}"
-											title="Billing")
+											title="Subscription")
 											| {% if subscription == 'demo' %}
 											i.pi-star
-											span You have a demo account.
+											span You have a demo account
 											| {% elif subscription == 'subscriber' %}
 											i.pi-star-filled
-											span Your subscription is active.
+											span Your subscription is active
 											| {% else %}
 											i.pi-warning
-											span Your subscription is not active.
+											span Your subscription is not active
 											| {% endif %}
 
 									li
@@ -183,7 +183,7 @@ html(lang="en")
 										a(href="{{url_for('users.settings_billing')}}"
 											title="Billing")
 											i.pi-credit-card
-											| Billing
+											| Subscription
 									li.divider(role="separator")
 									li
 										a(href="{{ url_for('users.logout') }}")
