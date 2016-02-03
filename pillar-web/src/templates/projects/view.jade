@@ -458,7 +458,7 @@ script.
 		containerResizeY($(window).height());
 	});
 
-	$("#project_context-container").hover(function(){
+	$(document).on( 'scroll', '#project_context-container', function(){
 		Ps.update(document.getElementById('project_context-container'));
 	});
 
