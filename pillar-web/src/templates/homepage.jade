@@ -22,7 +22,11 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 | {% block body %}
 .homepage_container.page-content
 	#header
-		.text
+		iframe(
+			src="https://www.youtube.com/embed/SkVqJ1SGeL0?rel=0&amp;controls=1&amp;showinfo=0",
+			frameborder="0",
+			allowfullscreen)
+		// .text
 			.title
 				img(src="{{ url_for('static', filename='assets/img/logo_gallery.png')}}")
 
@@ -263,7 +267,7 @@ section.homepage_container.statement
 				a.btn.btn-default.btn-outline.sign-up-now(href="https://store.blender.org/product/membership/")
 					| Sign up now
 
-	.row
+	.row-fluid
 		.col-md-8.col-md-offset-2.groups-text.
 			<strong>For groups:</strong> we also provide flexible options for group subscription
 			ideal for schools or teams. Get in touch to discuss direct support, custom solutions,

@@ -106,6 +106,9 @@ var movingNodeId = Cookies.get('bcloud_moving_node_id');
 function moveModeEnter() {
 	$('#overlay-mode-move-container').addClass('visible');
 	$('.button-move').addClass('disabled');
+
+	// Scroll to top so we can see the instructions/buttons
+	$("#project_context-container").scrollTop(0);
 };
 
 function moveModeExit() {

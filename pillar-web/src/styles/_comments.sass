@@ -32,6 +32,15 @@
 	#comments-list-items
 		position: relative
 
+		+media-xs
+			max-width: 100%
+		+media-sm
+			max-width: 100%
+		+media-md
+			max-width: 710px
+		+media-lg
+			max-width: 710px
+
 		.nocomments
 			color: $color-text-dark-hint
 			text-align: center
@@ -67,7 +76,6 @@
 
 				.comment-author
 					position: relative
-					top: 1px
 					color: $color-text-dark
 					font:
 						weight: 500
@@ -87,16 +95,15 @@
 			/* Here we style both the preview comment and posted comments */
 			.comment-content,
 			.comment-reply-form
-				padding: 10px 0 0 30px
-				color: $color-text-dark-primary
-				line-height: 1.5em
+				+node-details-description
 
-				h1, h2, h3, h4, h5, h6
-					font-weight: 500
-
-				blockquote
-					font-size: 1em
-					color: $color-text-dark-secondary
+				padding: 10px 0 0 10px
+				color: darken($color-text-dark, 10%)
+				font:
+					size: 1em
+					weight: normal
+				p
+					line-height: 1.3em
 
 			/* Rating, and actions such as reply */
 			.comment-meta
@@ -184,7 +191,7 @@
 				padding:
 					top: 0
 					left: 15px
-				border-left: 2px solid lighten($color-text-dark-hint, 20%)
+				border-left: 3px solid lighten($color-text-dark-hint, 20%)
 
 			&.is-team
 				.comment-author

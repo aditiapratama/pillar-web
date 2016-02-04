@@ -60,12 +60,17 @@
 				data-node-id="{{node._id}}",
 				type="submit")
 
-
 script(type='text/javascript', src="{{ url_for('static', filename='jquery-file-upload/js/vendor/jquery.ui.widget.js') }}")
 script(type='text/javascript', src="{{ url_for('static', filename='jquery-file-upload/js/jquery.iframe-transport.js') }}")
 script(type='text/javascript', src="{{ url_for('static', filename='jquery-file-upload/js/jquery.fileupload.js') }}")
 
+script(type='text/javascript', src="{{ url_for('static', filename='assets/js/jquery.select2.min.js') }}")
+
 script(type="text/javascript").
+
+	$(function () {
+		//- $('#tags').select2();
+	});
 
 	var convert = new Markdown.getSanitizingConverter().makeHtml;
 

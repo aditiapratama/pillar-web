@@ -763,7 +763,6 @@ section.node-preview.group
 	.node-details-description
 		+node-details-description
 
-
 	&.group, &.project
 		.node-details-header
 			max-width: 35%
@@ -1666,6 +1665,11 @@ section.node-children
 
 				&#fileupload
 					color: $color-info
+
+			&.tags .select2-container
+				.select2-selection
+					+input-generic
+
 
 			select
 				text-transform: capitalize

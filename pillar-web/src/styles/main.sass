@@ -16,6 +16,7 @@
 
 @import plugins/_jstree
 @import plugins/js_perfectscrollbar
+@import plugins/_js_select2
 
 
 html
@@ -30,8 +31,10 @@ body
 	color: $color-text-dark
 	background-color: $color-background
 
-	// Until we can afford responsiveness
 	min-width: $screen-md
+
+	+media-xs
+		min-width: $screen-xs
 
 h1, h2, h3, h4, h5
 	font:
@@ -53,6 +56,9 @@ $navbar-backdrop-height: 600px
 
 .container
 	min-width: $screen-md
+
+	+media-xs
+		min-width: $screen-xs
 
 .container-page
 	background-color: $color-background
@@ -166,6 +172,9 @@ header.navbar-header
 	margin: 0
 	z-index: 1 // to be on top of the overlay
 	height: 100%
+
+	.navbar-toggle
+		color: white
 
 .navbar-overlay
 	position: absolute

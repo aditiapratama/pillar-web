@@ -102,10 +102,17 @@
 
 		+container-behavior
 
+		+media-xs
+			flex-direction: column
+
 		#sidebar, #updates
 			flex: 1
 			margin: 0 15px
 			+container-box
+
+			+media-xs
+				margin: 15px 0
+				border-radius: 0
 
 		#sidebar
 			width: 25%
@@ -246,6 +253,7 @@
 
 					.title
 						font-size: 1.5em
+						+text-overflow-ellipsis
 
 				&.comments
 					padding:
@@ -304,6 +312,9 @@
 					+media-sm
 						width: 120px
 						height: 120px
+					+media-xs
+						width: 120px
+						height: 120px
 
 					.ribbon
 						+ribbon
@@ -338,6 +349,11 @@
 						background-color: white
 						padding: 10px 0
 						border-top: 2px solid $color-background
+
+						+media-xs
+							opacity: 1
+							bottom: 0
+							height: 58%
 
 						.title
 							+text-overflow-ellipsis
@@ -385,6 +401,9 @@
 	padding: 50px 0
 	margin-bottom: 25px
 
+	+media-xs
+		padding: 0
+
 	h2
 		text-align: center
 		font-size: 2.8em
@@ -393,12 +412,17 @@
 			bottom: 50px
 		padding: 0
 
+		+media-xs
+			font-size: 1.6em
+
 	.box
-		// background-color: rgba(white, .9)
 		padding: 0 15px
 		border: 1px solid rgba(black, .4)
 		height: 450px
 		position: relative
+
+		+media-xs
+			margin-bottom: 15px
 
 		h3
 			font-size: 1.8em
@@ -451,7 +475,7 @@
 				text-decoration: none
 
 	.groups-text
-		margin-top: 20px
+		margin: 20px 15px 0 15px
 
 
 .container-fluid.our-content
@@ -486,8 +510,8 @@
 		justify-content: space-around
 		align-items: stretch
 
-		+media-sm
-			margin: 0 auto
+		+media-xs
+			display: inline-block
 		+media-sm
 			margin: 0 10px
 		+media-md
@@ -509,6 +533,13 @@
 
 			position: relative
 			transition: background-color 150ms ease-in-out
+
+			+media-xs
+				display: block
+				clear: both
+				width: auto
+				max-width: 90%
+				margin: 10px auto
 
 			&:hover, &:active, &:focus
 				text-decoration: none
@@ -592,6 +623,11 @@ section.homepage_container.statement
 
 		+media-md
 			padding: 0 80px
+
+		+media-xs
+			padding: 0
+			max-width: 95%
+			font-size: 1.6em
 
 	.buttons
 		display: flex
@@ -693,8 +729,14 @@ section.homepage_container.supported-by
 		margin-bottom: 0
 		color: $color-info
 
+		+media-xs
+			font-size: 2em
+
 	img.logos
 		padding: 60px 0 100px 0
+
+		+media-xs
+			max-width: 100%
 
 .container-fluid.get-started
 	background-color: $color-background-nav
@@ -759,6 +801,9 @@ section.homepage_container.supported-by
 				z-index: 0
 				position: relative
 				transition: transform 150ms ease-in-out
+
+				+media-xs
+					height: initial
 
 				&:hover
 
