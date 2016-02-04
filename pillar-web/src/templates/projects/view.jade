@@ -379,7 +379,7 @@ script.
 				if (data.node.original.type == 'blog') {
 					window.location.replace('blog');
 				} else {
-					var currentNodeId = Cookies.get('bcloud_current_node_id');
+					var currentNodeId = ProjectUtils.nodeId();
 					if (currentNodeId != data.node.id.substr(2)) {
 						displayNode(data.node.id);
 					}
