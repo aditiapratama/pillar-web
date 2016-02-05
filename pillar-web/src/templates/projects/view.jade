@@ -203,7 +203,7 @@ script.
 	var urlNodeTogglePublic = "{{url_for('projects.toggle_node_public')}}";
 
 	function loadNodeContent(url, nodeId) {
-		$('#project-loading').show();
+		$('#project-loading').addClass('active');
 
 		$.get(url, function(dataHtml) {
 			$("#node-edit-form").unbind( "submit" );
@@ -224,18 +224,18 @@ script.
 				window.location.replace('#' + nodeId);
 			};
 
-			$('#project-loading').hide();
+			$('#project-loading').removeClass('active');
 		})
 		.fail(function(dataResponse) {
 			$('#project_context').html($('<iframe id="server_error"/>'));
 			$('#server_error').attr('src', url);
 
-			$('#project-loading').hide();
+			$('#project-loading').removeClass('active');
 		});
 	}
 
 	function loadProjectContent(url) {
-		$('#project-loading').show();
+		$('#project-loading').addClass('active');
 
 		$.get(url, function(dataHtml) {
 
@@ -252,13 +252,13 @@ script.
 			// Update scrollbars
 			Ps.update(document.getElementById('project_context-container'));
 
-			$('#project-loading').hide();
+			$('#project-loading').removeClass('active');
 		})
 		.fail(function(dataResponse) {
 			$('#project_context').html($('<iframe id="server_error"/>'));
 			$('#server_error').attr('src', url);
 
-			$('#project-loading').hide();
+			$('#project-loading').removeClass('active');
 		});
 	}
 

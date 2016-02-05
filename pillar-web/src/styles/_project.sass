@@ -398,12 +398,18 @@ $z-index-base: 12
 		margin-left: auto
 		right: 5px
 		padding-bottom: 5px
-		display: none
+		display: inline-block
+		opacity: 0
+		transition: opacity 150ms ease-in-out
+		+spin
+		animation-duration: .5s
 
 		i
-			+spin
 			position: relative
 			top: 2px
+
+		&.active
+			opacity: 1
 
 
 #project-header+#project_tree,
@@ -459,9 +465,10 @@ $z-index-base: 12
 
 #node-container
 	flex: 1
-	display: flex
-	align-items: stretch
-	flex-direction: column
+	/* Gives problems on Chrome 48+ */
+	// display: flex
+	// align-items: stretch
+	// flex-direction: column
 
 	color: $color-text-dark
 

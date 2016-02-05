@@ -81,7 +81,8 @@ script.
 	$("li.node-details-meta-list-item.type").text(content_type.substring(content_type.indexOf("/") + 1));
 
 	if (document.getElementById("node-preview").offsetWidth > 750) {
-		$('.node-preview, .node-preview-thumbnail').css({'max-height': '100%', 'width': '100%'});
+		$('.node-preview, .node-preview-thumbnail').css({'max-height': 'auto', 'width': '100%'});
+		$('.node-preview img').css({'max-height': '100%'});
 	}
 	$('.sorry').click(function() {
 		$.get('/403', function(data) {
