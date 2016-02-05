@@ -139,8 +139,8 @@ html(lang="en")
 
 							| {% if current_user.is_anonymous() %}
 							li
-								a(href="https://blender.org/id/register",
-									title="Register") Register
+								a(href="https://store.blender.org/product/membership/",
+									title="Sign up") Sign up
 							| {% endif %}
 
 							| {% if current_user.is_authenticated() %}
@@ -194,8 +194,8 @@ html(lang="en")
 
 							li.nav-item-sign-in
 								a(href="{{ url_for('users.login') }}")
-									i.pi-log-in(title="Sign In")
-									|  Sign In
+									i.pi-log-in(title="Log In")
+									|  Log in
 							| {% endif %}
 
 			.page-content

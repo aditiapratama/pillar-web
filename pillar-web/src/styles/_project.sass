@@ -475,6 +475,7 @@ $z-index-base: 12
 	/* For error messages (403) and other overlaid text*/
 	#node-overlay
 		z-index: $z-index-base + 2
+		position: relative
 		opacity: 0
 		transition: opacity 250ms ease-in-out
 		&.active
@@ -644,6 +645,10 @@ section.node-row
 
 section.node-preview
 	overflow: hidden
+
+	iframe
+		width: 100%
+
 	&.image,
 	&.file,
 		min-height: 200px

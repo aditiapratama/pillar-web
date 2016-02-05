@@ -13,9 +13,9 @@
 					| Subscribe Now
 
 				| {% if not current_user.is_authenticated() %}
-				a.sign-in.btn.btn-outline(href="{{ url_for('users.login') }}")
+				a.sign-in.btn.btn-empty(href="{{ url_for('users.login') }}")
 					i.pi-log-in
-					| Sign In
+					| Log in
 				| {% endif %}
 
 		hr
