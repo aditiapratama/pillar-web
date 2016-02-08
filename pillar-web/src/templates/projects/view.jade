@@ -278,6 +278,8 @@ script.
 		loadNodeContent(url, nodeId);
 		$('.project-mode-view').show();
 		$('.project-mode-edit').hide();
+
+		$("#project_context-container").scrollTop(0);
 	}
 
 
@@ -306,8 +308,6 @@ script.
 				displayProject(nodeId);
 			}
 		{% endif %}
-
-
 
 
 		Ps.initialize(document.getElementById('project_context-container'));

@@ -249,6 +249,8 @@ script(type="text/javascript").
 			$('#project_context').html(dataHtml);
 			statusBarSet('success', 'Saved Successfully');
 
+			$("#project_context-container").scrollTop(0);
+
 			/* Style button */
 			$("li.button-save").removeClass('saving field-error');
 			$("li.button-save a#item_save").html('<i class="pi-check"></i> Save Changes');
@@ -256,6 +258,7 @@ script(type="text/javascript").
 			/* Show/hide buttons */
 			$('.project-mode-view').show();
 			$('.project-mode-edit').hide();
+
 		});
 
 	});
