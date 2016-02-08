@@ -190,12 +190,17 @@
 	position: relative
 	+spin
 
+	&:before, &:after
+		+spin
+
 .spinner
 	padding-top: 3px
 	padding-left: 3px
 	position: relative
 	left: -3px
 	+spin
+	&:before, &:after
+		+spin
 
 @keyframes spin-once
 	from

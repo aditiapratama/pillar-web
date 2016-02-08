@@ -23,7 +23,7 @@ function editNode(nodeId) {
 		$('#server_error').attr('src', url);
 	})
 	.always(function(){
-		$('.button-edit-icon').addClass('pi-edit').removeClass('pi-spin spinner');
+		$('.button-edit-icon').addClass('pi-edit').removeClass('pi-spin spin');
 	});
 }
 
@@ -46,7 +46,7 @@ function addNode() {
 		$('#server_error').attr('src', url);
 	})
 	.always(function(){
-		$('.button-add-icon').addClass('pi-collection-plus').removeClass('pi-spin spinner');
+		$('.button-add-icon').addClass('pi-collection-plus').removeClass('pi-spin spin');
 	});
 }
 
@@ -61,14 +61,14 @@ function addGroup(parentId) {
 			editNode(data.data.asset_id);
 	})
 	.always(function(){
-		$('.button-add-group-icon').addClass('pi-collection-plus').removeClass('pi-spin spinner');
+		$('.button-add-group-icon').addClass('pi-collection-plus').removeClass('pi-spin spin');
 	});
 }
 
 
 /* Edit Button */
 $('#item_edit').click(function(e){
-	$('.button-edit-icon').addClass('pi-spin spinner').removeClass('pi-edit');
+	$('.button-edit-icon').addClass('pi-spin spin').removeClass('pi-edit');
 	// When clicking on the edit icon, embed the edit
 	e.preventDefault;
 	if (ProjectUtils.isProject() === 'True') {
@@ -82,7 +82,7 @@ $('#item_edit').click(function(e){
 
 /* Add Asset Button */
 $('#item_add').click(function(e){
-	$('.button-add-icon').addClass('pi-spin spinner').removeClass('pi-collection-plus');
+	$('.button-add-icon').addClass('pi-spin spin').removeClass('pi-collection-plus');
 	e.preventDefault;
 	addNode();
 });
@@ -90,7 +90,7 @@ $('#item_add').click(function(e){
 
 /* Add Group Button */
 $('#item_add_group').click(function(e){
-	$('.button-add-group-icon').addClass('pi-spin spinner').removeClass('pi-collection-plus');
+	$('.button-add-group-icon').addClass('pi-spin spin').removeClass('pi-collection-plus');
 	e.preventDefault;
 	if (ProjectUtils.isProject() === 'True') {
 		addGroup();
