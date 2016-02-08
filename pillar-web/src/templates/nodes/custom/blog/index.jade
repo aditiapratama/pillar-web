@@ -19,7 +19,7 @@
 
 		#blog_index-container
 
-			| {% if project._id == config.MAIN_PROJECT_ID and node_type_post and project.node_type_has_method('post', 'POST', api=api) %}
+			| {% if project._id == config.MAIN_PROJECT_ID and project.node_type_has_method('post', 'POST', api=api) %}
 			a.btn.btn-default.button-create(href="{{url_for('nodes.posts_create', project_id=project._id)}}")
 				| Create New Post
 			| {% endif %}
@@ -89,11 +89,11 @@
 						| {{project.summary|safe}}
 					| {% endif %}
 
-			//- | {% if node_type_post and node_type_post.has_method('POST') %}
-			//- .blog_project-sidebar
-			//- 	a.btn.btn-default.button-create(href="{{url_for('nodes.posts_create', project_id=project._id)}}")
-			//- 		| Create New Post
-			//- | {% endif %}
+			| {% if project.node_type_has_method('post', 'POST', api=api) %}
+			.blog_project-sidebar
+				a.btn.btn-default.button-create(href="{{url_for('nodes.posts_create', project_id=project._id)}}")
+					| Create New Post
+			| {% endif %}
 		| {% endif %}
 
 | {% endblock %}

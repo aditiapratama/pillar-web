@@ -3,8 +3,8 @@
 | {% block page_title %}New {{ node_type.name }}{% endblock %}
 
 | {% block header_backdrop %}
-| {% if project and project.properties.picture_header %}
-.navbar-backdrop(style="background-image: url({{ project.properties.picture_header.thumbnail('m', api=api) }})")
+| {% if project and project.picture_header %}
+.navbar-backdrop(style="background-image: url({{ project.picture_header.thumbnail('m', api=api) }})")
 | {% elif node and node.picture %}
 .navbar-backdrop(style="background-image: url({{ node.picture.thumbnail('m', api=api) }})")
 | {% else %}
@@ -38,23 +38,23 @@
 				| {% if project._id != config.MAIN_PROJECT_ID %}
 				.blog_project-card
 					a.item-header(
-						href="{{ url_for('projects.view', project_url=project.properties.url) }}")
+						href="{{ url_for('projects.view', project_url=project.url) }}")
 
 						.overlay
-						| {% if project.properties.picture_header %}
-						img.background(src="{{ project.properties.picture_header.thumbnail('m', api=api) }}")
+						| {% if project.picture_header %}
+						img.background(src="{{ project.picture_header.thumbnail('m', api=api) }}")
 						| {% endif %}
 
 					a.card-thumbnail(
-						href="{{ url_for('projects.view', project_url=project.properties.url) }}")
-						| {% if project.properties.picture_square %}
-						img.thumb(src="{{ project.properties.picture_square.thumbnail('m', api=api) }}")
+						href="{{ url_for('projects.view', project_url=project.url) }}")
+						| {% if project.picture_square %}
+						img.thumb(src="{{ project.picture_square.thumbnail('m', api=api) }}")
 						| {% endif %}
 
 					.item-info
 
 						a.item-title(
-							href="{{ url_for('projects.view', project_url=project.properties.url) }}")
+							href="{{ url_for('projects.view', project_url=project.url) }}")
 							| {{ project.name }}
 
 				| {% endif %}
@@ -73,7 +73,7 @@
 
 					input.btn.btn-default.button-create(type='submit', value='Create {{ node_type.name }}')
 
-					a.btn.btn-default.button-back(href="{{ url_for('projects.view', project_url=project.properties.url) }}blog")
+					a.btn.btn-default.button-back(href="{{ url_for('projects.view', project_url=project.url) }}blog")
 						| Back to Blog
 
 			#blog_post-create-container
