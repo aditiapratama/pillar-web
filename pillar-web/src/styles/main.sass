@@ -287,19 +287,37 @@ header.navbar-header
 			height: 32px
 			width: 32px
 			box-shadow: 1px 1px 0 rgba(black, .2)
+			position: relative
 
-			&.none, &.demo, &.subscriber
-				padding: 3px
-				height: 35px
-				width: 35px
+
+		.special
+			width: 14px
+			height: 14px
+			border-radius: 999em
+			position: absolute
+			background-color: white
+			z-index: 2
+			display: inline-block
+			bottom: 5px
+			right: 17px
+			font-size: 1.2em
+			box-shadow: 1px 1px 1px rgba(black, .2)
 
 			&.subscriber
 				background-color: $color-success
+				color: white
+				font-size: .6em
+
 			&.demo
 				background-color: $color-info
-			&.none
-				background-color: $color-danger
+				color: white
+				font-size: .6em
 
+			&.none
+				color: $color-danger
+
+			i
+				+position-center-translate
 
 	.navbar-brand
 		height: $navbar-height
@@ -368,6 +386,13 @@ header.navbar-header
 						padding:
 							top: 10px
 							bottom: 10px
+
+						transition: opacity 150ms ease-in-out
+						opacity: 1
+
+						&:hover
+							opacity: .8
+
 						a
 							text-transform: initial
 
@@ -375,8 +400,17 @@ header.navbar-header
 							color: $color-danger
 						&.subscriber a
 							color: $color-success
+
 						&.demo a
 							color: $color-info
+
+						span.info
+							display: block
+
+							span.renew
+								display: block
+								color: $color-text-dark-primary
+								font-size: .9em
 
 
 		&.libraries
@@ -566,7 +600,7 @@ footer
 
 .btn-empty
 	background-color: transparent
-	border: none
+	border-color: transparent
 
 	&:focus, &:active
 		box-shadow: none

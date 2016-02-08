@@ -329,6 +329,36 @@
       ]
     },
     {
+      "uid": "c64623255a4a7c72436b199b05296c4f",
+      "css": "happy",
+      "code": 59456,
+      "src": "fontelico"
+    },
+    {
+      "uid": "53ed8570225581269cd7eff5795e8bea",
+      "css": "unhappy",
+      "code": 59457,
+      "src": "fontelico"
+    },
+    {
+      "uid": "043b585886018be7408f4c77c1a3759c",
+      "css": "displeased",
+      "code": 59462,
+      "src": "fontelico"
+    },
+    {
+      "uid": "cbc328d1c779a2b9e3b1199d904199a5",
+      "css": "grin",
+      "code": 59458,
+      "src": "fontelico"
+    },
+    {
+      "uid": "2bd5f98482d86649958312ea2ab5bb40",
+      "css": "laugh",
+      "code": 59463,
+      "src": "fontelico"
+    },
+    {
       "uid": "9bd60140934a1eb9236fd7a8ab1ff6ba",
       "css": "spin",
       "code": 59392,
@@ -344,6 +374,18 @@
       "uid": "381da2c2f7fd51f8de877c044d7f439d",
       "css": "image",
       "code": 59425,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "5e2ab018e3044337bcef5f7e94098ea1",
+      "css": "thumbs-up",
+      "code": 59459,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "ddcd918b502642705838815d40aea9e3",
+      "css": "thumbs-down",
+      "code": 59460,
       "src": "fontawesome"
     },
     {
@@ -419,6 +461,12 @@
       "src": "entypo"
     },
     {
+      "uid": "91426c82d94428a33353e495418435e3",
+      "css": "share",
+      "code": 59461,
+      "src": "entypo"
+    },
+    {
       "uid": "f11c9e95ae5eaa84d193e8fa1d38c6f9",
       "css": "angle-down",
       "code": 59436,
@@ -447,6 +495,18 @@
       "css": "credit-card",
       "code": 59443,
       "src": "entypo"
+    },
+    {
+      "uid": "3b00728aa97ad1a2581d414bd9d650bc",
+      "css": "heart",
+      "code": 59455,
+      "src": "typicons"
+    },
+    {
+      "uid": "hi76m8qggwn5lbl286oeqp64q0n8kusy",
+      "css": "heart-filled",
+      "code": 59454,
+      "src": "typicons"
     },
     {
       "uid": "bcdc294bb787b15203b82f2be8096548",
@@ -536,6 +596,12 @@
       "uid": "8167f6441d2557a90d717a7fc3248760",
       "css": "lock-open",
       "code": 59439,
+      "src": "mfglabs"
+    },
+    {
+      "uid": "189edfc41118cccbeb25788fcbb403da",
+      "css": "attention",
+      "code": 59453,
       "src": "mfglabs"
     },
     {

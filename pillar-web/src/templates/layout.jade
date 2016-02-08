@@ -155,24 +155,35 @@ html(lang="en")
 
 							li(class="dropdown{% if title in ['profile', 'billing-address', 'pledges', 'manage-collection']: %} active{% endif %}")
 								a.dropdown-toggle(href="#", data-toggle="dropdown", title="{{ current_user.email }}")
-									img.gravatar(
-										src="{{ current_user.gravatar }}",
-										class="{{ subscription }}")
+									img.gravatar(src="{{ current_user.gravatar }}", class="{{ subscription }}")
+									.special(class="{{ subscription }}")
+										| {% if subscription == 'subscriber' %}
+										i.pi-check
+										| {% elif subscription == 'demo' %}
+										i.pi-heart-filled
+										| {% else %}
+										i.pi-attention
+										| {% endif %}
 
 								ul.dropdown-menu
 									li.subscription-status(class="{{ subscription }}")
+										| {% if subscription == 'subscriber' %}
 										a(href="{{url_for('users.settings_billing')}}"
-											title="Subscription")
-											| {% if subscription == 'demo' %}
-											i.pi-star
-											span You have a demo account
-											| {% elif subscription == 'subscriber' %}
-											i.pi-star-filled
-											span Your subscription is active
-											| {% else %}
-											i.pi-warning
-											span Your subscription is not active
-											| {% endif %}
+											title="View subscription info")
+											i.pi-grin
+											span Your subscription is active!
+										| {% elif subscription == 'demo' %}
+										a(href="{{url_for('users.settings_billing')}}"
+											title="View subscription info")
+											i.pi-heart-filled
+											span You have a free account.
+										| {% else %}
+										a(href="https://store.blender.org/product/membership/"
+											title="Renew subscription")
+											i.pi-attention
+											span.info Your subscription is not active.
+												span.renew Click here to renew.
+										| {% endif %}
 
 									li
 										a(href="{{url_for('users.settings_profile')}}"
