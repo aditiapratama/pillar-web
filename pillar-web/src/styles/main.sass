@@ -34,7 +34,8 @@ body
 	min-width: $screen-md
 
 	+media-xs
-		min-width: $screen-xs
+		max-width: $screen-xs
+		min-width: auto
 
 h1, h2, h3, h4, h5
 	font:
@@ -58,7 +59,11 @@ $navbar-backdrop-height: 600px
 	min-width: $screen-md
 
 	+media-xs
-		min-width: $screen-xs
+		max-width: $screen-xs
+		min-width: auto
+		padding:
+			left: 0
+			right: 0
 
 .container-page
 	background-color: $color-background
@@ -496,6 +501,10 @@ ul.dropdown-menu
 #footer-container
 	position: relative
 	background-color: $color-background
+
+	.row
+		+media-xs
+			margin: 0
 
 /* Footer Navigation */
 footer

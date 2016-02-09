@@ -6,6 +6,9 @@
 	display: flex
 	justify-content: center
 
+	+media-xs
+		flex-direction: column
+
 	&.post-create
 		flex-direction: row-reverse
 
@@ -21,6 +24,7 @@
 		width: 75%
 
 		+media-xs
+			border-radius: 0
 			width: 100%
 			clear: both
 			display: block
@@ -81,11 +85,21 @@
 				padding: 25px 5px 35px 5px
 				font-size: 1.3em
 
+				+media-xs
+					padding:
+						left: 0
+						right: 0
+
 			.item-meta
 				color: $color-text-dark-secondary
 				padding:
 					left: 25px
 					right: 25px
+
+				+media-xs
+					padding:
+						left: 10px
+						right: 10px
 
 		.button-create
 			float: right
@@ -99,6 +113,14 @@
 			max-width: 680px
 			margin: 0 auto
 
+			+media-xs
+				padding:
+					left: 20px
+					right: 20px
+			.comment-reply-form
+				+media-xs
+					padding:
+						left: 0
 
 	#blog_post-edit-form
 		padding: 0
@@ -147,6 +169,7 @@
 		width: 100%
 		clear: both
 		display: block
+		margin-top: 25px
 	+media-sm
 		width: 40%
 	+media-md
