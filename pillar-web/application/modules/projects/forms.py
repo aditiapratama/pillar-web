@@ -48,3 +48,12 @@ class ProjectForm(Form):
 
     # def __init__(self, csrf_enabled=False, *args, **kwargs):
     #     super(ProjectForm, self).__init__(csrf_enabled=False, *args, **kwargs)
+
+class NodeTypeForm(Form):
+    project_id = HiddenField('project_id', validators=[DataRequired()])
+    name = StringField('Name', validators=[DataRequired()])
+    parent = StringField('Parent')
+    description = TextAreaField('Description')
+    dyn_schema = TextAreaField('Schema', validators=[DataRequired()])
+    form_schema = TextAreaField('Form Schema', validators=[DataRequired()])
+    permissions = TextAreaField('Permissions', validators=[DataRequired()])
