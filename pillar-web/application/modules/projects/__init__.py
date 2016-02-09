@@ -1,3 +1,4 @@
+import json
 from pillarsdk import Node
 from pillarsdk import Project
 from pillarsdk.exceptions import ResourceNotFound
@@ -18,6 +19,7 @@ from application import cache
 from application import SystemUtility
 from application.modules.users.model import UserProxy
 from application.modules.projects.forms import ProjectForm
+from application.modules.projects.forms import NodeTypeForm
 from application.helpers import current_user_is_authenticated
 from application.helpers import get_file
 from application.helpers import attach_project_pictures
@@ -185,6 +187,37 @@ def edit(project_url):
         project=project,
         api=api)
 
+
+@projects.route('/<project_url>/e/node-type/<node_type_name>', methods=['GET', 'POST'])
+@login_required
+def edit_node_type(project_url, node_type_name):
+    api = SystemUtility.attract_api()
+    # Fetch the Node or 404
+    try:
+        project = Project.find_one({
+            'where': '{"url" : "%s"}' % (project_url)}, api=api)
+    except ResourceNotFound:
+        return abort(404)
+    attach_project_pictures(project, api)
+    node_type = project.get_node_type(node_type_name)
+    form = NodeTypeForm()
+    if form.validate_on_submit():
+        schema = json.loads(form.dyn_schema.data)
+        node_type.dyn_schema = schema
+        project.update(api=api)
+    else:
+        form.project_id.data = project._id
+        form.name.data = node_type.name
+        form.description.data = node_type.description
+        form.parent.data = node_type.parent
+        form.dyn_schema.data = json.dumps(node_type.dyn_schema.to_dict())
+        form.form_schema.data = json.dumps(node_type.form_schema.to_dict())
+        form.permissions.data = json.dumps(node_type.permissions.to_dict())
+    return render_template('projects/edit_node_type.html',
+        form=form,
+        project=project,
+        api=api,
+        node_type=node_type)
 
 @projects.route('/e/add-featured-node', methods=['POST'])
 @login_required
