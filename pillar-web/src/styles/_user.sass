@@ -168,3 +168,117 @@
 		.settings-password
 			color: $color-text-dark-primary
 
+#users-container
+	background-color: white
+	display: flex
+
+	#users-sidebar
+		background-color: lighten($color-background-nav, 5%)
+		padding: 15px
+		width: 20%
+
+		input.search-field
+			background-color: lighten($color-background-nav, 10%)
+			font-size: 1.2em
+			color: white
+			margin-bottom: 20px
+			border: thin solid rgba(white, .1)
+			border-radius: 3px
+			width: 100%
+			padding: 5px
+
+		.users-list-filters
+			.panel.panel-default
+				border-radius: 3px
+				border: none
+				background-color: lighten($color-background-nav, 15%)
+			.toggleRefine
+				display: block
+
+			.panel-title, .panel-heading
+				color: $color-text-light-primary
+				text-decoration: none
+				&:hover, &:active, &:focus
+					text-decoration: none
+
+			.panel-body
+				padding-top: 0
+
+		.users-list-stats
+			color: lighten($color-background-nav, 70%)
+
+		#pagination
+			ul
+				list-style-type: none
+				margin: 0
+				padding: 0
+				width: 100%
+
+				li
+					float: left
+					padding: 5px
+					margin: 3px auto
+
+					border-right: thin solid lighten($color-background-nav, 15%)
+
+					&:last-child
+						border-color: transparent
+
+					&.disabled
+						opacity: .6
+
+					&.active
+						a
+							color: white
+
+	#users-list
+		width: 40%
+		height: 100%
+		position: relative
+		padding: 10px 0
+
+		.user-hit
+			padding: 5px 15px
+			display: block
+
+			&:hover
+				cursor: pointer
+				.name
+					color: $color-primary
+
+			em
+				font-style: normal
+				color: $color-primary
+
+			.name
+				font-size: 1.2em
+				small
+					margin-left: 5px
+					color: $color-text-dark-secondary
+
+			.roles
+				font-size: .9em
+				color: $color-text-dark-secondary
+
+	#users-details
+		background-color: darken(white, 3%)
+		width: 40%
+
+#user-edit-container
+	padding: 15px
+
+	#user-edit-header
+		.user-edit-name
+			font-size: 1.5em
+		.user-edit-username, .user-edit-email
+			color: $color-text-dark-secondary
+
+	#user-edit-form
+		padding: 10px 0
+
+		#submit_edit_user
+			+button-rounded-filled($color-success, 999em)
+
+		#button-cancel
+			+button-rounded(#aaa, 999em)
+			margin: 0 10px
