@@ -57,7 +57,7 @@ def homepage():
             "permissions.world": 1}',
         'where': '{"node_type": "asset", "properties.status": "published"}',
         'embedded': '{"user":1, "project":1}',
-        'sort': '-_created',
+        'sort': '-_updated',
         'max_results': '12'
         }, api=api)
 
