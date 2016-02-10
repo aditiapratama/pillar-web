@@ -42,6 +42,8 @@
 			data-user-id="{{user._id}}",
 			type="submit")
 
+		#user-edit-notification
+
 
 //- script(type='text/javascript', src="{{ url_for('static', filename='assets/js/jquery.select2.min.js') }}")
 
@@ -51,7 +53,13 @@ script(type="text/javascript").
 	$('#user-edit-form').submit(function(e){
 		e.preventDefault();
 		//- console.log($(this).serialize());
-		$.post($(this).attr('action'), $(this).serialize());
+		$.post($(this).attr('action'), $(this).serialize())
+		.done(function(data){
+			$('#user-edit-notification').addClass('success').html('Success!');
+		})
+		.fail(function(data){
+			$('#user-edit-notification').addClass('fail').html('Houston!');
+		});
 		//- $("#user-edit-form").submit();
 	});
 
