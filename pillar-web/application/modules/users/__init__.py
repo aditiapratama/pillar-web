@@ -294,8 +294,9 @@ def users_edit(user_id):
         system_roles = set([role[0] for role in form.roles.choices])
         system_groups = get_groups(system_roles)
         # Current user roles
-        user_roles = set(user.roles)
-        user_groups = get_groups(user.roles)
+        user_roles_list = user.roles if user.roles else []
+        user_roles = set(user_roles_list)
+        user_groups = get_groups(user_roles_list)
         # Remove all form roles from current roles
         user_roles = list(user_roles.difference(system_roles))
         user_groups = list(user_groups.difference(system_groups))
@@ -306,7 +307,6 @@ def users_edit(user_id):
         user_roles += system_roles_assigned
         user_groups += list(get_groups(user_roles))
         # Fetch the group for the assigned system roles
-        # system_groups_assigned =
         user.roles = user_roles
         user.groups = user_groups
         user.update(api=api)
