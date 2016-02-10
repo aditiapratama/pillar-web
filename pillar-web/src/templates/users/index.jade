@@ -110,5 +110,11 @@ script(type="text/javascript").
 		displayUser($(this).data('user-id'));
 	});
 
+	// Remove focus from search input so that the click event bound to .user-hit
+	// can be fired on the first click.
+	$('#users-list').hover(function(){
+		$('#q').blur();
+	});
+
 
 | {% endblock %}
