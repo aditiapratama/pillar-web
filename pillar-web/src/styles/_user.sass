@@ -194,6 +194,39 @@
 				background-color: lighten($color-background-nav, 15%)
 			.toggleRefine
 				display: block
+				padding-left: 7px
+				color: $color-text-light-secondary
+
+				&:hover
+					text-decoration: none
+					color: $color-primary
+
+				&.refined
+					color: $color-primary
+
+					&:hover
+						color: $color-danger
+
+						span
+							&:before
+								content: '\e84a'
+								font-family: 'pillar-font'
+					span
+						&:before
+							content: '\e849'
+							font-family: 'pillar-font'
+							position: relative
+							left: -7px
+							font-size: .9em
+
+				span
+					&:before
+						content: '\e848'
+						font-family: 'pillar-font'
+						position: relative
+						left: -7px
+						font-size: .9em
+
 
 			.panel-title, .panel-heading
 				color: $color-text-light-primary

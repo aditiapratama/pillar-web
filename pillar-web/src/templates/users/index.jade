@@ -40,8 +40,12 @@ script(type="text/template", id="facet-template")
 		.panel-collapse.collapse.in(id='filter_{{ facet }}', role='tabpanel', aria-labelledby='headingOne')
 			.panel-body
 				| {{#values}}
-				a.facet_link.toggleRefine(data-facet='{{ facet }}', data-value='{{ value }}', href='#')
-					span(class='{{#refined}}refined{{/refined}}')
+				a.facet_link.toggleRefine(
+					class='{{#refined}}refined{{/refined}}',
+					data-facet='{{ facet }}',
+					data-value='{{ value }}',
+					href='#')
+					span
 						| {{ label }}
 						small.facet_count.text-muted.pull-right {{ count }}
 				| {{/values}}
