@@ -88,23 +88,8 @@ def user_roles_update(user_id):
         user.update(api=api)
         return
 
-    # Custom demo list functionality, only available is a DEMO_USER_LIST is
-    # available. The content of the file is a list of email addresses. One
-    # address per line.
-    if 'DEMO_USERS_LIST' in app.config:
-        users_list_filepath = app.config['DEMO_USERS_LIST']
-        if os.path.isfile(users_list_filepath):
-            group_demo = Group.find_one({'where': "name=='demo'"}, api=api)
-            # Load all emails in a list for lookup
-            emails = [l.rstrip('\n') for l in open(users_list_filepath)]
-            if user.email in emails:
-                if not user.groups:
-                    user.groups = []
-                user.groups.append(group_demo._id)
-                user.update(api=api)
 
-
-@users.route("/login", methods=['GET', 'POST'])
+@users.route('/login', methods=['GET', 'POST'])
 def login():
     form = UserLoginForm()
     if form.validate_on_submit():
@@ -124,14 +109,14 @@ def login():
     return render_template('users/login.html', form=form)
 
 
-@users.route("/logout")
+@users.route('/logout')
 def logout():
     logout_user()
     # flash('Successfully logged out', 'info')
     return redirect('/')
 
 
-@users.route("/settings/profile", methods=['GET', 'POST'])
+@users.route('/settings/profile', methods=['GET', 'POST'])
 @login_required
 def settings_profile():
     """Profile view and edit page. This is a temporary implementation.
@@ -156,7 +141,7 @@ def settings_profile():
     return render_template('users/settings/profile.html', form=form, title='profile')
 
 
-@users.route("/settings/emails", methods=['GET', 'POST'])
+@users.route('/settings/emails', methods=['GET', 'POST'])
 @login_required
 def settings_emails():
     """Main email settings
@@ -191,7 +176,7 @@ def settings_emails():
     return render_template('users/settings/emails.html', form=form, title='emails')
 
 
-@users.route("/settings/billing")
+@users.route('/settings/billing')
 @login_required
 def settings_billing():
     """View the subscription status of a user
@@ -220,7 +205,7 @@ def type_names():
     return type_names
 
 
-@users.route("/tasks", methods=['GET', 'POST'])
+@users.route('/tasks', methods=['GET', 'POST'])
 @login_required
 def tasks():
     """User-assigned tasks"""
@@ -297,7 +282,34 @@ def users_edit(user_id):
     user = User.find(user_id, api=api)
     form = UserEditForm()
     if form.validate_on_submit():
-        print form.roles.data
+        def get_groups(roles):
+            """Return a set of role ids matching the group names provided"""
+            groups_set = set()
+            for system_role in roles:
+                group = Group.find_one({'where': "name=='%s'" % system_role}, api=api)
+                groups_set.add(group._id)
+            return groups_set
+
+        # Remove any of the default roles
+        system_roles = set([role[0] for role in form.roles.choices])
+        system_groups = get_groups(system_roles)
+        # Current user roles
+        user_roles = set(user.roles)
+        user_groups = get_groups(user.roles)
+        # Remove all form roles from current roles
+        user_roles = list(user_roles.difference(system_roles))
+        user_groups = list(user_groups.difference(system_groups))
+        # Get the assigned roles
+        system_roles_assigned = form.roles.data
+        system_groups_assigned = get_groups(system_roles_assigned)
+        # Reassign roles based on form.roles.data by adding them to existing roles
+        user_roles += system_roles_assigned
+        user_groups += list(get_groups(user_roles))
+        # Fetch the group for the assigned system roles
+        # system_groups_assigned =
+        user.roles = user_roles
+        user.groups = user_groups
+        user.update(api=api)
     else:
         form.roles.data = user.roles
     return render_template('users/edit_embed.html',
