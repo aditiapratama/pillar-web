@@ -5,6 +5,7 @@ from wtforms import StringField
 from wtforms import BooleanField
 from wtforms import PasswordField
 from wtforms import RadioField
+from wtforms import SelectMultipleField
 from wtforms.validators import DataRequired
 from wtforms.validators import Length
 from wtforms.validators import NoneOf
@@ -54,3 +55,8 @@ class UserSettingsEmailsForm(Form):
     choices = [(1, 'Keep me updated with Blender Cloud news.'),
         (0, 'Do not mail me news update.')]
     email_communications = RadioField('Notifications', choices=choices, coerce=int)
+
+
+class UserEditForm(Form):
+    role_choices = [('admin', 'admin'), ('subscriber', 'subscriber'), ('demo', 'demo')]
+    roles = SelectMultipleField('Roles', choices=role_choices)

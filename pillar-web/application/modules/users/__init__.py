@@ -16,10 +16,12 @@ from flask import session
 from flask import redirect
 from flask import request
 from flask import url_for
+from flask import abort
 
 from application.modules.users.forms import UserLoginForm
 from application.modules.users.forms import UserProfileForm
 from application.modules.users.forms import UserSettingsEmailsForm
+from application.modules.users.forms import UserEditForm
 from application.helpers import Pagination
 
 from application import SystemUtility
@@ -277,3 +279,27 @@ def tasks():
         title="task",
         tasks_data=json.dumps(tasks_datatable),
         node_type=node_type)
+
+
+@users.route('/u')
+@login_required
+def users_index():
+    if not current_user.has_role('admin'):
+        return abort(403)
+    return render_template('users/index.html')
+
+@users.route('/u/<user_id>/edit', methods=['GET', 'POST'])
+@login_required
+def users_edit(user_id):
+    if not current_user.has_role('admin'):
+        return abort(403)
+    api = SystemUtility.attract_api()
+    user = User.find(user_id, api=api)
+    form = UserEditForm()
+    if form.validate_on_submit():
+        print form.roles.data
+    else:
+        form.roles.data = user.roles
+    return render_template('users/edit_embed.html',
+        user=user,
+        form=form)

@@ -1,0 +1,172 @@
+| {% extends 'layout.html' %}
+
+| {% block page_title %} Blender Professionals {% endblock %}
+
+| {% block body %}
+#members
+	#featured.container-fluid.profiles-index.featured.featured-lg(
+		style="background-image: url({{url_for('static', filename='assets/images/backgrounds/background_jobs.jpg')}});")
+		.row.height-full
+			#profiles-index-featured-caption.col-md-12.vertical-align.text-center
+				h2
+					| Users
+
+
+
+
+	.container
+
+		#members-list.row
+
+			//- .profiles-index-loading
+			//- 	i.fa.fa-circle-o-notch.fa-spin
+
+			.col-lg-3.col-md-3.col-sm-12.col-xs-12
+				#search_input.m-t
+					input.profiles-index-search-field(
+							type="text",
+							name="q",
+							id="q",
+							autocomplete="off",
+							spellcheck="false",
+							autocorrect="false",
+							placeholder="Search by Full Name, Username...")
+
+				.profile-index-filters
+					//- h4.profile-index-filters-title Filters
+					#accordion.panel-group.accordion(role="tablist", aria-multiselectable="true")
+						#facets
+
+				.profile-index-stats
+					#stats
+
+				#pagination
+
+				.clearfix
+
+			.col-lg-6.col-md-6.col-sm-12.col-xs-12
+
+				#hits.profiles-index.list
+
+			.col-lg-3.col-md-3.col-sm-12.col-xs-12
+				#user-container
+
+
+| {% raw %}
+// Facet template
+script(type="text/template", id="facet-template").
+	<div class="profile-index-filters-skillset-list">
+		<div class="panel panel-default">
+
+			<a data-toggle="collapse" data-parent="#accordion" href="#filter_{{ facet }}" aria-expanded="true" aria-controls="filter_{{ facet }}">
+				<div class="panel-heading" role="tab" id="heading_special">
+					<h4 class="panel-title profile-index-filters-skillset-title">
+						{{ title }}
+					</h4>
+				</div>
+			</a>
+
+			<div id="filter_{{ facet }}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+				<div class="panel-body">
+
+					{{#values}}
+					<a class="facet_link toggleRefine" data-facet="{{ facet }}" data-value="{{ value }}" href="#">
+						<span class="profile-index-filters-skillset-skill {{#refined}}refined{{/refined}}">
+							{{ label }}
+							<small class="facet_count text-muted pull-right">{{ count }}</small>
+						</span>
+					</a>
+					{{/values}}
+
+				</div>
+			</div>
+
+				<!-- other values will only be displayed if the use click on the "show more" link  -->
+				{{#has_other_values}}
+				<!-- "show more" link -->
+				<li class="show-more"><a href="#"><i class="glyphicon glyphicon-chevron-down" /> more</a></li>
+
+				<!-- other values -->
+				{{#other_values}}
+				<li class="{{#refined}}refined{{/refined}} additional-facets show-more">
+					{{#disjunctive}}
+					<input class="checkbox toggleRefine" data-facet="{{ facet }}" data-value="{{ value }}" type="checkbox" {{#refined}}checked="checked"{{/refined}}>
+					{{/disjunctive}}
+					<a class="facet_link toggleRefine" data-facet="{{ facet }}" data-value="{{ value }}" href="#">{{ label }}</a><small class="text-muted pull-right">{{ count }}</small>
+				</li>
+				{{/other_values}}
+
+				<!-- "show less" link -->
+				<li class="show-less"><a href="#"><i class="glyphicon glyphicon-chevron-up" /> less</a></li>
+				{{/has_other_values}}
+
+
+		</div>
+	</div>
+
+// Hit template
+script(type="text/template", id="hit-template").
+	<a class="profiles-index-item list-item box job-index-item" data-user-id="{{ objectID }}" href="#">
+		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 relative height-full">
+			<div class="row profiles-index-item-title">
+				<div class="col-md-12 col-xs-12">
+					<h3 class="title">{{{ _highlightResult.full_name.value }}} <small>({{{ username }}})</small></h3>
+					<span class="tag_line">
+						{{{ roles }}}
+					</span>
+				</div>
+			</div>
+
+
+
+		</div>
+	</a>
+
+// Pagination template
+script(type="text/template", id="pagination-template").
+	<div class="profiles-index-pagination">
+		<ul class="pagination">
+			<li {{^prev_page}}class="disabled"{{/prev_page}}><a href="#" {{#prev_page}} class="gotoPage" data-page="{{ prev_page }}" {{/prev_page}}>&#60;</a></li>
+			{{#pages}}
+			<li class="{{#current}}active{{/current}}{{#disabled}}disabled{{/disabled}}"><a href="#" {{^disabled}} class="gotoPage" data-page="{{ number }}" {{/disabled}}>{{ number }}</a></li>
+			{{/pages}}
+			<li {{^next_page}}class="disabled"{{/next_page}}><a href="#" {{#next_page}} class="gotoPage" data-page="{{ next_page }}" {{/next_page}}>&#62;</a></li>
+		</ul>
+	</div>
+
+// Stats template
+script(type="text/template", id="stats-template").
+	<h5>{{ nbHits }} result{{#nbHits_plural}}s{{/nbHits_plural}} <span class="text-muted hidden-sm hidden-xs">({{ processingTimeMS }}ms)</span></h5>
+| {% endraw %}
+
+| {% endblock %}
+
+| {% block footer_scripts %}
+script().
+	var APPLICATION_ID = '{{config.ALGOLIA_USER}}';
+	var SEARCH_ONLY_API_KEY = '{{config.ALGOLIA_PUBLIC_KEY}}';
+	var INDEX_NAME = '{{config.ALGOLIA_INDEX_USERS}}';
+	var sortByCountDesc = null;
+	var FACET_CONFIG = [
+	{ name: 'roles', title: 'Roles', disjunctive: false, sortFunction: sortByCountDesc },
+	];
+
+script(src="//cdn.jsdelivr.net/algoliasearch/3/algoliasearch.min.js")
+script(src="//cdn.jsdelivr.net/algoliasearch.helper/2/algoliasearch.helper.min.js")
+script(src="//cdn.jsdelivr.net/hogan.js/3.0.0/hogan.common.js")
+script(src="{{ url_for('static', filename='assets/js/algolia_search.min.js') }}")
+
+script().
+	function displayUser(userId) {
+		var url = '/u/' + userId + '/edit?embed=1';
+		$.get(url, function(dataHtml){
+			$('#user-container').html(dataHtml);
+		});
+	}
+
+	$('body').on('click', '.profiles-index-item', function(){
+		displayUser($(this).data('user-id'));
+	});
+
+
+| {% endblock %}

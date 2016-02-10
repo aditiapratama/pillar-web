@@ -1,0 +1,81 @@
+| {% block body %}
+
+| {% with errors = errors %}
+| {% if errors %}
+
+| {% for field in errors %}
+.alert.alert-danger(role="alert")
+	strong {{field}}
+	| {% for message in errors[field] %}
+	| {{message}}|
+	| {% endfor %}
+
+| {% endfor %}
+
+| {% endif %}
+| {% endwith %}
+
+| {% if error!="" %}
+.alert.alert-danger(role="alert")
+	| {{error}}
+| {% endif %}
+
+#user-edit-container
+
+	#user-edit-header
+		.user-edit-title {{user.full_name}}
+
+	form(
+		id="user-edit-form",
+		method="POST",
+		enctype="multipart/form-data",
+		action="{{url_for('users.users_edit', user_id=user._id)}}")
+
+		| {% for field in form %}
+
+		| {% if field.name == 'csrf_token' %}
+		| {{ field }}
+
+		| {% else %}
+
+		| {% if field.type == 'HiddenField' %}
+		| {{ field }}
+
+		| {% else %}
+
+		.form-group(class="{{field.name}}")
+			| {{ field.label }}
+			| {{ field(class='form-control') }}
+
+		| {% endif %}
+
+		| {% endif %}
+
+		| {% endfor %}
+
+
+		a#button-cancel.btn.btn-default(href="#", data-user-id='{{user._id}}') Cancel
+
+		input#submit_edit_user.btn.btn-default.btn-success(
+			data-user-id="{{user._id}}",
+			type="submit")
+
+
+//- script(type='text/javascript', src="{{ url_for('static', filename='assets/js/jquery.select2.min.js') }}")
+
+script(type="text/javascript").
+
+	$('#user-edit-form').submit(function(e){
+		e.preventDefault();
+		//- console.log($(this).serialize());
+		$.post($(this).attr('action'), $(this).serialize());
+		//- $("#user-edit-form").submit();
+	});
+
+	$('#item_cancel').click(function(e){
+		displayUser('{{user._id}}');
+	});
+
+
+
+| {% endblock %}
