@@ -465,12 +465,6 @@ script.
 		Ps.update(document.getElementById('project_tree'));
 	});
 
-	$(window).bind( 'hashchange', function(e) {
-		displayNode(location.hash.substring(1));
-	});
-
-
-
 | {% endblock %}
 
 | {% block comment_scripts %} {% endblock%}

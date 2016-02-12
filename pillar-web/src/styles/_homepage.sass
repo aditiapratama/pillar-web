@@ -71,25 +71,23 @@
 				// justify-content: space-around
 				margin: 25px auto
 
-				// width: 100%
-				// max-width: 450px
-
 				a
 					min-width: 200px
 					font-size: 1.2em
 					padding: 10px 25px
 
-
 					@include button-rounded($color-text-light, 999em)
 					opacity: 1
 
+					box-shadow: 0 0 50px rgba(black, .2)
+
 					&.blue
-						@include button-rounded-filled($color-primary, 999em)
+						@include button-rounded-filled(hsl(hue($color-primary), 50%, 50%), 999em)
 						opacity: 1
 						margin-right: 15px
 
 					&.orange
-						@include button-rounded-filled($color-danger, 999em)
+						@include button-rounded-filled(hsl(hue($color-secondary), 50%, 50%), 999em)
 						opacity: 1
 						padding: 10px 35px
 						margin-right: 15px
