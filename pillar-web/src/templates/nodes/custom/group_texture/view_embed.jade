@@ -6,7 +6,7 @@
 		img.backdrop(src="{{ node.picture.thumbnail('l', api=api) }}")
 		.overlay
 		| {% endif %}
-		.node-title
+		.node-title#node-title
 			| {{node.name}}
 
 		.node-details-meta.preview

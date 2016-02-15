@@ -682,7 +682,8 @@ section.node-preview
 		background-color: black
 
 	&.group, &.project
-		background-color: $color-background-nav
+		background-color: $color-background
+		@include overlay(rgba($color-background, .3), 0%, transparent, 100%)
 		position: relative
 		overflow: hidden
 
@@ -698,25 +699,31 @@ section.node-preview
 			width: 100%
 
 		.backdrop
-			width: 100%
+			width: 105%
+			left: -5px
+			position: relative
 			z-index: 0
+			filter: blur(10px)
 
 		.overlay
-			@include overlay(transparent, 0%, rgba(black, .3), 100%)
+			@include overlay(rgba($color-background-nav, .2), 0%, transparent, 100%)
 			width: 100%
 			height: 100%
 			z-index: 2
 
 
 		.node-title
-			+project-node-title
 			position: absolute
 			z-index: 2
-			color: white
+			color: $color-background-nav
 			left: 20px
 			bottom: 10px
-			font-size: 2.5em
-			text-shadow: 1px 1px 1px rgba(black, .5)
+			font:
+				size: 2.4em
+				weight: 300
+
+		.author
+			color: $color-text-dark-secondary
 
 	&.group
 		height: 100px
@@ -811,10 +818,10 @@ section.node-preview.group
 						&:before
 							content: ''
 					&.author
-						color: $color-text-light-primary
+						color: $color-text-dark-primary
 
 					&.status
-						color: $color-text-light
+						color: $color-text-dark
 
 		&.footer
 			+clearfix
