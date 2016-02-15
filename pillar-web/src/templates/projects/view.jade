@@ -6,14 +6,13 @@
 meta(property="og:title", content="{{project.name}} - Blender Cloud")
 meta(property="og:url", content="{{url_for('projects.view', project_url=project.url, _external=True)}}")
 meta(property="og:type", content="website")
+meta(property="og:description", content="{{project.summary}}")
 | {% if project.picture_header %}
 meta(property="og:image", content="{{ project.picture_header.thumbnail('l', api=api) }}")
 | {% endif %}
 | {% endblock %}
 
 | {% block tw %}
-meta(name="twitter:card", content="summary_large_image")
-meta(name="twitter:site", content="@Blender_Cloud")
 meta(name="twitter:title", content="{{project.name}} on Blender Cloud")
 meta(name="twitter:description", content="{{project.summary}}")
 | {% if project.picture_header %}
@@ -174,8 +173,6 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 							i.pi-cancel
 							| Cancel
 
-
-
 | {% endblock %}
 
 | {% block footer_navigation %}{% endblock %}
@@ -223,6 +220,11 @@ script.
 			if (typeof(nodeId) != 'undefined') {
 				window.location.replace('#' + nodeId);
 			};
+
+			var nodeTitle = document.getElementById('node-title');
+			var nodeTitleText = $(nodeTitle).text() + " - {{project.name}} - Blender Cloud";
+
+			document.title = nodeTitleText;
 
 			$('#project-loading').removeClass('active');
 		})

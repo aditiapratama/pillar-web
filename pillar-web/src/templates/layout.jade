@@ -16,9 +16,9 @@ html(lang="en")
 		meta(property="og:image", content="{{ url_for('static', filename='assets/img/background_gleb_locomotive.jpg')}}")
 		| {% endblock %}
 
+		meta(name="twitter:card", content="summary_large_image")
 		meta(name="twitter:site", content="@Blender_Cloud")
 		| {% block tw %}
-		meta(name="twitter:card", content="summary_large_image")
 		meta(name="twitter:title", content="Blender Cloud")
 		meta(name="twitter:description", content="Blender Cloud is a web based service developed by Blender Institute that allows people to access the training videos and all the data from the past open projects.")
 		meta(name="twitter:image", content="{{ url_for('static', filename='assets/img/background_gleb_locomotive.jpg')}}")

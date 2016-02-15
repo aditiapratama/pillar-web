@@ -5,14 +5,15 @@
 
 	| {% if node.picture %}
 	section#node-preview.node-preview.file
-		img.node-preview-thumbnail(src="{{ node.picture.thumbnail('l', api=api) }}")
+		img.node-preview-thumbnail#node-preview-thumbnail(
+			src="{{ node.picture.thumbnail('l', api=api) }}")
 	| {% endif %}
 
 
 	section.node-details-container.file
 
 		.node-details-header
-			.node-title
+			.node-title#node-title
 				| {{node.name}}
 
 		.node-details-meta.header
@@ -44,7 +45,7 @@
 
 
 		| {% if node.description %}
-		.node-details-description
+		.node-details-description#node-description
 			| {{node.description}}
 		| {% endif %}
 

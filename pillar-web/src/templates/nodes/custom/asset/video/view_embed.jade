@@ -24,7 +24,7 @@ link(rel="stylesheet", href="//releases.flowplayer.org/6.0.3/skin/minimalist.css
 	section.node-details-container.video
 
 		.node-details-header
-			.node-title
+			.node-title#node-title
 				| {{node.name}}
 
 		.node-details-meta.header
@@ -67,7 +67,7 @@ link(rel="stylesheet", href="//releases.flowplayer.org/6.0.3/skin/minimalist.css
 				| {% endif %}
 
 		| {% if node.description %}
-		.node-details-description
+		.node-details-description#node-description
 			| {{node.description}}
 		| {% endif %}
 
