@@ -5,7 +5,6 @@ from pillarsdk import utils
 from pillarsdk.users import User
 from pillarsdk.nodes import Node
 from pillarsdk.nodes import NodeType
-from pillarsdk.tokens import Token
 from pillarsdk.groups import Group
 from pillarsdk.exceptions import ResourceInvalid
 
