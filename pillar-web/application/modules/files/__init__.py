@@ -7,9 +7,7 @@ from PIL import Image
 import simplejson
 import traceback
 from datetime import datetime
-
-from pillarsdk import File
-
+from werkzeug import secure_filename
 from flask import session
 from flask import redirect
 from flask import url_for
@@ -17,32 +15,18 @@ from flask import flash
 from flask import abort
 from flask import send_from_directory
 from flask import jsonify
-from werkzeug import secure_filename
-
-#from application.controllers.admin import *
-
-import os
-from pillarsdk import File
-from flask import jsonify
 from flask import Blueprint
 from flask import request
 from flask import render_template
-
-# from flask import render_template
-
-from application import app
-from application import SystemUtility
-# from application.helpers import percentage
-
 from flask.ext.login import current_user
 from flask.ext.login import login_required
-
+from pillarsdk import File
+from pillarsdk.exceptions import ResourceNotFound
+from application import app
+from application import SystemUtility
 
 # Name of the Blueprint
 files = Blueprint('files', __name__)
-
-RFC1123_DATE_FORMAT = '%a, %d %b %Y %H:%M:%S GMT'
-
 
 
 def hashfile(afile, hasher, blocksize=65536):
@@ -56,8 +40,7 @@ def hashfile(afile, hasher, blocksize=65536):
 @files.route('/', methods=['GET', 'POST'])
 @login_required
 def index():
-    """Custom files entry point
-    """
+    """Custom files entry point"""
     rfiles = []
     backend = app.config['STORAGE_BACKEND']
     api = SystemUtility.attract_api()
@@ -217,7 +200,6 @@ def allowed_file(filename):
 def gen_file_name(filename):
     """If file was exist already, rename it and return a new name
     """
-
     i = 1
     while os.path.exists(os.path.join(app.config['UPLOAD_DIR'], filename)):
         name, extension = os.path.splitext(filename)
@@ -250,9 +232,7 @@ def create_thumbnail(image):
         hsize = int((float(img.size[1])*float(wpercent)))
         img = img.resize((basewidth,hsize), PIL.Image.ANTIALIAS)
         img.save(os.path.join(get_dir('thumbnails'), image))
-
         return True
-
     except:
         print traceback.format_exc()
         return False
@@ -417,8 +397,10 @@ def item_delete(item_id):
     a new one).
     """
     api = SystemUtility.attract_api()
-    file_item = File.find(item_id, api=api)
-    file_item.delete(api=api)
-    return jsonify(status='success', data=dict(message='File deleted'))
-
-
+    try:
+        file_item = File.find(item_id, api=api)
+        file_item.delete(api=api)
+        message = 'File deleted'
+    except ResourceNotFound:
+        message = 'File not found'
+    return jsonify(status='success', data=dict(message=message))

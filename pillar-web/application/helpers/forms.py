@@ -12,7 +12,7 @@ class FileSelectText(HiddenInput):
         super(FileSelectText, self).__init__(**kwargs)
 
     def __call__(self, field, **kwargs):
-        html =  super(FileSelectText, self).__call__(field, **kwargs)
+        html = super(FileSelectText, self).__call__(field, **kwargs)
 
         button = ""
         if field.data:
@@ -24,7 +24,7 @@ class FileSelectText(HiddenInput):
                 button += '<a href="#" class="file_delete" data-field-name="picture" \
                     data-file_id="{0}"> Delete</a>'.format(field.data)
             except ResourceNotFound:
-                field.data = None
+                pass
 
         button += """
         <input class="fileupload" type="file" name="file" data-url="{0}" data-field-name="{1}">
