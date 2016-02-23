@@ -3,6 +3,7 @@ from flask import url_for
 from wtforms import TextField
 from wtforms.widgets import HiddenInput
 from wtforms.widgets import HTMLString
+from pillarsdk.exceptions import ResourceNotFound
 from application import SystemUtility
 
 
@@ -16,11 +17,14 @@ class FileSelectText(HiddenInput):
         button = ""
         if field.data:
             api = SystemUtility.attract_api()
-            picture = File.find(field.data, api=api)
-            button += '<img class="preview-thumbnail" src="{0}" />'.format(
-                picture.thumbnail('s', api=api))
-            button += '<a href="#" class="file_delete" data-field-name="picture" data-file_id="{0}"> Delete</a>'.format(
-                field.data)
+            try:
+                picture = File.find(field.data, api=api)
+                button += '<img class="preview-thumbnail" src="{0}" />'.format(
+                    picture.thumbnail('s', api=api))
+                button += '<a href="#" class="file_delete" data-field-name="picture" \
+                    data-file_id="{0}"> Delete</a>'.format(field.data)
+            except ResourceNotFound:
+                pass
 
         button += """
         <input class="fileupload" type="file" name="file" data-url="{0}" data-field-name="{1}">
