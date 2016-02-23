@@ -24,7 +24,7 @@ class FileSelectText(HiddenInput):
                 button += '<a href="#" class="file_delete" data-field-name="picture" \
                     data-file_id="{0}"> Delete</a>'.format(field.data)
             except ResourceNotFound:
-                pass
+                field.data = None
 
         button += """
         <input class="fileupload" type="file" name="file" data-url="{0}" data-field-name="{1}">
