@@ -16,7 +16,6 @@ from flask import Blueprint
 from flask import redirect
 from flask import url_for
 
-from flask.ext.mail import Mail
 from flask.ext.login import LoginManager
 from flask.ext.login import UserMixin
 from flask.ext.login import current_user
@@ -153,7 +152,6 @@ class SystemUtility():
             return None
 
 # Initialize the available extensions
-mail = Mail(app)
 cache = Cache(app)
 
 # Initialize Redis client to manage deletion of custom cache keys
