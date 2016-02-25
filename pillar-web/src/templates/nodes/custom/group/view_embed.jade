@@ -23,9 +23,11 @@
 				| {% endif %}
 
 			.node-details-meta-actions
-				.btn-browsetoggle
+				.btn-browsetoggle(
+					title="Toggle between list/grid view",
+					data-toggle="tooltip",
+					data-placement="top")
 					i.pi-list
-
 
 	section.node-details-container.group
 
@@ -34,32 +36,47 @@
 			| {{node.description}}
 		| {% endif %}
 
-
-
 	section.node-children.group
 
 		| {% if children %}
 		| 	{% for child in children %}
 
+		| {# Browse type: List #}
 		a(href="#", data-node_id="{{ child._id }}", class="item_icon list-node-children-item browse-list")
 			.list-node-children-item-thumbnail
 
 				| {% if child.picture %}
 				img(
-					src="{{ child.picture.thumbnail('m', api=api)}} ")
+					src="{{ child.picture.thumbnail('t', api=api)}} ")
 				| {% endif %}
 
 				.list-node-children-item-thumbnail-icon
+					| {# If there's a type available, otherwise show a folder icon #}
 					| {% if child.properties.content_type %}
 
+					| {# Show an icon if there's no thumbnail #}
+					| {% if not child.picture %}
+					| {% if child.properties.content_type == 'image' %}
+					i.dark.pi-image
+					| {% elif child.properties.content_type == 'video' %}
+					i.dark.pi-film-thick
+					| {% elif child.properties.content_type == 'file' %}
+					i.dark.pi-document
+					| {% endif %}
+
+					| {% else %}
 					| {% if child.properties.content_type == 'video' %}
 					i.pi-play
 					| {% endif %}
-
 					| {% endif %}
 
-			.list-node-children-item-name
-				span {{ child.name }}
+					| {% else %}
+					| {% if not child.picture %}
+					i.dark.pi-folder
+					| {% endif %}
+					| {% endif %}
+
+			.list-node-children-item-name {{ child.name }}
 
 			.list-node-children-item-meta
 				| {% if child.properties.status != 'published' %}
@@ -72,6 +89,10 @@
 				span Image ·
 				| {% elif child.properties.content_type == 'file' %}
 				span File ·
+				| {% else %}
+				| {% if child.picture %}
+				span Folder ·
+				| {% endif %}
 				| {% endif %}
 
 				span(title="Created {{ child._created }}")  {{ child._created | pretty_date }}
@@ -86,6 +107,8 @@
 					data-placement="right") free access
 				| {% endif %}
 
+
+		| {# Browse type: Icon #}
 		a(href="#", data-node_id="{{ child._id }}", title="{{ child.name }}", class="item_icon list-node-children-item browse-icon")
 			.list-node-children-item-thumbnail
 
