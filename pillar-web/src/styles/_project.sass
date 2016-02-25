@@ -3,6 +3,7 @@ $project_header-height: 50px
 $project_footer-height: 30px
 
 $list-node-children-item-width: 160px
+$list-node-children-item-width_list: 48px
 $z-index-base: 12
 
 /* Child of container, contains project-flex */
@@ -26,7 +27,8 @@ $z-index-base: 12
 	/* So we have *some* page scroll, inside it uses perfectscrollbar */
 	overflow: hidden
 	min-height: 600px
-	background-color: rgba($color-background-nav, .9)
+	// background-color: $color-background-nav
+	background: white
 
 	+media-xs
 		border-radius: 0
@@ -35,8 +37,7 @@ $z-index-base: 12
 	+media-md
 		border-radius: 0
 	+media-lg
-		border-bottom-left-radius: 3px
-		border-bottom-right-radius: 3px
+		border-radius: 3px
 
 #project-nav,
 #project_context-container
@@ -50,7 +51,8 @@ $z-index-base: 12
 	position: relative
 
 	color: white
-	border-right: thick solid $color-background-nav
+	border-right: thick solid darken($color-background-nav, 2%)
+	background-color: $color-background-nav
 
 	z-index: $z-index-base + 2
 
@@ -97,6 +99,10 @@ $z-index-base: 12
 	top: 0
 	z-index: $z-index-base +1
 
+	+media-lg
+		border-top-left-radius: 3px
+		border-top-right-radius: 3px
+
 	&.navigation
 		width: 100%
 		left: 0
@@ -104,6 +110,7 @@ $z-index-base: 12
 
 	&.context
 		right: 0
+		background-color: lighten($color-background-nav, 3%)
 
 	span#project-statusbar
 		position: absolute
@@ -111,7 +118,6 @@ $z-index-base: 12
 		top: 10px
 		min-width: 50%
 		padding: 5px 15px
-		background-color: rgba($color-background-nav, .8)
 		color: $color-text-light
 		border-radius: 3px
 		opacity: 0
@@ -163,11 +169,13 @@ $z-index-base: 12
 			a
 				color: lighten($color-text, 60%)
 
-		/* Kinda special, we want to highlight the current project*/
+		/* Name of thte project */
 		.project-title
 			font-weight: 400
 			a
 				color: white
+				// font-family: $font-headings
+				text-transform: uppercase
 
 		/* The > separating each breadcrumb */
 		li+li:before
@@ -299,7 +307,7 @@ $z-index-base: 12
 			padding: 5px 15px
 			color: $color-text-light-primary
 			border-radius: 3px
-			border: thin solid darken($color-background, 50%)
+			border: thin solid lighten($color-background-nav, 20%)
 			text-align: center
 			text-transform: uppercase
 			transition: background-color 150ms ease-in-out
@@ -308,7 +316,7 @@ $z-index-base: 12
 				margin-right: 5px
 
 			&:hover
-				background-color: darken($color-background, 60%)
+				background-color: lighten($color-background-nav, 5%)
 				color: $color-text-light
 				text-decoration: none
 
@@ -354,7 +362,7 @@ $z-index-base: 12
 			border-bottom-right-radius: 3px
 			border-top-left-radius: 0
 			border-top-right-radius: 0
-			background-color: lighten($color-background-nav, 10%)
+			background-color: darken($color-background-nav, 3%)
 
 			li
 				padding: 0
@@ -368,7 +376,6 @@ $z-index-base: 12
 					padding: 10px 15px
 					width: 100%
 					border: 0
-					border-top: thin solid $color-background-nav
 					font-size: .9em
 					width: 100%
 					text-align: left
@@ -524,9 +531,9 @@ $z-index-base: 12
 /* Node Context */
 =project-node-title
 	font:
-		family: $font-headings
+		family: $font-body
 		size: 2em
-		weight: 400
+		weight: 300
 
 $node-preview-max-height-sm: 300px
 $node-preview-max-height-md: 450px
@@ -706,16 +713,17 @@ section.node-preview
 			filter: blur(10px)
 
 		.overlay
-			@include overlay(rgba($color-background-nav, .2), 0%, transparent, 100%)
+			@include overlay(rgba($color-background-nav, .1), 0%, rgba(white, .6), 100%)
 			width: 100%
 			height: 100%
-			z-index: 2
+			z-index: 1
 
 
 		.node-title
 			position: absolute
 			z-index: 2
-			color: $color-background-nav
+			color: lighten($color-background-nav, 15%)
+			text-shadow: 1px 1px 0 rgba(white, .2)
 			left: 20px
 			bottom: 10px
 			font:
@@ -741,6 +749,7 @@ section.node-details-container
 
 section.node-details-container,
 section.node-preview.group
+	position: relative
 	//flex: 1 // because firefox
 
 	&.group, &.storage
@@ -753,7 +762,7 @@ section.node-preview.group
 		display: flex
 		align-items: baseline
 		min-height: 50px
-		padding: 15px 20px 5px 20px
+		padding: 20px 20px 5px 20px
 
 		.node-title
 			+project-node-title
@@ -795,6 +804,23 @@ section.node-preview.group
 		.node-details-description
 			padding-top: 15px
 
+		.node-details-meta.preview
+			.node-details-meta-list
+				display: inline-block
+
+			.node-details-meta-actions
+				display: inline-block
+
+				.btn-browsetoggle
+					+button-rounded($color-text-dark-secondary, 3px)
+					width: 48px
+					text-align: center
+					padding: 2px 4px
+					i
+						font-size: 1.3em
+						padding: 0
+						margin: 0
+
 	&.project
 		.node-details-description
 			position: relative
@@ -811,6 +837,7 @@ section.node-preview.group
 			position: absolute
 			right: 10px
 			bottom: 20px
+			z-index: 1
 
 			ul.node-details-meta-list
 				li.node-details-meta-list-item
@@ -818,7 +845,7 @@ section.node-preview.group
 						&:before
 							content: ''
 					&.author
-						color: $color-text-dark-primary
+						color: lighten($color-background-nav, 25%)
 
 					&.status
 						color: $color-text-dark
@@ -1275,10 +1302,8 @@ section.node-children
 	width: $list-node-children-item-width
 	overflow: hidden
 	text-overflow: ellipsis
-	transition: opacity .1s ease-in-out, color .1s ease-in-out
 
 	&:hover
-		opacity: .9
 		color: darken($color-primary, 20%)
 
 		& .list-node-children-item-name i
@@ -1294,6 +1319,95 @@ section.node-children
 		& .list-node-children-item-name i
 			color: $color-primary
 
+	&.browse-list
+		display: none
+		width: 98%
+		position: relative
+		background-color: initial
+		box-shadow: none
+		border-top: thin solid darken(white, 8%)
+
+		margin: 0
+		padding:
+			top: 7px
+			bottom: 7px
+
+		+clearfix
+
+		&:first-child
+			border: none
+
+		&:hover
+			opacity: 1
+			text-decoration: none
+
+			.list-node-children-item-name
+				text-decoration: none
+				color: darken($color-primary, 10%)
+
+		.list-node-children-item-thumbnail
+			float: left
+			min-width: $list-node-children-item-width_list * 1.69
+			max-width: $list-node-children-item-width_list * 1.69
+			height: $list-node-children-item-width_list
+			border-radius: 3px
+			img
+				height: $list-node-children-item-width_list
+				width: auto
+
+			.list-node-children-item-thumbnail-icon
+				font-size: 1.2em
+				transition: none
+
+		.list-node-children-item-name
+			position: relative
+			padding:
+				top: 0
+				left: 15px
+			font:
+				size: 1.2em
+			color: darken($color-primary, 15%)
+
+			background-color: initial
+			width: auto
+			max-width: initial
+			span
+				width: 100%
+
+			&:hover
+				text-decoration: underline
+
+		.list-node-children-item-meta
+			position: relative
+			left: 15px
+			font-size: .9em
+			color: $color-text-dark-secondary
+			background-color: initial
+			padding: 0
+			text-decoration: none
+			span
+				width: 100%
+
+				&.updated
+					color: $color-text-dark-hint
+				&.free
+					font-size: .8em
+					color: $color-success
+					border: thin solid $color-success
+					padding: 3px 8px
+					text-transform: uppercase
+					border-radius: 3px
+					margin-left: 5px
+
+				&.status
+					font-size: .8em
+					color: $color-text-dark-secondary
+					border: thin solid $color-text-dark-hint
+					padding: 3px 8px
+					text-transform: uppercase
+					border-radius: 3px
+					margin-right: 5px
+
 
 	& .list-node-children-item-thumbnail
 		display: flex
@@ -1302,8 +1416,9 @@ section.node-children
 
 		width: $list-node-children-item-width
 		height: $list-node-children-item-width
-		background-color: lighten($color-background-nav, 50%)
+		background-color: darken($color-background, 5%)
 		position: relative
+		overflow: hidden
 
 		img
 			width: $list-node-children-item-width
@@ -1314,8 +1429,8 @@ section.node-children
 			left: 50%
 			transform: translate(-50%, -50%)
 			font-size: 4em
-			color: rgba(white, .75)
-			text-shadow: 1px 1px 1px rgba(black, .2)
+			color: white
+			text-shadow: 1px 1px 1px rgba(black, .2), 0 0 50px rgba(black, .3)
 			transition: transform .1s ease-in-out
 
 		& .list-node-children-item-status
@@ -1355,7 +1470,6 @@ section.node-children
 				left: 7px
 				right: 3px
 			font-size: .9em
-			transition: color .1s ease-in-out
 
 		span
 			padding:

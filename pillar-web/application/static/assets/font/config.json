@@ -449,6 +449,12 @@
       "src": "entypo"
     },
     {
+      "uid": "5e9f01871d44e56b45ecbfd00f4dbc3a",
+      "css": "layout",
+      "code": 59468,
+      "src": "entypo"
+    },
+    {
       "uid": "70370693ada58ef0a60fa0984fe8d52a",
       "css": "plus",
       "code": 59405,
@@ -506,6 +512,12 @@
       "uid": "9e251fb8e9e1c71ab09683468e0479a3",
       "css": "angle-up",
       "code": 59418,
+      "src": "entypo"
+    },
+    {
+      "uid": "3626b3f3a0b284e7f4166b815719aece",
+      "css": "list",
+      "code": 59467,
       "src": "entypo"
     },
     {

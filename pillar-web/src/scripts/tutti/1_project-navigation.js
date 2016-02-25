@@ -1,4 +1,3 @@
-
 function projectNavCollapse() {
 
 	$("#project_nav").addClass('collapsed');

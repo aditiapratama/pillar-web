@@ -76,7 +76,7 @@
 
 				.comment-author
 					position: relative
-					color: $color-text-dark
+					color: lighten($color-background-nav, 20%)
 					font:
 						weight: 500
 
@@ -118,6 +118,7 @@
 
 				strong, b
 					font-weight: 500
+					color: $color-info
 
 			/* Rating, and actions such as reply */
 			.comment-meta
@@ -205,11 +206,11 @@
 				padding:
 					top: 0
 					left: 15px
-				border-left: 3px solid lighten($color-text-dark-hint, 20%)
+				border-left: 2px solid lighten($color-text-dark-hint, 15%)
 
 			&.is-team
 				.comment-author
-					color: $color-info
+					color: $color-success
 
 			&.is-replying
 				// background-color: $color-background

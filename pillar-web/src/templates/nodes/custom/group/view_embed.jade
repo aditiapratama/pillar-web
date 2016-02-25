@@ -22,6 +22,10 @@
 					| {{node.properties.status}}
 				| {% endif %}
 
+			.node-details-meta-actions
+				.btn-browsetoggle
+					i.pi-list
+
 
 	section.node-details-container.group
 
@@ -30,53 +34,99 @@
 			| {{node.description}}
 		| {% endif %}
 
+
+
 	section.node-children.group
 
 		| {% if children %}
 		| 	{% for child in children %}
 
-		a(href="#", data-node_id="{{ child._id }}", title="{{ child.name }}", class="item_icon")
-			.list-node-children-item
-				.list-node-children-item-thumbnail
+		a(href="#", data-node_id="{{ child._id }}", class="item_icon list-node-children-item browse-list")
+			.list-node-children-item-thumbnail
 
-					| {% if child.picture %}
-					img(
-						src="{{ child.picture.thumbnail('b', api=api)}} ")
-					| {% endif %}
+				| {% if child.picture %}
+				img(
+					src="{{ child.picture.thumbnail('m', api=api)}} ")
+				| {% endif %}
 
-					.list-node-children-item-thumbnail-icon
-						| {% if child.properties.content_type %}
-
-						| {% if child.properties.content_type == 'video' %}
-						i.pi-play
-						| {% endif %}
-
-						| {% else %}
-						i.pi-folder
-						| {% endif %}
-
-					| {% if child.properties.status != 'published' %}
-					.list-node-children-item-status {{ child.properties.status }}
-					| {% endif %}
-
-					| {% if child.permissions.world %}
-					.list-node-children-item-ribbon
-						span free
-					| {% endif %}
-
-				.list-node-children-item-name
+				.list-node-children-item-thumbnail-icon
+					| {% if child.properties.content_type %}
 
 					| {% if child.properties.content_type == 'video' %}
-					i.pi-film-thick
-					| {% elif child.properties.content_type == 'image' %}
-					i.pi-image
-					| {% elif child.properties.content_type == 'file' %}
-					i.pi-document
+					i.pi-play
+					| {% endif %}
+
+					| {% endif %}
+
+			.list-node-children-item-name
+				span {{ child.name }}
+
+			.list-node-children-item-meta
+				| {% if child.properties.status != 'published' %}
+				span.status {{ child.properties.status }}
+				| {% endif %}
+
+				| {% if child.properties.content_type == 'video' %}
+				span Video ·
+				| {% elif child.properties.content_type == 'image' %}
+				span Image ·
+				| {% elif child.properties.content_type == 'file' %}
+				span File ·
+				| {% endif %}
+
+				span(title="Created {{ child._created }}")  {{ child._created | pretty_date }}
+				| {% if (child._created | pretty_date) != (child._updated | pretty_date) %}
+				span.updated(title="Updated {{ child._updated }}")  (updated {{ child._updated | pretty_date }})
+				| {% endif %}
+
+				| {% if child.permissions.world %}
+				span.free(
+					title="Everyone can access this, share it around!",
+					data-toggle="tooltip",
+					data-placement="right") free access
+				| {% endif %}
+
+		a(href="#", data-node_id="{{ child._id }}", title="{{ child.name }}", class="item_icon list-node-children-item browse-icon")
+			.list-node-children-item-thumbnail
+
+				| {% if child.picture %}
+				img(
+					src="{{ child.picture.thumbnail('b', api=api)}} ")
+				| {% endif %}
+
+				.list-node-children-item-thumbnail-icon
+					| {% if child.properties.content_type %}
+
+					| {% if child.properties.content_type == 'video' %}
+					i.pi-play
+					| {% endif %}
+
 					| {% else %}
 					i.pi-folder
 					| {% endif %}
 
-					span {{ child.name }}
+				| {% if child.properties.status != 'published' %}
+				.list-node-children-item-status {{ child.properties.status }}
+				| {% endif %}
+
+				| {% if child.permissions.world %}
+				.list-node-children-item-ribbon
+					span free
+				| {% endif %}
+
+			.list-node-children-item-name
+
+				| {% if child.properties.content_type == 'video' %}
+				i.pi-film-thick
+				| {% elif child.properties.content_type == 'image' %}
+				i.pi-image
+				| {% elif child.properties.content_type == 'file' %}
+				i.pi-document
+				| {% else %}
+				i.pi-folder
+				| {% endif %}
+
+				span {{ child.name }}
 
 		| 	{% endfor %}
 		| {% endif %}
@@ -100,6 +150,75 @@
 			$('#project_tree').jstree('select_node', 'n_' + nodeId);
 
 		});
+
+
+		// Browse type: icon or list
+		function projectBrowseTypeIcon() {
+			$(".list-node-children-item.browse-list").hide();
+			$(".list-node-children-item.browse-icon").show();
+			$(".btn-browsetoggle").html('<i class="pi-list"></i>');
+		};
+
+		function projectBrowseTypeList() {
+			$(".list-node-children-item.browse-list").show();
+			$(".list-node-children-item.browse-icon").hide();
+			$(".btn-browsetoggle").html('<i class="pi-layout"></i>');
+		};
+
+		function projectBrowseTypeCheck(){
+
+			/* Only run if we're in a project */
+			if(document.getElementById("project-flex") !== null) {
+
+				var browse_type = Cookies.get('bcloud_ui_browse_type');
+
+				if (browse_type) {
+					if (browse_type == 'icon') {
+						projectBrowseTypeIcon();
+
+					} else if ( browse_type == 'list' ) {
+						projectBrowseTypeList();
+					}
+				} else {
+					projectBrowseTypeIcon();
+				}
+
+			}
+		}
+
+		function projectBrowseToggle(){
+
+			var browse_type = Cookies.get('bcloud_ui_browse_type');
+
+			if (browse_type) {
+				if (browse_type == 'icon') {
+
+					projectBrowseTypeList();
+					Cookies.set('bcloud_ui_browse_type', 'list');
+
+				} else if ( browse_type == 'list' ) {
+
+					projectBrowseTypeIcon();
+					Cookies.set('bcloud_ui_browse_type', 'icon');
+
+				}
+			} else {
+				projectBrowseTypeList();
+				Cookies.set('bcloud_ui_browse_type', 'list');
+			}
+		}
+
+		$('.btn-browsetoggle').on('click', function (e) {
+			e.preventDefault();
+			projectBrowseToggle();
+		});
+
+
+		/* Check on load */
+		$( document ).ready(function() {
+			projectBrowseTypeCheck();
+		});
+
 
 include ../_scripts
 
