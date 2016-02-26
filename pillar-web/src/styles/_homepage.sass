@@ -32,14 +32,8 @@
 
 		.text
 			padding: 100px 15px 0 30px
-			// width: 100%
 			height: 100%
 			color: white
-
-			// display: flex
-			// flex-direction: column
-			// justify-content: center
-			// align-items: center
 
 			.title
 				padding-bottom: 25px
@@ -50,7 +44,6 @@
 				text-shadow: 1px 1px 0 rgba(black, .2), 1px 1px 10px rgba(black, .4)
 
 			.lead
-				// text-align: center
 				padding-left: 15px
 				max-width: 780px
 				span
@@ -67,8 +60,6 @@
 
 
 			.buttons
-				// display: flex
-				// justify-content: space-around
 				margin: 25px auto
 
 				a
@@ -100,6 +91,8 @@
 
 		+container-behavior
 
+		+media-sm
+			flex-direction: column
 		+media-xs
 			flex-direction: column
 
@@ -109,11 +102,18 @@
 			+container-box
 
 			+media-lg
-				max-width: 50%
+				max-width: 48%
 			+media-md
-				max-width: 50%
+				max-width: 48%
+			+media-sm
+				margin: 15px 0
+				width: 100%
+				max-width: 100%
+				border-radius: 0
 			+media-xs
 				margin: 15px 0
+				width: 100%
+				max-width: 100%
 				border-radius: 0
 
 		#sidebar
@@ -262,6 +262,21 @@
 						font-size: 1.5em
 						+text-overflow-ellipsis
 
+					.details
+						.where
+							margin-right: 3px
+						.who
+							margin: 0 3px
+							font-weight: 400
+
+						.when
+							margin-left: 3px
+							color: $color-text-dark-secondary
+
+							&:hover
+								color: $color-primary
+
+
 				&.comments
 					padding:
 						top: 6px
@@ -270,12 +285,12 @@
 					.info
 						float: left
 						width: 100%
-						max-width: 450px
+						max-width: 100%
 						+text-overflow-ellipsis
 
 						.title
 							font-size: 1em
-							color: $color-text-dark-primary
+							color: darken($color-primary, 5%)
 							+text-overflow-ellipsis
 
 							&:hover
@@ -293,8 +308,14 @@
 
 								.parent
 									padding: 0 5px
+
 								.project
 									padding-left: 5px
+							.when
+								strong
+									margin-right: 3px
+								a
+									color: $color-text-dark-secondary
 
 			.latestassets-list
 				width: 100%

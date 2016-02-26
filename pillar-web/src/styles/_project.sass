@@ -27,17 +27,21 @@ $z-index-base: 12
 	/* So we have *some* page scroll, inside it uses perfectscrollbar */
 	overflow: hidden
 	min-height: 600px
-	// background-color: $color-background-nav
 	background: white
 
 	+media-xs
 		border-radius: 0
+		flex-direction: column-reverse
+		min-height: auto
 	+media-sm
 		border-radius: 0
+		flex-direction: row
 	+media-md
 		border-radius: 0
+		flex-direction: row
 	+media-lg
 		border-radius: 3px
+		flex-direction: row
 
 #project-nav,
 #project_context-container
@@ -58,6 +62,10 @@ $z-index-base: 12
 
 	left: 0
 	transition: all 250ms ease-in-out
+
+	+media-xs
+		width: initial
+		padding-bottom: 20px
 
 	+media-lg
 		border-top-left-radius: 3px
@@ -437,6 +445,10 @@ $z-index-base: 12
 	i
 		font-size: 1.3em
 
+	+media-xs
+		visibility: hidden
+		display: none
+
 .project_nav-collapse-btn
 	height: $project_footer-height
 	width: 30px
@@ -527,6 +539,9 @@ $z-index-base: 12
 	&.collapsed
 		background-color: rgba($color-background-nav, .15)
 		cursor: e-resize
+
+	+media-xs
+		display: none
 
 
 /* Node Context */

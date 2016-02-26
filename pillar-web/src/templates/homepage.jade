@@ -84,9 +84,13 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 						.info
 							a.title(href="{{ url_for('nodes.view', node_id=n._id, redir=1) }}") {{ n.name }}
 							span.details
-								span.where
-									a(href="{{ url_for('projects.view', project_url=n.project.url) }}") {{ n.project.name }}
-								span.when(title="Updated {{ n._updated | pretty_date }}")  · by {{ n.user.full_name }} · {{ n._created | pretty_date }}
+								a.where(href="{{ url_for('projects.view', project_url=n.project.url) }}") {{ n.project.name }}
+								| ·
+								span.who by {{ n.user.full_name }}
+								| ·
+								a.when(
+									href="{{ url_for('nodes.view', node_id=n._id, redir=1) }}",
+									title="Updated {{ n._updated | pretty_date }}") {{ n._created | pretty_date }}
 					| {% endfor %}
 
 					| {% else %}
@@ -107,9 +111,10 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 						.info
 							a.title(href="{{ url_for('nodes.view', node_id=n.parent._id, redir=1) }}") {{ n.properties.content }}
 							span.details
-								span.when.
-									<strong>{{ n.user.full_name }}</strong>
-									 · <span title="{{ n._created }}">{{ n._created | pretty_date }}</span>
+								span.who {{ n.user.full_name }} ·
+								a.when(
+									href="{{ url_for('nodes.view', node_id=n.parent._id, redir=1) }}",
+									title="{{ n._created }}") {{ n._created | pretty_date }}
 								span.where
 									|  ·
 									a.parent(href="{{ url_for('nodes.view', node_id=n.parent._id, redir=1) }}") {{ n.parent.name }}
