@@ -27,7 +27,7 @@ meta(name="twitter:image", content="{{ project.properties.picture_header.thumbna
 | {% elif node and node.picture %}
 meta(name="twitter:image", content="{{ node.picture.thumbnail('l', api=api) }}")
 | {% else %}
-meta(name="twitter:image", content="{{ url_for('static', filename='assets/img/background_caminandes_3_02.jpg')}}")
+meta(name="twitter:image", content="{{ url_for('static', filename='assets/img/backgrounds/background_caminandes_3_02.jpg')}}")
 | {% endif %}
 meta(name="twitter:description", content="{{ node.properties.content }}")
 | {% endblock %}

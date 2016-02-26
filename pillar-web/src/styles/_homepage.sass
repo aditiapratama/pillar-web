@@ -10,11 +10,13 @@
 		+container-behavior
 
 	#header
-		min-height: 550px
-
+		min-height: 500px
 		background:
-			size: 100% 100%
+			size: cover
 			repeat: no-repeat
+
+		+media-xs
+			min-height: 350px
 
 		iframe
 			width: 100%
@@ -31,17 +33,23 @@
 
 
 		.text
-			padding: 100px 15px 0 30px
+			padding: 80px 15px 0 30px
 			height: 100%
 			color: white
+
+			+media-xs
+				padding-top: 40px
 
 			.title
 				padding-bottom: 25px
 				font:
-					family: $font-headings
+					family: $font-body
 					size: 4.5em
-					weight: 600
-				text-shadow: 1px 1px 0 rgba(black, .2), 1px 1px 10px rgba(black, .4)
+					weight: 400
+				text-shadow: 1px 1px 0 rgba(black, .5), 0 0 25px rgba(black, .4)
+
+				+media-xs
+					font-size: 2.5em
 
 			.lead
 				padding-left: 15px
@@ -54,10 +62,12 @@
 						top: 5px
 						bottom: 5px
 
-					background-color: rgba(darken($color-primary, 25%), .9)
-					box-shadow: 0.5em 0 0 rgba(darken($color-primary, 25%), .9),-0.5em 0 0 rgba(darken($color-primary, 25%), .9)
+					background-color: rgba(#961C49, .9)
+					box-shadow: 0.5em 0 0 rgba(#961C49, .9),-0.5em 0 0 rgba(#961C49, .9)
 					box-decoration-break: clone
 
+				+media-xs
+					padding-left: 10px
 
 			.buttons
 				margin: 25px auto
@@ -69,11 +79,14 @@
 
 					@include button-rounded($color-text-light, 999em)
 					opacity: 1
+					box-shadow: 1px 1px 1px rgba(black, .1), 0 0 50px rgba(black, .3)
 
-					box-shadow: 0 0 50px rgba(black, .2)
+					+media-xs
+						margin: 10px auto
+						width: 100%
 
 					&.blue
-						@include button-rounded-filled(hsl(hue($color-primary), 50%, 50%), 999em)
+						@include button-rounded-filled(hsl(hue($color-info), 60%, 45%), 999em)
 						opacity: 1
 						margin-right: 15px
 
@@ -242,25 +255,38 @@
 
 				.image
 					width: 65px
-					max-height: 65px
-					max-width: 65px
 					height: 65px
+					max-width: 65px
+					max-height: 65px
 					margin-right: 15px
 					float: left
+
+					+media-xs
+						width: 48px
+						height: 48px
+						max-width: 48px
+						max-height: 48px
 
 				.info
 					float: left
 					width: auto
 					+text-overflow-ellipsis
 
-					+media-lg
-						max-width: 82%
+					+media-xs
+						max-width: 75%
+					+media-sm
+						max-width: 78%
 					+media-md
+						max-width: 82%
+					+media-lg
 						max-width: 82%
 
 					.title
 						font-size: 1.5em
 						+text-overflow-ellipsis
+
+						+media-xs
+							font-size: 1.2em
 
 					.details
 						.where
@@ -669,7 +695,6 @@ section.homepage_container.statement
 			min-width: 200px
 			font-size: 1.2em
 			padding: 10px 25px
-
 
 			@include button-rounded($color-text-light, 999em)
 			opacity: 1

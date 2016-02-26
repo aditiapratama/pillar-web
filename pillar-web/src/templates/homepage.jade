@@ -10,9 +10,9 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 
 | {% block header_backdrop %}
 .homepage.navbar-backdrop(
-	style="background-image: url({{ url_for('static', filename='assets/img/background_caminandes_3_02.jpg')}})")
+	style="background-image: url({{ url_for('static', filename='assets/img/backgrounds/bg_tutorials_01.jpg')}})")
 	//
-		video(loop, muted, autoplay, poster="{{ url_for('static', filename='assets/img/background_join_glass.jpg')}}", class="fullscreen-bg__video")
+		video(loop, muted, autoplay, poster="{{ url_for('static', filename='assets/img/backgrounds/background_join_glass.jpg')}}", class="fullscreen-bg__video")
 			source(src="{{ url_for('static', filename='assets/video/header-glass_half.webm')}}", type="video/webm")
 			source(src="{{ url_for('static', filename='assets/video/header-glass_half.mp4')}}", type="video/mp4")x
 .homepage.navbar-backdrop-overlay
@@ -27,40 +27,37 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 		//- 	frameborder="0",
 		//- 	allowfullscreen)
 		.text
-			.title LLAMIGOS
+			.title Learn by example.
 				//- img(src="{{ url_for('static', filename='assets/img/logo_gallery.png')}}")
 
 			.lead
-				//- span.
-				//- 	Create epic and emotional scenes,
-				//- 	<br/>
-				//- 	dive into high quality computer graphics!
-				//- 	<br/>
-				//- 	Full sources and documentation available in CC-BY.
 				span.
-					Snowy environments and furry characters,
+					Watch detailed animation reviews,
 					<br/>
-					a great winter adventure awaits!
+					groom and shade furry animals,
 					<br/>
-					Full sources, tutorials and documentation available now.
+					dig into the source files. It's all free to share.
 				//
 					We make films, we build a production pipeline, and we share everything.
 					<br/>Get full access to the Blender Institute's Open Projects and training material.
 
 			.buttons
-				| {% if current_user.is_authenticated() %}
-				a.btn.btn-default.btn-outline.orange(href="https://cloud.blender.org/p/caminandes-3/")
-					| Explore
+				a.btn.btn-default.btn-outline.blue(href="https://cloud.blender.org/p/caminandes-3/#56c70585c379cf00797168a6")
+					i.pi-play
+					|  Shading & Grooming
 
-				a.btn.btn-default.btn-outline.blue(href="https://www.youtube.com/watch?v=SkVqJ1SGeL0")
-					| Watch Caminandes: Llamigos
+				a.btn.btn-default.btn-outline.blue(href="https://cloud.blender.org/p/caminandes-3/#56bdacccc379cf00797160b0")
+					i.pi-play
+					|  Animation Review
 
-				| {% elif current_user.is_anonymous() %}
-				a.btn.btn-default.btn-outline.orange.go-to-pricing
-					| Sign up
-				a.btn.btn-default.btn-outline.blue(href="https://www.youtube.com/watch?v=SkVqJ1SGeL0")
-					| Watch Llamigos
-				| {% endif %}
+				//
+					| {% if current_user.is_authenticated() %}
+					| {% elif current_user.is_anonymous() %}
+					a.btn.btn-default.btn-outline.orange.go-to-pricing
+						| Sign up
+					a.btn.btn-default.btn-outline.blue(href="https://www.youtube.com/watch?v=SkVqJ1SGeL0")
+						| Watch Caminandes: Llamigos
+					| {% endif %}
 
 .homepage_container.page-content
 	#content
@@ -300,8 +297,6 @@ section.homepage_container.statement
 						img(src="{{ url_for('static', filename='assets/img/people/pablo.jpg')}}")
 					.face(data-blenderhead='hjalti')
 						img(src="{{ url_for('static', filename='assets/img/people/hjalti.jpg')}}")
-					.face(data-blenderhead='sarah')
-						img(src="{{ url_for('static', filename='assets/img/people/sarah.jpg')}}")
 					.face(data-blenderhead='andy')
 						img(src="{{ url_for('static', filename='assets/img/people/andy.jpg')}}")
 					.face(data-blenderhead='sergey')
@@ -333,11 +328,6 @@ section.homepage_container.statement
 							small Iceland
 						span.
 							Animation. Layout Artist.
-					.bio#sarah
-						h3 Sarah Feldlaufer
-							small Belgium
-						span.
-							Animation. Concept Art.
 					.bio#sergey
 						h3 Sergey Sharybin
 							small Russia
