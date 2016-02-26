@@ -479,8 +479,8 @@ def edit(node_id):
     set_properties(dyn_schema, form_schema, node_properties, form, set_data=False)
 
     if form.validate_on_submit():
-        if process_node_form(
-                form, node_id=node_id, node_type=node_type, user=user_id):
+        if process_node_form(form, node_id=node_id, node_type=node_type,
+            user=user_id):
             # Handle the specific case of a blog post
             if node_type.name == 'post':
                 project_update_nodes_list(node, list_name='blog')
