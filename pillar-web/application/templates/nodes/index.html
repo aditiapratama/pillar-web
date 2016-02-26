@@ -1,48 +1,37 @@
 {% extends 'layout.html' %}
-{% from '_macros/_pagination.html' import render_pagination %}
-
-{% block body %}
-<div class="col-md-9">
-  <div class="row">
-    <div class="col-md-12">
-      <table cellpadding="0" cellspacing="0" border="0" class="table table-striped" id="nodes">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Description</th>
-            <th width="8%"></th>
-          </tr>
-        </thead>
-        <tbody>
-        {% for node in nodes._items %}
-            <tr id="row_{{node._id}}">
-              <td><a href="#">{{node.name}}</a></td>
-              <td>
-                {% if node.description %}
-                  {{node.description|truncate(25)}}
-                {% endif %}
-              </td>
-              <td>
-                <a class="btn btn-default btn-xs" href="{{url_for('nodes.edit', node_id=node._id)}}"><i class="glyphicon glyphicon-edit"></i> Edit</a>
-              </td>
-            </tr>
-        {% endfor %}
-          
-        </tbody>
-        <tfoot>
-          <tr>
-            <th>Name</th>
-            <th>Description</th>
-            <th></th>
-          </tr>
-        </tfoot>
-      </table>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-12">
-      <a href="#" class="btn btn-default">Add</a>
-    </div>
-  </div>
-</div>
+{% block page_title %}Users{% endblock %}
+{% block body %}<div id="users-container"><div id="users-sidebar"><input type="text" name="q" id="q" autocomplete="off" spellcheck="false" autocorrect="false" placeholder="Search by Full Name, Username..." class="search-field"/><div class="users-list-filters"><div id="accordion" role="tablist" aria-multiselectable="true" class="panel-group accordion"><div id="facets"></div></div></div><div class="users-list-stats"><div id="stats"></div></div><div id="pagination"></div></div><div id="users-list"><div id="hits"></div></div><div id="users-details"><div id="user-container"></div></div></div>{% raw %}<!-- Facet template--><script type="text/template" id="facet-template"><div class="panel panel-default"><a data-toggle="collapse" data-parent="#accordion" href="#filter_{{ facet }}" aria-expanded="true" aria-controls="filter_{{ facet }}"><div role="tab" class="panel-heading"><div class="panel-title">{{ title }}</div></div></a><div id="filter_{{ facet }}" role="tabpanel" aria-labelledby="headingOne" class="panel-collapse collapse in"><div class="panel-body">{{#values}}<a data-facet="{{ facet }}" data-value="{{ value }}" href="#" class="facet_link toggleRefine {{#refined}}refined{{/refined}}"><span>{{ label }}<small class="facet_count text-muted pull-right">{{ count }}</small></span></a>{{/values}}</div></div></div></script><!-- Hit template--><script type="text/template" id="hit-template"><div data-user-id="{{ objectID }}" class="user-hit"><div class="name">{{{ _highlightResult.full_name.value }}}<small>({{{ username }}})</small></div><div class="roles">{{{ roles }}}</div></div></script><!-- Pagination template--><script type="text/template" id="pagination-template"><ul>
+	<li {{^prev_page}}class="disabled"{{/prev_page}}><a href="#" {{#prev_page}} class="gotoPage" data-page="{{ prev_page }}" {{/prev_page}}><i class="pi-angle-left"></i></a></li>
+	{{#pages}}
+	<li class="{{#current}}active{{/current}}{{#disabled}}disabled{{/disabled}}"><a href="#" {{^disabled}} class="gotoPage" data-page="{{ number }}" {{/disabled}}>{{ number }}</a></li>
+	{{/pages}}
+	<li {{^next_page}}class="disabled"{{/next_page}}><a href="#" {{#next_page}} class="gotoPage" data-page="{{ next_page }}" {{/next_page}}><i class="pi-angle-right"></i></a></li>
+</ul>
+</script><!-- Stats template--><script type="text/template" id="stats-template"><h5>{{ nbHits }} result{{#nbHits_plural}}s{{/nbHits_plural}}<span> ({{ processingTimeMS }}ms)</span></h5></script>{% endraw %}
 {% endblock %}
+{% block footer_scripts %}<script>var APPLICATION_ID = '{{config.ALGOLIA_USER}}';
+var SEARCH_ONLY_API_KEY = '{{config.ALGOLIA_PUBLIC_KEY}}';
+var INDEX_NAME = '{{config.ALGOLIA_INDEX_USERS}}';
+var sortByCountDesc = null;
+var FACET_CONFIG = [
+{ name: 'roles', title: 'Roles', disjunctive: false, sortFunction: sortByCountDesc },
+];
+</script><script src="//cdn.jsdelivr.net/algoliasearch/3/algoliasearch.min.js"></script><script src="//cdn.jsdelivr.net/algoliasearch.helper/2/algoliasearch.helper.min.js"></script><script src="//cdn.jsdelivr.net/hogan.js/3.0.0/hogan.common.js"></script><script src="{{ url_for('static', filename='assets/js/algolia_search.min.js') }}"></script><script type="text/javascript" src="{{ url_for('static', filename='assets/js/jquery.select2.min.js') }}"></script><script type="text/javascript">Ps.initialize(document.getElementById('hits'), {suppressScrollX: true});
+
+function displayUser(userId) {
+	var url = '/u/' + userId + '/edit?embed=1';
+	$.get(url, function(dataHtml){
+		$('#user-container').html(dataHtml);
+	});
+}
+
+$('body').on('click', '.user-hit', function(){
+	displayUser($(this).data('user-id'));
+});
+
+// Remove focus from search input so that the click event bound to .user-hit
+// can be fired on the first click.
+$('#users-list').hover(function(){
+	$('#q').blur();
+});
+</script>{% endblock %}

@@ -79,7 +79,7 @@
 
 					@include button-rounded($color-text-light, 999em)
 					opacity: 1
-					box-shadow: 1px 1px 1px rgba(black, .1), 0 0 50px rgba(black, .3)
+					box-shadow: 0 0 50px rgba(black, .4)
 
 					+media-xs
 						margin: 10px auto
@@ -94,6 +94,11 @@
 						@include button-rounded-filled(hsl(hue($color-secondary), 50%, 50%), 999em)
 						opacity: 1
 						padding: 10px 35px
+						margin-right: 15px
+
+					&.green
+						@include button-rounded-filled(hsl(hue($color-success), 60%, 40%), 999em)
+						opacity: 1
 						margin-right: 15px
 
 	#content
@@ -437,7 +442,7 @@
 	left: 0
 	// filter: blur(10px)
 	filter: blur(0)
-	max-height: 800px
+	max-height: 650px
 	background-image: none
 	background-color: #afbfcc // glasshalf
 
@@ -445,7 +450,7 @@
 		filter: blur(10px)
 
 .homepage.navbar-backdrop-overlay
-	height: 800px
+	height: 650px
 	top: -40px
 	// background: linear-gradient(to bottom, rgba(black, 0) 0%, rgba(black, 0) 25%, rgba(black,.6) 90%, rgba(black,.5) 100%)
 	background: linear-gradient(to bottom, rgba(black, .5) 0%, rgba(black, .2) 25%, transparent 56%, rgba($color-background,.4) 90%, $color-background 100%)

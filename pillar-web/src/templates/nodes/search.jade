@@ -1,5 +1,5 @@
 | {% extends 'layout.html' %}
-| {% block page_title %}Users{% endblock %}
+| {% block page_title %}Search{% endblock %}
 
 | {% block body %}
 
@@ -12,7 +12,7 @@
 				autocomplete="off",
 				spellcheck="false",
 				autocorrect="false",
-				placeholder="Search by Full Name, Username...")
+				placeholder="Search by Title, Type...")
 
 		.search-list-filters
 			#accordion.panel-group.accordion(role="tablist", aria-multiselectable="true")
@@ -53,23 +53,42 @@ script(type="text/template", id="facet-template")
 
 // Hit template
 script(type="text/template", id="hit-template")
-	.search-hit.users(data-user-id='{{ objectID }}')
+	.search-hit(data-hit-id='{{ objectID }}')
+		.search-hit-thumbnail
+			| {{#picture}}
+			img(src="{{{ picture }}}")
+			| {{/picture}}
+			| {{^picture}}
+			.search-hit-thumbnail-icon
+				| {{#media}}
+				i(class="pi-{{{ media }}}")
+				| {{/media}}
+				| {{^media}}
+				i.dark(class="pi-{{{ node_type }}}")
+				| {{/media}}
+			| {{/picture}}
 		.search-hit-name
-			| {{{ _highlightResult.full_name.value }}}
-			small ({{{ username }}})
-		.search-hit-roles
-			| {{{ roles }}}
+			| {{{ _highlightResult.name.value }}}
+		.search-hit-meta
+			span.project {{{ project.name }}} ·
+			span.node_type {{{ node_type }}}
+			| {{#media}}
+			span.media · {{{ media }}}
+			| {{/media}}
+			span.when {{{ created }}}
+			| {{#is_free}}
+			span.free Free Access
+			| {{/is_free}}
 
 
 // Pagination template
-script(type="text/template", id="pagination-template").
-	<ul>
+script(type="text/template", id="pagination-template")
+	ul.
 		<li {{^prev_page}}class="disabled"{{/prev_page}}><a href="#" {{#prev_page}} class="gotoPage" data-page="{{ prev_page }}" {{/prev_page}}><i class="pi-angle-left"></i></a></li>
 		{{#pages}}
 		<li class="{{#current}}active{{/current}}{{#disabled}}disabled{{/disabled}}"><a href="#" {{^disabled}} class="gotoPage" data-page="{{ number }}" {{/disabled}}>{{ number }}</a></li>
 		{{/pages}}
 		<li {{^next_page}}class="disabled"{{/next_page}}><a href="#" {{#next_page}} class="gotoPage" data-page="{{ next_page }}" {{/next_page}}><i class="pi-angle-right"></i></a></li>
-	</ul>
 
 // Stats template
 script(type="text/template", id="stats-template")
@@ -83,10 +102,10 @@ script(type="text/template", id="stats-template")
 script().
 	var APPLICATION_ID = '{{config.ALGOLIA_USER}}';
 	var SEARCH_ONLY_API_KEY = '{{config.ALGOLIA_PUBLIC_KEY}}';
-	var INDEX_NAME = '{{config.ALGOLIA_INDEX_USERS}}';
+	var INDEX_NAME = '{{config.ALGOLIA_INDEX_NODES}}';
 	var sortByCountDesc = null;
 	var FACET_CONFIG = [
-	{ name: 'roles', title: 'Roles', disjunctive: false, sortFunction: sortByCountDesc },
+	{ name: 'tags', title: 'Tags', disjunctive: false, sortFunction: sortByCountDesc },
 	];
 
 script(src="//cdn.jsdelivr.net/algoliasearch/3/algoliasearch.min.js")
@@ -100,17 +119,17 @@ script(type="text/javascript").
 	Ps.initialize(document.getElementById('hits'), {suppressScrollX: true});
 
 	function displayUser(userId) {
-		var url = '/u/' + userId + '/edit?embed=1';
+		var url = '/nodes/' + userId + '/view?embed=1';
 		$.get(url, function(dataHtml){
 			$('#search-hit-container').html(dataHtml);
 		});
 	}
 
 	$('body').on('click', '.search-hit', function(){
-		displayUser($(this).data('user-id'));
+		displayUser($(this).data('hit-id'));
 	});
 
-	// Remove focus from search input so that the click event bound to .user-hit
+	// Remove focus from search input so that the click event bound to .search-hit
 	// can be fired on the first click.
 	$('#search-list').hover(function(){
 		$('#q').blur();

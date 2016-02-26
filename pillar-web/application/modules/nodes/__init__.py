@@ -576,6 +576,11 @@ def delete(node_id):
         return redirect(url_for('nodes.edit', node_id=node._id))
 
 
+@app.route('/search')
+def nodes_search_index():
+    return render_template('nodes/search.html')
+
+
 # Import of custom modules (using the same nodes decorator)
 from application.modules.nodes.custom.assets import *
 from application.modules.nodes.custom.groups import *

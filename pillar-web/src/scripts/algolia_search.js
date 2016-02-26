@@ -71,7 +71,7 @@ $(document).ready(function() {
       dd = ('0' + d.getDate()).slice(-2),     // Add leading 0.
       time;
 
-    time = dd + '-' + mm + '-' + yyyy;
+    time = dd + '/' + mm + '/' + yyyy;
 
     return time;
   }
@@ -90,13 +90,13 @@ $(document).ready(function() {
     var hitsHtml = '';
     for (var i = 0; i < content.hits.length; ++i) {
       // console.log(content.hits[i]);
-      var date_start = content.hits[i]['date_start'];
-      if (date_start) {
-        content.hits[i]['date_start'] = convertTimestamp(date_start);
+      var created = content.hits[i]['created'];
+      if (created) {
+        content.hits[i]['created'] = convertTimestamp(created);
       }
-      var date_end = content.hits[i]['date_end'];
-      if (date_end) {
-        content.hits[i]['date_end'] = convertTimestamp(date_end);
+      var updated = content.hits[i]['updated'];
+      if (updated) {
+        content.hits[i]['updated'] = convertTimestamp(updated);
       }
       hitsHtml += hitTemplate.render(content.hits[i]);
     }

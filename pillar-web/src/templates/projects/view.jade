@@ -276,7 +276,7 @@ script.
 		if (nodeId.substring(0, 2) == 'n_') {
 			nodeId = nodeId.substr(2);
 		}
-		var url = '/nodes/' + nodeId + '/view?embed=1'
+		var url = '/nodes/' + nodeId + '/view?embed=1';
 		loadNodeContent(url, nodeId);
 		$('.project-mode-view').show();
 		$('.project-mode-edit').hide();
