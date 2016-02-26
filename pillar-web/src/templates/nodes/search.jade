@@ -47,7 +47,7 @@ script(type="text/template", id="facet-template")
 					href='#')
 					span
 						| {{ label }}
-						small.facet_count.text-muted.pull-right {{ count }}
+						small.facet_count.pull-right {{ count }}
 				| {{/values}}
 
 
@@ -105,6 +105,8 @@ script().
 	var INDEX_NAME = '{{config.ALGOLIA_INDEX_NODES}}';
 	var sortByCountDesc = null;
 	var FACET_CONFIG = [
+	{ name: 'node_type', title: 'Type', disjunctive: false, sortFunction: sortByCountDesc },
+	{ name: 'media', title: 'Media', disjunctive: false, sortFunction: sortByCountDesc },
 	{ name: 'tags', title: 'Tags', disjunctive: false, sortFunction: sortByCountDesc },
 	];
 
