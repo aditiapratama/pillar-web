@@ -56,8 +56,6 @@ def posts_view(project_id, url=None):
             api=api)
     else:
         node_type_post = project.get_node_type('post')
-        print node_type_post
-
         status_query = "" if blog.has_method('PUT') else ', "properties.status": "published"'
         posts = Node.all({
             'where': '{"parent": "%s" %s}' % (blog._id, status_query),
