@@ -4,7 +4,7 @@ $(document).ready(function() {
   * INITIALIZATION
   * *******************/
 
-  var HITS_PER_PAGE = 15;
+  var HITS_PER_PAGE = 25;
   var MAX_VALUES_PER_FACET = 30;
 
   // DOM binding
@@ -173,7 +173,7 @@ $(document).ready(function() {
 
     // Process pagination
     var pages = [];
-    if (content.page > 5) {
+    if (content.page > ) {
       pages.push({ current: false, number: 1 });
       pages.push({ current: false, number: '...', disabled: true });
     }

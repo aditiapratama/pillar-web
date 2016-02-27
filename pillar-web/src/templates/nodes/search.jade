@@ -18,15 +18,16 @@
 			#accordion.panel-group.accordion(role="tablist", aria-multiselectable="true")
 				#facets
 
+		#pagination
+
 		.search-list-stats
 			#stats
-
-		#pagination
 
 	#search-list
 		#hits
 
 	#search-details
+		#search-error
 		#search-hit-container
 
 
@@ -54,6 +55,9 @@ script(type="text/template", id="facet-template")
 // Hit template
 script(type="text/template", id="hit-template")
 	.search-hit(data-hit-id='{{ objectID }}')
+		#search-loading.search-loading
+			.spinner
+				span.spin ·
 		.search-hit-thumbnail
 			| {{#picture}}
 			img(src="{{{ picture }}}")
@@ -83,7 +87,7 @@ script(type="text/template", id="hit-template")
 
 // Pagination template
 script(type="text/template", id="pagination-template")
-	ul.
+	ul.search-pagination.
 		<li {{^prev_page}}class="disabled"{{/prev_page}}><a href="#" {{#prev_page}} class="gotoPage" data-page="{{ prev_page }}" {{/prev_page}}><i class="pi-angle-left"></i></a></li>
 		{{#pages}}
 		<li class="{{#current}}active{{/current}}{{#disabled}}disabled{{/disabled}}"><a href="#" {{^disabled}} class="gotoPage" data-page="{{ number }}" {{/disabled}}>{{ number }}</a></li>
@@ -92,13 +96,14 @@ script(type="text/template", id="pagination-template")
 
 // Stats template
 script(type="text/template", id="stats-template")
-	h5 {{ nbHits }} result{{#nbHits_plural}}s{{/nbHits_plural}}
-		span  ({{ processingTimeMS }}ms)
+	span {{ nbHits }} result{{#nbHits_plural}}s{{/nbHits_plural}}
+		small  ({{ processingTimeMS }}ms)
 | {% endraw %}
 
 | {% endblock %}
 
 | {% block footer_scripts %}
+script(src="//releases.flowplayer.org/6.0.3/flowplayer.min.js")
 script().
 	var APPLICATION_ID = '{{config.ALGOLIA_USER}}';
 	var SEARCH_ONLY_API_KEY = '{{config.ALGOLIA_PUBLIC_KEY}}';
@@ -118,17 +123,30 @@ script(type='text/javascript', src="{{ url_for('static', filename='assets/js/jqu
 
 script(type="text/javascript").
 
-	Ps.initialize(document.getElementById('hits'), {suppressScrollX: true});
+	Ps.initialize(document.getElementById('search-list'), {suppressScrollX: true});
+	Ps.initialize(document.getElementById('search-hit-container'), {suppressScrollX: true});
 
 	function displayUser(userId) {
 		var url = '/nodes/' + userId + '/view?embed=1';
+
 		$.get(url, function(dataHtml){
 			$('#search-hit-container').html(dataHtml);
+		})
+		.done(function(){
+			$('.search-loading').removeClass('active');
+		})
+		.fail(function(data){
+			console.log('noo');
+			$('#search-error').html('errorrr + ' + data.data.message);
 		});
 	}
 
 	$('body').on('click', '.search-hit', function(){
+		$(this).find('#search-loading').addClass('active');
+
 		displayUser($(this).data('hit-id'));
+		$('.search-hit').removeClass('active');
+		$(this).addClass('active');
 	});
 
 	// Remove focus from search input so that the click event bound to .search-hit
@@ -137,4 +155,32 @@ script(type="text/javascript").
 		$('#q').blur();
 	});
 
+	/* UI Stuff */
+	container_offset = $('#search-container').offset();
+
+	function containerResizeY(window_height){
+
+		var container_height = window_height - container_offset.top;
+
+			if (container_height > parseInt($('#search-container').css("min-height"))) {
+				$('#search-container').css(
+					{'max-height': container_height + 'px',
+					 'height': container_height + 'px'}
+				);
+				$('#search-list, #search-hit-container').css(
+					{'max-height': container_height + 'px',
+					 'height': container_height + 'px'}
+				);
+			};
+		//- Ps.update(document.getElementById('project_context-container'));
+		//- Ps.update(document.getElementById('project_tree'));
+	};
+
+	$(window).on("load resize",function(){
+		containerResizeY($(window).height());
+	});
+
 | {% endblock %}
+
+| {% block footer_navigation %}{% endblock %}
+| {% block footer %}{% endblock %}

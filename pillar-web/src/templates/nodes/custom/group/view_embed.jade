@@ -174,7 +174,6 @@
 
 		});
 
-
 		// Browse type: icon or list
 		function projectBrowseTypeIcon() {
 			$(".list-node-children-item.browse-list").hide();
@@ -189,9 +188,8 @@
 		};
 
 		function projectBrowseTypeCheck(){
-
-			/* Only run if we're in a project */
-			if(document.getElementById("project-flex") !== null) {
+			/* Only run if we're in a project, or search */
+			if(document.getElementById("project-flex") !== null || document.getElementById("search-container") !== null) {
 
 				var browse_type = Cookies.get('bcloud_ui_browse_type');
 
@@ -204,26 +202,20 @@
 					}
 				} else {
 					projectBrowseTypeIcon();
-				}
-
-			}
+				};
+			};
 		}
 
 		function projectBrowseToggle(){
-
 			var browse_type = Cookies.get('bcloud_ui_browse_type');
 
 			if (browse_type) {
 				if (browse_type == 'icon') {
-
 					projectBrowseTypeList();
 					Cookies.set('bcloud_ui_browse_type', 'list');
-
 				} else if ( browse_type == 'list' ) {
-
 					projectBrowseTypeIcon();
 					Cookies.set('bcloud_ui_browse_type', 'icon');
-
 				}
 			} else {
 				projectBrowseTypeList();
@@ -236,11 +228,7 @@
 			projectBrowseToggle();
 		});
 
-
-		/* Check on load */
-		$( document ).ready(function() {
-			projectBrowseTypeCheck();
-		});
+		projectBrowseTypeCheck();
 
 
 include ../_scripts
