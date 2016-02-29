@@ -4,10 +4,21 @@ $search-hit-width_list: 48px
 #search-container
 	background-color: white
 	display: flex
+	border-radius: 0
+
+	+container-behavior
+
+	+media-lg
+		border-top-left-radius: 3px
+		border-top-right-radius: 3px
+		padding-left: 0
+		padding-right: 0
 
 	#search-sidebar
 		background-color: $color-background-nav
 		width: 20%
+		+media-lg
+			border-top-left-radius: 3px
 
 		input.search-field
 			background-color: darken($color-background-nav, 5%)
@@ -21,6 +32,9 @@ $search-hit-width_list: 48px
 			padding: 5px 15px
 			height: 45px
 			transition: border 100ms ease-in-out
+
+			+media-lg
+				border-top-left-radius: 3px
 
 			&::placeholder
 				color: lighten($color-background-nav, 20%)
@@ -129,7 +143,7 @@ $search-hit-width_list: 48px
 	#search-list
 		width: 40%
 		height: 100%
-		padding: 10px 0
+		padding: 0
 		position: relative
 
 		#hits
@@ -150,11 +164,8 @@ $search-hit-width_list: 48px
 
 			width: 100%
 			position: relative
-			overflow: hidden
-			text-overflow: ellipsis
 			margin: 0
 			padding: 7px 10px 7px 10px
-
 			+clearfix
 
 			&:first-child
@@ -213,9 +224,16 @@ $search-hit-width_list: 48px
 				margin-right: 15px
 				text-align: center
 				overflow: hidden
+				+media-xs
+					display: none
+				+media-sm
+					min-width: $search-hit-width_list
+					max-width: $search-hit-width_list
+
 				img
 					height: $search-hit-width_list
 					width: auto
+
 
 				.pi-video:before, .pi-file:before,
 				.pi-group:before
@@ -244,13 +262,13 @@ $search-hit-width_list: 48px
 
 			.search-hit-name
 				position: relative
-				font:
-					size: 1.2em
+				font-size: 1.1em
 				color: $color-text-dark-primary
 
 				background-color: initial
 				width: initial
 				max-width: initial
+				+text-overflow-ellipsis
 
 				&:hover
 					cursor: pointer
@@ -299,6 +317,10 @@ $search-hit-width_list: 48px
 					&.when
 						margin: 0 3px
 						float: right
+						+media-sm
+							display: none
+						+media-xs
+							display: none
 
 			&:hover
 				cursor: pointer
@@ -364,6 +386,14 @@ $search-hit-width_list: 48px
 		#search-hit-container
 			position: absolute // for custom scrollbars
 			width: 100%
+			.ps-scrollbar-y-rail
+				z-index: 1
+
+		#search-error
+			display: none
+			margin: 20px auto
+			color: $color-danger
+			text-align: center
 
 	#error_container.404
 		#error-box
@@ -379,10 +409,16 @@ $search-hit-width_list: 48px
 			max-height: initial
 
 			&.group
-				overflow: initial
 				background: white
 				.overlay
 					display: none
+				.node-title
+					font-size: 1.8em
+					padding-right: 30px
+					width: 100%
+					+text-overflow-ellipsis
+				.backdrop
+					opacity: .15
 
 			.node-preview-thumbnail
 				max-height: 320px
@@ -393,11 +429,34 @@ $search-hit-width_list: 48px
 				position: relative
 				z-index: 1
 
+				.list-node-children-item.browse-list
+					.list-node-children-item-name
+						+text-overflow-ellipsis
+						font-size: 1.1em
+					.list-node-children-item-meta
+						+text-overflow-ellipsis
+						padding-right: 20px
+
+						span
+							&.free
+								font-size: .7em
+
 		.node-details-container
+			&.group
+				position: initial
+			.node-details-description
+				max-width: 100%
+
+				p
+					margin-bottom: 0
+					padding-bottom: 10px
+
 			.node-details-header
 				clear: both
 				width: 100%
 				max-width: 100%
+				.node-title
+					font-size: 1.7em
 
 			.node-details-meta
 				&.header
@@ -407,16 +466,29 @@ $search-hit-width_list: 48px
 					padding: 10px
 
 					.node-details-meta-list
-						flex-direction: row-reverse
+						display: inline-block
+						float: right
 						font-size: .9em
 
 						.node-details-meta-list-item
-							&.status
+							&.status, &.author
 								display: none
+							&.type, &.length
+								padding-top: 10px
+							&.access
+								padding-top: 5px
+
 				&.footer
 					.node-details-meta-list
 						.node-details-meta-list-item
 							&.status
+								display: none
+				&.preview
+					bottom: initial
+					top: 10px
+					.node-details-meta-list
+						.node-details-meta-list-item
+							&.status, &.author, &.date
 								display: none
 
 		&.texture

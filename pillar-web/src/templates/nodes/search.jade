@@ -134,14 +134,20 @@ script(type="text/javascript").
 		})
 		.done(function(){
 			$('.search-loading').removeClass('active');
+			$('#search-error').hide();
+			$('#search-hit-container').show();
 		})
 		.fail(function(data){
-			console.log('noo');
-			$('#search-error').html('errorrr + ' + data.data.message);
+			$('.search-loading').removeClass('active');
+			$('#search-hit-container').hide();
+			$('#search-error').show().html('Houston!\n\n' + data.status + ' ' + data.statusText);
 		});
 	}
 
 	$('body').on('click', '.search-hit', function(){
+		if ($('.search-loading').hasClass('active')){
+			$(this).removeClass('active');
+		}
 		$(this).find('#search-loading').addClass('active');
 
 		displayUser($(this).data('hit-id'));
@@ -153,6 +159,9 @@ script(type="text/javascript").
 	// can be fired on the first click.
 	$('#search-list').hover(function(){
 		$('#q').blur();
+	});
+	$('#search-sidebar').hover(function(){
+		$('#q').focus();
 	});
 
 	/* UI Stuff */

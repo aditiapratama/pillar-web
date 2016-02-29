@@ -9,6 +9,7 @@
 		.node-title#node-title
 			| {{node.name}}
 
+	section.node-details-container.group
 		.node-details-meta.preview
 			ul.node-details-meta-list
 				li.node-details-meta-list-item.date(title="Created {{ node._created | pretty_date }}")
@@ -29,7 +30,6 @@
 					data-placement="top")
 					i.pi-list
 
-	section.node-details-container.group
 
 		| {% if node.description %}
 		.node-details-description
@@ -42,7 +42,11 @@
 		| 	{% for child in children %}
 
 		| {# Browse type: List #}
-		a(href="#", data-node_id="{{ child._id }}", class="item_icon list-node-children-item browse-list")
+		a(
+			href="#",
+			data-node_url="{{ url_for('nodes.view', node_id=child._id, redir=1) }}",
+			data-node_id="{{ child._id }}",
+			class="item_icon list-node-children-item browse-list")
 			.list-node-children-item-thumbnail
 
 				| {% if child.picture %}
@@ -161,17 +165,24 @@
 		$('a.item_icon').unbind("click");
 		$('a.item_icon').click(function(e){
 			e.preventDefault;
-			// When clicking on a node preview, we load its content
-			var nodeId = $(this).data('node_id');
-			// displayNode will run asynchronously and set the bcloud_current_node_id
-			// as well, but we set it manually in the next line as well, to make sure
-			// that select_node on jstree works as expected, preventing the node to be
-			// loaded twice.
-			Cookies.set('bcloud_current_node_id', nodeId);
-			displayNode(nodeId);
-			// Update tree with current selection
-			$('#project_tree').jstree('select_node', 'n_' + nodeId);
 
+			var nodeId = $(this).data('node_id');
+			var nodeUrl = $(this).data('node_url');
+
+			if (ProjectUtils.projectId()) {
+				// When clicking on a node preview, we load its content
+				// displayNode will run asynchronously and set the bcloud_current_node_id
+				// as well, but we set it manually in the next line as well, to make sure
+				// that select_node on jstree works as expected, preventing the node to be
+				// loaded twice.
+				Cookies.set('bcloud_current_node_id', nodeId);
+				displayNode(nodeId);
+				// Update tree with current selection
+				$('#project_tree').jstree('select_node', 'n_' + nodeId);
+			} else {
+				// If there's project_id defined, we use the full link (for search)
+				window.location.replace(nodeUrl);
+			};
 		});
 
 		// Browse type: icon or list
