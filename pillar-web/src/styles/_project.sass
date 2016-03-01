@@ -4,7 +4,7 @@ $project_footer-height: 30px
 
 $list-node-children-item-width: 160px
 $list-node-children-item-width_list: 48px
-$z-index-base: 12
+$z-index-base: 13
 
 /* Child of container, contains project-flex */
 #project_container
@@ -58,7 +58,7 @@ $z-index-base: 12
 	border-right: thick solid darken($color-background-nav, 2%)
 	background-color: $color-background-nav
 
-	z-index: $z-index-base + 2
+	z-index: $z-index-base + 1
 
 	left: 0
 	transition: all 250ms ease-in-out
@@ -92,7 +92,7 @@ $z-index-base: 12
 	position: absolute
 	left: $project_nav-width - 30px
 	bottom: 0
-	z-index: $z-index-base + 2
+	z-index: $z-index-base + 1
 
 	+media-lg
 		border-bottom-left-radius: 3px
@@ -106,7 +106,7 @@ $z-index-base: 12
 
 	position: absolute
 	top: 0
-	z-index: $z-index-base +1
+	z-index: $z-index-base
 
 	+media-lg
 		border-top-left-radius: 3px

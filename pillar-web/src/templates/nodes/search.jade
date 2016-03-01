@@ -103,7 +103,7 @@ script(type="text/template", id="stats-template")
 | {% endblock %}
 
 | {% block footer_scripts %}
-script(src="//releases.flowplayer.org/6.0.3/flowplayer.min.js")
+script(src="//releases.flowplayer.org/6.0.3/flowplayer.min.js", async)
 script().
 	var APPLICATION_ID = '{{config.ALGOLIA_USER}}';
 	var SEARCH_ONLY_API_KEY = '{{config.ALGOLIA_PUBLIC_KEY}}';
@@ -119,7 +119,6 @@ script(src="//cdn.jsdelivr.net/algoliasearch/3/algoliasearch.min.js")
 script(src="//cdn.jsdelivr.net/algoliasearch.helper/2/algoliasearch.helper.min.js")
 script(src="//cdn.jsdelivr.net/hogan.js/3.0.0/hogan.common.js")
 script(src="{{ url_for('static', filename='assets/js/algolia_search.min.js') }}")
-script(type='text/javascript', src="{{ url_for('static', filename='assets/js/jquery.select2.min.js') }}")
 
 script(type="text/javascript").
 

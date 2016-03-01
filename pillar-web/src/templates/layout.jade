@@ -40,7 +40,6 @@ html(lang="en")
 		link(href="{{ url_for('static', filename='assets/css/main.css') }}", rel="stylesheet")
 
 	body.transition-none
-
 		.container-page
 			a(name="hop")
 			header.navbar-backdrop-container
@@ -84,6 +83,11 @@ html(lang="en")
 							| {% else %}
 							| {% set category = title %}
 							| {% endif %}
+							.search-input
+								input#cloud-search(
+									type="text",
+									placeholder="Search Tutorials, Videos...")
+								i.search-icon.pi-search
 							li
 								a(href="{{ url_for('main_blog') }}",
 									title="Blender Cloud Blog",
@@ -211,7 +215,9 @@ html(lang="en")
 							| {% endif %}
 
 			.page-content
-				| {% block body %}{% endblock %}
+				#search-overlay
+				.page-body
+					| {% block body %}{% endblock %}
 
 		| {% block footer_container %}
 		#footer-container
@@ -296,8 +302,74 @@ html(lang="en")
 		script(type="text/javascript", src="//cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/0.6.7/js/min/perfect-scrollbar.min.js")
 		script(type="text/javascript", src="//cdnjs.cloudflare.com/ajax/libs/js-cookie/2.0.3/js.cookie.min.js",)
 		script(type="text/javascript", src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.3/handlebars.min.js")
+
+		script(src="//cdn.jsdelivr.net/typeahead.js/0.11.1/typeahead.jquery.min.js")
+		script(src="//cdn.jsdelivr.net/algoliasearch/3/algoliasearch.min.js")
 		script(type="text/javascript", src="{{ url_for('static', filename='assets/js/markdown.min.js') }}")
 		script(type="text/javascript", src="{{ url_for('static', filename='assets/js/tutti.min.js') }}")
+
+		script.
+			$('document').ready(function(){
+
+				var algolia = algoliasearch("{{config['ALGOLIA_USER']}}", "{{config['ALGOLIA_PUBLIC_KEY']}}");
+				var index = algolia.initIndex("{{config['ALGOLIA_INDEX_NODES']}}");
+
+				var tu = $('#cloud-search').typeahead({hint: true}, {
+
+					source: index.ttAdapter(),
+					displayKey: 'name',
+					limit: 10,
+					minLength: 2,
+					templates: {
+						suggestion: function(hit) {
+
+							var hitMedia = (hit.media ? ' · <span class="media">'+hit.media+'</span>' : '');
+							var hitFree = (hit.is_free ? ' · <span class="free">Free Access</span>' : '');
+							var hitPicture;
+
+							if (hit.picture){
+								hitPicture = '<img src="' + hit.picture + '"/>';
+							} else {
+								hitPicture = '<div class="search-hit-thumbnail-icon">';
+								hitPicture += (hit.media ? '<i class="pi-' + hit.media + '"></i>' : '<i class="dark pi-'+ hit.node_type + '"></i>');
+								hitPicture += '</div>';
+							};
+
+							return '' +
+								'<a href="/nodes/'+ hit.objectID + '/view?redir=1" class="search-site-result">' +
+									'<div class="search-hit">' +
+										'<div class="search-hit-thumbnail">' +
+											hitPicture +
+										'</div>' +
+										'<div class="search-hit-name">' +
+											hit._highlightResult.name.value + ' ' +
+										'</div>' +
+										'<div class="search-hit-meta">' +
+											'<span class="project">' + hit._highlightResult.project.name.value + '</span> · ' +
+											'<span class="node_type">' + hit.node_type + '</span>' +
+											hitMedia +
+											hitFree +
+										'</div>' +
+									'</div>'+
+								'</a>';
+						}
+					}
+				});
+
+				$('#cloud-search').bind('typeahead:select', function(ev, hit) {
+					window.location.href = '/nodes/'+ hit.objectID + '/view?redir=1';
+				});
+
+				$('#cloud-search').bind('typeahead:open', function() {
+					$('#search-overlay').addClass('active');
+					$('.page-body').addClass('blur');
+				});
+				$('#cloud-search').bind('typeahead:close', function() {
+					$('#search-overlay').removeClass('active');
+					$('.page-body').removeClass('blur');
+				});
+
+			});
 
 		| {% block footer_scripts %}{% endblock %}
 

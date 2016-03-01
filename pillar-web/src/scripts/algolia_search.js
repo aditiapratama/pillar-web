@@ -173,7 +173,7 @@ $(document).ready(function() {
 
     // Process pagination
     var pages = [];
-    if (content.page > ) {
+    if (content.page > 5) {
       pages.push({ current: false, number: 1 });
       pages.push({ current: false, number: '...', disabled: true });
     }

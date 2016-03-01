@@ -77,9 +77,18 @@ $navbar-backdrop-height: 600px
 
 .page-content
 	position: relative
+	transition: filter 150ms ease-in-out
+	&.blur
+		filter: blur(5px)
 
 	.container-box
 		+container-box
+
+.page-body
+	transition: filter 150ms ease-in-out
+	&.blur
+		filter: blur(5px)
+
 
 .navbar-fixed-top+.page-content
 	padding-top: $navbar-height
@@ -90,7 +99,7 @@ $navbar-backdrop-height: 600px
 .alert
 	display: block
 	position: relative
-	z-index: 15
+	z-index: 16
 	width: 100%
 	margin-bottom: 0
 	text-align: center
@@ -221,7 +230,7 @@ header.navbar-header
 
 
 .navbar-transparent
-	z-index: 15 /* Flowplayer seems to take up to 11, project container is 12 */
+	z-index: 16 /* Flowplayer seems to take up to 11, project container is 12 */
 	border: none
 	border-width: 0
 	display: flex
