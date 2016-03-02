@@ -821,6 +821,9 @@ section.node-preview.group
 			padding-top: 15px
 
 		.node-details-meta.preview
+			top: 10px
+			bottom: initial
+
 			.node-details-meta-list
 				display: inline-block
 
@@ -1396,6 +1399,16 @@ section.node-children
 					color: $color-text-dark-secondary
 					font-size: 1.3em
 
+			.list-node-children-item-ribbon
+				+ribbon
+				right: -30px
+				top: 5px
+
+				span
+					font-size: 60%
+					margin: 1px 0
+					padding: 2px 35px
+
 		.list-node-children-item-name
 			position: relative
 			padding:
@@ -1426,14 +1439,6 @@ section.node-children
 
 				&.updated
 					color: $color-text-dark-hint
-				&.free
-					font-size: .8em
-					color: $color-success
-					border: thin solid $color-success
-					padding: 3px 8px
-					text-transform: uppercase
-					border-radius: 3px
-					margin-left: 5px
 
 				&.status
 					font-size: .8em

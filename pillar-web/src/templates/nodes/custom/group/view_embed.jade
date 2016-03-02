@@ -80,6 +80,11 @@
 					| {% endif %}
 					| {% endif %}
 
+				| {% if child.permissions.world %}
+				.list-node-children-item-ribbon
+					span free
+				| {% endif %}
+
 			.list-node-children-item-name {{ child.name }}
 
 			.list-node-children-item-meta
@@ -102,13 +107,6 @@
 				span(title="Created {{ child._created }}")  {{ child._created | pretty_date }}
 				| {% if (child._created | pretty_date) != (child._updated | pretty_date) %}
 				span.updated(title="Updated {{ child._updated }}")  (updated {{ child._updated | pretty_date }})
-				| {% endif %}
-
-				| {% if child.permissions.world %}
-				span.free(
-					title="Everyone can access this, share it around!",
-					data-toggle="tooltip",
-					data-placement="right") free access
 				| {% endif %}
 
 

@@ -100,7 +100,7 @@ $(document).ready(function() {
       }
       hitsHtml += hitTemplate.render(content.hits[i]);
     }
-    if (content.hits.length === 0) hitsHtml = '<p id="no-hits">We didn\'t find any member for your search.</p>';
+    if (content.hits.length === 0) hitsHtml = '<p id="no-hits">We didn\'t find any items. Try searching something else.</p>';
     $hits.html(hitsHtml);
   }
 

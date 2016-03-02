@@ -71,6 +71,10 @@ script(type="text/template", id="hit-template")
 				i.dark(class="pi-{{{ node_type }}}")
 				| {{/media}}
 			| {{/picture}}
+			| {{#is_free}}
+			.search-hit-ribbon
+				span free
+			| {{/is_free}}
 		.search-hit-name
 			| {{{ _highlightResult.name.value }}}
 		.search-hit-meta
@@ -80,9 +84,6 @@ script(type="text/template", id="hit-template")
 			span.media · {{{ media }}}
 			| {{/media}}
 			span.when {{{ created }}}
-			| {{#is_free}}
-			span.free Free Access
-			| {{/is_free}}
 
 
 // Pagination template
@@ -113,6 +114,7 @@ script().
 	{ name: 'node_type', title: 'Type', disjunctive: false, sortFunction: sortByCountDesc },
 	{ name: 'media', title: 'Media', disjunctive: false, sortFunction: sortByCountDesc },
 	{ name: 'tags', title: 'Tags', disjunctive: false, sortFunction: sortByCountDesc },
+	{ name: 'is_free', title: 'Free Access', disjunctive: false, sortFunction: sortByCountDesc },
 	];
 
 script(src="//cdn.jsdelivr.net/algoliasearch/3/algoliasearch.min.js")
@@ -124,6 +126,8 @@ script(type="text/javascript").
 
 	Ps.initialize(document.getElementById('search-list'), {suppressScrollX: true});
 	Ps.initialize(document.getElementById('search-hit-container'), {suppressScrollX: true});
+
+	$('.search-input').hide();
 
 	function displayUser(userId) {
 		var url = '/nodes/' + userId + '/view?embed=1';
