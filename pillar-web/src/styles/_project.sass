@@ -752,6 +752,9 @@ section.node-preview
 	&.group
 		height: 100px
 
+		.node-title
+			max-width: 80%
+
 		.backdrop
 			opacity: .25
 			position: absolute
@@ -821,7 +824,7 @@ section.node-preview.group
 			padding-top: 15px
 
 		.node-details-meta.preview
-			top: 10px
+			top: -45px
 			bottom: initial
 
 			.node-details-meta-list
@@ -1341,7 +1344,7 @@ section.node-children
 	/* Browse group as list */
 	&.browse-list
 		display: none
-		width: 98%
+		width: 50%
 		position: relative
 		background-color: initial
 		box-shadow: none
@@ -1355,9 +1358,6 @@ section.node-children
 
 		+clearfix
 		clear: none
-
-		&:first-child
-			border: thin solid transparent
 
 		&:hover
 			opacity: 1
