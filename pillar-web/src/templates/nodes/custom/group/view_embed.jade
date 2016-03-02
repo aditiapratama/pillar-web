@@ -44,7 +44,6 @@
 		| {# Browse type: List #}
 		a(
 			href="#",
-			data-node_url="{{ url_for('nodes.view', node_id=child._id, redir=1) }}",
 			data-node_id="{{ child._id }}",
 			class="item_icon list-node-children-item browse-list")
 			.list-node-children-item-thumbnail
@@ -165,7 +164,6 @@
 			e.preventDefault;
 
 			var nodeId = $(this).data('node_id');
-			var nodeUrl = $(this).data('node_url');
 
 			if (ProjectUtils.projectId()) {
 				// When clicking on a node preview, we load its content
@@ -179,7 +177,7 @@
 				$('#project_tree').jstree('select_node', 'n_' + nodeId);
 			} else {
 				// If there's project_id defined, we use the full link (for search)
-				window.location.replace(nodeUrl);
+				window.location.replace('/nodes/' + nodeId + '/view?redir=1');
 			};
 		});
 
