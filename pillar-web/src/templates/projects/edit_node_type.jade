@@ -57,19 +57,27 @@
 					| {% endif %}
 					| {% endfor %}
 
-
 | {% endblock %}
 
 | {% block footer_scripts%}
 script(src="https://cdn.jsdelivr.net/g/ace@1.2.3(noconflict/ace.js+noconflict/mode-json.js)")
 
 script.
-	var dynSchema = $("#dyn_schema");
-	//- var dynSchema = $("#dyn_schema").hide();
 	var dynSchemaEditorContainer = $("<div>", {id: "dyn_schema_editor"});
-	$("#dyn_schema").after(dynSchemaEditorContainer);
+	$(".form-group.dyn_schema").before(dynSchemaEditorContainer);
 	var dynSchemaEditor = ace.edit("dyn_schema_editor");
-	dynSchemaEditor.getSession().setValue(dynSchema.val());
+	dynSchemaEditor.getSession().setValue($("#dyn_schema").val());
+
+	var formSchemaEditorContainer = $("<div>", {id: "form_schema_editor"});
+	$(".form-group.form_schema").before(formSchemaEditorContainer);
+	var formSchemaEditor = ace.edit("form_schema_editor");
+	formSchemaEditor.getSession().setValue($("#form_schema").val());
+
+	var permissionsEditorContainer = $("<div>", {id: "permissions_editor"});
+	$(".form-group.permissions").before(permissionsEditorContainer);
+	var permissionsEditor = ace.edit("permissions_editor");
+	permissionsEditor.getSession().setValue($("#permissions").val());
+
 	//- $("form").submit(function(e) {
 	//- 	dynSchema.val(dynSchemaEditor.getSession().getValue());
 	//- });

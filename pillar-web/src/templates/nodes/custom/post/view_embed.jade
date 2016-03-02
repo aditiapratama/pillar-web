@@ -49,21 +49,21 @@ meta(name="twitter:description", content="{{ node.properties.content }}")
 	#blog_container(class="{% if project._id == config.MAIN_PROJECT_ID %}cloud-blog{% endif %}")
 
 		#blog_post-container
-			| {% if project._id == config.MAIN_PROJECT_ID %}
-			a.btn.btn-default.button-back(href="{{ url_for('projects.view', project_url=project.url) }}blog")
-				| Back to Blog
-
-			| {% if node.has_method('PUT') %}
-			a.btn.btn-default.button-create(href="{{url_for('nodes.posts_edit', post_id=node._id)}}")
-				| Edit Post
-			| {% endif %}
-			.clearfix
-			| {% endif %}
-
 			.blog_index-item
 				| {% if node.picture %}
 				.item-picture
 					img(src="{{ node.picture.thumbnail('l', api=api) }}")
+				| {% endif %}
+
+				| {% if project._id == config.MAIN_PROJECT_ID %}
+				a.btn.btn-default.button-back(href="{{ url_for('projects.view', project_url=project.url) }}blog")
+					| Back to Blog
+
+				| {% if node.has_method('PUT') %}
+				a.btn.btn-default.button-create(href="{{url_for('nodes.posts_edit', post_id=node._id)}}")
+					| Edit Post
+				| {% endif %}
+				.clearfix
 				| {% endif %}
 
 				.item-title

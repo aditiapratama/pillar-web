@@ -2098,3 +2098,22 @@ section.node-children
 			margin: 0 20px
 
 @import plugins/_flowplayer
+
+
+/* Edit Project specific classes*/
+.ace_editor.ace-tm
+	min-height: 300px
+	margin: 60px auto 30px auto
+	font-size: 1em
+	resize: vertical !important
+	overflow: auto !important
+	color: $color-text
+
+	&+.form-group.dyn_schema,
+	&+.form-group.form_schema,
+	&+.form-group.permissions
+		label
+			position: absolute
+			top: -355px
+		.form-control
+			display: none

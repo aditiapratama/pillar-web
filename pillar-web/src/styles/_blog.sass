@@ -61,7 +61,7 @@
 				+media-sm
 					min-height: 150px
 				+media-md
-					min-height: 150px
+					min-height: 200px
 				+media-lg
 					min-height: 200px
 
@@ -108,15 +108,16 @@
 
 		#comments-container
 			padding:
-				left: 0
-				right: 0
+				left: 20px
+				right: 20px
 			max-width: 680px
 			margin: 0 auto
 
-			+media-xs
+			+media-lg
 				padding:
-					left: 20px
-					right: 20px
+					left: 0
+					right: 0
+
 			.comment-reply-form
 				+media-xs
 					padding:
@@ -294,7 +295,7 @@
 		float: right
 		display: inline-block
 		+button-rounded($color-info, 6px)
-		margin: 0 0 20px 0
+		margin: 0 30px 20px 0
 
 #blog_container
 	&.cloud-blog
@@ -308,3 +309,13 @@
 		#blog_index-container+#blog_index-sidebar,
 		#blog_post-container+#blog_index-sidebar
 			display: none
+
+		#blog_post-container
+			padding: 0 0 20px 0
+			.item-title, .item-info
+				padding-left: 100px
+				padding-right: 100px
+
+			.item-content
+				padding-left: 80px
+				padding-right: 80px
