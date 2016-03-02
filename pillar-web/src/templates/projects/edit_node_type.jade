@@ -59,3 +59,20 @@
 
 
 | {% endblock %}
+
+| {% block footer_scripts%}
+script(src="https://cdn.jsdelivr.net/g/ace@1.2.3(noconflict/ace.js+noconflict/mode-json.js)")
+
+script.
+	var dynSchema = $("#dyn_schema");
+	//- var dynSchema = $("#dyn_schema").hide();
+	var dynSchemaEditorContainer = $("<div>", {id: "dyn_schema_editor"});
+	$("#dyn_schema").after(dynSchemaEditorContainer);
+	var dynSchemaEditor = ace.edit("dyn_schema_editor");
+	dynSchemaEditor.getSession().setValue(dynSchema.val());
+	//- $("form").submit(function(e) {
+	//- 	dynSchema.val(dynSchemaEditor.getSession().getValue());
+	//- });
+| {% endblock %}
+
+
