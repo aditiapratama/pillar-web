@@ -219,6 +219,7 @@ def edit_node_type(project_url, node_type_name):
         api=api,
         node_type=node_type)
 
+
 @projects.route('/e/add-featured-node', methods=['POST'])
 @login_required
 def add_featured_node():
