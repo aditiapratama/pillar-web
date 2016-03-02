@@ -119,6 +119,8 @@ $search-hit-width_list: 48px
 		.search-hit-name
 			top: 6px
 			margin: 0
+			padding-top: 0
+
 		.search-hit-meta
 			padding-top: 8px
 			margin: 0
@@ -567,12 +569,19 @@ $search-hit-width_list: 48px
 	&:focus
 		background-color: thin solid rgba($color-primary, .2)
 
+	/* Class that gets added when we click on the item */
 	&.active
 		background-color: lighten($color-background, 2%)
 		border-left: 3px solid $color-primary
 
 		.search-hit-name
 			color: darken($color-primary, 10%)
+
+		.search-hit-meta
+			span.when
+				display: none
+			span.context
+				display: inline-block
 
 	.search-hit-thumbnail
 		position: relative
@@ -625,11 +634,11 @@ $search-hit-width_list: 48px
 		position: relative
 		font-size: 1.1em
 		color: $color-text-dark-primary
-
 		background-color: initial
 		width: initial
 		max-width: initial
 		+text-overflow-ellipsis
+		padding-top: 5px
 
 		&:hover
 			cursor: pointer
@@ -680,12 +689,20 @@ $search-hit-width_list: 48px
 			&.when
 				margin: 0 3px
 				float: right
+				display: block
+				+media-lg
+					display: block
 				+media-md
-					display: none
+					display: block
 				+media-sm
 					display: none
 				+media-xs
 					display: none
+
+			&.context
+				margin: 0
+				float: right
+				display: none
 
 	&:hover
 		cursor: pointer

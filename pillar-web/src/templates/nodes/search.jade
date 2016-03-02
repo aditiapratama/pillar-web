@@ -84,6 +84,8 @@ script(type="text/template", id="hit-template")
 			span.media · {{{ media }}}
 			| {{/media}}
 			span.when {{{ created }}}
+			span.context
+				a(href="/nodes/{{ objectID }}/view?redir=1") view in context
 
 
 // Pagination template
