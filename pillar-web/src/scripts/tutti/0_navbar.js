@@ -23,7 +23,7 @@ var tu = $('#cloud-search').typeahead({hint: true}, {
 	source: index.ttAdapter(),
 	displayKey: 'name',
 	limit: 10,
-	minLength: 2,
+	minLength: 0,
 	templates: {
 		suggestion: function(hit) {
 
