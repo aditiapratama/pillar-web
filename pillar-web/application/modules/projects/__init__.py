@@ -202,8 +202,10 @@ def edit_node_type(project_url, node_type_name):
     node_type = project.get_node_type(node_type_name)
     form = NodeTypeForm()
     if form.validate_on_submit():
-        schema = json.loads(form.dyn_schema.data)
-        node_type.dyn_schema = schema
+        dyn_schema = json.loads(form.dyn_schema.data)
+        node_type.dyn_schema = dyn_schema
+        form_schema = json.loads(form.form_schema.data)
+        node_type.form_schema = form_schema
         project.update(api=api)
     else:
         form.project_id.data = project._id
