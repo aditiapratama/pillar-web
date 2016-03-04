@@ -118,7 +118,7 @@ class SystemUtility():
         is defined, it's possible to override the (default) production address.
         """
         return os.environ.get(
-            'BLENDER_ID_ENDPOINT', "https://www.blender.org/id")
+            'BLENDER_ID_ENDPOINT', "https://www.blender.org/id").rstrip('/')
 
     @staticmethod
     def attract_server_endpoint():
