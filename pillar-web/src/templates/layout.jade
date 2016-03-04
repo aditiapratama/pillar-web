@@ -39,7 +39,7 @@ html(lang="en")
 
 		link(href="{{ url_for('static', filename='assets/css/main.css', v=02032016) }}", rel="stylesheet")
 
-	body.transition-none
+	body
 		.container-page
 			a(name="hop")
 			header.navbar-backdrop-container
@@ -90,7 +90,7 @@ html(lang="en")
 										i.pi-angle-right
 								input#cloud-search(
 									type="text",
-									placeholder="Search Tutorials, Assets...")
+									placeholder="Search tutorials, assets...")
 								i.search-icon.pi-search
 							li
 								a(href="{{ url_for('main_blog') }}",

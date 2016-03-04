@@ -224,6 +224,12 @@ header.navbar-header
 .navbar-container
 	+container-behavior
 
+	.navbar-collapse
+		+media-xs
+			padding: 0
+			width: 100%
+			max-height: initial // overrides bs, we don't have many items
+
 
 .navbar-transparent
 	z-index: 16 /* Flowplayer seems to take up to 11, project container is 12 */
@@ -253,6 +259,9 @@ header.navbar-header
 
 		.navbar-nav
 			margin-right: 0
+			+media-xs
+				margin: 0
+				width: 100%
 
 	li
 		user-select: none
@@ -277,6 +286,13 @@ header.navbar-header
 				bottom: 0
 				left: 20px
 				right: 20px
+
+			+media-md
+				padding-left: 15px
+				padding-right: 15px
+			+media-sm
+				padding-left: 10px
+				padding-right: 10px
 
 			&:hover, &:focus
 				background-color: rgba($color-background-nav, .4)
@@ -339,22 +355,24 @@ header.navbar-header
 		display: flex
 		align-items: center
 		margin-left: 0 !important
-		text-shadow: 1px 1px 0 rgba(black, .2), 1px 1px 10px rgba(black, .2)
+		color: white
 		padding:
 			top: 8px
 			left: 15px
 			right: 20px // overrides bs
-		color: white
-		text-align: left
-		font:
-			family: $font-headings
-			size: 1.4em
-			weight: 100
 
 		span.app-logo
 			font-size: 1.2em
 			position: relative
 			top: 3px
+
+			+media-sm
+				width: 30px
+				overflow: hidden
+			+media-xs
+				width: 30px
+				overflow: hidden
+
 
 	.dropdown
 		position: relative

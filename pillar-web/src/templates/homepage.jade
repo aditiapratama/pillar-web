@@ -82,8 +82,7 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 							a.title(href="{{ url_for('nodes.view', node_id=n._id, redir=1) }}") {{ n.name }}
 							span.details
 								a.where(href="{{ url_for('projects.view', project_url=n.project.url) }}") {{ n.project.name }}
-								| ·
-								span.who by {{ n.user.full_name }}
+								span.who <small>by</small> {{ n.user.full_name }}
 								| ·
 								a.when(
 									href="{{ url_for('nodes.view', node_id=n._id, redir=1) }}",
