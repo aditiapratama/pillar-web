@@ -39,3 +39,12 @@ class Development(object):
     ALGOLIA_INDEX_USERS = 'dev_Users'
 
     GOOGLE_ANALYTICS_TRACKING_ID = ''
+
+    SOCIAL_BLENDER_ID = {
+        'app_id': '',
+        'app_secret': ''
+    }
+    BLENDER_ID_BASE_URL = 'https://www.blender.org/id/'
+    BLENDER_ID_OAUTH_URL = BLENDER_ID_BASE_URL + 'api/'
+    BLENDER_ID_BASE_ACCESS_TOKEN_URL = BLENDER_ID_BASE_URL + 'oauth/token'
+    BLENDER_ID_AUTHORIZE_URL = BLENDER_ID_BASE_URL + 'oauth/authorize'

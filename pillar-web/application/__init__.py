@@ -15,6 +15,7 @@ from flask import session
 from flask import Blueprint
 from flask import redirect
 from flask import url_for
+from flask_oauthlib.client import OAuth
 
 from flask.ext.login import LoginManager
 from flask.ext.login import UserMixin
@@ -88,6 +89,22 @@ def load_user(userid):
     else:
         login_user = None
     return login_user
+
+# Set up authentication
+oauth = OAuth(app)
+if app.config.get('SOCIAL_BLENDER_ID'):
+    blender_id = oauth.remote_app(
+        'blender_id',
+        consumer_key=app.config.get('SOCIAL_BLENDER_ID')['app_id'],
+        consumer_secret=app.config.get('SOCIAL_BLENDER_ID')['app_secret'],
+        request_token_params={'scope': 'email'},
+        base_url=app.config['BLENDER_ID_OAUTH_URL'],
+        request_token_url=None,
+        access_token_url=app.config['BLENDER_ID_BASE_ACCESS_TOKEN_URL'],
+        authorize_url=app.config['BLENDER_ID_AUTHORIZE_URL']
+    )
+else:
+    blender_id = None
 
 
 class UserClass(UserMixin):

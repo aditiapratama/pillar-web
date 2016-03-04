@@ -1,6 +1,9 @@
 import os
 import requests
 import json
+
+from flask.ext.oauthlib.client import OAuthException
+
 from pillarsdk import utils
 from pillarsdk.users import User
 from pillarsdk.nodes import Node
@@ -27,6 +30,7 @@ from application import SystemUtility
 from application import UserClass
 from application import load_user
 from application import app
+from application import blender_id
 
 from flask.ext.login import login_user
 from flask.ext.login import logout_user
@@ -109,8 +113,55 @@ def login():
 @users.route('/logout')
 def logout():
     logout_user()
+    # TODO: log out of Blender-ID OAuth
     # flash('Successfully logged out', 'info')
     return redirect('/')
+
+
+def check_oauth_provider(provider):
+    if not provider:
+        return abort(404)
+
+
+@app.route('/oauth/blender-id/login')
+def blender_id_login():
+    check_oauth_provider(blender_id)
+    callback = url_for(
+        'blender_id_authorized',
+        next=None,
+        _external=True
+    )
+    return blender_id.authorize(callback=callback)
+
+
+@app.route('/oauth/blender-id/authorized')
+def blender_id_authorized():
+    check_oauth_provider(blender_id)
+    oauth_resp = blender_id.authorized_response()
+    if oauth_resp is None:
+        return 'Access denied: reason=%s error=%s' % (
+            request.args['error_reason'],
+            request.args['error_description']
+        )
+    if isinstance(oauth_resp, OAuthException):
+        return 'Access denied: %s' % oauth_resp.message
+
+    session['blender_id_oauth_token'] = (oauth_resp['access_token'], '')
+    user_data = blender_id.get('user')
+
+    user = UserClass(oauth_resp['access_token'])
+    login_user(user)
+    user = load_user(current_user.id)
+    # Check with the store for user roles. If the user has an active
+    # subscription, we apply the 'subscriber' role
+    user_roles_update(user.objectid)
+    # flash('Welcome %(first_name)s %(last_name)s!' % user_data.data, 'info')
+    return redirect(url_for('homepage'))
+
+if blender_id:
+    @blender_id.tokengetter
+    def get_blender_id_oauth_token():
+        return session.get('blender_id_oauth_token')
 
 
 @users.route('/settings/profile', methods=['GET', 'POST'])
