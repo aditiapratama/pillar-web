@@ -152,6 +152,8 @@ def posts_edit(post_id):
     form.url.data = post.properties.url
     if post.picture:
         form.picture.data = post.picture._id
+    if post.properties.picture_square:
+        form.picture_square.data = post.properties.picture_square
     return render_template('nodes/custom/post/edit.html',
         node_type=node_type,
         post=post,
