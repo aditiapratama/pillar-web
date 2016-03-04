@@ -52,10 +52,8 @@ def authenticate(username, password):
         raise e
 
     if r.status_code == 200:
-        response = r.json()
-    else:
-        response = None
-    return response
+        return r.json()
+    return None
 
 
 def user_roles_update(user_id):
