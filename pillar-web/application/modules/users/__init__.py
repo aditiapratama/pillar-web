@@ -90,30 +90,10 @@ def user_roles_update(user_id):
         return
 
 
-@users.route('/login', methods=['GET', 'POST'])
-def login():
-    form = UserLoginForm()
-    if form.validate_on_submit():
-        auth = authenticate(form.email.data, form.password.data)
-        if auth and auth['status'] == 'success':
-            user = UserClass(auth['data']['token'])
-            login_user(user)
-            user = load_user(current_user.id)
-            # Check with the store for user roles. If the user has an active
-            # subscription, we apply the 'subscriber' role
-            user_roles_update(user.objectid)
-            # flash('Welcome {0}!'.format(form.email.data), 'info')
-            return redirect(url_for('homepage'))
-        elif auth:
-            flash('{0}'.format(auth['data']), 'danger')
-            return redirect(url_for('users.login'))
-    return render_template('users/login.html', form=form)
-
-
 @users.route('/logout')
 def logout():
     logout_user()
-    # TODO: log out of Blender-ID OAuth
+    session.clear()
     # flash('Successfully logged out', 'info')
     return redirect('/')
 
@@ -123,18 +103,18 @@ def check_oauth_provider(provider):
         return abort(404)
 
 
-@app.route('/oauth/blender-id/login')
-def blender_id_login():
+@users.route('/login')
+def login():
     check_oauth_provider(blender_id)
     callback = url_for(
-        'blender_id_authorized',
+        'users.blender_id_authorized',
         next=None,
         _external=True
     )
     return blender_id.authorize(callback=callback)
 
 
-@app.route('/oauth/blender-id/authorized')
+@users.route('/oauth/blender-id/authorized')
 def blender_id_authorized():
     check_oauth_provider(blender_id)
     oauth_resp = blender_id.authorized_response()
