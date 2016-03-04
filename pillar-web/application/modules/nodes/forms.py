@@ -173,8 +173,8 @@ def recursive(path, rdict, data):
     item = path.pop(0)
     if not item in rdict:
         rdict[item] = {}
-    if len(path)>0:
-        rdict[item] = recursive (path, rdict[item], data)
+    if len(path) > 0:
+        rdict[item] = recursive(path, rdict[item], data)
     else:
         rdict[item] = data
     return rdict
@@ -228,12 +228,18 @@ def process_node_form(form, node_id=None, node_type=None, user=None):
                     else:
                         data = int(form[prop_name].data)
                 elif schema_prop['type'] == 'datetime':
-                    data = datetime.strftime(data, app.config['RFC1123_DATE_FORMAT'])
+                    data = datetime.strftime(data,
+                        app.config['RFC1123_DATE_FORMAT'])
                 elif schema_prop['type'] == 'list':
                     if pr == 'attachments':
                         data = json.loads(data)
                     # elif pr == 'tags':
                     #     data = [tag.strip() for tag in data.split(',')]
+                elif schema_prop['type'] == 'objectid':
+                    if data == '':
+                        # Set empty object to None so it gets removed by the
+                        # SDK before node.update()
+                        data = None
                 else:
                     if pr in form:
                         data = form[prop_name].data
@@ -245,7 +251,6 @@ def process_node_form(form, node_id=None, node_type=None, user=None):
                 else:
                     node.properties[prop_name] = data
         update_data(node_schema, form_schema)
-        # send_file(form, node, user)
         update = node.update(api=api)
         # if form.picture.data:
         #     image_data = request.files[form.picture.name].read()

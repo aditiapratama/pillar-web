@@ -21,8 +21,8 @@ class FileSelectText(HiddenInput):
                 picture = File.find(field.data, api=api)
                 button += '<img class="preview-thumbnail" src="{0}" />'.format(
                     picture.thumbnail('s', api=api))
-                button += '<a href="#" class="file_delete" data-field-name="picture" \
-                    data-file_id="{0}"> Delete</a>'.format(field.data)
+                button += '<a href="#" class="file_delete" data-field-name="{1}" \
+                    data-file_id="{0}"> Delete</a>'.format(field.data, field.name)
             except ResourceNotFound:
                 pass
 
