@@ -193,6 +193,7 @@ from application.modules.nodes.custom import shots
 from application.modules.nodes.custom import tasks
 from application.modules.nodes.custom import comments
 from application.modules.projects import projects
+from application.modules.notifications import notifications
 from helpers import gravatar
 from helpers import pretty_date
 
@@ -211,6 +212,7 @@ app.register_blueprint(stats, url_prefix='/stats')
 app.register_blueprint(files, url_prefix='/files')
 app.register_blueprint(organizations, url_prefix='/organizations')
 app.register_blueprint(projects, url_prefix='/p')
+app.register_blueprint(notifications, url_prefix='/notifications')
 
 
 @app.errorhandler(UnauthorizedAccess)

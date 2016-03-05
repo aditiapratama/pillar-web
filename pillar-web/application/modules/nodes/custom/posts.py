@@ -102,6 +102,8 @@ def posts_create(project_id):
                 content=form.content.data,
                 status=form.status.data,
                 url=form.url.data))
+        if form.picture.data == '':
+            post_props['picture'] = None
         post = Node(post_props)
         post.create(api=api)
         # Only if the node is set as published, push it to the list

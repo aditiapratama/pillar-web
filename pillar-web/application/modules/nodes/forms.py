@@ -266,7 +266,7 @@ def process_node_form(form, node_id=None, node_type=None, user=None):
         prop['user'] = user
         if 'picture' in form:
             prop['picture'] = form.picture.data
-            if prop['picture'] == 'None':
+            if prop['picture'] == 'None' or prop['picture'] == '':
                 prop['picture'] = None
         if 'parent' in form:
             prop['parent'] = form.parent.data
