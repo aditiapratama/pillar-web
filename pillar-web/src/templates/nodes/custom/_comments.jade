@@ -44,7 +44,7 @@
 
 			| {% else %}
 
-			| {# * It's autenticated, but has no 'POST' permission #}
+			| {# * It's authenticated, but has no 'POST' permission #}
 			.comment-reply-form
 				.comment-reply-field.sign-in
 					textarea(
@@ -53,7 +53,7 @@
 						data-parent_id="{{ parent_id }}",
 						placeholder="")
 					.sign-in
-						| Wanna be part of the conversation? <a href="https://store.blender.org/product/membership/">Get a Blender Cloud subscription</a>.
+						| Want to be part of the conversation?  <a href="https://store.blender.org/product/membership/">Get a Blender Cloud subscription</a>.
 			| {% endif %}
 
 			| {% else %}

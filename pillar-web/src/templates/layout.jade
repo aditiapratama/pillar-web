@@ -93,14 +93,15 @@ html(lang="en")
 									placeholder="Search tutorials, assets...")
 								i.search-icon.pi-search
 							li
-								a(href="{{ url_for('main_blog') }}",
+								a.navbar-item(
+									href="{{ url_for('main_blog') }}",
 									title="Blender Cloud Blog",
 									data-toggle="tooltip",
 									data-placement="bottom")
 									span Blog
 
 							li(class="dropdown libraries")
-								a.dropdown-toggle(
+								a.navbar-item.dropdown-toggle(
 									href="#",
 									data-toggle="dropdown",
 									title="Libraries")
@@ -109,7 +110,8 @@ html(lang="en")
 
 								ul.dropdown-menu
 									li
-										a(href="/p/textures/",
+										a.navbar-item(
+											href="/p/textures/",
 											title="Textures Library",
 											data-toggle="tooltip",
 											data-placement="left")
@@ -117,14 +119,16 @@ html(lang="en")
 											| Textures
 											small   (beta)
 									li
-										a(href="/p/characters/",
+										a.navbar-item(
+											href="/p/characters/",
 											title="Character Library",
 											data-toggle="tooltip",
 											data-placement="left")
 											i.pi-angle-right
 											| Characters
 									li
-										a(href="/p/gallery/",
+										a.navbar-item(
+											href="/p/gallery/",
 											title="Curated artwork collection",
 											data-toggle="tooltip",
 											data-placement="left")
@@ -132,14 +136,16 @@ html(lang="en")
 											| Art Gallery
 
 							li
-								a(href="/training",
+								a.navbar-item(
+									href="/training",
 									title="Training & Tutorials",
 									data-toggle="tooltip",
 									data-placement="bottom",
 									class="{% if category == 'training': %}active{% endif %}")
 									span Training
 							li
-								a(href="/open-projects",
+								a.navbar-item(
+									href="/open-projects",
 									title="Browse all the Open Projects",
 									data-toggle="tooltip",
 									data-placement="bottom",
@@ -148,7 +154,8 @@ html(lang="en")
 
 							| {% if current_user.is_anonymous() %}
 							li
-								a(href="https://store.blender.org/product/membership/",
+								a.navbar-item(
+									href="https://store.blender.org/product/membership/",
 									title="Sign up") Sign up
 							| {% endif %}
 
@@ -162,8 +169,26 @@ html(lang="en")
 							| {% set subscription = 'none' %}
 							| {% endif %}
 
+							li
+								a.navbar-item#notifications-toggle
+									i.pi-notifications-none
+									span#notifications-count
+										span
+									.flyout-hat
+
+								#notifications.flyout.notifications
+									.flyout-content
+										span.flyout-title Notifications
+										a#notifications-markallread(
+											title="Mark All as Read",
+											href="/notifications/read-all")
+											| Mark All as Read
+
+										| {% include '_notifications.html' %}
+
+
 							li(class="dropdown{% if title in ['profile', 'billing-address', 'pledges', 'manage-collection']: %} active{% endif %}")
-								a.dropdown-toggle(href="#", data-toggle="dropdown", title="{{ current_user.email }}")
+								a.navbar-item.dropdown-toggle(href="#", data-toggle="dropdown", title="{{ current_user.email }}")
 									img.gravatar(src="{{ current_user.gravatar }}", class="{{ subscription }}")
 									.special(class="{{ subscription }}")
 										| {% if subscription == 'subscriber' %}
@@ -177,17 +202,20 @@ html(lang="en")
 								ul.dropdown-menu
 									li.subscription-status(class="{{ subscription }}")
 										| {% if subscription == 'subscriber' %}
-										a(href="{{url_for('users.settings_billing')}}"
+										a.navbar-item(
+											href="{{url_for('users.settings_billing')}}"
 											title="View subscription info")
 											i.pi-grin
 											span Your subscription is active!
 										| {% elif subscription == 'demo' %}
-										a(href="{{url_for('users.settings_billing')}}"
+										a.navbar-item(
+											href="{{url_for('users.settings_billing')}}"
 											title="View subscription info")
 											i.pi-heart-filled
 											span You have a free account.
 										| {% else %}
-										a(href="https://store.blender.org/product/membership/"
+										a.navbar-item(
+											href="https://store.blender.org/product/membership/"
 											title="Renew subscription")
 											i.pi-attention
 											span.info Your subscription is not active.
@@ -195,25 +223,28 @@ html(lang="en")
 										| {% endif %}
 
 									li
-										a(href="{{url_for('users.settings_profile')}}"
+										a.navbar-item(
+											href="{{url_for('users.settings_profile')}}"
 											title="Settings")
 											i.pi-vcard
 											| Profile
 									li
-										a(href="{{url_for('users.settings_billing')}}"
+										a.navbar-item(
+											href="{{url_for('users.settings_billing')}}"
 											title="Billing")
 											i.pi-credit-card
 											| Subscription
 									li.divider(role="separator")
 									li
-										a(href="{{ url_for('users.logout') }}")
+										a.navbar-item(
+											href="{{ url_for('users.logout') }}")
 											i.pi-log-out(title="Log Out")
 											| Log out
 
 							| {% else %}
 
 							li.nav-item-sign-in
-								a(href="{{ url_for('users.login') }}")
+								a.navbar-item(href="{{ url_for('users.login') }}")
 									i.pi-log-in(title="Log In")
 									|  Log in
 							| {% endif %}
@@ -296,6 +327,17 @@ html(lang="en")
 						i.pi-angle-up
 			| {% endblock %}
 		| {% endblock %}
+
+		#notification-pop
+			.nc-progress
+			a#pop-close(href="#", title="Dismiss")
+				i.pi-cancel
+			.nc-item
+				.nc-avatar
+					img(src="http://placehold.it/16x16")
+				.nc-text
+					span.nc-date
+						a(href="")
 
 		noscript
 			link(href='//fonts.googleapis.com/css?family=Roboto:300,400,500', rel='stylesheet', type='text/css')

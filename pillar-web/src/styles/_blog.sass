@@ -47,7 +47,6 @@
 				overflow: hidden
 				border-top-left-radius: 3px
 				border-top-right-radius: 3px
-				margin-bottom: 15px
 				+clearfix
 
 				img
@@ -290,12 +289,12 @@
 		float: right
 		display: inline-block
 		+button-rounded($color-success, 6px)
-		margin: 0 15px 20px 0 !important
+		margin: 15px 15px 20px 0 !important
 	.button-back
 		float: right
 		display: inline-block
 		+button-rounded($color-info, 6px)
-		margin: 0 30px 20px 0
+		margin: 15px 20px 20px 0
 
 #blog_container
 	&.cloud-blog
@@ -319,3 +318,13 @@
 			.item-content
 				padding-left: 80px
 				padding-right: 80px
+
+		#blog_index-container
+			padding: 25px 80px 20px 80px
+
+			+media-sm
+				width: 100%
+				padding: 25px 20px 20px 20px
+			+media-xs
+				width: 100%
+				padding: 25px 5px 20px 5px

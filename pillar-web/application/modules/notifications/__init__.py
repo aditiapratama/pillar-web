@@ -49,8 +49,14 @@ def notification_parse(notification):
                     node.parent.node_type)
 
             context_object_type = node.parent.node_type
-            context_object_name = owner
             context_object_url = url_for('nodes.view', node_id=node.parent._id, redir=1)
+
+            if context_object_type == 'post':
+                context_object_name = '{0} "{1}"'.format(owner, node.parent.name)
+            else:
+                context_object_name = owner
+
+
             if activity.verb == 'replied':
                 action = 'replied to'
             elif activity.verb == 'commented':
@@ -91,6 +97,7 @@ def index():
     api = SystemUtility.attract_api()
     notifications = Notification.all({
         'where': '{"user": "%s"}' % (current_user.objectid),
+        'sort': '-_created',
         'max_results': str(limit)}, api=api)
     notifications = notifications._items
     items = [notification_parse(n) for n in notifications]
