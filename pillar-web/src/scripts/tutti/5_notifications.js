@@ -15,7 +15,6 @@ function getNotificationsOnce() {
 
 // getNotifications by fetching json every X seconds
 function getNotifications(){
-
 	$.getJSON( "/notifications/", function( data ) {
 
 		var items = [];
@@ -81,7 +80,7 @@ function getNotifications(){
 				content += '</li>';
 
 				items.push(content);
-			});
+			}); // each
 
 			if (unread_new > 0) {
 				// Set page title, display notifications and set counter
@@ -101,12 +100,22 @@ function getNotifications(){
 
 			items.push(content);
 
-		};
+		}; // if items
 
 		// Populate the list
 		$('ul#notifications-list').html( items.join('') );
 
-		checkPopNotification();
+		checkPopNotification(
+				data['items'][0]['username'],
+				data['items'][0]['username_avatar'],
+				data['items'][0]['action'],
+				data['items'][0]['date'],
+				data['items'][0]['context_object_name'],
+				data['items'][0]['context_object_url'])
+
+	})
+	.done(function(){
+		// clear the counter
 		unread_on_load = unread_new;
 	});
 };
@@ -141,36 +150,29 @@ function popNotification(){
 };
 
 
-function checkPopNotification(){
+function checkPopNotification(username, username_avatar, action, date, context_object_name, context_object_url){
 
 	// If there's new content
 	if (unread_new > unread_on_load){
 
-		$.getJSON( "/notifications/", function( data ) {
+		var text = '<span class="nc-author">' + username + '</span> ';
+		text += action;
 
-			if (data['items'][0]){
+		text += ' <a href="' + context_object_url + '">';
+			text += context_object_name + ' ';
+		text += '</a>';
 
-			var text = '<span class="nc-author">' + data['items'][0]['username'] + '</span> ';
-			text += data['items'][0]['action'];
-
-			text += ' <a href="' + data['items'][0]['context_object_url'] + '">';
-				text += data['items'][0]['context_object_name'] + ' ';
+		text += '<span class="nc-date">';
+			text += ' <a href="' + context_object_url + '">';
+				text += date;
 			text += '</a>';
+		text += '</span>';
 
-			text += '<span class="nc-date">';
-				text += ' <a href="' + data['items'][0]['context_object_url'] + '">';
-					text += data['items'][0]['date'];
-				text += '</a>';
-			text += '</span>';
+		$('#notification-pop .nc-text').html(text);
+		$('#notification-pop .nc-avatar img').attr('src', username_avatar);
 
-			$('#notification-pop .nc-text').html(text);
-			$('#notification-pop .nc-avatar img').attr('src', data['items'][0]['username_avatar']);
-			};
+		popNotification();
 
-		})
-		.done(function(){
-			popNotification();
-		});
 	};
 };
 
@@ -230,17 +232,25 @@ $('#notifications-markallread').on('click', function(e){
 	$('#notifications-count').removeAttr('class');
 	$('#notifications-toggle i').removeClass('pi-notifications-active').addClass('pi-notifications-none');
 
-	unread_new = 0;
-	unread_on_load = 0;
+	unread_on_load = unread_new;
 });
+
+
+function getNotificationsLoop() {
+	getNotifications();
+
+	setTimeout(function () {
+		getNotificationsLoop();
+	}, 10000);
+}
 
 
 $(document).ready(function() {
 
 	getNotificationsOnce();
-	getNotifications();
 
-	setInterval(getNotifications, 30000);
+	// Check for new notifications in the background
+	getNotificationsLoop();
 
 	// Resize #notifications and change overflow for scrollbars
 	$(window).on("resize", function() { notificationsResize(); });

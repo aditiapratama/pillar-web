@@ -864,18 +864,21 @@ label, label.control-label
 		font-size: 1.2em
 
 #notification-pop
-	background-color: white
+	visibility: hidden
+	display: none
 	opacity: 0
+	background-color: #327588
+	color: $color-text-light-primary
 	border-radius: 3px
+	overflow: hidden
 	width: 300px
-	box-shadow: 1px 1px 0 rgba(black, .1), 0 0 25px rgba(black, .3)
 	position: fixed
 	z-index: 9998
 	bottom: 20px
 	left: 20px
 	cursor: default
-	transform: scale(0.8)
-	transition: opacity 150ms ease-in-out, transform 200ms ease-in-out
+	box-shadow: 1px 1px 0 rgba(black, .1), 0 0 25px rgba(black, .2)
+	transition: opacity 250ms ease-in-out
 
 	&:hover
 		#pop-close
@@ -883,7 +886,15 @@ label, label.control-label
 
 	&.in
 		opacity: 1
-		transform: scale(1.0)
+		visibility: visible
+		display: block
+		animation:
+			name: grow-bounce-in
+			duration: 500ms
+			delay: 0
+			fill-mode: forwards
+			iteration-count: 1
+			timing-function: ease-out
 
 		.nc-progress
 			animation:
@@ -896,9 +907,14 @@ label, label.control-label
 
 
 	&.in.out
-		transition: opacity 1000ms ease-in, transform 1000ms ease-in
-		opacity: 0
-		transform: scale(1.2)
+		animation:
+			name: grow-bounce-out
+			duration: 500ms
+			delay: 0
+			fill-mode: forwards
+			iteration-count: 1
+			timing-function: ease-out
+
 
 	.nc-progress
 		position: absolute
@@ -918,12 +934,12 @@ label, label.control-label
 		top: 5px
 		right: 5px
 		font-size: .8em
-		color: $color-text-dark-hint
+		color: $color-text-light-hint
 		cursor: pointer
 		padding: 3px
 
 		&:hover
-			color: $color-text-dark-secondary
+			color: $color-text-light-secondary
 
 	.nc-item
 		padding: 10px
@@ -931,7 +947,7 @@ label, label.control-label
 		align-items: center
 
 		a
-			color: $color-primary-dark
+			color: white
 
 		.nc-text
 			width: 90%
@@ -940,6 +956,7 @@ label, label.control-label
 
 		.nc-author
 			font-weight: 500
+			color: white
 
 		.nc-avatar
 			width: 10%
@@ -956,8 +973,8 @@ label, label.control-label
 			display: block
 			padding-top: 5px
 			font-size: .85em
-			color: $color-text-dark-hint
+			color: $color-text-light-secondary
 			& a
-				color: $color-text-dark-hint
+				color: $color-text-light-secondary
 				&:hover
-					color: $color-text-dark-secondary
+					color: $color-text-light-primary

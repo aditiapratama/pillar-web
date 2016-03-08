@@ -227,6 +227,28 @@
 	to
 		background-position: left bottom
 
+@keyframes grow-bounce-in
+	0
+		transform: scale(0.8)
+		opacity: 0
+	50%
+		transform: scale(1.05)
+		opacity: 1
+	85%
+		transform: scale(1.0)
+	90%
+		transform: scale(0.99)
+	100%
+		transform: scale(1.0)
+
+@keyframes grow-bounce-out
+	0
+		transform: scale(1.0)
+		opacity: 1
+	100%
+		transform: scale(0.9)
+		opacity: 0
+
 =list-bullets
 	ul
 		padding-left: 20px
