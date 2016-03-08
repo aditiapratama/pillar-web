@@ -255,9 +255,4 @@ $(document).ready(function() {
 	// Resize #notifications and change overflow for scrollbars
 	$(window).on("resize", function() { notificationsResize(); });
 
-	// Load perfectScrollbar
-	if (typeof Ps !== 'undefined'){
-		Ps.initialize(document.getElementById('notifications'), {suppressScrollX: true});
-	};
-
 });
