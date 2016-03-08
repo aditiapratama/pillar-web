@@ -49,7 +49,7 @@ def notification_parse(notification):
                     node.parent.node_type)
 
             context_object_type = node.parent.node_type
-            context_object_url = url_for('nodes.view', node_id=node.parent._id, redir=1)
+            context_object_url = url_for('nodes.view', node_id=activity.context_object, redir=1)
 
             if context_object_type == 'post':
                 context_object_name = '{0} "{1}"'.format(owner, node.parent.name)
