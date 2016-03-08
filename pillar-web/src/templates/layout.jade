@@ -76,6 +76,12 @@ html(lang="en")
 							span.app-logo
 								i.pi-blender-cloud-logo
 
+					.search-input
+						input#cloud-search(
+							type="text",
+							placeholder="Search tutorials, assets...")
+						i.search-icon.pi-search
+
 					nav.collapse.navbar-collapse
 						ul.nav.navbar-nav.navbar-right
 							| {% if node and node.properties and node.properties.category %}
@@ -83,15 +89,6 @@ html(lang="en")
 							| {% else %}
 							| {% set category = title %}
 							| {% endif %}
-							.search-input
-								.advanced
-									a(href="{{ url_for('nodes_search_index') }}")
-										| Advanced Search
-										i.pi-angle-right
-								input#cloud-search(
-									type="text",
-									placeholder="Search tutorials, assets...")
-								i.search-icon.pi-search
 							li
 								a.navbar-item(
 									href="{{ url_for('main_blog') }}",

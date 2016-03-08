@@ -80,11 +80,6 @@ $navbar-backdrop-height: 600px
 	.container-box
 		+container-box
 
-.page-body
-	transition: filter 50ms ease-in
-	&.blur
-		filter: blur(5px)
-
 
 .navbar-fixed-top+.page-content
 	padding-top: $navbar-height
@@ -194,6 +189,7 @@ header.navbar-header
 		color: white
 
 .navbar-overlay
+	display: none
 	position: absolute
 	top: 0
 	left: 0
@@ -207,12 +203,13 @@ header.navbar-header
 	transition: background-color 350ms ease-in-out
 
 	&.is-active
-		background-color: rgba($color-background-nav,1)
+		background-color: $color-background-nav
 		text-shadow: none
 
+	+media-lg
+		display: block
 
 .navbar-transparent
-
 	a
 		height: 75px
 		transition: height 150ms ease-in-out
@@ -239,18 +236,13 @@ header.navbar-header
 	align-items: center
 
 	width: 100%
-	background:
-		color: transparent
-		repeat: repeat-x
-		size: 100% 100% // 'contain' gives a black-line appearing for a few seconds in webkit when scrolling
+	background-color: $color-background-nav
 
-	+media-xs
-		background-color: rgba($color-background-nav, .8)
-	+media-sm
-		background-color: rgba($color-background-nav, .8)
-	+media-md
-		background-color: rgba($color-background-nav, .8)
 	+media-lg
+		background:
+			color: transparent
+			repeat: repeat-x
+			size: 100% 100% // 'contain' gives a black-line appearing for a few seconds in webkit when scrolling
 		background: linear-gradient(to bottom, rgba(black, .5) 0%, transparent 100%)
 
 	nav
@@ -308,6 +300,10 @@ header.navbar-header
 				&:hover
 					border-color: lighten($color-primary, 5%)
 
+			.pi-angle-down
+				position: relative
+				left: 5px
+
 		&.nav-item-sign-in
 			i
 				padding-right: 6px
@@ -361,17 +357,19 @@ header.navbar-header
 			left: 15px
 			right: 20px // overrides bs
 
+		+media-lg
+			margin-right: 80px
+
 		span.app-logo
 			font-size: 1.2em
 			position: relative
 			top: 3px
+			width: 30px
+			overflow: hidden
 
-			+media-sm
-				width: 30px
-				overflow: hidden
-			+media-xs
-				width: 30px
-				overflow: hidden
+			+media-lg
+				width: initial
+				overflow: initial
 
 
 	.dropdown
@@ -483,23 +481,23 @@ header.navbar-header
 	z-index: 0
 	position: absolute
 
-	top: -40px
-	left: -40px
+	top: 0
+	left: 0
 	right: 0
 	bottom: 0
 
-	width: 120%
-	height: 400%
+	width: 100%
+	height: 100%
 	max-height: $navbar-backdrop-height
 	background:
 		size: cover
 		position: 50% 50%
 		repeat: no-repeat
 		color: white
-		image: url(https://www.blender.org/wp-content/themes/bthree/assets/images/placeholder_background.jpg)
-	filter: blur(15px)
-	-webkit-filter: blur(15px)
-	-moz-filter: blur(15px)
+		image: url(https://cloud.blender.org/static/assets/img/backgrounds/background_gleb_locomotive.jpg)
+	// filter: blur(15px)
+	// -webkit-filter: blur(15px)
+	// -moz-filter: blur(15px)
 
 	video
 		width: 100%
