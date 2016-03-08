@@ -134,16 +134,20 @@ $('#notifications').on('click', function(e){ e.stopPropagation(); });
 
 
 function popNotification(){
+
+	// pop!
 	$("#notification-pop").addClass('in');
 
+	// After 10s, add a class to make it disappear
 	setTimeout(function(){
 		$("#notification-pop").addClass('out');
+
+		// And a second later, remove all classes
+		setTimeout(function(){
+			$("#notification-pop").removeAttr('class');
+		}, 1000);
+
 	}, 10000);
-
-
-	setTimeout(function(){
-		$("#notification-pop").removeAttr('class');
-	}, 11000);
 
 	// Set them the same so it doesn't pop up again
 	unread_on_load = unread_new;
@@ -154,6 +158,8 @@ function checkPopNotification(username, username_avatar, action, date, context_o
 
 	// If there's new content
 	if (unread_new > unread_on_load){
+
+		$('#notification-pop').data('url', context_object_url);
 
 		var text = '<span class="nc-author">' + username + '</span> ';
 		text += action;
@@ -206,6 +212,12 @@ $('#notifications-toggle').on('click', function(e){
 
 	notificationsResize();
 	getNotifications();
+});
+
+
+$('#notification-pop').on('click', function(e){
+	e.stopPropagation();
+	window.location.href = $(this).data('url');
 });
 
 
