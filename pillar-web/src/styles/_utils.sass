@@ -436,3 +436,10 @@
 		text:
 			align: center
 			transform: uppercase
+
+@mixin text-background($color, $roundness, $padding)
+	border-radius: $roundness
+	padding: $padding
+	background-color: rgba($color, .9)
+	box-shadow: 0.5em 0 0 rgba($color, .9),-0.5em 0 0 rgba($color, .9)
+	box-decoration-break: clone

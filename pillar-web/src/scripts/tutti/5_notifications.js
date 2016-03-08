@@ -243,16 +243,3 @@ function getNotificationsLoop() {
 		getNotificationsLoop();
 	}, 10000);
 }
-
-
-$(document).ready(function() {
-
-	getNotificationsOnce();
-
-	// Check for new notifications in the background
-	getNotificationsLoop();
-
-	// Resize #notifications and change overflow for scrollbars
-	$(window).on("resize", function() { notificationsResize(); });
-
-});

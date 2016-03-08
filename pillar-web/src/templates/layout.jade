@@ -353,15 +353,25 @@ html(lang="en")
 			var algolia = algoliasearch("{{config['ALGOLIA_USER']}}", "{{config['ALGOLIA_PUBLIC_KEY']}}");
 			var index = algolia.initIndex("{{config['ALGOLIA_INDEX_NODES']}}");
 
-			{% if current_user.is_authenticated() %}
-				// Load perfectScrollbar
-				Ps.initialize(document.getElementById('notifications'), {suppressScrollX: true});
-			{% endif %}
-
 		script(type="text/javascript", src="{{ url_for('static', filename='assets/js/markdown.min.js') }}")
 		script(type="text/javascript", src="{{ url_for('static', filename='assets/js/tutti.min.js') }}")
 
 		| {% block footer_scripts %}{% endblock %}
+
+		script.
+			$(document).ready(function() {
+				{% if current_user.is_authenticated() %}
+					getNotificationsOnce();
+					getNotificationsLoop(); // Check for new notifications in the background
+
+					// Resize #notifications and change overflow for scrollbars
+					$(window).on("resize", function() { notificationsResize(); });
+
+					// Load perfectScrollbar
+					Ps.initialize(document.getElementById('notifications'), {suppressScrollX: true});
+
+				{% endif %}
+			});
 
 		script.
 			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

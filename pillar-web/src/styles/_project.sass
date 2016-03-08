@@ -1625,16 +1625,23 @@ section.node-children
 			.node_index-collection-name
 				padding-bottom: 10px
 				font:
-					family: $font-headings
+					family: $font-body
 					size: 2.1em
-					weight: 300
+					weight: 600
+
+				span
+					+text-background($color-background-nav, 3px, 5px 0)
 
 			.node_index-user-description,
 			.node_index-collection-description
+				margin: 5px auto
 				color: $color-text-light
 				font:
 					size: 1.1em
 					weight: 300
+
+				span
+					+text-background($color-background-nav, 3px, 7px 10px)
 
 
 		#node_index-collection-info

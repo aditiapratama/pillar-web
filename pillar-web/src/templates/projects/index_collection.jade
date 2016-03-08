@@ -36,23 +36,27 @@ meta(name="twitter:image", content="{% if title == 'open-projects' %}{{ url_for(
 			#node_index-user-avatar
 				img(src="{{ user.gravatar }}")
 			#node_index-user-info
-				.node_index-user-name {{user.name}}
-				.node_index-user-description {{user.description}}
+				.node_index-user-name
+					span {{user.name}}
+				.node_index-user-description
+					span {{user.description}}
 		| {% endif %}
 
 		| {% if title == 'open-projects' %}
 		#node_index-header.collection
 			#node_index-collection-info
-				.node_index-collection-name Open Projects
-				.node_index-collection-description.
-					Full production data and tutorials from all open movies, for you to use freely.
+				.node_index-collection-name
+					span Open Projects
+				.node_index-collection-description
+					span Full production data and tutorials from all open movies, for you to use freely.
 
 		| {% elif title == 'training' %}
 		#node_index-header.collection
 			#node_index-collection-info
-				.node_index-collection-name Training
-				.node_index-collection-description.
-					Production quality training videos by 3D professionals.
+				.node_index-collection-name
+					span Training
+				.node_index-collection-description
+					span Production quality training videos by 3D professionals.
 		| {% endif %}
 
 
