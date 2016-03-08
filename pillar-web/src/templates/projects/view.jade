@@ -191,8 +191,10 @@ script.
 
 	ProjectUtils.setProjectAttributes({projectId: "{{project._id}}", isProject: "", nodeId: ""});
 	/* Initialize scrollbars */
-	Ps.initialize(document.getElementById('project_context-container'), {suppressScrollX: true});
-	Ps.initialize(document.getElementById('project_tree'), {suppressScrollX: true});
+	if (typeof Ps !== 'undefined'){
+		Ps.initialize(document.getElementById('project_context-container'), {suppressScrollX: true});
+		Ps.initialize(document.getElementById('project_tree'), {suppressScrollX: true});
+	}
 
 	var urlNodeMove = "{{url_for('projects.move_node')}}";
 	var urlNodeFeature = "{{url_for('projects.add_featured_node')}}";
@@ -311,8 +313,9 @@ script.
 			}
 		{% endif %}
 
-
-		Ps.initialize(document.getElementById('project_context-container'));
+		if (typeof Ps !== 'undefined'){
+			Ps.initialize(document.getElementById('project_context-container'));
+		}
 
 		$('#project_tree').jstree({
 				'core': {

@@ -58,7 +58,7 @@ handle_exceptions(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "users.login"
-login_manager.login_message = u"Please login."
+login_manager.login_message = u''
 
 
 @login_manager.user_loader

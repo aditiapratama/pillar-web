@@ -126,8 +126,10 @@ script(src="{{ url_for('static', filename='assets/js/algolia_search.min.js') }}"
 
 script(type="text/javascript").
 
-	Ps.initialize(document.getElementById('search-list'), {suppressScrollX: true});
-	Ps.initialize(document.getElementById('search-hit-container'), {suppressScrollX: true});
+	if (typeof Ps !== 'undefined'){
+		Ps.initialize(document.getElementById('search-list'), {suppressScrollX: true});
+		Ps.initialize(document.getElementById('search-hit-container'), {suppressScrollX: true});
+	}
 
 	$('.search-input').hide();
 

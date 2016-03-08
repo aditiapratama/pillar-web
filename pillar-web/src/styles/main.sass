@@ -120,6 +120,7 @@ $navbar-backdrop-height: 600px
 	&.alert-success
 		background-color: lighten($color-success, 45%)
 		color: $color-success
+
 		.alert-icon, .close
 			color: $color-success
 
@@ -129,44 +130,35 @@ $navbar-backdrop-height: 600px
 		.alert-icon, .close
 			color: darken($color-info, 10%)
 
-	.close
+	button.close
+		background: none
+		border: none
 		opacity: .5
-		position: relative
-		top: -2px
-		right: -10px
-		padding: 0 10px
+		position: absolute
+		top: 5px
+		right: 10px
+		padding: 10px
+
+		&:hover
+			opacity: 1
 
 		i
-			font-size: .6em
+			font-size: .8em
 
 	i.alert-icon
 		&:before
-			display: inline-block
-			speak: none
-			font:
-				family: "Ionicons"
-				style: normal
-				weight: normal
-				variant: normal
-			text:
-				transform: none
-				rendering: auto
-			line-height: 1
-			-webkit-font-smoothing: antialiased
-			-moz-osx-font-smoothing: grayscale
-
-			padding: 0 10px
-			transform: scale(1.2)
+			font-family: "pillar-font"
+			padding-right: 10px
 
 		&.success:before
-			content: "\f121"
+			content: '\e801'
 		&.info:before
-			content: "\f44c"
+			content: "\e80c"
 		&.warning:before
-			content: "\f101"
+			content: "\e80b"
 		&.danger:before,
 		&.error:before
-			content: "\f100"
+			content: "\e83d"
 
 
 /* When there's an alert, disable the fixed top */

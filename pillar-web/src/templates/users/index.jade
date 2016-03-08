@@ -97,7 +97,9 @@ script(type='text/javascript', src="{{ url_for('static', filename='assets/js/jqu
 
 script(type="text/javascript").
 
-	Ps.initialize(document.getElementById('hits'), {suppressScrollX: true});
+	if (typeof Ps !== 'undefined'){
+		Ps.initialize(document.getElementById('hits'), {suppressScrollX: true});
+	}
 
 	function displayUser(userId) {
 		var url = '/u/' + userId + '/edit?embed=1';
