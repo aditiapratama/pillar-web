@@ -96,9 +96,6 @@ function getNotifications(){
 				$('#notifications-toggle i').removeClass('pi-notifications-active').addClass('pi-notifications-none');
 			};
 
-			// Populate the list
-			$('ul#notifications-list').html( items.join('') );
-
 			checkPopNotification(
 				data['items'][0]['_id'],
 				data['items'][0]['username'],
@@ -114,9 +111,10 @@ function getNotifications(){
 			content += '</li>';
 
 			items.push(content);
-
-
 		}; // if items
+
+		// Populate the list
+		$('ul#notifications-list').html( items.join(''));
 	})
 	.done(function(){
 		// clear the counter
