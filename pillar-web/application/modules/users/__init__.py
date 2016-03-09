@@ -109,7 +109,8 @@ def login():
     callback = url_for(
         'users.blender_id_authorized',
         next=None,
-        _external=True
+        _external=True,
+        _scheme=app.config['SCHEME']
     )
     return blender_id.authorize(callback=callback)
 
