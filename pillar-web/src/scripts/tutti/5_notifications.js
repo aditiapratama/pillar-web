@@ -77,6 +77,10 @@ function getNotifications(){
 							content += '<i title="Turn On Notifications" class="pi-toggle-off"></i>';
 						};
 					content += '</a>';
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/master
 					content += '</div>';
 				content += '</li>';
 
@@ -159,11 +163,9 @@ function checkPopNotification(id,username,username_avatar,action,date,context_ob
 	{
 		// If there's new content
 		if (unread_new > unread_on_load){
-
 			// Fill in the urls for redirect on click, and mark-read
 			$("#notification-pop").attr('data-url', context_object_url);
 			$("#notification-pop").attr('data-read-toggle', '/notifications/' + id + '/read-toggle');
-
 			// The text in the pop
 			var text = '<span class="nc-author">' + username + '</span> ';
 			text += action;
