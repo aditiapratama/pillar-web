@@ -109,7 +109,7 @@ def action_subscription_toggle(notification_id):
     api = SystemUtility.attract_api()
     # Get the notification
     notification = notification_parse(
-        Notification.find(notification_id, api=api))
+        Notification.find(notification_id, {'parse':'1'}, api=api))
     # Get the subscription and modify it
     subscription = ActivitySubscription.find(
         notification['subscription'], api=api)

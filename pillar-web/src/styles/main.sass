@@ -843,6 +843,10 @@ label, label.control-label
 		&.active
 			color: $color-primary
 
+		i.spin
+			&:before
+				content: '\e800'
+
 	& .nc-subscription_toggle
 		top: 25px
 		right: 4px
@@ -912,7 +916,7 @@ label, label.control-label
 		left: 0
 		width: 100%
 		height: 2px
-		background: linear-gradient(to left, transparent 50%, $color-primary 50%)
+		background: linear-gradient(to left, transparent 50%, lighten($color-primary, 10%) 50%)
 		background-size: 200% 100%
 		color: white
 

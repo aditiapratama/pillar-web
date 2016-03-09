@@ -45,37 +45,38 @@ function getNotifications(){
 					// Text of the notification
 					content += '<div class="nc-text">';
 
-						// Username and action
-						content += no['username'] + ' ' + no['action'] + ' ';
+					// Username and action
+					content += no['username'] + ' ' + no['action'] + ' ';
 
-						// Object
-						content += '<a ' + read_info + '" href="' + no['context_object_url'] + '">';
-							content += no['context_object_name'] + ' ';
-						content += '</a> ';
+					// Object
+					content += '<a '+read_info+'" href="'+no['context_object_url']+'" class="nc-a">';
+					content += no['context_object_name'] + ' ';
+					content += '</a> ';
 
-						// Date
-						content += '<span class="nc-date">';
-							content += '<a ' + read_info + '" href="' + no['context_object_url'] + '">' + no['date'] + '</a>';
-						content += '</span>';
+					// Date
+					content += '<span class="nc-date">';
+					content += '<a '+read_info+'" href="'+no['context_object_url']+'" class="nc-a">';
+					content += no['date'];
+					content += '</a>';
+					content += '</span>';
 
-						// Read Toggle
-						content += '<a href="/notifications/' + no['_id'] + '/read-toggle" class="nc-button nc-read_toggle">';
-							if (no['is_read']){
-								content += '<i title="Mark as Unread" class="pi pi-circle-dot"></i>';
-							} else {
-								content += '<i title="Mark as Read" class="pi pi-circle"></i>';
-							};
-						content += '</a>';
+					// Read Toggle
+					content += '<a id="'+no['_id']+'" href="/notifications/' + no['_id'] + '/read-toggle" class="nc-button nc-read_toggle">';
+						if (no['is_read']){
+							content += '<i title="Mark as Unread" class="pi pi-circle-dot"></i>';
+						} else {
+							content += '<i title="Mark as Read" class="pi pi-circle"></i>';
+						};
+					content += '</a>';
 
-						// // Subscription Toggle
-						// content += '<a href="/notifications/' + no['_id'] + '/subscription-toggle" class="nc-button nc-subscription_toggle">';
-						// 	if (no['is_subscribed']){
-						// 		content += '<i title="Turn Off Notifications" class="fa fa-toggle-on"></i>';
-						// 	} else {
-						// 		content += '<i title="Turn On Notifications" class="fa fa-toggle-off"></i>';
-						// 	};
-						// content += '</a>';
-
+					// Subscription Toggle
+					content += '<a href="/notifications/' + no['_id'] + '/subscription-toggle" class="nc-button nc-subscription_toggle">';
+						if (no['is_subscribed']){
+							content += '<i title="Turn Off Notifications" class="pi-toggle-on"></i>';
+						} else {
+							content += '<i title="Turn On Notifications" class="pi-toggle-off"></i>';
+						};
+					content += '</a>';
 					content += '</div>';
 				content += '</li>';
 
@@ -106,13 +107,13 @@ function getNotifications(){
 		$('ul#notifications-list').html( items.join('') );
 
 		checkPopNotification(
-				data['items'][0]['username'],
-				data['items'][0]['username_avatar'],
-				data['items'][0]['action'],
-				data['items'][0]['date'],
-				data['items'][0]['context_object_name'],
-				data['items'][0]['context_object_url'])
-
+			data['items'][0]['_id'],
+			data['items'][0]['username'],
+			data['items'][0]['username_avatar'],
+			data['items'][0]['action'],
+			data['items'][0]['date'],
+			data['items'][0]['context_object_name'],
+			data['items'][0]['context_object_url'])
 	})
 	.done(function(){
 		// clear the counter
@@ -135,10 +136,10 @@ $('#notifications').on('click', function(e){ e.stopPropagation(); });
 
 function popNotification(){
 
-	// pop!
+	// pop in!
 	$("#notification-pop").addClass('in');
 
-	// After 10s, add a class to make it disappear
+	// After 10s, add a class to make it pop out
 	setTimeout(function(){
 		$("#notification-pop").addClass('out');
 
@@ -154,33 +155,29 @@ function popNotification(){
 };
 
 
-function checkPopNotification(username, username_avatar, action, date, context_object_name, context_object_url){
+function checkPopNotification(id,username,username_avatar,action,date,context_object_name,context_object_url)
+	{
+		// If there's new content
+		if (unread_new > unread_on_load){
 
-	// If there's new content
-	if (unread_new > unread_on_load){
+			// Fill in the urls for redirect on click, and mark-read
+			$("#notification-pop").attr('data-url', context_object_url);
+			$("#notification-pop").attr('data-read-toggle', '/notifications/' + id + '/read-toggle');
 
-		$('#notification-pop').data('url', context_object_url);
-
-		var text = '<span class="nc-author">' + username + '</span> ';
-		text += action;
-
-		text += ' <a href="' + context_object_url + '">';
+			// The text in the pop
+			var text = '<span class="nc-author">' + username + '</span> ';
+			text += action;
 			text += context_object_name + ' ';
-		text += '</a>';
+			text += '<span class="nc-date">' + date + '</span>';
 
-		text += '<span class="nc-date">';
-			text += ' <a href="' + context_object_url + '">';
-				text += date;
-			text += '</a>';
-		text += '</span>';
+			// Fill the html
+			$('#notification-pop .nc-text').html(text);
+			$('#notification-pop .nc-avatar img').attr('src', username_avatar);
 
-		$('#notification-pop .nc-text').html(text);
-		$('#notification-pop .nc-avatar img').attr('src', username_avatar);
-
-		popNotification();
-
+			// pop in!
+			popNotification();
+		};
 	};
-};
 
 
 // Function to set #notifications flyout height and resize if needed
@@ -211,22 +208,58 @@ $('#notifications-toggle').on('click', function(e){
 	$(this).toggleClass("active");
 
 	notificationsResize();
-	getNotifications();
+
+	// Hide other dropdowns
+	$('nav .dropdown').removeClass('open');
+});
+
+// Hide flyout when clicking other dropdowns
+$('nav').on('click', '.dropdown', function(e){
+	$('#notifications').hide();
+	$('#notifications-toggle').removeClass('active');
 });
 
 
 $('#notification-pop').on('click', function(e){
+	e.preventDefault();
 	e.stopPropagation();
-	window.location.href = $(this).data('url');
+
+	var link_url = $(this).data('url');
+	var read_url = $(this).data('read-toggle');
+
+	$.get(read_url)
+	.done(function(){
+		window.location.href = link_url;
+	});
 });
 
 
 // Read/Subscription Toggles
 $('ul#notifications-list').on('click', '.nc-button', function(e){
 	e.preventDefault();
+	var nc = $(this);
 
-	$.get($(this).attr('href'));
-	getNotifications();
+	// Swap to spin icon while we wait for the response
+	$('i', nc).addClass('spin');
+
+	$.get($(nc).attr('href'))
+		.done(function(){
+			$('i', nc).removeClass('spin');
+	});
+});
+
+
+// When clicking on links, toggle as read
+$('ul#notifications-list').on('click', '.nc-a', function(e){
+	e.preventDefault();
+
+	var link_url = $(this).attr('href');
+	var read_url = '/notifications/' + $(this).data('id') + '/read-toggle';
+
+	$.get(read_url)
+	.done(function(){
+		window.location.href = link_url;
+	});
 });
 
 
@@ -251,7 +284,7 @@ $('#notifications-markallread').on('click', function(e){
 function getNotificationsLoop() {
 	getNotifications();
 
-	setTimeout(function () {
+	var getLoop = setTimeout(function () {
 		getNotificationsLoop();
 	}, 10000);
 }
