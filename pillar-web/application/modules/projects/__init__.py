@@ -34,8 +34,7 @@ def view(project_url):
     api = SystemUtility.attract_api()
     # Fetch the Node or 404
     try:
-        project = Project.find_one({
-            'where': '{"url" : "%s"}' % (project_url)}, api=api)
+        project = Project.find_one({'where': {"url": project_url}}, api=api)
     except ResourceNotFound:
         return abort(404)
     # Set up variables for processing
