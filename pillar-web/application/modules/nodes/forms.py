@@ -197,7 +197,7 @@ def process_node_form(form, node_id=None, node_type=None, user=None):
         node.description = form.description.data
         if 'picture' in form:
             node.picture = form.picture.data
-            if node.picture == "None":
+            if node.picture == 'None' or node.picture == '':
                 node.picture = None
         if 'parent' in form:
             if form.parent.data != "":
