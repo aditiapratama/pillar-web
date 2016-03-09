@@ -70,9 +70,9 @@ function getNotifications(){
 						// Subscription Toggle
 						content += '<a href="/notifications/' + no['_id'] + '/subscription-toggle" class="nc-button nc-subscription_toggle">';
 							if (no['is_subscribed']){
-								content += '<i title="Turn Off Notifications" class="fa fa-toggle-on"></i>';
+								content += '<i title="Turn Off Notifications" class="pi-toggle-on"></i>';
 							} else {
-								content += '<i title="Turn On Notifications" class="fa fa-toggle-off"></i>';
+								content += '<i title="Turn On Notifications" class="pi-toggle-off"></i>';
 							};
 						content += '</a>';
 
@@ -215,11 +215,12 @@ $('#notification-pop').on('click', function(e){
 	e.preventDefault();
 	e.stopPropagation();
 
-	var url = $(this).data('url');
+	var link_url = $(this).data('url');
+	var read_url = $(this).data('read-toggle');
 
-	$.get($(this).data('read-toggle'))
+	$.get(read_url)
 	.done(function(){
-		// window.location.href = url;
+		window.location.href = link_url;
 	});
 });
 
