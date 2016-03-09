@@ -21,11 +21,11 @@ $search-hit-width_list: 48px
 		background-color: rgba($color-background-nav, .7)
 
 .search-input
-	background-color: darken($color-background-nav, 2%)
 	position: relative
 	float: left
 	padding: 0
 	margin: 0
+	transition: background-color 350ms ease-in-out
 
 	+media-lg
 		max-width: 350px
@@ -50,7 +50,7 @@ $search-hit-width_list: 48px
 		cursor: pointer
 
 	#cloud-search, .tt-hint
-		background: transparent
+		background-color: transparent
 		width: 100%
 		border: none
 		outline: none

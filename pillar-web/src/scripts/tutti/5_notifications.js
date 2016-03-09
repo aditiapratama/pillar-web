@@ -77,10 +77,7 @@ function getNotifications(){
 							content += '<i title="Turn On Notifications" class="pi-toggle-off"></i>';
 						};
 					content += '</a>';
-<<<<<<< HEAD
-=======
 
->>>>>>> origin/master
 					content += '</div>';
 				content += '</li>';
 
@@ -98,6 +95,19 @@ function getNotifications(){
 				$('#notifications-count').removeAttr('class');
 				$('#notifications-toggle i').removeClass('pi-notifications-active').addClass('pi-notifications-none');
 			};
+
+			// Populate the list
+			$('ul#notifications-list').html( items.join('') );
+
+			checkPopNotification(
+				data['items'][0]['_id'],
+				data['items'][0]['username'],
+				data['items'][0]['username_avatar'],
+				data['items'][0]['action'],
+				data['items'][0]['date'],
+				data['items'][0]['context_object_name'],
+				data['items'][0]['context_object_url']);
+
 		} else {
 			var content = '<li class="nc-item nc-item-empty">';
 			content += 'No notifications... yet.';
@@ -105,19 +115,8 @@ function getNotifications(){
 
 			items.push(content);
 
+
 		}; // if items
-
-		// Populate the list
-		$('ul#notifications-list').html( items.join('') );
-
-		checkPopNotification(
-			data['items'][0]['_id'],
-			data['items'][0]['username'],
-			data['items'][0]['username_avatar'],
-			data['items'][0]['action'],
-			data['items'][0]['date'],
-			data['items'][0]['context_object_name'],
-			data['items'][0]['context_object_url'])
 	})
 	.done(function(){
 		// clear the counter
@@ -168,7 +167,7 @@ function checkPopNotification(id,username,username_avatar,action,date,context_ob
 			$("#notification-pop").attr('data-read-toggle', '/notifications/' + id + '/read-toggle');
 			// The text in the pop
 			var text = '<span class="nc-author">' + username + '</span> ';
-			text += action;
+			text += action + ' ';
 			text += context_object_name + ' ';
 			text += '<span class="nc-date">' + date + '</span>';
 

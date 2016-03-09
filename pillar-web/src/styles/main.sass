@@ -194,9 +194,21 @@ header.navbar-header
 
 	transition: background-color 350ms ease-in-out
 
+	&+.navbar-container
+		#cloud-search, .tt-hint
+			&::placeholder
+				color: rgba(white, .8)
+
 	&.is-active
 		background-color: $color-background-nav
 		text-shadow: none
+
+		&+.navbar-container
+			.search-input
+				background-color: darken($color-background-nav, 2%)
+				#cloud-search, .tt-hint
+					&::placeholder
+						color: rgba(white, .3)
 
 	+media-lg
 		display: block
