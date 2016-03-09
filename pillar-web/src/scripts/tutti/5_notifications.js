@@ -271,13 +271,19 @@ $('ul#notifications-list').on('click', '.nc-button', function(e){
 $('ul#notifications-list').on('click', '.nc-a', function(e){
 	e.preventDefault();
 
+	var is_read = $(this).data('read');
 	var link_url = $(this).attr('href');
 	var read_url = '/notifications/' + $(this).data('id') + '/read-toggle';
 
-	$.get(read_url)
-	.done(function(){
+	if (is_read){
 		window.location.href = link_url;
-	});
+	} else {
+		$.get(read_url)
+		.done(function(){
+			window.location.href = link_url;
+		});
+	}
+
 });
 
 
