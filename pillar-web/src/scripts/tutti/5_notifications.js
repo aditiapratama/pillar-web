@@ -67,14 +67,14 @@ function getNotifications(){
 							};
 						content += '</a>';
 
-						// // Subscription Toggle
-						// content += '<a href="/notifications/' + no['_id'] + '/subscription-toggle" class="nc-button nc-subscription_toggle">';
-						// 	if (no['is_subscribed']){
-						// 		content += '<i title="Turn Off Notifications" class="fa fa-toggle-on"></i>';
-						// 	} else {
-						// 		content += '<i title="Turn On Notifications" class="fa fa-toggle-off"></i>';
-						// 	};
-						// content += '</a>';
+						// Subscription Toggle
+						content += '<a href="/notifications/' + no['_id'] + '/subscription-toggle" class="nc-button nc-subscription_toggle">';
+							if (no['is_subscribed']){
+								content += '<i title="Turn Off Notifications" class="fa fa-toggle-on"></i>';
+							} else {
+								content += '<i title="Turn On Notifications" class="fa fa-toggle-off"></i>';
+							};
+						content += '</a>';
 
 					content += '</div>';
 				content += '</li>';
@@ -106,13 +106,13 @@ function getNotifications(){
 		$('ul#notifications-list').html( items.join('') );
 
 		checkPopNotification(
-				data['items'][0]['username'],
-				data['items'][0]['username_avatar'],
-				data['items'][0]['action'],
-				data['items'][0]['date'],
-				data['items'][0]['context_object_name'],
-				data['items'][0]['context_object_url'])
-
+			data['items'][0]['_id'],
+			data['items'][0]['username'],
+			data['items'][0]['username_avatar'],
+			data['items'][0]['action'],
+			data['items'][0]['date'],
+			data['items'][0]['context_object_name'],
+			data['items'][0]['context_object_url'])
 	})
 	.done(function(){
 		// clear the counter
@@ -135,10 +135,10 @@ $('#notifications').on('click', function(e){ e.stopPropagation(); });
 
 function popNotification(){
 
-	// pop!
+	// pop in!
 	$("#notification-pop").addClass('in');
 
-	// After 10s, add a class to make it disappear
+	// After 10s, add a class to make it pop out
 	setTimeout(function(){
 		$("#notification-pop").addClass('out');
 
@@ -154,33 +154,29 @@ function popNotification(){
 };
 
 
-function checkPopNotification(username, username_avatar, action, date, context_object_name, context_object_url){
+function checkPopNotification(id,username,username_avatar,action,date,context_object_name,context_object_url)
+	{
+		// If there's new content
+		if (unread_new > unread_on_load){
 
-	// If there's new content
-	if (unread_new > unread_on_load){
+			// Fill in the urls for redirect on click, and mark-read
+			$("#notification-pop").attr('data-url', context_object_url);
+			$("#notification-pop").attr('data-read-toggle', '/notifications/' + id + '/read-toggle');
 
-		$('#notification-pop').data('url', context_object_url);
-
-		var text = '<span class="nc-author">' + username + '</span> ';
-		text += action;
-
-		text += ' <a href="' + context_object_url + '">';
+			// The text in the pop
+			var text = '<span class="nc-author">' + username + '</span> ';
+			text += action;
 			text += context_object_name + ' ';
-		text += '</a>';
+			text += '<span class="nc-date">' + date + '</span>';
 
-		text += '<span class="nc-date">';
-			text += ' <a href="' + context_object_url + '">';
-				text += date;
-			text += '</a>';
-		text += '</span>';
+			// Fill the html
+			$('#notification-pop .nc-text').html(text);
+			$('#notification-pop .nc-avatar img').attr('src', username_avatar);
 
-		$('#notification-pop .nc-text').html(text);
-		$('#notification-pop .nc-avatar img').attr('src', username_avatar);
-
-		popNotification();
-
+			// pop in!
+			popNotification();
+		};
 	};
-};
 
 
 // Function to set #notifications flyout height and resize if needed
@@ -216,14 +212,23 @@ $('#notifications-toggle').on('click', function(e){
 
 
 $('#notification-pop').on('click', function(e){
+	e.preventDefault();
 	e.stopPropagation();
-	window.location.href = $(this).data('url');
+
+	var url = $(this).data('url');
+
+	$.get($(this).data('read-toggle'))
+	.done(function(){
+		// window.location.href = url;
+	});
 });
 
 
 // Read/Subscription Toggles
 $('ul#notifications-list').on('click', '.nc-button', function(e){
 	e.preventDefault();
+
+	// $('i', this).addClass('spin');
 
 	$.get($(this).attr('href'));
 	getNotifications();
@@ -251,7 +256,7 @@ $('#notifications-markallread').on('click', function(e){
 function getNotificationsLoop() {
 	getNotifications();
 
-	setTimeout(function () {
+	var getLoop = setTimeout(function () {
 		getNotificationsLoop();
 	}, 10000);
 }
