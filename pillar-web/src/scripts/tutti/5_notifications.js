@@ -209,7 +209,15 @@ $('#notifications-toggle').on('click', function(e){
 	$(this).toggleClass("active");
 
 	notificationsResize();
-	getNotifications();
+
+	// Hide other dropdowns
+	$('nav .dropdown').removeClass('open');
+});
+
+// Hide flyout when clicking other dropdowns
+$('nav').on('click', '.dropdown', function(e){
+	$('#notifications').hide();
+	$('#notifications-toggle').removeClass('active');
 });
 
 
