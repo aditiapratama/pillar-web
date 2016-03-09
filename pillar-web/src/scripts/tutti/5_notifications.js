@@ -49,19 +49,19 @@ function getNotifications(){
 					content += no['username'] + ' ' + no['action'] + ' ';
 
 					// Object
-					content += '<a '+read_info+'" href="'+no['context_object_url']+'" data-read-toggle="/notifications/'+no['_id']+'/read-toggle" class="nc-a">';
+					content += '<a '+read_info+'" href="'+no['context_object_url']+'" class="nc-a">';
 					content += no['context_object_name'] + ' ';
 					content += '</a> ';
 
 					// Date
 					content += '<span class="nc-date">';
-					content += '<a '+read_info+'" href="'+no['context_object_url']+'" data-read-toggle="/notifications/'+no['_id']+'/read-toggle" class="nc-a">';
+					content += '<a '+read_info+'" href="'+no['context_object_url']+'" class="nc-a">';
 					content += no['date'];
 					content += '</a>';
 					content += '</span>';
 
 					// Read Toggle
-					content += '<a href="/notifications/' + no['_id'] + '/read-toggle" class="nc-button nc-read_toggle">';
+					content += '<a id="'+no['_id']+'" href="/notifications/' + no['_id'] + '/read-toggle" class="nc-button nc-read_toggle">';
 						if (no['is_read']){
 							content += '<i title="Mark as Unread" class="pi pi-circle-dot"></i>';
 						} else {
@@ -230,25 +230,29 @@ $('#notification-pop').on('click', function(e){
 // Read/Subscription Toggles
 $('ul#notifications-list').on('click', '.nc-button', function(e){
 	e.preventDefault();
+	var nc = $(this);
 
-	// $('i', this).addClass('spin');
+	// Swap to spin icon while we wait for the response
+	$('i', nc).addClass('spin');
 
-	$.get($(this).attr('href'));
-	getNotifications();
+	$.get($(nc).attr('href'))
+		.done(function(){
+			$('i', nc).removeClass('spin');
+	});
 });
 
 
+// When clicking on links, toggle as read
 $('ul#notifications-list').on('click', '.nc-a', function(e){
 	e.preventDefault();
 
 	var link_url = $(this).attr('href');
-	var read_url = $(this).data('read-toggle');
+	var read_url = '/notifications/' + $(this).data('id') + '/read-toggle';
 
 	$.get(read_url)
 	.done(function(){
 		window.location.href = link_url;
 	});
-
 });
 
 
