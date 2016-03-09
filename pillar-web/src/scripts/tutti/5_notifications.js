@@ -245,7 +245,26 @@ $('ul#notifications-list').on('click', '.nc-button', function(e){
 	$('i', nc).addClass('spin');
 
 	$.get($(nc).attr('href'))
-		.done(function(){
+		.done(function(data){
+
+			if ($(nc).hasClass('nc-read_toggle')){
+				if (data.data.is_read){
+					$('i', nc).removeClass('pi-circle').addClass('pi-circle-dot');
+					$(nc).closest('.nc-item').addClass('is_read');
+				} else {
+					$('i', nc).removeClass('pi-circle-dot').addClass('pi-circle');
+					$(nc).closest('.nc-item').removeClass('is_read');
+				}
+			};
+
+			if ($(nc).hasClass('nc-subscription_toggle')){
+				if (data.data.is_subscribed){
+					$('i', nc).removeClass('pi-toggle-on').addClass('pi-toggle-off');
+				} else {
+					$('i', nc).removeClass('pi-toggle-off').addClass('pi-toggle-on');
+				}
+			};
+
 			$('i', nc).removeClass('spin');
 	});
 });
