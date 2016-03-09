@@ -45,36 +45,38 @@ function getNotifications(){
 					// Text of the notification
 					content += '<div class="nc-text">';
 
-						// Username and action
-						content += no['username'] + ' ' + no['action'] + ' ';
+					// Username and action
+					content += no['username'] + ' ' + no['action'] + ' ';
 
-						// Object
-						content += '<a ' + read_info + '" href="' + no['object_url'] + '">';
-							content += no['context_object_name'] + ' ';
-						content += '</a> ';
+					// Object
+					content += '<a '+read_info+'" href="'+no['context_object_url']+'" data-read-toggle="/notifications/'+no['_id']+'/read-toggle" class="nc-a">';
+					content += no['context_object_name'] + ' ';
+					content += '</a> ';
 
-						// Date
-						content += '<span class="nc-date">';
-							content += '<a ' + read_info + '" href="' + no['object_url'] + '">' + no['date'] + '</a>';
-						content += '</span>';
+					// Date
+					content += '<span class="nc-date">';
+					content += '<a '+read_info+'" href="'+no['context_object_url']+'" data-read-toggle="/notifications/'+no['_id']+'/read-toggle" class="nc-a">';
+					content += no['date'];
+					content += '</a>';
+					content += '</span>';
 
-						// Read Toggle
-						content += '<a href="/notifications/' + no['_id'] + '/read-toggle" class="nc-button nc-read_toggle">';
-							if (no['is_read']){
-								content += '<i title="Mark as Unread" class="pi pi-circle-dot"></i>';
-							} else {
-								content += '<i title="Mark as Read" class="pi pi-circle"></i>';
-							};
-						content += '</a>';
+					// Read Toggle
+					content += '<a href="/notifications/' + no['_id'] + '/read-toggle" class="nc-button nc-read_toggle">';
+						if (no['is_read']){
+							content += '<i title="Mark as Unread" class="pi pi-circle-dot"></i>';
+						} else {
+							content += '<i title="Mark as Read" class="pi pi-circle"></i>';
+						};
+					content += '</a>';
 
-						// Subscription Toggle
-						content += '<a href="/notifications/' + no['_id'] + '/subscription-toggle" class="nc-button nc-subscription_toggle">';
-							if (no['is_subscribed']){
-								content += '<i title="Turn Off Notifications" class="pi-toggle-on"></i>';
-							} else {
-								content += '<i title="Turn On Notifications" class="pi-toggle-off"></i>';
-							};
-						content += '</a>';
+					// Subscription Toggle
+					content += '<a href="/notifications/' + no['_id'] + '/subscription-toggle" class="nc-button nc-subscription_toggle">';
+						if (no['is_subscribed']){
+							content += '<i title="Turn Off Notifications" class="pi-toggle-on"></i>';
+						} else {
+							content += '<i title="Turn On Notifications" class="pi-toggle-off"></i>';
+						};
+					content += '</a>';
 
 					content += '</div>';
 				content += '</li>';
@@ -233,6 +235,20 @@ $('ul#notifications-list').on('click', '.nc-button', function(e){
 
 	$.get($(this).attr('href'));
 	getNotifications();
+});
+
+
+$('ul#notifications-list').on('click', '.nc-a', function(e){
+	e.preventDefault();
+
+	var link_url = $(this).attr('href');
+	var read_url = $(this).data('read-toggle');
+
+	$.get(read_url)
+	.done(function(){
+		window.location.href = link_url;
+	});
+
 });
 
 
