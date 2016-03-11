@@ -310,5 +310,5 @@ function getNotificationsLoop() {
 
 	var getLoop = setTimeout(function () {
 		getNotificationsLoop();
-	}, 10000);
+	}, 30000);
 }
