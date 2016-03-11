@@ -8,28 +8,38 @@ from application import SystemUtility
 def jstree_parse_node(node, children=None):
     """Generate JStree node from node object"""
     node_type = node.node_type
+    # Define better the node type
     if node_type == 'asset':
         node_type = node.properties.content_type
-    return dict(
+    parsed_node = dict(
         id="n_{0}".format(node._id),
         text=node.name,
         type=node_type,
-        children=True)
+        children=False)
+    # Append children property only if it is a directory type
+    if node_type in ['group', 'storage']:
+        parsed_node['children'] = True
+
+    return parsed_node
 
 
-def jstree_get_children(node_id):
+def jstree_get_children(node_id, project_id=None):
     api = SystemUtility.attract_api()
     children_list = []
 
-    if node_id.startswith('n_'):
-        node_id = node_id.split('_')[1]
+    lookup = {'projection': '{"name": 1, "parent": 1, "node_type": 1, \
+            "properties.order": 1, "properties.status": 1, \
+            "properties.content_type": 1, "user": 1, "project": 1}',
+        'sort': 'properties.order'}
+    if node_id:
+        if node_id.startswith('n_'):
+            node_id = node_id.split('_')[1]
+        lookup['where'] = '{"parent": "%s"}' % node_id
+    elif project_id:
+        lookup['where'] = '{"project": "%s", "parent" : {"$exists": false}}' % project_id
+
     try:
-        children = Node.all({
-            'projection': '{"name": 1, "parent": 1, "node_type": 1, \
-                "properties.order": 1, "properties.status": 1, \
-                "properties.content_type": 1, "user": 1, "project": 1}',
-            'where': '{"parent": "%s"}' % node_id,
-            'sort': 'properties.order'}, api=api)
+        children = Node.all(lookup, api=api)
         for child in children._items:
             # Skip nodes of type comment
             if child.node_type not in ['comment', 'post']:
@@ -58,58 +68,45 @@ def jstree_build_from_node(node):
     open_nodes = [jstree_parse_node(node)]
     # Get the current node again (with parent data)
     try:
-        parent = Node.find(node.parent, {
-            'projection': '{"project":1 ,"name": 1, "parent": 1',
-            }, api=api)
+        parent = Node.find(node.parent, api=api)
+        # Define the child node of the tree (usually an asset)
+        child_node = jstree_parse_node(node)
+        child_node['state'] = dict(selected=True)
     except ResourceNotFound:
         parent = None
     except ForbiddenAccess:
         parent = None
     while (parent):
-        open_nodes.append(jstree_parse_node(parent))
+        # Store the child in a new var
+        tmp_child = child_node
+        # Get the parent's parent
+        parent_parent = jstree_parse_node(parent)
+        # Use it to get the parent's children (this will also include child_node)
+        parent_children = jstree_get_children(parent_parent['id'])
+        # Remove the child with matching id with the tmp_child
+        parent_children = [x for x in parent_children if x['id'] != tmp_child['id']]
+        # Append the tmp_child
+        parent_children.append(tmp_child)
+        parent_parent.pop('children', None)
+        # Overwrite children_node with the current parent
+        child_node = parent_parent
+        # Set the node to open so that jstree actually displays the nodes
+        child_node['state'] = dict(opened=True)
+        # Push in the computed children into the parent
+        child_node['children'] = parent_children
         # If we have a parent
         if parent.parent:
             try:
                 parent = Node.find(parent.parent, {
-                    'projection': '{"name":1, "parent":1, "project": 1}',
+                    'projection': '{"name":1, "parent":1, "project": 1, "node_type":1}',
                     }, api=api)
             except ResourceNotFound:
                 parent = None
         else:
             parent = None
-    open_nodes.reverse()
-    #open_nodes.pop(0)
-
-    nodes_list = []
-
-    for node in jstree_get_children(open_nodes[0]['id']):
-        # Nodes at the root of the project
-        node_dict = {
-            'id': node['id'],
-            'text': node['text'],
-            'type': node['type'],
-            'children': True
-        }
-        if len(open_nodes) > 1:
-            # Opening and selecting the tree nodes according to the landing place
-            if node['id'] == open_nodes[1]['id']:
-                current_dict = node_dict
-                current_dict['state'] = {'opened': True}
-                current_dict['children'] = jstree_get_children(node['id'])
-                # Iterate on open_nodes until the end
-                for n in open_nodes[2:]:
-                    for c in current_dict['children']:
-                        if n['id'] == c['id']:
-                            current_dict = c
-                            break
-                    current_dict['state'] = {'opened': True}
-                    current_dict['children'] = jstree_get_children(n['id'])
-
-                # if landing_asset_id:
-                #     current_dict['children'] = aux_product_tree_node(open_nodes[-1])
-                #     for asset in current_dict['children']:
-                #         if int(asset['id'][1:])==landing_asset_id:
-                #             asset.update(state=dict(selected=True))
-
-        nodes_list.append(node_dict)
+    # Get top level nodes for the project
+    project_children = jstree_get_children(None, node.project)
+    nodes_list = [x for x in project_children if x['id'] != child_node['id']]
+    nodes_list.append(child_node)
     return nodes_list
+

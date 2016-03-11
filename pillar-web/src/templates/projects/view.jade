@@ -238,6 +238,7 @@ script.
 		});
 	}
 
+
 	function loadProjectContent(url) {
 		$('#project-loading').addClass('active');
 
@@ -294,6 +295,16 @@ script.
 		$('.project-mode-edit').hide();
 	}
 
+
+	function getHashId() {
+		if (location.hash) {
+			nodeId = location.hash.substring(1);
+		} else {
+			nodeId = '{{project._id}}';
+		}
+		return nodeId;
+	}
+
 	/* Loaded once, on page load */
 	function loadContent() {
 
@@ -321,10 +332,18 @@ script.
 				'core': {
 						'data': function (obj, callback) {
 								if(obj.id === '#') { //tree root
+									if (location.hash) {
+										// If we are loading a node
+										nodeId = location.hash.substring(1);
+										$.getJSON('/nodes/' + nodeId + '/view?format=jstree', function(jsonObject) {
+												callback.call(this, jsonObject['items']);
+										});
+									} else {
+									// If we are loading a project
 										$.getJSON("{{url_for('projects.view', project_url=project.url, format='jstree')}}", function(jsonObject) {
 												callback.call(this, jsonObject['items']);
 										});
-
+									}
 								} else { //normal node
 										if (obj.original.type == 'group_storage') {
 											nodeId = obj.original.storage_node;
@@ -419,6 +438,7 @@ script.
 			Ps.update(document.getElementById('project_tree'));
 		});
 	};
+
 
 	// Initialize the page
 	loadContent();
