@@ -30,7 +30,8 @@ $tree-color-highlight-background: $color-primary
 
 .jstree-default .jstree-node
 	max-width: 100% // Needed for ellipsis on long names
-	margin: 0 0 0 10px !important
+	padding: 1px 0 1px 10px !important
+	margin: 0 !important
 	font-weight: 400 !important
 	padding: 1px 0
 	color: $tree-color-text
@@ -42,6 +43,13 @@ $tree-color-highlight-background: $color-primary
 .ps-active-y
 	.jstree-default .jstree-node
 		max-width: 97%
+
+.jstree-node.jstree-open
+	background-color: darken($color-background-nav, 2%) !important
+
+.jstree-node.jstree-open > .jstree-anchor:first-of-type
+	color: white !important
+	background-color: darken($color-background-nav, 2%) !important
 
 .jstree-default .jstree-node.jstree-open,
 .jstree-default .jstree-node.jstree-leaf
@@ -161,10 +169,9 @@ a.jstree-anchor.jstree-clicked+ul li a.jstree-anchor.jstree-clicked+ul li a.jstr
 	background-color: rgba($tree-color-highlight-background, .8) !important
 
 a.jstree-anchor+ul
-	background-color: rgba($color-background-nav, .33) !important
 	border:
-		top: thin solid rgba($color-background-nav, .8) !important
-		bottom: thin solid rgba($color-background-nav, .8) !important
+		top: thin solid $color-background-nav !important
+		bottom: none !important
 	a.jstree-anchor
 		color: darken($color-text-light-primary, 10%) !important
 
@@ -220,7 +227,7 @@ i.jstree-icon.jstree-ocl
 
 .jstree-default .jstree-icon:empty
 	line-height: 24px
-	left: 5px
+	left: 10px
 
 .jstree-children .jstree-open i.jstree-icon.jstree-ocl
 	height: 28px !important
