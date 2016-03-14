@@ -196,6 +196,7 @@ from modules.files import files
 from modules.organizations import organizations
 from modules.projects import projects
 from modules.notifications import notifications
+from modules.main import homepage
 from helpers import gravatar
 from helpers import pretty_date
 
