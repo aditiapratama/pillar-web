@@ -1,4 +1,3 @@
-import sys
 import os
 import logging
 import config
@@ -13,7 +12,6 @@ from pillarsdk.exceptions import UnauthorizedAccess
 
 from flask import Flask
 from flask import session
-from flask import Blueprint
 from flask import redirect
 from flask import url_for
 from flask_oauthlib.client import OAuth
@@ -25,8 +23,8 @@ from flask.ext.cache import Cache
 
 # Initialize the Flask all object
 app = Flask(__name__,
-    template_folder='templates',
-    static_folder='static')
+            template_folder='templates',
+            static_folder='static')
 
 # Choose the configuration to load
 app.config.from_object(config.Development)
@@ -44,6 +42,7 @@ bugsnag.configure(
     api_key=app.config['BUGSNAG_API_KEY'],
     project_root="/data/dev/pillar-web/pillar-web",
 )
+
 
 def bugsnag_notify_callback(notification):
     # If we return False, the notification will not be sent to Bugsnag.
@@ -188,27 +187,24 @@ else:
 
 
 # Import controllers
-from application.modules.node_types import node_types
-from application.modules.nodes import nodes
-from application.modules.users import users
-from application.modules.main import homepage
-from application.helpers import url_for_other_page
-from application.modules.stats import stats
-from application.modules.files import files
-from application.modules.organizations import organizations
-from application.modules.nodes.custom import shots
-from application.modules.nodes.custom import tasks
-from application.modules.nodes.custom import comments
-from application.modules.projects import projects
-from application.modules.notifications import notifications
+from modules.node_types import node_types
+from modules.nodes import nodes
+from modules.users import users
+from helpers import url_for_other_page
+from modules.stats import stats
+from modules.files import files
+from modules.organizations import organizations
+from modules.projects import projects
+from modules.notifications import notifications
 from helpers import gravatar
 from helpers import pretty_date
+
 
 @app.template_filter('pretty_date')
 def format_pretty_date(d):
     return pretty_date(d)
 
-# Pagination global to use un jinja template
+# Pagination global to use un Jinja template
 app.jinja_env.globals['url_for_other_page'] = url_for_other_page
 
 # Register blueprints for the imported controllers
