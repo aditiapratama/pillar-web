@@ -1,5 +1,6 @@
 import sys
 import os
+import logging
 import config
 import bugsnag
 import redis
@@ -32,6 +33,12 @@ app.config.from_object(config.Development)
 app.config['TEMPLATES_PATH'] = '{0}/templates'.format(
     os.path.dirname(__file__))
 app.config['RFC1123_DATE_FORMAT'] = '%a, %d %b %Y %H:%M:%S GMT'
+
+# Configure logging
+logging.basicConfig(level=logging.WARNING)
+log = logging.getLogger(__name__)
+log.setLevel(logging.DEBUG if app.config['DEBUG'] else logging.INFO)
+log.info('Pillar Web starting')
 
 bugsnag.configure(
     api_key=app.config['BUGSNAG_API_KEY'],

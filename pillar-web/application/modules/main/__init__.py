@@ -45,7 +45,7 @@ def homepage():
         'max_results': '3'
         }, api=api)
 
-    # Append picture Files to latst_posts
+    # Append picture Files to last_posts
     for post in latest_posts._items:
         if post.picture:
             post.picture = get_file(post.picture)

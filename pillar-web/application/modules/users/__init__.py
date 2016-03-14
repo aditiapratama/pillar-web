@@ -128,7 +128,6 @@ def blender_id_authorized():
         return 'Access denied: %s' % oauth_resp.message
 
     session['blender_id_oauth_token'] = (oauth_resp['access_token'], '')
-    user_data = blender_id.get('user')
 
     user = UserClass(oauth_resp['access_token'])
     login_user(user)
@@ -154,8 +153,8 @@ def settings_profile():
     user = User.find(current_user.objectid, api=api)
 
     form = UserProfileForm(
-        full_name = user.full_name,
-        username = user.username)
+        full_name=user.full_name,
+        username=user.username)
 
     if form.validate_on_submit():
         try:
