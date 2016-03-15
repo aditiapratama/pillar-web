@@ -89,11 +89,14 @@
 						.comment-avatar
 							img(src="{{ gravatar }}")
 
-						.comment-author
+						.comment-author(class="{{#if is_own}}op{{/if}}")
 							| {{ author }}
 
 						| {{#if is_team}}
-						.comment-badge.badge-team team
+						.comment-badge.badge-team(title="Project Member") team
+						| {{/if}}
+						| {{#if is_own}}
+						.comment-badge.badge-own(title="Original Poster") op
 						| {{/if}}
 
 						.comment-time {{ time_published }}
