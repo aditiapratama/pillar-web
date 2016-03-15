@@ -64,27 +64,35 @@ def jstree_build_children(node):
 
 
 def jstree_build_from_node(node):
+    """Give a node, traverse the tree bottom to top and expand the relevant
+    branches.
+
+    :param node: the base node, where tree building starts
+    """
     api = SystemUtility.attract_api()
-    open_nodes = [jstree_parse_node(node)]
+    # Parse the node and mark it as selected
+    child_node = jstree_parse_node(node)
+    child_node['state'] = dict(selected=True)
     # Get the current node again (with parent data)
     try:
         parent = Node.find(node.parent, api=api)
         # Define the child node of the tree (usually an asset)
-        child_node = jstree_parse_node(node)
-        child_node['state'] = dict(selected=True)
     except ResourceNotFound:
+        # If not found, we might be on the top level, in which case we skip the
+        # while loop and use child_node
         parent = None
     except ForbiddenAccess:
         parent = None
-    while (parent):
+    while parent:
         # Store the child in a new var
         tmp_child = child_node
         # Get the parent's parent
         parent_parent = jstree_parse_node(parent)
-        # Use it to get the parent's children (this will also include child_node)
+        # Get the parent's children (this will also include child_node)
         parent_children = jstree_get_children(parent_parent['id'])
         # Remove the child with matching id with the tmp_child
-        parent_children = [x for x in parent_children if x['id'] != tmp_child['id']]
+        parent_children = [x for x in parent_children
+                           if x['id'] != tmp_child['id']]
         # Append the tmp_child
         parent_children.append(tmp_child)
         parent_parent.pop('children', None)
@@ -98,7 +106,8 @@ def jstree_build_from_node(node):
         if parent.parent:
             try:
                 parent = Node.find(parent.parent, {
-                    'projection': '{"name":1, "parent":1, "project": 1, "node_type":1}',
+                    'projection': {
+                        'name': 1, 'parent': 1, 'project': 1, 'node_type': 1},
                     }, api=api)
             except ResourceNotFound:
                 parent = None
