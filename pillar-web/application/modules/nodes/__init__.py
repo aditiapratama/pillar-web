@@ -83,10 +83,12 @@ def get_node_children(node_id, node_type_name, user_id):
         'embedded': '{"node_type": 1}'}, api=api)
     return children.to_dict()
 
+
 @nodes.route("/<node_id>/view")
 def view(node_id):
     api = SystemUtility.attract_api()
-    user_id = 'ANONYMOUS' if current_user.is_anonymous() else str(current_user.objectid)
+    user_id = 'ANONYMOUS' if current_user.is_anonymous() else str(
+        current_user.objectid)
 
     # Get node with basic embedded data
     try:
@@ -102,8 +104,8 @@ def view(node_id):
     rewrite_url = None
     embedded_node_id = None
     if request.args.get('redir') and request.args.get('redir') == '1':
-        # Check the project property for the node. The only case when the prop is
-        # None is if the node is a project, which usually means we are at the
+        # Check the project property for the node. The only case when the prop
+        # is None is if the node is a project, which usually means we are at the
         # second stage of redirection.
         if node.project:
             # Set node to embed in the session
@@ -128,21 +130,22 @@ def view(node_id):
                 # which is read from the configuration.
                 if node._id == app.config['MAIN_PROJECT_ID']:
                     return redirect(url_for('main_blog',
-                        url=g.get('embedded_node')['properties']['url']))
+                                            url=g.get('embedded_node')[
+                                                'properties']['url']))
                 else:
                     return redirect(url_for('project_blog',
-                        project_url=node.properties.url,
-                        url=g.get('embedded_node')['properties']['url']))
+                                            project_url=node.properties.url,
+                                            url=g.get('embedded_node')[
+                                                'properties']['url']))
             rewrite_url = "/p/{0}/#{1}".format(node.properties.url,
-                g.get('embedded_node')['_id'])
+                                               g.get('embedded_node')['_id'])
             embedded_node_id = g.get('embedded_node')['_id']
-
 
     # JsTree functionality.
     # This return a lightweight version of the node, to be used by JsTree in the
     # frontend. We have two possible cases:
-    # - https://pillar/<node_id>/view?format=jstree (construct the whole expanded
-    #   tree starting from the node_id. Use only once)
+    # - https://pillar/<node_id>/view?format=jstree (construct the whole
+    #   expanded tree starting from the node_id. Use only once)
     # - https://pillar/<node_id>/view?format=jstree&children=1 (deliver the
     #   children of a node - use in the navigation of the tree)
 
@@ -165,7 +168,8 @@ def view(node_id):
                 return jsonify(jstree_build_children(node))
         else:
             return jsonify(items=jstree_build_from_node(node))
-    # Continue to process the node (for HTML, HTML embeded and JSON responses)
+
+    # Continue to process the node (for HTML, HTML embedded and JSON responses)
 
 
     def allow_link(node):
@@ -214,7 +218,7 @@ def view(node_id):
         # be added.
         if not allow_link(node):
             node_file.link = None
-        #node_file_children = node_file.children(api=api)
+        # node_file_children = node_file.children(api=api)
         # Attach the file node to the asset node
         setattr(node, 'file', node_file)
 
@@ -233,7 +237,8 @@ def view(node_id):
                         src=f.link))
                     # Build a link that triggers download with proper filename
                     if f.backend == 'cdnsun':
-                        f.link = "{0}&name={1}.{2}".format(f.link, node.name, f.format)
+                        f.link = "{0}&name={1}.{2}".format(f.link, node.name,
+                                                           f.format)
             # If the user is allowed, attach video variations to the node data
             # so that the player can function.
             if allow_link(node):
@@ -253,11 +258,9 @@ def view(node_id):
     elif node_type_name == 'project':
         if node.properties.picture_square:
             picture_square = get_file(node.properties.picture_square)
-            #picture_square = File.find(node.properties.picture_square, api=api)
             node.properties.picture_square = picture_square
         if node.properties.picture_header:
             picture_header = get_file(node.properties.picture_header)
-            # picture_header = File.find(node.properties.picture_header, api=api)
             node.properties.picture_header = picture_header
         if node.properties.nodes_latest:
             list_latest = []
@@ -266,7 +269,7 @@ def view(node_id):
                     node_item = Node.find(node_id, {
                         'projection': '{"name":1, "user":1, "node_type":1}',
                         'embedded': '{"user":1, "node_type":1}',
-                        }, api=api)
+                    }, api=api)
                     list_latest.append(node_item)
                 except ForbiddenAccess:
                     list_latest.append(FakeNodeAsset())
@@ -279,10 +282,9 @@ def view(node_id):
                         'where': '{"_id": "%s"}' % node_id,
                         'projection': '{"name":1, "user":1, "picture":1, "node_type":1}',
                         'embedded': '{"user":1, "node_type":1}',
-                        }, api=api)
+                    }, api=api)
                     if node_item.picture:
                         picture = get_file(node_item.picture)
-                        # picture = File.find(node_item.picture, api=api)
                         node_item.picture = picture
                     list_featured.append(node_item)
                 except ForbiddenAccess:
@@ -295,7 +297,7 @@ def view(node_id):
                     node_item = Node.find(node_id, {
                         'projection': '{"name":1, "user":1, "node_type":1}',
                         'embedded': '{"user":1, "node_type":1}',
-                        }, api=api)
+                    }, api=api)
                     list_blog.append(node_item)
                 except ForbiddenAccess:
                     list_blog.append(FakeNodeAsset())
@@ -326,9 +328,6 @@ def view(node_id):
             if not allow_link(node):
                 f.file.link = None
 
-    # end_t = time.time()
-    # print (end_t - start_t)
-
     # Get previews
     node.picture = get_file(node.picture) if node.picture else None
     # Get Parent
@@ -339,8 +338,6 @@ def view(node_id):
     except ResourceNotFound:
         parent = None
     # Get children
-    # start = time.time()
-    # print 'Loading children'
     try:
         if node_type_name == 'group':
             published_status = ',"properties.status": "published"'
@@ -362,8 +359,6 @@ def view(node_id):
         return render_template('errors/403.html')
     for child in children:
         child.picture = get_file(child.picture) if child.picture else None
-    # end = time.time()
-    # print (end - start)
 
     if request.args.get('format'):
         if request.args.get('format') == 'json':
@@ -386,28 +381,23 @@ def view(node_id):
 
         # Check if template exists on the filesystem
         template_path = '{0}/{1}{2}.html'.format(template_path,
-                                                template_action, embed_string)
+                                                 template_action, embed_string)
         template_path_full = os.path.join(app.config['TEMPLATES_PATH'],
-                                        template_path)
+                                          template_path)
         if not os.path.exists(template_path_full):
             return "Missing template '{0}'".format(template_path)
-        # start = time.time()
-        # print 'Render template'
 
         return_content = render_template(template_path,
-            node_id=node._id,
-            user_string_id=user_id,
-            node=node,
-            rewrite_url=rewrite_url,
-            embedded_node_id=embedded_node_id,
-            parent=parent,
-            children=children,
-            config=app.config,
-            api=api)
-        # end = time.time()
-        # print (end - start)
+                                         node_id=node._id,
+                                         user_string_id=user_id,
+                                         node=node,
+                                         rewrite_url=rewrite_url,
+                                         embedded_node_id=embedded_node_id,
+                                         parent=parent,
+                                         children=children,
+                                         config=app.config,
+                                         api=api)
 
-    #print(time.time() - start)
     return return_content
 
 
@@ -416,8 +406,10 @@ def view(node_id):
 def edit(node_id):
     """Generic node editing form
     """
-    def set_properties(dyn_schema, form_schema, node_properties, form, prefix="",
-        set_data=True):
+
+    def set_properties(dyn_schema, form_schema, node_properties, form,
+                       prefix="",
+                       set_data=True):
         """Initialize custom properties for the form. We run this function once
         before validating the function with set_data=False, so that we can set
         any multiselect field that was originally specified empty and fill it
@@ -442,7 +434,8 @@ def edit(node_id):
                 except KeyError:
                     print ("{0} not found in form".format(prop_name))
                 if schema_prop['type'] == 'datetime':
-                    data = datetime.strptime(data, app.config['RFC1123_DATE_FORMAT'])
+                    data = datetime.strptime(data,
+                                             app.config['RFC1123_DATE_FORMAT'])
                 if prop_name in form:
                     # Other field types
                     if isinstance(form[prop_name], SelectMultipleField):
@@ -451,7 +444,7 @@ def edit(node_id):
                         # database to pick all the choices). If it's empty we
                         # populate the choices with the actual data.
                         if not form[prop_name].choices:
-                            form[prop_name].choices = [(d,d) for d in data]
+                            form[prop_name].choices = [(d, d) for d in data]
                             # Choices should be a tuple with value and name
                     # Assign data to the field
                     if set_data:
@@ -476,11 +469,12 @@ def edit(node_id):
 
     node_properties = node.properties.to_dict()
 
-    set_properties(dyn_schema, form_schema, node_properties, form, set_data=False)
+    set_properties(dyn_schema, form_schema, node_properties, form,
+                   set_data=False)
 
     if form.validate_on_submit():
         if process_node_form(form, node_id=node_id, node_type=node_type,
-            user=user_id):
+                             user=user_id):
             # Handle the specific case of a blog post
             if node_type.name == 'post':
                 project_update_nodes_list(node, list_name='blog')
@@ -493,7 +487,8 @@ def edit(node_id):
             # Emergency hardcore cache flush
             # cache.clear()
             return redirect(url_for('nodes.view', node_id=node_id, embed=1,
-                _external=True, _scheme=app.config['SCHEME']))
+                                    _external=True,
+                                    _scheme=app.config['SCHEME']))
         else:
             error = "Server error"
             print ("Error sending data")
@@ -535,23 +530,23 @@ def edit(node_id):
     # the filesystem level
     try:
         return render_template(
-                template,
-                node=node,
-                parent=parent,
-                form=form,
-                errors=form.errors,
-                error=error,
-                api=api)
+            template,
+            node=node,
+            parent=parent,
+            form=form,
+            errors=form.errors,
+            error=error,
+            api=api)
     except TemplateNotFound:
         template = 'nodes/edit{1}.html'.format(node_type['name'], embed_string)
         return render_template(
-                template,
-                node=node,
-                parent=parent,
-                form=form,
-                errors=form.errors,
-                error=error,
-                api=api)
+            template,
+            node=node,
+            parent=parent,
+            form=form,
+            errors=form.errors,
+            error=error,
+            api=api)
 
 
 @nodes.route("/<node_id>/delete", methods=['GET', 'POST'])
@@ -571,7 +566,8 @@ def delete(node_id):
 
     if not forbidden:
         # print (node_type['name'])
-        return redirect(url_for('nodes.index', node_type_name=node_type['name']))
+        return redirect(
+            url_for('nodes.index', node_type_name=node_type['name']))
     else:
         return redirect(url_for('nodes.edit', node_id=node._id))
 
