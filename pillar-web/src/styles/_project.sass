@@ -417,8 +417,6 @@ $z-index-base: 13
 		display: inline-block
 		opacity: 0
 		transition: opacity 150ms ease-in-out
-		+spin
-		animation-duration: .5s
 
 		i
 			position: relative
@@ -426,6 +424,8 @@ $z-index-base: 13
 
 		&.active
 			opacity: 1
+			+spin
+			animation-duration: .5s
 
 
 #project-header+#project_tree,
