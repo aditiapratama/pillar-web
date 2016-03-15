@@ -26,10 +26,11 @@ def jstree_parse_node(node, children=None):
 def jstree_get_children(node_id, project_id=None):
     api = SystemUtility.attract_api()
     children_list = []
-
-    lookup = {'projection': '{"name": 1, "parent": 1, "node_type": 1, \
-            "properties.order": 1, "properties.status": 1, \
-            "properties.content_type": 1, "user": 1, "project": 1}',
+    lookup = {
+        'projection': {
+            'name': 1, 'parent': 1, 'node_type': 1, 'properties.order': 1,
+            'properties.status': 1, 'properties.content_type': 1, 'user': 1,
+            'project': 1},
         'sort': 'properties.order'}
     if node_id:
         if node_id.startswith('n_'):
@@ -40,7 +41,7 @@ def jstree_get_children(node_id, project_id=None):
 
     try:
         children = Node.all(lookup, api=api)
-        for child in children._items:
+        for child in children['_items']:
             # Skip nodes of type comment
             if child.node_type not in ['comment', 'post']:
                 if child.properties.status == 'published':
