@@ -44,7 +44,7 @@
 				padding-bottom: 25px
 				font:
 					family: $font-body
-					size: 4.5em
+					size: 4em
 					weight: 400
 				text-shadow: 1px 1px 0 rgba(black, .5), 0 0 25px rgba(black, .4)
 
@@ -61,9 +61,12 @@
 					padding:
 						top: 5px
 						bottom: 5px
+					border-radius: 3px
 
-					background-color: rgba(#961C49, .9)
-					box-shadow: 0.5em 0 0 rgba(#961C49, .9),-0.5em 0 0 rgba(#961C49, .9)
+					$lead-background-color: hsl(14, 62%, 43%)
+
+					background-color: $lead-background-color
+					box-shadow: 0.5em 0 0 $lead-background-color,-0.5em 0 0 $lead-background-color
 					box-decoration-break: clone
 
 				+media-xs
