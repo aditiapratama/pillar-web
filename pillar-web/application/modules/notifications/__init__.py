@@ -1,3 +1,4 @@
+import bugsnag
 from flask import jsonify
 from flask import Blueprint
 from flask import request
@@ -10,7 +11,7 @@ from pillarsdk.nodes import Node
 from pillarsdk.projects import Project
 from pillarsdk.activities import Notification
 from pillarsdk.activities import ActivitySubscription
-from application import app
+from pillarsdk.exceptions import ResourceNotFound
 from application import SystemUtility
 from application.helpers import pretty_date
 
@@ -20,9 +21,14 @@ notifications = Blueprint('notifications', __name__)
 
 def notification_parse(notification):
     api = SystemUtility.attract_api()
-    actor = User.find(notification.actor, api=api)
+    try:
+        actor = User.find(notification.actor, api=api)
+    except ResourceNotFound:
+        bugsnag.notify(ResourceNotFound, meta_data={
+            'notification_context': notification['_id']})
+        return None
     return dict(
-        _id=notification._id,
+        _id=notification['_id'],
         username=actor.username,
         username_avatar=actor.gravatar(),
         action=notification.action,
@@ -34,7 +40,7 @@ def notification_parse(notification):
         context_object_name=notification.context_object_name,
         context_object_url=url_for(
             'nodes.view', node_id=notification.context_object_id, redir=1),
-        date=pretty_date(notification._created),
+        date=pretty_date(notification['_created']),
         is_read=notification.is_read,
         is_subscribed=notification.is_subscribed,
         subscription=notification.subscription
@@ -51,13 +57,12 @@ def index():
     """
     limit = request.args.get('limit', 25)
     api = SystemUtility.attract_api()
-    notifications = Notification.all({
-        'where': '{"user": "%s"}' % (current_user.objectid),
+    user_notifications = Notification.all({
+        'where': {'user': current_user.objectid},
         'sort': '-_created',
         'max_results': str(limit),
         'parse': '1'}, api=api)
-    notifications = notifications._items
-    items = [notification_parse(n) for n in notifications]
+    items = [notification_parse(n) for n in user_notifications['_items'] if n]
 
     return jsonify(items=items)
 
