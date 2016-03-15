@@ -4,18 +4,16 @@ var page_title = document.title;
 
 var unread_on_load = 0;
 var unread_new = 0;
-
-
-function getNotificationsOnce() {
-	$.getJSON( "/notifications/", function( data ) {
-		unread_on_load = data['items'].length;
-	});
-};
-
+var first_load = false;
 
 // getNotifications by fetching json every X seconds
 function getNotifications(){
 	$.getJSON( "/notifications/", function( data ) {
+
+		if (!first_load) {
+			unread_on_load = data['items'].length;
+			first_load = true;
+		}
 
 		var items = [];
 		unread_new = 0;

@@ -361,7 +361,6 @@ html(lang="en")
 		script.
 			$(document).ready(function() {
 				{% if current_user.is_authenticated() %}
-					getNotificationsOnce();
 					getNotificationsLoop(); // Check for new notifications in the background
 
 					// Resize #notifications and change overflow for scrollbars
