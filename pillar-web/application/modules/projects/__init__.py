@@ -15,12 +15,9 @@ from flask import url_for
 from flask.ext.login import login_required
 from flask.ext.login import current_user
 from application import app
-from application import cache
 from application import SystemUtility
-from application.modules.users.model import UserProxy
 from application.modules.projects.forms import ProjectForm
 from application.modules.projects.forms import NodeTypeForm
-from application.helpers import current_user_is_authenticated
 from application.helpers import get_file
 from application.helpers import attach_project_pictures
 from application.helpers.jstree import jstree_parse_node
@@ -61,23 +58,6 @@ def view(project_url):
         embedded_node_id = g.get('embedded_node')['_id']
 
     if request.args.get('format') == 'jstree':
-        # children_list = []
-        # children = Node.all({
-        #     'projection': '{"name": 1, "parent": 1, "node_type": 1, \
-        #         "properties.order": 1, "properties.status": 1, \
-        #         "properties.content_type": 1, "user": 1, "project": 1}',
-        #     'where': '{"project": "%s", "parent" : {"$exists": false}}' % project._id,
-        #     'sort': 'properties.order'}, api=api)
-        # for child in children._items:
-        #     # Skip nodes of type comment
-        #     if child.node_type not in ['comment', 'post']:
-        #         # children_list.append(jstree_parse_node(child))
-        #         if child.properties.status == 'published':
-        #             children_list.append(jstree_parse_node(child))
-        #         elif child.node_type == 'blog':
-        #             children_list.append(jstree_parse_node(child))
-        #         elif current_user.is_authenticated() and child.user == current_user.objectid:
-        #             children_list.append(jstree_parse_node(child))
         return jsonify(items=jstree_get_children(None, project._id))
 
     project.picture_square = get_file(project.picture_square)
