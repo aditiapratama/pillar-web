@@ -192,17 +192,17 @@ def edit_node_type(project_url, node_type_name):
         form.name.data = node_type.name
         form.description.data = node_type.description
         form.parent.data = node_type.parent
-        form.dyn_schema.data = json.dumps(node_type.dyn_schema.to_dict(),
-            indent=4)
-        form.form_schema.data = json.dumps(node_type.form_schema.to_dict(),
-            indent=4)
-        form.permissions.data = json.dumps(node_type.permissions.to_dict(),
-            indent=4)
+        form.dyn_schema.data = json.dumps(
+            node_type.dyn_schema.to_dict(), indent=4)
+        form.form_schema.data = json.dumps(
+            node_type.form_schema.to_dict(), indent=4)
+        form.permissions.data = json.dumps(
+            node_type.permissions.to_dict(), indent=4)
     return render_template('projects/edit_node_type.html',
-        form=form,
-        project=project,
-        api=api,
-        node_type=node_type)
+                           form=form,
+                           project=project,
+                           api=api,
+                           node_type=node_type)
 
 
 @projects.route('/e/add-featured-node', methods=['POST'])
