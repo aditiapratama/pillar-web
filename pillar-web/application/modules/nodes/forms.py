@@ -2,13 +2,8 @@ import json
 from datetime import datetime
 from datetime import date
 import pillarsdk
-from pillarsdk import Node
-from flask import url_for
 from flask_wtf import Form
-from wtforms import FieldList
-from wtforms import FormField
-from wtforms import TextField
-from wtforms import FileField
+from wtforms import StringField
 from wtforms import DateField
 from wtforms import SelectField
 from wtforms import HiddenField
@@ -20,7 +15,6 @@ from wtforms import DateTimeField
 from wtforms import SelectMultipleField
 from wtforms import Form as BasicForm
 from wtforms.validators import DataRequired
-from wtforms.widgets import HiddenInput
 from wtforms.widgets import HTMLString
 from wtforms.widgets import Select
 from wtforms.widgets import TextInput
@@ -30,141 +24,148 @@ from application.helpers.forms import FileSelectField
 from application.helpers.forms import AttachmentSelectField
 
 
+def add_form_properties(form_class, node_schema, form_schema, prefix=''):
+    """Add fields to a form based on the node and form schema provided.
+    :type node_schema: dict
+    :param node_schema: the validation schema used by Cerberus
+    :type form_class: class
+    :param form_class: The form class to which we append fields
+    :type form_schema: dict
+    :param form_schema: description of how to build the form (which fields to
+            show and hide)
+    """
+    api = SystemUtility.attract_api()
+
+    for prop in node_schema:
+        schema_prop = node_schema[prop]
+        form_prop = form_schema[prop]
+        if prop == 'items':
+            continue
+        if 'visible' in form_prop and not form_prop['visible']:
+            continue
+        prop_name = "{0}{1}".format(prefix, prop)
+
+        # Recursive call if detects a dict
+        if schema_prop['type'] == 'dict':
+            # This works if the dictionary schema is hardcoded.
+            # If we define it using propertyschema and valueschema, this
+            # validation pattern does not work and crahses.
+            add_form_properties(form_class, schema_prop['schema'],
+                                form_prop['schema'], "{0}__".format(prop_name))
+            continue
+        if schema_prop['type'] == 'list' and 'items' in form_prop:
+            # Attempt at populating the content of a select menu. If this
+            # is a large collection this will not work because of
+            # pagination.
+            # See the next statement for an improved approach to this.
+            for item in form_prop['items']:
+                items = eval("pillarsdk.{0}".format(item[0]))
+                items_to_select = items.all(api=api)
+                if items_to_select:
+                    items_to_select = items_to_select["_items"]
+                else:
+                    items_to_select = []
+                select = []
+                for select_item in items_to_select:
+                    select.append((select_item['_id'], select_item[item[1]]))
+                setattr(form_class,
+                        prop_name,
+                        SelectMultipleField(choices=select, coerce=str))
+        elif schema_prop['type'] == 'list':
+            # Create and empty multiselect field, which will be populated
+            # with choices from the data it's being initialized with.
+            if prop == 'attachments':
+                setattr(form_class,
+                        prop_name,
+                        AttachmentSelectField(prop_name))
+            # elif prop == 'tags':
+            #     setattr(ProceduralForm,
+            #             prop_name,
+            #             TextField(prop_name))
+            elif 'allowed' in schema_prop['schema']:
+                choices = [(c, c) for c in schema_prop['schema']['allowed']]
+                setattr(form_class,
+                        prop_name,
+                        SelectMultipleField(choices=choices))
+            else:
+                setattr(form_class,
+                        prop_name,
+                        SelectMultipleField(choices=[]))
+        elif 'allowed' in schema_prop:
+            select = []
+            for option in schema_prop['allowed']:
+                select.append((str(option), str(option)))
+            setattr(form_class,
+                    prop_name,
+                    SelectField(choices=select))
+        elif schema_prop['type'] == 'datetime':
+            if 'dateonly' in form_prop and form_prop['dateonly']:
+                setattr(form_class,
+                        prop_name,
+                        DateField(prop_name, default=date.today()))
+            else:
+                setattr(form_class,
+                        prop_name,
+                        DateTimeField(prop_name, default=datetime.now()))
+        elif schema_prop['type'] == 'integer':
+            setattr(form_class,
+                    prop_name,
+                    IntegerField(prop_name, default=0))
+        elif schema_prop['type'] == 'float':
+            setattr(form_class,
+                    prop_name,
+                    FloatField(prop_name, default=0))
+        elif schema_prop['type'] == 'boolean':
+            setattr(form_class,
+                    prop_name,
+                    BooleanField(prop_name))
+        elif schema_prop['type'] == 'objectid' and 'data_relation' in schema_prop:
+            if schema_prop['data_relation']['resource'] == 'files':
+                setattr(form_class,
+                        prop_name,
+                        FileSelectField(prop_name))
+            else:
+                setattr(form_class,
+                        prop_name,
+                        StringField(prop_name))
+        elif 'maxlength' in schema_prop and schema_prop['maxlength'] > 64:
+            setattr(form_class,
+                    prop_name,
+                    TextAreaField(prop_name))
+        else:
+            setattr(form_class,
+                    prop_name,
+                    StringField(prop_name))
+
+
 def get_node_form(node_type):
     """Get a procedurally generated WTForm, based on the dyn_schema and
     node_schema of a specific node_type.
+    :type node_type: dict
+    :param node_type: Describes the node type via dyn_schema, form_schema and
+    parent
     """
-    class ProceduralForm(Form): pass
+    class ProceduralForm(Form):
+        pass
 
-    api = SystemUtility.attract_api()
     node_schema = node_type['dyn_schema'].to_dict()
     form_prop = node_type['form_schema'].to_dict()
     parent_prop = node_type['parent']
 
-    setattr(ProceduralForm,
-        'name',
-        TextField('Name', validators=[DataRequired()]))
+    setattr(ProceduralForm, 'name', StringField(
+        'Name', validators=[DataRequired()]))
     # Parenting
     if parent_prop:
         parent_names = ", ".join(parent_prop)
-        setattr(ProceduralForm,
-                'parent',
-                HiddenField('Parent ({0})'.format(parent_names)))
+        setattr(ProceduralForm, 'parent', HiddenField(
+            'Parent ({0})'.format(parent_names)))
 
-    setattr(ProceduralForm,
-        'description',
-        TextAreaField('Description'))
-    setattr(ProceduralForm,
-        'picture',
-        FileSelectField('Picture'))
-    setattr(ProceduralForm,
-        'node_type_id',
-        HiddenField(default=node_type._id))
+    setattr(ProceduralForm, 'description', TextAreaField('Description'))
+    setattr(ProceduralForm, 'picture', FileSelectField('Picture'))
+    setattr(ProceduralForm, 'node_type', HiddenField(
+        default=node_type['name']))
 
-    def build_form(node_schema, form_schema, prefix=""):
-        for prop in node_schema:
-            schema_prop = node_schema[prop]
-            form_prop = form_schema[prop]
-            if prop == 'items':
-                continue
-            if 'visible' in form_prop and not form_prop['visible']:
-                continue
-            prop_name = "{0}{1}".format(prefix, prop)
-
-            # Recursive call if detects a dict
-            if schema_prop['type'] == 'dict':
-                # This works if the dictionary schema is hardcoded.
-                # If we define it using propertyschema and valueschema, this
-                # validation pattern does not work and crahses.
-                build_form(schema_prop['schema'],
-                           form_prop['schema'],
-                           "{0}__".format(prop_name))
-                continue
-            if schema_prop['type'] == 'list' and 'items' in form_prop:
-                # Attempt at populating the content of a select menu. If this
-                # is a large collection this will not work because of pagination.
-                # This whole section should just be removed in the future. See
-                # the next statement for an improved approach to this.
-                for item in form_prop['items']:
-                    items = eval("pillarsdk.{0}".format(item[0]))
-                    items_to_select = items.all(api=api)
-                    if items_to_select:
-                        items_to_select = items_to_select["_items"]
-                    else:
-                        items_to_select = []
-                    select = []
-                    for select_item in items_to_select:
-                        select.append((select_item['_id'], select_item[item[1]]))
-                    setattr(ProceduralForm,
-                            prop_name,
-                            SelectMultipleField(choices=select, coerce=str))
-            elif schema_prop['type'] == 'list':
-                # Create and empty multiselect field, which will be populated
-                # with choices from the data it's being initialized with.
-                if prop == 'attachments':
-                    setattr(ProceduralForm,
-                            prop_name,
-                            AttachmentSelectField(prop_name))
-                # elif prop == 'tags':
-                #     setattr(ProceduralForm,
-                #             prop_name,
-                #             TextField(prop_name))
-                elif 'allowed' in schema_prop['schema']:
-                    choices = [(c,c) for c in schema_prop['schema']['allowed']]
-                    setattr(ProceduralForm,
-                            prop_name,
-                            SelectMultipleField(choices=choices))
-                else:
-                    setattr(ProceduralForm,
-                            prop_name,
-                            SelectMultipleField(choices=[]))
-            elif 'allowed' in schema_prop:
-                select = []
-                for option in schema_prop['allowed']:
-                    select.append((str(option), str(option)))
-                setattr(ProceduralForm,
-                        prop_name,
-                        SelectField(choices=select))
-            elif schema_prop['type'] == 'datetime':
-                if 'dateonly' in form_prop and form_prop['dateonly']:
-                    setattr(ProceduralForm,
-                            prop_name,
-                            DateField(prop_name, default=date.today()))
-                else:
-                    setattr(ProceduralForm,
-                            prop_name,
-                            DateTimeField(prop_name, default=datetime.now()))
-            elif schema_prop['type'] == 'integer':
-                setattr(ProceduralForm,
-                        prop_name,
-                        IntegerField(prop_name, default=0))
-            elif schema_prop['type'] == 'float':
-                setattr(ProceduralForm,
-                        prop_name,
-                        FloatField(prop_name, default=0))
-            elif schema_prop['type'] == 'boolean':
-                setattr(ProceduralForm,
-                        prop_name,
-                        BooleanField(prop_name))
-            elif schema_prop['type'] == 'objectid' and 'data_relation' in schema_prop:
-                if schema_prop['data_relation']['resource'] == 'files':
-                    setattr(ProceduralForm,
-                            prop_name,
-                            FileSelectField(prop_name))
-                else:
-                    setattr(ProceduralForm,
-                            prop_name,
-                            TextField(prop_name))
-            elif 'maxlength' in schema_prop and schema_prop['maxlength'] > 64:
-                setattr(ProceduralForm,
-                        prop_name,
-                        TextAreaField(prop_name))
-            else:
-                setattr(ProceduralForm,
-                        prop_name,
-                        TextField(prop_name))
-
-    build_form(node_schema, form_prop)
+    add_form_properties(ProceduralForm, node_schema, form_prop)
 
     return ProceduralForm()
 
