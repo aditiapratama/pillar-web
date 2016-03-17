@@ -11,7 +11,6 @@ from pillarsdk.nodes import Node
 from pillarsdk.projects import Project
 from pillarsdk.activities import Notification
 from pillarsdk.activities import ActivitySubscription
-from pillarsdk.exceptions import ResourceNotFound
 from application import SystemUtility
 from application.helpers import pretty_date
 
@@ -20,17 +19,15 @@ notifications = Blueprint('notifications', __name__)
 
 
 def notification_parse(notification):
-    api = SystemUtility.attract_api()
-    try:
-        actor = User.find(notification.actor, api=api)
-    except ResourceNotFound:
-        bugsnag.notify(ResourceNotFound, meta_data={
-            'notification_context': notification['_id']})
+    if notification.actor:
+        username = notification.actor['username']
+        avatar = notification.actor['avatar']
+    else:
         return None
     return dict(
         _id=notification['_id'],
-        username=actor.username,
-        username_avatar=actor.gravatar(),
+        username=username,
+        username_avatar=avatar,
         action=notification.action,
         object_type=notification.object_type,
         object_name=notification.object_name,
