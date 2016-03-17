@@ -78,7 +78,7 @@ script(type="text/javascript").
 		newFileId = newFileId || null;
 		var fileId = fileField.val();
 		var url = '/files/delete/' + fileId;
-		$.post(url, function(data){}).success(function(dataResponse){
+		$.post(url, function(){}).success(function(){
 			// Notify of successful request
 			statusBarSet('success', 'Original File Removed Successfully');
 			// If we provide the id of a previously uploaded file, add it here
@@ -121,7 +121,7 @@ script(type="text/javascript").
 			} else {
 				// Convert markdown
 				$preview.html(convert($textarea.val()));
-			};
+			}
 		}).trigger('keyup');
 	});
 
@@ -153,16 +153,21 @@ script(type="text/javascript").
 			},
 			done: function (e, data) {
 				// Get the first file upload result (we only need one)
-				var fileData = data.result.files[0]
+				var fileData = data.result.files[0];
 				// Create a file object on the server and retrieve its id
 				statusBarSet('info', 'Uploading File');
 
 				$('.button-save').addClass('disabled');
-				$("li.button-save a#item_save").html('<i class="pi-spin spin"></i> Uploading Preview');
+				$('li.button-save a#item_save').html('<i class="pi-spin spin"></i> Uploading Preview');
 
-				$.post("{{url_for('files.create')}}",
-					{name : fileData.name, size: fileData.size, type: fileData.type,
-					field_name: $(this).data('field-name'), project_id: ProjectUtils.projectId()})
+				var payload = {
+					name: fileData.name,
+					size: fileData.size,
+					type: fileData.type,
+					field_name: $(this).data('field-name'),
+					project_id: ProjectUtils.projectId()
+				}
+				$.post("{{url_for('files.create')}}", payload)
 					.done(function(data) {
 					if (data.status === 'success') {
 						// If successful, add id to the picture hidden field
@@ -178,7 +183,7 @@ script(type="text/javascript").
 						statusBarSet('success', 'File Uploaded Successfully');
 
 						$('.button-save').removeClass('disabled');
-						$("li.button-save a#item_save").html('<i class="pi-check"></i> Save Changes');
+						$('li.button-save a#item_save').html('<i class="pi-check"></i> Save Changes');
 					}
 				});
 			}

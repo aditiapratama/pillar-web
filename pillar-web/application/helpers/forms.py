@@ -18,13 +18,16 @@ class FileSelectText(HiddenInput):
         if field.data:
             api = SystemUtility.attract_api()
             try:
-                picture = File.find(field.data, api=api)
-                button += '<img class="preview-thumbnail" src="{0}" />'.format(
-                    picture.thumbnail('s', api=api))
+                file_item = File.find(field.data, api=api)
+                if file_item.content_type.split('/')[0] == 'image':
+                    button += '<img class="preview-thumbnail" src="{0}" />'.format(
+                        file_item.thumbnail('s', api=api))
+                else:
+                    button += '<p>{}</p>'.format(file_item.filename)
                 button += '<a href="#" class="file_delete" data-field-name="{1}" \
                     data-file_id="{0}"> Delete</a>'.format(field.data, field.name)
                 button += '<a href="{}" class="file_original">Original</a>'.format(
-                    picture.link)
+                    file_item.link)
             except ResourceNotFound:
                 pass
 
