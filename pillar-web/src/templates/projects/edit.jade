@@ -95,8 +95,10 @@
 script(type='text/javascript', src="{{ url_for('static', filename='jquery-file-upload/js/vendor/jquery.ui.widget.js') }}")
 script(type='text/javascript', src="{{ url_for('static', filename='jquery-file-upload/js/jquery.iframe-transport.js') }}")
 script(type='text/javascript', src="{{ url_for('static', filename='jquery-file-upload/js/jquery.fileupload.js') }}")
+script(type='text/javascript', src="{{ url_for('static', filename='assets/js/file_upload.min.js') }}")
 
 script(type="text/javascript").
+	ProjectUtils.setProjectAttributes({projectId: "{{project._id}}", isProject: "", nodeId: ""});
 	var convert = new Markdown.getSanitizingConverter().makeHtml;
 
 	/* Build the markdown preview when typing in textarea */
@@ -132,70 +134,6 @@ script(type="text/javascript").
 				$preview.html(convert($textarea.val()));
 			};
 		}).trigger('keyup');
-	});
-
-	function deleteFile(fileField, newFileId) {
-		newFileId = newFileId || null;
-		var fileId = fileField.val();
-		var url = '/files/delete/' + fileId;
-		$.post(url, function(data){}).success(function(dataResponse){
-			// Notify of successful request
-			//- statusBarSet('success', 'Original File Removed Successfully');
-			// If we provide the id of a previously uploaded file, add it here
-			if (newFileId) {
-				fileField.val(newFileId);
-			} else {
-				fileField.val('');
-			}
-		});
-	}
-
-	$('.file_delete').click(function(e){
-		e.preventDefault();
-		var field_name = '#' + $(this).data('field-name');
-		var file_field = $(field_name);
-		deleteFile(file_field);
-		$('.node-preview-thumbnail').hide();
-	});
-
-	$(function () {
-		$('.fileupload').fileupload({
-			dataType: 'json',
-			acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
-			replaceFileInput:false,
-			dropZone: $(this),
-			formData: {},
-			progressall: function (e, data) {
-				// Update progressbar during upload
-				var progress = parseInt(data.loaded / data.total * 100, 10);
-				$('.picture-progress-bar').css(
-						'width',
-						progress + '%'
-				);
-			},
-			done: function (e, data) {
-				// Get the first file upload result (we only need one)
-				var file_data = data.result.files[0]
-				// Create a file object on the server and retrieve its id
-				$.post("{{url_for('files.create')}}",
-					{name : file_data.name, size: file_data.size, type: file_data.type,
-					field_name: $(this).data('field-name'), project_id: ProjectUtils.projectId()})
-					.done(function(data) {
-					if (data.status === 'success') {
-						// If successful, add id to the picture hidden field
-						var field_name = '#' + data.data.field_name;
-						if ($(field_name).val()){
-							$('.node-preview-thumbnail').hide();
-							deleteFile($(field_name), data.data.id);
-						} else {
-							$(field_name).val(data.data.id);
-						}
-						$('.node-preview-thumbnail').attr('src', data.data.link);
-						$('.node-preview-thumbnail').show();
-					}
-				});
-			}
-		});
 	});
 
 | {% endblock %}
