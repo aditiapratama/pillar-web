@@ -8,7 +8,6 @@ from flask import redirect
 from flask import url_for
 from flask.ext.login import login_required
 from flask.ext.login import current_user
-from application import app
 from application import SystemUtility
 from application.helpers import attach_project_pictures
 from application.helpers import get_file
@@ -16,6 +15,7 @@ from application.modules.nodes import nodes
 from application.modules.nodes.forms import get_node_form
 from application.modules.nodes.forms import process_node_form
 from application.modules.projects import project_update_nodes_list
+
 
 def posts_view(project_id, url=None):
     """View individual blogpost"""
@@ -126,9 +126,6 @@ def posts_edit(post_id):
     try:
         post = Node.find(post_id, {
             'embedded': '{"user": 1}'}, api=api)
-        if post.picture:
-            post.picture = File.find(post.picture, api=api)
-        node_type = post.node_type
     except ResourceNotFound:
         return abort(404)
     # Check if user is allowed to edit the post
@@ -142,7 +139,7 @@ def posts_edit(post_id):
     form = get_node_form(node_type)
     if form.validate_on_submit():
         if process_node_form(form, node_id=post_id, node_type=node_type,
-                            user=current_user.objectid):
+                             user=current_user.objectid):
             # The the post is published, add it to the list
             if form.status.data == 'published':
                 project_update_nodes_list(post, project_id=project._id, list_name='blog')
@@ -154,12 +151,14 @@ def posts_edit(post_id):
     form.url.data = post.properties.url
     if post.picture:
         form.picture.data = post.picture._id
+        # Embed picture file
+        post.picture = File.find(post.picture, api=api)
     if post.properties.picture_square:
         form.picture_square.data = post.properties.picture_square
     return render_template('nodes/custom/post/edit.html',
-        node_type=node_type,
-        post=post,
-        form=form,
-        project=project,
-        api=api)
+                           node_type=node_type,
+                           post=post,
+                           form=form,
+                           project=project,
+                           api=api)
 
