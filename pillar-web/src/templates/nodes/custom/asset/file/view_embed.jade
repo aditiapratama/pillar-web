@@ -87,7 +87,9 @@ script.
 
 	$("li.node-details-meta-list-item.type").html(type_trimmed);
 
-	if (document.getElementById("node-preview").offsetWidth > 750) {
+	var node_preview = document.getElementById("node-preview");
+
+	if (node_preview && node_preview.offsetWidth > 750) {
 		$('.node-preview.file, .node-preview-thumbnail').css({'max-height': 'auto', 'width': '100%'});
 		$('.node-preview img').css({'max-height': '100%'});
 	}

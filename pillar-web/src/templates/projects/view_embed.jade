@@ -45,8 +45,8 @@
 
 			| {% if project.nodes_latest %}
 			.node-updates
+				h3 Latest Updates
 				ul.node-updates-list
-					h3 Updated Assets
 					| {% for n in project.nodes_latest %}
 					| {% if n.node_type not in ['comment'] %}
 					li.node-updates-list-item
