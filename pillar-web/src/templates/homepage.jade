@@ -9,7 +9,7 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 
 | {% block header_backdrop %}
 .homepage.navbar-backdrop(
-	style="background-image: url({{ url_for('static', filename='assets/img/backgrounds/bg_tutorials_02.jpg')}})")
+	style="background-image: url({{ url_for('static', filename='assets/img/backgrounds/bg_ed_01.jpg')}})")
 	//
 		video(loop, muted, autoplay, poster="{{ url_for('static', filename='assets/img/backgrounds/background_join_glass.jpg')}}", class="fullscreen-bg__video")
 			source(src="{{ url_for('static', filename='assets/video/header-glass_half.webm')}}", type="video/webm")
@@ -26,11 +26,16 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 		//- 	frameborder="0",
 		//- 	allowfullscreen)
 		.text
-			.title Rigging made easy.
+			.title 10 years of Open Movies
 				//- img(src="{{ url_for('static', filename='assets/img/logo_gallery.png')}}")
 
 			.lead
 				span.
+					Elephants Dream premiered exactly 10 years ago,
+					<br/> on March 24th 2006 in Amsterdam.
+					<hr/>
+					Download the characters ready for the latest Blender.
+				//span.
 					Auto-rigging and skinning with advanced facial controls.
 					<br/>
 					It's time to bring your characters to the next level.
@@ -39,13 +44,13 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 					<br/>Get full access to the Blender Institute's Open Projects and training material.
 
 			.buttons
-				a.btn.btn-default.btn-outline.blue(href="https://gitlab.com/jpbouza/BlenRig")
-					i.pi-download
-					|  Download BlenRig 5
-
-				a.btn.btn-default.btn-outline.blue(href="https://cloud.blender.org/p/blenrig/#56e3a51ac379cf26b1cd877a")
+				a.btn.btn-default.btn-outline.blue(href="https://cloud.blender.org/p/elephants-dream/#56f3d3b3c379cf2df4c4ffca")
 					i.pi-play
-					|  Watch: Re-Targeting Body
+					|  Watch Promo Video
+
+				a.btn.btn-default.btn-outline.blue(href="https://cloud.blender.org/p/characters/")
+					i.pi-download
+					|  Download Emo & Proog
 
 				//
 					| {% if current_user.is_authenticated() %}

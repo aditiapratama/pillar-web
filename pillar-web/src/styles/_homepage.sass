@@ -44,7 +44,7 @@
 				padding-bottom: 25px
 				font:
 					family: $font-body
-					size: 4em
+					size: 3.5em
 					weight: 400
 				text-shadow: 1px 1px 0 rgba(black, .5), 0 0 25px rgba(black, .4)
 
@@ -63,11 +63,21 @@
 						bottom: 5px
 					border-radius: 3px
 
-					$lead-background-color: hsl(14, 62%, 43%)
+					$lead-background-color: hsl(200, 62%, 20%)
 
 					background-color: $lead-background-color
 					box-shadow: 0.5em 0 0 $lead-background-color,-0.5em 0 0 $lead-background-color
 					box-decoration-break: clone
+
+					hr
+						position: relative
+						left: -10px
+						border: none
+						height: 1px
+						width: 50%
+						margin: 10px 0
+						background-color: rgba(white, .2)
+						clear: both
 
 				+media-xs
 					padding-left: 10px
