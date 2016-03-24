@@ -25,6 +25,7 @@ from application.helpers import attach_project_pictures
 from application.helpers import current_user_is_authenticated
 from application.helpers import get_file
 
+
 @app.route("/")
 @cache.cached(timeout=3600, unless=current_user_is_authenticated)
 def homepage():

@@ -23,11 +23,12 @@ def posts_view(project_id, url=None):
     # Fetch project (for backgroud images and links generation)
     project = Project.find(project_id, api=api)
     attach_project_pictures(project, api)
-
-    blog = Node.find_one({
-        'where': '{"node_type" : "blog", \
-            "project": "%s"}' % (project_id),
-        }, api=api)
+    try:
+        blog = Node.find_one({
+            'where': {'node_type': 'blog', 'project': project_id},
+            }, api=api)
+    except ResourceNotFound:
+        abort(404)
     if url:
         try:
             post = Node.find_one({

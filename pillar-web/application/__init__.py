@@ -56,8 +56,8 @@ def bugsnag_notify_callback(notification):
         notification.add_tab("account", {"roles": current_user.roles})
 
 bugsnag.before_notify(bugsnag_notify_callback)
-
 handle_exceptions(app)
+
 
 
 # Login manager
@@ -158,7 +158,11 @@ class SystemUtility():
 
     @staticmethod
     def attract_api():
-        token = current_user.id if current_user.is_authenticated() else None
+        token = None
+        # Check if current_user is initialized (in order to support manage.py
+        # scripts and non authenticated server requests).
+        if current_user and current_user.is_authenticated():
+            token = current_user.id
         api = Api(
             endpoint=SystemUtility.attract_server_endpoint(),
             username=None,
@@ -195,11 +199,15 @@ from modules.stats import stats
 from modules.files import files
 from modules.organizations import organizations
 from modules.projects import projects
+from modules.projects import create as create_project
 from modules.nodes.custom import comments
 from modules.notifications import notifications
 from modules.main import homepage
 from helpers import gravatar
 from helpers import pretty_date
+from helpers import get_main_project
+
+get_main_project()
 
 
 @app.template_filter('pretty_date')
@@ -228,20 +236,3 @@ def handle_invalid_usage(error):
     """
     return redirect(url_for('users.login'))
 
-
-@app.context_processor
-def inject_node_types():
-    if current_user.is_anonymous:
-        return dict(node_types={})
-
-    api = SystemUtility.attract_api()
-
-    types = NodeType.all(api=api)['_items']
-    node_types = []
-    for t in types:
-        # If we need to include more info, we can turn node_types into a dict
-        # node_types[t.name] = dict(
-        #     url_view=url_for('nodes.index', node_type_name=t.name))
-        node_types.append(str(t['name']))
-
-    return dict(node_types=node_types)

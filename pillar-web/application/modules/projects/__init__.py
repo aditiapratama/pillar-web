@@ -20,11 +20,27 @@ from application.modules.projects.forms import ProjectForm
 from application.modules.projects.forms import NodeTypeForm
 from application.helpers import get_file
 from application.helpers import attach_project_pictures
-from application.helpers.jstree import jstree_parse_node
 from application.helpers.jstree import jstree_get_children
 from application.helpers.caching import delete_redis_cache_template
 
 projects = Blueprint('projects', __name__)
+
+
+@projects.route('/')
+def index():
+    api = SystemUtility.attract_api()
+    user_projects = Project.all({
+        'where': {'user': current_user.objectid},
+        'sort': '-_created'
+    }, api=api)
+    for project in user_projects['_items']:
+        attach_project_pictures(project, api)
+    return render_template(
+        'projects/index_collection.html',
+        title='dashboard',
+        projects=user_projects['_items'],
+        api=SystemUtility.attract_api())
+
 
 @projects.route('/<project_url>/')
 def view(project_url):
@@ -34,7 +50,7 @@ def view(project_url):
     try:
         project = Project.find_one({'where': {"url": project_url}}, api=api)
     except ResourceNotFound:
-        return abort(404)
+        abort(404)
     # Set up variables for processing
     user_id = 'ANONYMOUS' if current_user.is_anonymous() else str(current_user.objectid)
     rewrite_url = None
@@ -67,53 +83,56 @@ def view(project_url):
     if request.args.get('embed'):
         embed_string = '_embed'
         list_latest = []
-        for node_id in project.nodes_latest:
-            try:
-                node_item = Node.find(node_id, {
-                    'projection': '{"name":1, "user":1, "node_type":1, \
-                        "project": 1}',
-                    'embedded': '{"user":1}',
-                    }, api=api)
-                list_latest.append(node_item)
-            except ForbiddenAccess:
-                list_latest.append(FakeNodeAsset())
+        if project.nodes_latest:
+            for node_id in project.nodes_latest:
+                try:
+                    node_item = Node.find(node_id, {
+                        'projection': '{"name":1, "user":1, "node_type":1, \
+                            "project": 1}',
+                        'embedded': '{"user":1}',
+                        }, api=api)
+                    list_latest.append(node_item)
+                except ForbiddenAccess:
+                    pass
         project.nodes_latest = list(reversed(list_latest))
 
         list_featured = []
-        for node_id in project.nodes_featured:
-            try:
-                node_item = Node.find(node_id, {
-                    'projection': '{"name":1, "user":1, "picture":1, \
-                        "node_type":1, "project": 1}',
-                    'embedded': '{"user":1}',
-                    }, api=api)
-                if node_item.picture:
-                    picture = get_file(node_item.picture)
-                    # picture = File.find(node_item.picture, api=api)
-                    node_item.picture = picture
-                list_featured.append(node_item)
-            except ForbiddenAccess:
-                list_featured.append(FakeNodeAsset())
+        if project.nodes_featured:
+            for node_id in project.nodes_featured:
+                try:
+                    node_item = Node.find(node_id, {
+                        'projection': '{"name":1, "user":1, "picture":1, \
+                            "node_type":1, "project": 1}',
+                        'embedded': '{"user":1}',
+                        }, api=api)
+                    if node_item.picture:
+                        picture = get_file(node_item.picture)
+                        # picture = File.find(node_item.picture, api=api)
+                        node_item.picture = picture
+                    list_featured.append(node_item)
+                except ForbiddenAccess:
+                    pass
         project.nodes_featured = list(reversed(list_featured))
 
         list_blog = []
-        for node_id in project.nodes_blog:
-            try:
-                node_item = Node.find(node_id, {
-                    # 'projection': '{"name":1, "user":1, "node_type":1}',
-                    'embedded': '{"user":1}',
-                    }, api=api)
-                list_blog.append(node_item)
-            except ForbiddenAccess:
-                list_blog.append(FakeNodeAsset())
+        if project.nodes_blog:
+            for node_id in project.nodes_blog:
+                try:
+                    node_item = Node.find(node_id, {
+                        # 'projection': '{"name":1, "user":1, "node_type":1}',
+                        'embedded': '{"user":1}',
+                        }, api=api)
+                    list_blog.append(node_item)
+                except ForbiddenAccess:
+                    pass
         project.nodes_blog = list(reversed(list_blog))
 
     return render_template("projects/view{0}.html".format(embed_string),
-        embedded_node_id=embedded_node_id,
-        rewrite_url=rewrite_url,
-        user_string_id=user_id,
-        project=project,
-        api=api)
+                           embedded_node_id=embedded_node_id,
+                           rewrite_url=rewrite_url,
+                           user_string_id=user_id,
+                           project=project,
+                           api=api)
 
 
 @projects.route('/<project_url>/edit', methods=['GET', 'POST'])
@@ -122,10 +141,10 @@ def edit(project_url):
     api = SystemUtility.attract_api()
     # Fetch the Node or 404
     try:
-        project = Project.find_one({
-            'where': '{"url" : "%s"}' % (project_url)}, api=api)
+        project = Project.find_one({'where': {'url': project_url}}, api=api)
+        # project = Project.find(project_url, api=api)
     except ResourceNotFound:
-        return abort(404)
+        abort(404)
     attach_project_pictures(project, api)
     form = ProjectForm()
 
@@ -250,8 +269,8 @@ def delete_node():
     node = Node.find(request.form['node_id'], api=api)
     if node.has_method('PUT'):
         node.properties.status = 'deleted'
-        # Temporarily append a [D] at the name. We will properly display the node
-        # status from the properties later on.
+        # Temporarily append a [D] at the name. We will properly display the
+        # node status from the properties later on.
         node.name = u"[D] {0}".format(node.name)
         node.update(api=api)
         # Delete cached parent template fragment
@@ -326,3 +345,35 @@ def project_update_nodes_list(node, project_id=None, list_name='latest'):
         project.update(api=api)
         return "added"
 
+
+@projects.route('/create')
+@login_required
+def create():
+    """Create a new project. This is a multi step operation that involves:
+    - initialize basic node types
+    - initialize basic permissions
+    - create and connect storage space
+    """
+    api = SystemUtility.attract_api()
+    project_properties = dict(
+        name='My project',
+        user=current_user.objectid,
+        category='assets',
+        status='pending'
+    )
+    project = Project(project_properties)
+    project.create(api=api)
+
+    return redirect(url_for('projects.edit',
+                            project_url="p-{}".format(project['_id'])))
+
+
+@projects.route('/delete', methods=['POST'])
+@login_required
+def delete():
+    """Unapologetically deletes a project"""
+    api = SystemUtility.attract_api()
+    project_id = request.form.project_id.data
+    project = Project.delete(project_id, api=api)
+    return jsonify(dict(staus='success', data=dict(
+        message='Project deleted {}'.format(project['_id']))))

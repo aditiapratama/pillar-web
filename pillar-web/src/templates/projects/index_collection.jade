@@ -78,7 +78,7 @@ meta(name="twitter:image", content="{% if title == 'open-projects' %}{{ url_for(
 
 						a.card-thumbnail(
 							href="{{ url_for('projects.view', project_url=project.url) }}")
-							| {% if project.picture_header %}
+							| {% if project.picture_square %}
 							img.thumb(src="{{ project.picture_square.thumbnail('m', api=api) }}")
 							| {% endif %}
 

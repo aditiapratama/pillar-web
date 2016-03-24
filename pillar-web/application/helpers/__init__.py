@@ -6,9 +6,12 @@ from flask import url_for
 from flask import request
 from flask.ext.login import current_user
 from pillarsdk import File
+from pillarsdk import Project
 from pillarsdk.exceptions import ResourceNotFound
 from application import cache
+from application import app
 from application import SystemUtility
+from application.helpers.exceptions import ConfigError
 
 
 @cache.memoize(timeout=3600 * 23)
@@ -94,7 +97,7 @@ def attach_project_pictures(project, api):
             project.picture_header)
 
 
-def gravatar(email, size=64, consider_settings=True):
+def gravatar(email, size=64):
     parameters = {'s':str(size), 'd':'mm'}
     return "https://www.gravatar.com/avatar/" + \
         hashlib.md5(str(email)).hexdigest() + \
@@ -162,3 +165,14 @@ def pretty_date(time=False):
 
 def current_user_is_authenticated():
     return current_user.is_authenticated()
+
+
+def get_main_project():
+    api = SystemUtility.attract_api()
+    try:
+        main_project = Project.find(app.config['MAIN_PROJECT_ID'], api=api)
+    except ResourceNotFound:
+        raise ConfigError('MAIN_PROJECT_ID was not found. Check config.py.')
+    except KeyError:
+        raise ConfigError('MAIN_PROJECT_ID missing from config.py')
+    return main_project
