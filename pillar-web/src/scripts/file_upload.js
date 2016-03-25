@@ -24,6 +24,8 @@ $('.file_delete').click(function(e){
 
 
 $(function () {
+    var fieldUpload = '';
+
     $('.fileupload').fileupload({
         dataType: 'json',
         acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
@@ -31,11 +33,13 @@ $(function () {
         dropZone: $(this),
         formData: {},
         progressall: function (e, data) {
-          // Update progressbar during upload
-					var progress = parseInt(data.loaded / data.total * 100, 10);
-          $(this).next().find('.picture-progress-bar').css(
-						{'width': progress + '%', 'display': 'block'}
-					).addClass('progress-active');
+            // Update progressbar during upload
+            var progress = parseInt(data.loaded / data.total * 100, 10);
+            $(this).next().find('.form-upload-progress-bar').css(
+                {'width': progress + '%', 'display': 'block'}
+                ).addClass('progress-active');
+
+            fieldUpload = $(this);
         },
         done: function (e, data) {
             // Get the first file upload result (we only need one)
@@ -64,13 +68,16 @@ $(function () {
                     } else {
                         $(field_name).val(data.data.id);
                     }
-                    $('.node-preview-thumbnail').attr('src', data.data.link);
+
+                    var previewThumbnail = fieldUpload.prev().prev();
+
+                    $(previewThumbnail).attr('src', data.data.link);
                     $('.node-preview-thumbnail').show();
                     statusBarSet('success', 'File Uploaded Successfully');
 
                     $('.button-save').removeClass('disabled');
                     $('li.button-save a#item_save').html('<i class="pi-check"></i> Save Changes');
-									$('.progress-active').hide().removeClass('progress-active');
+                    $('.progress-active').removeClass('progress-active');
                 }
             });
         }

@@ -75,6 +75,9 @@ $navbar-backdrop-height: 600px
 .container-page
 	background-color: $color-background
 
+	&.dashboard
+		background-color: $color-background-nav
+
 .page-content
 	position: relative
 	.container-box
@@ -508,9 +511,6 @@ header.navbar-header
 		repeat: no-repeat
 		color: white
 		image: url(https://cloud.blender.org/static/assets/img/backgrounds/background_gleb_locomotive.jpg)
-	// filter: blur(15px)
-	// -webkit-filter: blur(15px)
-	// -moz-filter: blur(15px)
 
 	video
 		width: 100%
@@ -523,6 +523,9 @@ header.navbar-header
 	width: 100%
 	height: $navbar-backdrop-height
 	background: linear-gradient(to bottom, rgba($color-background, 0) 25%, rgba($color-background,0.5) 50%, rgba($color-background,1) 100%)
+
+	&.collection
+		background: linear-gradient(to bottom, rgba($color-background, 0) 25%, rgba($color-background-nav,0.5) 50%, rgba($color-background-nav,1) 100%)
 
 /* Global, we want all menus to look like this */
 ul.dropdown-menu
@@ -677,6 +680,51 @@ input, input.form-control
 	+input-generic
 label, label.control-label
 	+label-generic
+
+
+.form-upload-file
+	width: 100%
+	margin: 10px 0
+	+clearfix
+
+	.form-upload-progress
+		margin-top: 10px
+
+		.form-upload-progress-bar
+			&.progress-active
+				+stripes($color-success, lighten($color-success, 15%), -45deg)
+				+stripes-animate
+				animation-duration: 1s
+
+	.preview-thumbnail
+		width: 50px
+		height: 50px
+		border-radius: 3px
+		background-color: $color-background
+		margin-right: 10px
+		float: left
+
+	.form-upload-file-meta
+		float: left
+		width: 80%
+		list-style: none
+		font-size: .9em
+		padding: 0
+		margin: 0
+
+		li
+			float: left
+			padding: 5px
+
+			&.dimensions, &.size
+				color: $color-text-dark-secondary
+
+			&.delete, &.original
+				float: right
+
+		.file_delete
+			color: $color-danger
+
 
 
 /* Flyouts (only used on notifications for now) */

@@ -16,13 +16,13 @@ meta(name="twitter:image", content="{% if title == 'open-projects' %}{{ url_for(
 | {% endblock %}
 
 | {% block page_title %}
-| {% if user %}{{user.name}}{% elif title == 'open-projects' %}Open Projects{% elif title == 'training' %}Training{% endif %}
+| {% if user %}{{user.name}}{% elif title == 'open-projects' %}Open Projects{% elif title == 'training' %}Training{% else %}Projects{% endif %}
 | {% endblock %}
 
 | {% block header_backdrop %}
 .navbar-backdrop(
 	style="{% if title == 'open-projects' %}background-image: url({{ url_for('static', filename='assets/img/backgrounds/background_join_bbb.jpg')}}){% elif title == 'training' %}background-image: url({{ url_for('static', filename='assets/img/backgrounds/background_join_peoplecodingblender.jpg')}}){% endif %}")
-.navbar-backdrop-overlay(class="{% if user %}homepage{% endif %}")
+.navbar-backdrop-overlay.collection
 | {% endblock %}
 
 | {% block body %}
@@ -42,22 +42,27 @@ meta(name="twitter:image", content="{% if title == 'open-projects' %}{{ url_for(
 					span {{user.description}}
 		| {% endif %}
 
-		| {% if title == 'open-projects' %}
 		#node_index-header.collection
 			#node_index-collection-info
+
+				| {% if title == 'open-projects' %}
 				.node_index-collection-name
 					span Open Projects
 				.node_index-collection-description
 					span Full production data and tutorials from all open movies, for you to use freely.
 
-		| {% elif title == 'training' %}
-		#node_index-header.collection
-			#node_index-collection-info
+				| {% elif title == 'training' %}
 				.node_index-collection-name
 					span Training
 				.node_index-collection-description
 					span Production quality training videos by 3D professionals.
-		| {% endif %}
+
+				| {% elif title == 'dashboard' %}
+				.node_index-collection-name
+					span Projects
+				.node_index-collection-description
+					span Create and manage your own projects on Blender Cloud
+				| {% endif %}
 
 
 		#node_index-collection-container
@@ -66,37 +71,47 @@ meta(name="twitter:image", content="{% if title == 'open-projects' %}{{ url_for(
 				| {% for project in projects %}
 				| {% if (project.status == 'published') or (project.status == 'pending' and current_user.is_authenticated() and current_user.has_role('admin')) and project._id != config.MAIN_PROJECT_ID %}
 
-				.node_index-collection-card-container
-					.node_index-collection-card
-						a.item-header(
+				.node_index-collection-card
+					a.item-header(
+						href="{{ url_for('projects.view', project_url=project.url) }}")
+
+						| {% if project.picture_header %}
+						img.background(src="{{ project.picture_header.thumbnail('m', api=api) }}")
+						| {% endif %}
+
+					a.card-thumbnail(
+						href="{{ url_for('projects.view', project_url=project.url) }}")
+						| {% if project.picture_square %}
+						img.thumb(src="{{ project.picture_square.thumbnail('m', api=api) }}")
+						| {% else %}
+						i.pi-blender-cloud
+						| {% endif %}
+
+					.item-info
+						a.item-title(
 							href="{{ url_for('projects.view', project_url=project.url) }}")
-
-							.overlay
-							| {% if project.picture_header %}
-							img.background(src="{{ project.picture_header.thumbnail('m', api=api) }}")
+							| {{project.name}}
+							| {% if project.status == 'pending' and current_user.is_authenticated() and current_user.has_role('admin') %}
+							small (pending)
 							| {% endif %}
 
-						a.card-thumbnail(
-							href="{{ url_for('projects.view', project_url=project.url) }}")
-							| {% if project.picture_square %}
-							img.thumb(src="{{ project.picture_square.thumbnail('m', api=api) }}")
-							| {% endif %}
+						| {% if project.summary %}
+						p.item-description
+							| {{project.summary|safe}}
+						| {% endif %}
 
-						.item-info
-
-							a.item-title(
-								href="{{ url_for('projects.view', project_url=project.url) }}")
-								| {{project.name}}
-								| {% if project.status == 'pending' and current_user.is_authenticated() and current_user.has_role('admin') %}
-								small (pending)
-								| {% endif %}
-
-
-							| {% if project.summary %}
-							p.item-description
-								| {{project.summary|safe}}
-							| {% endif %}
 				| {% endif %}
 				| {% endfor %}
+
+				| {% if title == 'dashboard' %}
+				.node_index-collection-card.create
+					.item-info
+						a.item-title(
+							href="{{ url_for('projects.create') }}")
+							i.pi-plus
+							| Create New Project
+				| {% endif %}
+
+
 
 | {% endblock %}

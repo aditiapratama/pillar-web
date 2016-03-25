@@ -40,7 +40,7 @@ html(lang="en")
 		link(href="{{ url_for('static', filename='assets/css/main.css', v=24032016) }}", rel="stylesheet")
 
 	body
-		.container-page
+		.container-page(class="{{title}}")
 			a(name="hop")
 			header.navbar-backdrop-container
 				| {% block header_backdrop %}

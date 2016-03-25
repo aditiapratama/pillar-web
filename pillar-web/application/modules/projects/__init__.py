@@ -179,7 +179,7 @@ def edit(project_url):
             form.picture_header.data = project.picture_header._id
 
     # List of fields from the form that should be displayed in the sidebar
-    sidebar_selection = ['name', 'url', 'status', 'is_private', 'category']
+    sidebar_selection = ['url', 'status', 'is_private', 'category']
     return render_template('projects/edit.html',
         form=form,
         sidebar_selection=sidebar_selection,

@@ -1,20 +1,20 @@
 | {% extends 'layout.html' %}
 
-| {% block page_title %}Project {{ project.name }}{% endblock %}
+| {% block page_title %}Edit {{ project.name }}{% endblock %}
 
 | {% block header_backdrop %}
 | {% if project.picture_header %}
-.navbar-backdrop(style="background-image: url({{ project.picture_header.thumbnail('m', api=api) }})")
+.navbar-backdrop(style="background-image: url({{ project.picture_header.thumbnail('l', api=api) }})")
 | {% else %}
 .navbar-backdrop
 | {% endif %}
 .navbar-backdrop-overlay
 | {% endblock %}
 
-
 | {% block body %}
 .container.box
 	form(
+		id="project_edit_form"
 		method='POST',
 		action="{{url_for('projects.edit', project_url=project.url)}}")
 
@@ -25,12 +25,12 @@
 			| {% for field in errors %}
 			.alert.alert-danger(role='alert')
 				strong {{field}}
-				| 						{% for message in errors[field] %}
-				| 								{{message}}|
-				| 						{% endfor %}
-			| 				{% endfor %}
-			| 		{% endif %}
-			| 		{% endwith %}
+				| {% for message in errors[field] %}
+				| {{message}}|
+				| {% endfor %}
+			| {% endfor %}
+			| {% endif %}
+			| {% endwith %}
 
 			#blog_index-sidebar
 				.blog_project-sidebar
@@ -51,14 +51,16 @@
 						| {% endif %}
 						| {% endfor %}
 
-					input.btn.btn-default.button-create(type='submit', value='Update {{ project.name }}')
+					button.btn.btn-default.button-create(type='submit')
+						i.pi-check
+						| Save Changes
 
 					a.btn.btn-default.button-back(href="{{ url_for('projects.view', project_url=project.url) }}")
-						| Back to Project
+						| Go to Project
 
 			#blog_post-edit-container
 				#blog_post-edit-title
-					| Edit {{ project.name }}
+					| Edit Project
 
 				#blog_post-edit-form
 					| {% for field in form %}
@@ -100,6 +102,13 @@ script(type='text/javascript', src="{{ url_for('static', filename='assets/js/fil
 script(type="text/javascript").
 	ProjectUtils.setProjectAttributes({projectId: "{{project._id}}", isProject: "", nodeId: ""});
 	var convert = new Markdown.getSanitizingConverter().makeHtml;
+
+	$('.button-create').on('click', function(e){
+		e.preventDefault();
+
+		$(this).html('<i class="pi-spin spin"></i> Saving');
+		$('#project_edit_form').submit();
+	});
 
 	/* Build the markdown preview when typing in textarea */
 	$(function() {
