@@ -178,13 +178,14 @@ $z-index-base: 13
 			a
 				color: lighten($color-text, 60%)
 
-		/* Name of thte project */
+		/* Name of the project */
 		.project-title
 			font-weight: 400
+			max-width: $project_nav-width - 35px
+			+text-overflow-ellipsis
 			a
 				color: white
-				// font-family: $font-headings
-				text-transform: uppercase
+				font-family: $font-body
 
 		/* The > separating each breadcrumb */
 		li+li:before
@@ -1717,10 +1718,11 @@ section.node-children
 	display: flex
 	align-items: stretch
 	justify-content: space-around
+	flex-wrap: wrap
 
 	.node_index-collection-card
 		position: relative
-		width: 92%
+		width: 30%
 		border-radius: 3px
 		overflow: hidden
 		background-color: white
@@ -1760,6 +1762,10 @@ section.node-children
 			position: relative
 			width: 100%
 			position: absolute
+			top: 0
+			left: 0
+			right: 0
+			bottom: 0
 			overflow: hidden
 			z-index: 0
 			background:
@@ -1806,10 +1812,21 @@ section.node-children
 			z-index: 1
 			padding: 15px 20px
 			background-color: white
-			border-bottom-left-radius: 3px
 			border-bottom-right-radius: 3px
 			min-height: 168px
 			margin-left: 110px
+
+			&:before
+				content: ''
+				background: white
+				position: absolute
+				top: 0
+				left: 0
+				right: 0
+				bottom: 0
+				z-index: -1
+				height: 500px
+				display: block
 
 			a.item-title
 				display: inline-block
