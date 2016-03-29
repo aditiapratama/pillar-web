@@ -168,7 +168,7 @@ script.
 			}
 		}
 
-		$("#comments-list-title").html(((comments_count > 0) ? comments_count : 'No') + ' comments');
+		$("#comments-list-title").html(((comments_count > 0) ? comments_count : 'No') + ((comments_count == 1) ? ' comment' : ' comments'));
 
 		return ret;
 	});
