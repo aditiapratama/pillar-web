@@ -21,7 +21,10 @@ from wtforms.widgets import TextInput
 from application import SystemUtility
 from application import app
 from application.helpers.forms import FileSelectField
-from application.helpers.forms import AttachmentSelectField
+# from application.helpers.forms import AttachmentSelectField
+from application.helpers.forms import ProceduralFileSelectForm
+from wtforms import FieldList
+from application.helpers.forms import CustomFormField
 
 
 def add_form_properties(form_class, node_schema, form_schema, prefix=''):
@@ -74,14 +77,19 @@ def add_form_properties(form_class, node_schema, form_schema, prefix=''):
         elif schema_prop['type'] == 'list':
             # Create and empty multiselect field, which will be populated
             # with choices from the data it's being initialized with.
+            # if prop == 'attachments':
+            #     setattr(form_class,
+            #             prop_name,
+            #             AttachmentSelectField(prop_name))
             if prop == 'attachments':
                 setattr(form_class,
                         prop_name,
-                        AttachmentSelectField(prop_name))
-            # elif prop == 'tags':
-            #     setattr(ProceduralForm,
+                        FieldList(CustomFormField(ProceduralFileSelectForm)))
+            # if prop == 'attachments':
+            #     setattr(form_class,
             #             prop_name,
-            #             TextField(prop_name))
+            #             StringField(prop_name))
+
             elif 'allowed' in schema_prop['schema']:
                 choices = [(c, c) for c in schema_prop['schema']['allowed']]
                 setattr(form_class,
@@ -185,7 +193,6 @@ def process_node_form(form, node_id=None, node_type=None, user=None):
     """Generic function used to process new nodes, as well as edits
     """
     if not user:
-        print("User is None")
         return False
     api = SystemUtility.attract_api()
     node_schema = node_type['dyn_schema'].to_dict()
@@ -233,7 +240,8 @@ def process_node_form(form, node_id=None, node_type=None, user=None):
                         app.config['RFC1123_DATE_FORMAT'])
                 elif schema_prop['type'] == 'list':
                     if pr == 'attachments':
-                        data = json.loads(data)
+                        # data = json.loads(data)
+                        data = [dict(field='description', files=data)]
                     # elif pr == 'tags':
                     #     data = [tag.strip() for tag in data.split(',')]
                 elif schema_prop['type'] == 'objectid':

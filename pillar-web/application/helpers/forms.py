@@ -1,18 +1,23 @@
 from pillarsdk import File
 from flask import url_for
-from wtforms import TextField
+from wtforms import Form
+from wtforms import StringField
+from wtforms.fields import FileField
+from wtforms.compat import text_type
+from wtforms.widgets import html_params
 from wtforms.widgets import HiddenInput
 from wtforms.widgets import HTMLString
+from wtforms.fields import FormField
 from pillarsdk.exceptions import ResourceNotFound
 from application import SystemUtility
 
 
-class FileSelectText(HiddenInput):
+class CustomFileSelectWidget(HiddenInput):
     def __init__(self, **kwargs):
-        super(FileSelectText, self).__init__(**kwargs)
+        super(CustomFileSelectWidget, self).__init__(**kwargs)
 
     def __call__(self, field, **kwargs):
-        html = super(FileSelectText, self).__call__(field, **kwargs)
+        html = super(CustomFileSelectWidget, self).__call__(field, **kwargs)
 
         button = '<div class="form-upload-file">'
 
@@ -50,28 +55,45 @@ class FileSelectText(HiddenInput):
         return HTMLString(html + button)
 
 
-class FileSelectField(TextField):
+class FileSelectField(StringField):
     def __init__(self, name, **kwargs):
         super(FileSelectField, self).__init__(name, **kwargs)
-        self.widget = FileSelectText()
+        self.widget = CustomFileSelectWidget()
 
 
-class FileSelectAttachment(HiddenInput):
-    def __init__(self, **kwargs):
-        super(FileSelectAttachment, self).__init__(**kwargs)
+class ProceduralFileSelectForm(Form):
+    file = FileSelectField('file')
+    size = StringField()
+    slug = StringField()
 
+
+class CustomFormFieldWidget(object):
+    """
+    Renders a list of fields as in the way we like. Based the TableWidget.
+
+    Hidden fields will not be displayed with a row, instead the field will be
+    pushed into a subsequent table row to ensure XHTML validity. Hidden fields
+    at the end of the field list will appear outside the table.
+    """
     def __call__(self, field, **kwargs):
-        html =  super(FileSelectAttachment, self).__call__(field, **kwargs)
-        button = """
-        <input class="fileupload" type="file" name="file" data-url="{0}" data-field-name="{1}">
-        <div class="form-upload-progress">
-          <div class="form-upload-progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
-          </div>
-        </div>""".format(url_for('files.upload'), field.name)
-        return HTMLString(html + button)
+        html = []
+        kwargs.setdefault('id', field.id)
+        html.append('<div %s>' % html_params(**kwargs))
+        hidden = ''
+        for subfield in field:
+            if subfield.type == 'HiddenField':
+                hidden += text_type(subfield)
+            else:
+                html.append('<div><span>%s</span>%s%s</div>' % (
+                    text_type(subfield.label), hidden, text_type(subfield)))
+                hidden = ''
+        html.append('</div>')
+        if hidden:
+            html.append(hidden)
+        return HTMLString(''.join(html))
 
 
-class AttachmentSelectField(TextField):
+class CustomFormField(FormField):
     def __init__(self, name, **kwargs):
-        super(AttachmentSelectField, self).__init__(name, **kwargs)
-        self.widget = FileSelectAttachment()
+        super(CustomFormField, self).__init__(name, **kwargs)
+        self.widget = CustomFormFieldWidget()

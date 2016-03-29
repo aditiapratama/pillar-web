@@ -41,6 +41,7 @@ from application.helpers.jstree import jstree_parse_node
 from application.helpers.jstree import jstree_get_children
 from application.helpers.jstree import jstree_build_children
 from application.helpers.jstree import jstree_build_from_node
+from application.helpers.forms import ProceduralFileSelectForm
 
 nodes = Blueprint('nodes', __name__)
 
@@ -416,7 +417,7 @@ def edit(node_id):
         with the current choices.
         """
         for prop in dyn_schema:
-            if not prop in node_properties:
+            if prop not in node_properties:
                 continue
             schema_prop = dyn_schema[prop]
             form_prop = form_schema[prop]
@@ -449,8 +450,14 @@ def edit(node_id):
                     # Assign data to the field
                     if set_data:
                         if prop_name == 'attachments':
-                            # Parse JSON data
-                            form[prop_name].data = json.dumps(data)
+                            for attachment_collection in data:
+                                for a in attachment_collection['files']:
+                                    attachment_form = ProceduralFileSelectForm()
+                                    attachment_form.file = a['file']
+                                    attachment_form.slug = a['slug']
+                                    attachment_form.size = 'm'
+                                    form[prop_name].append_entry(attachment_form)
+                            pass
                         # elif prop_name == 'tags':
                         #     form[prop_name].data = ', '.join(data)
                         else:
