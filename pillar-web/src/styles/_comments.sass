@@ -10,14 +10,14 @@
 		border-top: none
 
 	#comments-list-header
-		h3
+		#comments-list-title
 			padding: 15px 0 0
 			margin: 0
-
-			span
-				padding-left: 5px
-				font-size: .9em
-				color: $color-text-dark-secondary
+			font:
+				size: 1.5em
+				weight: 300
+				family: $font-body
+			color: $color-text-dark-primary
 
 
 	#comments-list-items-loading
@@ -29,7 +29,8 @@
 		margin-bottom: 10px
 		+spin
 
-	#comments-list-items
+	#comments-list-items,
+	.comment-reply-container
 		position: relative
 
 		+media-xs
@@ -46,9 +47,6 @@
 			text-align: center
 			cursor: default
 			padding: 8px 0
-
-		// #comments-list-items-loading
-		// 	position: absolute
 
 	#comments-list
 
@@ -378,10 +376,22 @@
 
 					button.comment-action-submit
 						margin-left: auto
-						min-width: 200px
+						min-width: 180px
+						min-height: 30px
 						transition: all 200ms ease-in-out
 
 						@include button-rounded($color-success, 6px)
+						position: relative
+
+						span.hint
+							position: absolute
+							top: 35px
+							left: 50%
+							transform: translateX(-50%)
+							font-size: .7em
+							text-transform: initial
+							display: block
+							color: $color-text-dark-hint
 
 						&.submitting
 							background: linear-gradient(to left, transparent 50%, #7AC29A 50%)

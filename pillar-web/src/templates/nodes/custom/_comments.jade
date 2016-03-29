@@ -39,6 +39,7 @@
 							type="button",
 							title="Post Comment")
 							| Post Comment
+							span.hint (Ctrl+Enter)
 
 					.comment-reply-preview
 
@@ -72,6 +73,7 @@
 			| {% endif %}
 
 		section#comments-list-header
+			#comments-list-title
 			#comments-list-items
 				#comments-list-items-loading
 					i.pi-spin
@@ -113,35 +115,14 @@
 				| {{/list}}
 				| {% endraw %}
 
-			script#comments-empty-template(type="text/x-handlebars-template")
-				.nocomments
-					| No comments... yet!
-
-					| {% if not current_user.is_authenticated() %}
-					|  ·
-					a(href="{{ url_for('users.login') }}")  Log in
-					|  to comment.
-					| {% endif %}
-
-
-			| {# Build the list using individual comments
-			//
-				script#comments-list-template(type="text/x-handlebars-template")
-					| {% raw %}
-
-					| {{#list items }}
-					| {{/list}}
-
-					| {% endraw %}
-			| #}
-
-
 
 | {% block comment_scripts %}
 
 script.
 	// Markdown initialization
-	var convert = new Markdown.getSanitizingConverter().makeHtml;
+	var convert = new Markdown.getSanitizingConverter();
+	Markdown.Extra.init(convert);
+	convert = convert.makeHtml;
 
 	// Define the template for handlebars
 	var source = $("#comment-template").html();
@@ -151,9 +132,12 @@ script.
 	// Register the helper for generating the comments list
 	Handlebars.registerHelper('list', function(context, options) {
 		var ret = "";
+		var comments_count = 0
 
 		// Loop through all first-level comments
 		for(var i=0, j=context.length; i<j; i++) {
+
+			comments_count++
 
 			// Convert Markdown for each comment
 			context[i]['content'] = convert(context[i]['content']);
@@ -175,7 +159,7 @@ script.
 
 					// Append compiled replies
 					compiled_replies = compiled_replies + options.fn(replies[r]);
-
+					comments_count++
 				}
 
 				// Append replies list to the return string
@@ -183,6 +167,8 @@ script.
 
 			}
 		}
+
+		$("#comments-list-title").html(((comments_count > 0) ? comments_count : 'No') + ' comments');
 
 		return ret;
 	});
@@ -216,6 +202,11 @@ script.
 				$container.removeClass('filled');
 			};
 
+			// Send on ctrl+enter
+			if ((event.keyCode == 10 || event.keyCode == 13) && event.ctrlKey){
+				$( ".comment-action-submit" ).trigger( "click" );
+			};
+
 		}).trigger('keyup');
 	});
 
@@ -228,7 +219,7 @@ script.
 		if (comments && comments.trim() !="") {
 			$('#comments-list-items').html(comments);
 		} else {
-			$('#comments-list-items').html(Handlebars.compile($('#comments-empty-template').html()));
+			$('#comments-list-items').html('');
 		}
 	});
 
@@ -244,7 +235,7 @@ script.
 		if ($textarea.val()) {
 
 			$this.addClass('submitting');
-			$this.html('<i class="ion-load-c"></i> Posting...');
+			$this.html('<i class="pi-spin spin"></i> Posting...');
 
 			// Collect parent_id
 			var commentField = document.getElementById('comment_field');

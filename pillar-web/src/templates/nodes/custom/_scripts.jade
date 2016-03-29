@@ -1,8 +1,11 @@
 script(type="text/javascript").
 
 	/* Convert Markdown */
-	var convert = new Markdown.getSanitizingConverter().makeHtml;
 	var convert_fields = '.node-details-description, .blog_index-item .item-content';
+	var convert = new Markdown.getSanitizingConverter();
+	Markdown.Extra.init(convert);
+	convert = convert.makeHtml;
+
 
 	/* Parse description/content fields to convert markdown */
 	$(convert_fields).each(function(i){
