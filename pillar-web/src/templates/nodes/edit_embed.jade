@@ -40,7 +40,16 @@
 
 		| {% if field.type == 'HiddenField' %}
 		| {{ field }}
+		| {% else %}
 
+		| {% if field.name == 'attachments' %}
+		#attachments-actions
+			.btn.btn-info#attachments-action-add
+				i.pi-plus
+				| Add New Attachment
+
+		.form-group(class="{{field.name}}")
+			| {{ field(class='form-control') }}
 		| {% else %}
 
 		.form-group(class="{{field.name}}")
@@ -48,7 +57,7 @@
 			| {{ field(class='form-control') }}
 
 		| {% endif %}
-
+		| {% endif %}
 		| {% endif %}
 
 		| {% endfor %}
@@ -72,7 +81,9 @@ script(type="text/javascript").
 		$('#tags').select2();
 	});
 
-	var convert = new Markdown.getSanitizingConverter().makeHtml;
+	var convert = new Markdown.getSanitizingConverter();
+	Markdown.Extra.init(convert);
+	convert = convert.makeHtml;
 
 	/* Build the markdown preview when typing in textarea */
 	$(function() {
@@ -191,6 +202,11 @@ script(type="text/javascript").
 		$('.project-mode-edit').hide();
 	});
 
+	if (document.getElementById("attachments") !== null) {
+		$("#attachments-action-add").on('click', function(){
+			$('#attachments li:first').after($('#attachments li:first').clone());
+		});
+	};
 
 	//- console.log($._data($(elementSelector)[0], "events"));
 

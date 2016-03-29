@@ -1909,6 +1909,25 @@ section.node-children
 			.node-preview-thumbnail
 				display: block
 
+			&.attachments
+				+clearfix
+
+				.form-control
+					padding: 0
+					margin: 0
+					border: none
+					list-style-type: none
+					+clearfix
+
+					label[for^='attachments-']
+						margin-top: 15px
+						font-weight: 400
+
+					div[id^='attachments-']
+						margin-bottom: 15px
+						border-top: thin solid $color-text-dark-hint
+
+
 		.form-group.description,
 		.form-group.summary,
 		.form-group.content
