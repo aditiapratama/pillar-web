@@ -25,9 +25,17 @@
 
 		| {% else %}
 
-		.form-group(class="{{field.name}}")
+		.form-group(class="{{field.name}}{% if field.errors %} error{% endif %}")
 			| {{ field.label }}
 			| {{ field(class='form-control') }}
+
+			| {% if field.errors %}
+			ul.error
+				| {% for error in field.errors %}
+				li {{ error }}
+				| {% endfor %}
+			| {% endif %}
+
 
 		| {% endif %}
 

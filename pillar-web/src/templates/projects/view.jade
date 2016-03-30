@@ -191,7 +191,7 @@ script.
 
 	ProjectUtils.setProjectAttributes({projectId: "{{project._id}}", isProject: "", nodeId: ""});
 	/* Initialize scrollbars */
-	if (typeof Ps !== 'undefined'){
+	if ((typeof Ps !== 'undefined') && window.innerWidth > 768){
 		Ps.initialize(document.getElementById('project_context-container'), {suppressScrollX: true});
 		Ps.initialize(document.getElementById('project_tree'), {suppressScrollX: true});
 	}
@@ -324,7 +324,7 @@ script.
 			}
 		{% endif %}
 
-		if (typeof Ps !== 'undefined'){
+		if ((typeof Ps !== 'undefined') && window.innerWidth > 768){
 			Ps.initialize(document.getElementById('project_context-container'));
 		}
 

@@ -727,6 +727,17 @@ label, label.control-label
 		.file_delete
 			color: $color-danger
 
+.form-group
+	&.error
+		.form-control, input
+			border-color: $color-danger !important
+
+	ul.error
+		padding: 5px 0 0 0
+		margin: 0
+		color: $color-danger
+		list-style-type: none
+
 
 
 /* Flyouts (only used on notifications for now) */
