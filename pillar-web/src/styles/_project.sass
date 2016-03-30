@@ -1137,7 +1137,7 @@ section.node-details-container
 
 					.title
 						display: block
-						font-size: 1.2em
+						+text-overflow-ellipsis
 						+clearfix
 
 					span.details
@@ -1224,10 +1224,10 @@ section.node-details-container
 	.node-blog+.node-updates
 		ul.node-updates-list
 			padding:
-				left: 25px
 				right: 25px
-			margin-left: 25px
-			border-left: thin solid $color-background
+				// left: 25px
+			// margin-left: 25px
+			// border-left: thin solid $color-background
 
 
 	.node-updates+.node-featured
@@ -1753,8 +1753,16 @@ section.node-children
 				background-color: transparent
 				padding: 0
 				margin: 0
-				min-height: initial
+				min-height: 150px
+				position: relative
+				display: flex
+				align-items: center
+
+				&:before
+					display: none
+
 				.item-title
+					width: initial
 					color: $color-text-light
 
 
@@ -1834,7 +1842,7 @@ section.node-children
 				padding: 0 0 10px 0
 				color: $color-text-dark
 				font:
-					size: 1.6em
+					size: 1.5em
 					family: $font-body
 					weight: 300
 
