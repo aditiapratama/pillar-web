@@ -75,21 +75,10 @@ def add_form_properties(form_class, node_schema, form_schema, prefix=''):
                         prop_name,
                         SelectMultipleField(choices=select, coerce=str))
         elif schema_prop['type'] == 'list':
-            # Create and empty multiselect field, which will be populated
-            # with choices from the data it's being initialized with.
-            # if prop == 'attachments':
-            #     setattr(form_class,
-            #             prop_name,
-            #             AttachmentSelectField(prop_name))
             if prop == 'attachments':
                 setattr(form_class,
                         prop_name,
                         FieldList(CustomFormField(ProceduralFileSelectForm)))
-            # if prop == 'attachments':
-            #     setattr(form_class,
-            #             prop_name,
-            #             StringField(prop_name))
-
             elif 'allowed' in schema_prop['schema']:
                 choices = [(c, c) for c in schema_prop['schema']['allowed']]
                 setattr(form_class,

@@ -417,11 +417,15 @@ def edit(node_id):
         with the current choices.
         """
         for prop in dyn_schema:
-            if prop not in node_properties:
-                continue
             schema_prop = dyn_schema[prop]
             form_prop = form_schema[prop]
             prop_name = "{0}{1}".format(prefix, prop)
+
+            if prop not in node_properties:
+                if prop_name == 'attachments':
+                    node_properties['attachments'] = []
+                else:
+                    continue
             if schema_prop['type'] == 'dict':
                 set_properties(
                     schema_prop['schema'],
@@ -462,6 +466,18 @@ def edit(node_id):
                         #     form[prop_name].data = ', '.join(data)
                         else:
                             form[prop_name].data = data
+                    else:
+                        # Default population of multiple file form list (only if
+                        # we are getting the form)
+                        if request.method == 'POST':
+                            continue
+                        if prop_name == 'attachments':
+                            if not data:
+                                attachment_form = ProceduralFileSelectForm()
+                                attachment_form.file = 'file'
+                                attachment_form.slug = ''
+                                attachment_form.size = ''
+                                form[prop_name].append_entry(attachment_form)
 
     api = SystemUtility.attract_api()
     node = Node.find(node_id, api=api)
@@ -487,7 +503,7 @@ def edit(node_id):
                 project_update_nodes_list(node, list_name='blog')
             else:
                 project_update_nodes_list(node)
-            # Delete memoized File object (hardcoded and working only for assets)
+            # Delete memoized File object, hardcoded and working only for assets
             if node.properties.file:
                 file_id = node.properties.file
                 cache.delete_memoized(_get_file_cached, file_id)
