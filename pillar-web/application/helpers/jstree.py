@@ -17,7 +17,7 @@ def jstree_parse_node(node, children=None):
         type=node_type,
         children=False)
     # Append children property only if it is a directory type
-    if node_type in ['group', 'storage']:
+    if node_type in ['group', 'storage', 'group_texture']:
         parsed_node['children'] = True
 
     return parsed_node
