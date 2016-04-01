@@ -27,6 +27,7 @@ projects = Blueprint('projects', __name__)
 
 
 @projects.route('/')
+@login_required
 def index():
     api = SystemUtility.attract_api()
     user_projects = Project.all({
