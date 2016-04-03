@@ -14,7 +14,6 @@ from application import SystemUtility
 from application.helpers.exceptions import ConfigError
 
 
-@cache.memoize(timeout=3600 * 23)
 def _get_file_cached(file_id):
     """Leverage caching and return a dictionary-formatted version of a file"""
     api = SystemUtility.attract_api()
