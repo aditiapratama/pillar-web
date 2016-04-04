@@ -103,7 +103,7 @@ meta(name="twitter:image", content="{% if title == 'open-projects' %}{{ url_for(
 				| {% endif %}
 				| {% endfor %}
 
-				| {% if title == 'dashboard' %}
+				| {% if title == 'dashboard' and current_user.has_role('admin') %}
 				.node_index-collection-card.create
 					.item-info
 						a.item-title(
