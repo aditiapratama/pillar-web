@@ -3,8 +3,9 @@
 *.pyc
 *.sublime*
 *.ropeproject*
+*.swp
 
-config.py
+/pillar-web/config_local.py
 
 node_modules/
 .sass-cache/

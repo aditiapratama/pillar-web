@@ -26,11 +26,17 @@ app = Flask(__name__,
             template_folder='templates',
             static_folder='static')
 
-# Choose the configuration to load
-app.config.from_object(config.Development)
-app.config['TEMPLATES_PATH'] = '{0}/templates'.format(
-    os.path.dirname(__file__))
-app.config['RFC1123_DATE_FORMAT'] = '%a, %d %b %Y %H:%M:%S GMT'
+# Load configuration from three different sources, to make it easy to override
+# settings with secrets, as well as for development & testing.
+app_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+app.config.from_pyfile(os.path.join(app_root, 'config.py'), silent=False)
+app.config.from_pyfile(os.path.join(app_root, 'config_local.py'), silent=True)
+from_envvar = os.environ.get('PILLAR_WEB_CONFIG')
+if from_envvar:
+    # Don't use from_envvar, as we want different behaviour. If the envvar
+    # is not set, it's fine (i.e. silent=True), but if it is set and the
+    # configfile doesn't exist, it should error out (i.e. silent=False).
+    app.config.from_pyfile(from_envvar, silent=False)
 
 # Configure logging
 logging.basicConfig(level=logging.WARNING)
@@ -38,26 +44,26 @@ log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG if app.config['DEBUG'] else logging.INFO)
 log.info('Pillar Web starting')
 
-bugsnag.configure(
-    api_key=app.config['BUGSNAG_API_KEY'],
-    project_root="/data/dev/pillar-web/pillar-web",
-)
+# Configure Bugsnag
+if not app.config.get('TESTING'):
+    bugsnag.configure(
+        api_key=app.config['BUGSNAG_API_KEY'],
+        project_root="/data/dev/pillar-web/pillar-web",
+    )
 
+    def bugsnag_notify_callback(notification):
+        # If we return False, the notification will not be sent to Bugsnag.
+        if isinstance(notification.exception, KeyboardInterrupt):
+            return False
+        if current_user.is_authenticated():
+            notification.user = dict(
+                id=current_user.id,
+                name=current_user.full_name,
+                email=current_user.email)
+            notification.add_tab("account", {"roles": current_user.roles})
 
-def bugsnag_notify_callback(notification):
-    # If we return False, the notification will not be sent to Bugsnag.
-    if isinstance(notification.exception, KeyboardInterrupt):
-        return False
-    if current_user.is_authenticated():
-        notification.user = dict(
-            id=current_user.id,
-            name=current_user.full_name,
-            email=current_user.email)
-        notification.add_tab("account", {"roles": current_user.roles})
-
-bugsnag.before_notify(bugsnag_notify_callback)
-handle_exceptions(app)
-
+    bugsnag.before_notify(bugsnag_notify_callback)
+    handle_exceptions(app)
 
 
 # Login manager
