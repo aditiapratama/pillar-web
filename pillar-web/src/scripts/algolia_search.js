@@ -66,19 +66,23 @@ $(document).ready(function() {
     firstHit.addClass('active');
     firstHit.find('#search-loading').addClass('active');
 
-    $.get('/nodes/' + firstHit.attr('data-hit-id') + '/view?embed=1', function(dataHtml){
-      $('#search-hit-container').html(dataHtml);
-    })
-    .done(function(){
-      $('.search-loading').removeClass('active');
-      $('#search-error').hide();
-      $('#search-hit-container').show();
-    })
-    .fail(function(data){
-      $('.search-loading').removeClass('active');
-      $('#search-hit-container').hide();
-      $('#search-error').show().html('Houston!\n\n' + data.status + ' ' + data.statusText);
-    });
+    var getNode = setTimeout(function(){
+      $.get('/nodes/' + firstHit.attr('data-hit-id') + '/view?embed=1', function(dataHtml){
+        $('#search-hit-container').html(dataHtml);
+      })
+      .done(function(){
+        $('.search-loading').removeClass('active');
+        $('#search-error').hide();
+        $('#search-hit-container').show();
+
+        clearTimeout(getNode);
+      })
+      .fail(function(data){
+        $('.search-loading').removeClass('active');
+        $('#search-hit-container').hide();
+        $('#search-error').show().html('Houston!\n\n' + data.status + ' ' + data.statusText);
+      });
+    }, 1000);
   };
 
   // Initial search
