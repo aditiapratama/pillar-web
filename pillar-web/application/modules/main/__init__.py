@@ -38,10 +38,10 @@ def homepage():
     #     'projection': '{"permissions": 1}'
     #     }, api=api)
     latest_posts = Node.all({
-        'projection': '{"name":1, "project": 1, "user":1, "node_type":1, \
-            "picture": 1, "properties.status": 1}',
-        'where': '{"node_type": "post", "properties.status": "published"}',
-        'embedded': '{"user": 1, "project":1}',
+        'projection': {'name': 1, 'project': 1, 'user': 1, 'node_type': 1,
+                       'picture': 1, 'properties.status': 1},
+        'where': {'node_type': 'post', 'properties.status': 'published'},
+        'embedded': {'user': 1, 'project': 1},
         'sort': '-_created',
         'max_results': '3'
         }, api=api)
@@ -53,11 +53,11 @@ def homepage():
 
     # Get latest assets added to any project
     latest_assets = Node.all({
-        'projection': '{"name":1, "project": 1, "user":1, "node_type":1, \
-            "picture": 1, "properties.status": 1, "properties.content_type": 1, \
-            "permissions.world": 1}',
-        'where': '{"node_type": "asset", "properties.status": "published"}',
-        'embedded': '{"user":1, "project":1}',
+        'projection': {'name': 1, 'project': 1, 'user': 1, 'node_type': 1,
+                       'picture': 1, 'properties.status': 1, 'properties.content_type': 1,
+                       'permissions.world': 1},
+        'where': {'node_type': 'asset', 'properties.status': 'published'},
+        'embedded': {'user': 1, 'project': 1},
         'sort': '-_updated',
         'max_results': '12'
         }, api=api)
@@ -69,11 +69,11 @@ def homepage():
 
     # Get latest comments to any node
     latest_comments = Node.all({
-        'projection': '{"project": 1, "parent": 1, "user": 1, \
-            "properties.content": 1 ,"node_type": 1, "properties.status": 1, \
-            "properties.is_reply": 1}',
-        'where': '{"node_type": "comment", "properties.status": "published"}',
-        'embedded': '{"user": 1, "project": 1, "parent": 1}',
+        'projection': {'project': 1, 'parent': 1, 'user': 1,
+                       'properties.content': 1, 'node_type': 1, 'properties.status': 1,
+                       'properties.is_reply': 1},
+        'where': {'node_type': 'comment', 'properties.status': 'published'},
+        'embedded': {'user': 1, 'project': 1, 'parent': 1},
         'sort': '-_created',
         'max_results': '6'
         }, api=api)
