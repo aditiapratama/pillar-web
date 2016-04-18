@@ -151,7 +151,7 @@ def posts_edit(post_id):
     form.status.data = post.properties.status
     form.url.data = post.properties.url
     if post.picture:
-        form.picture.data = post.picture._id
+        form.picture.data = post.picture
         # Embed picture file
         post.picture = File.find(post.picture, api=api)
     if post.properties.picture_square:
