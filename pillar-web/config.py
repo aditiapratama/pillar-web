@@ -9,7 +9,7 @@ ALLOWED_EXTENSIONS = {'tif', 'tiff', 'exr', 'm4v', 'kra', 'xcf', 'avi', 'blend',
                       'jpeg', 'bmp', 'mov', 'mp4', 'pdf'}
 IGNORED_FILES = {'.gitignore'}
 
-SCHEME = 'http'
+SCHEME = 'https'
 SECRET_KEY = '123'
 PILLAR_SERVER_ENDPOINT = 'http://pillar:5000'
 HOST = '0.0.0.0'
