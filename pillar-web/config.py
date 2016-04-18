@@ -1,6 +1,6 @@
 from os.path import join, dirname, abspath
 
-TEMPLATES_PATH = join(dirname(abspath(__file__)), 'templates')
+TEMPLATES_PATH = join(dirname(abspath(__file__)), 'application/templates')
 RFC1123_DATE_FORMAT = '%a, %d %b %Y %H:%M:%S GMT'
 
 # Uploader settings
