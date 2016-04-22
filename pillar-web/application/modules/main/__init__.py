@@ -33,10 +33,6 @@ def homepage():
 
     # Get latest blog posts
     api = SystemUtility.attract_api()
-    # node_type_post = NodeType.find_one({
-    #     'where': '{"name" : "post"}',
-    #     'projection': '{"permissions": 1}'
-    #     }, api=api)
     latest_posts = Node.all({
         'projection': {'name': 1, 'project': 1, 'user': 1, 'node_type': 1,
                        'picture': 1, 'properties.status': 1},
@@ -85,8 +81,13 @@ def homepage():
         else:
             comment.parent = comment.parent
 
+    main_project = Project.find(app.config['MAIN_PROJECT_ID'], api=api)
+    main_project.picture_square = get_file(main_project.picture_square)
+    main_project.picture_header = get_file(main_project.picture_header)
+
     return render_template(
         'homepage.html',
+        main_project=main_project,
         latest_posts=latest_posts._items,
         latest_assets=latest_assets._items,
         latest_comments=latest_comments._items,

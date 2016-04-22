@@ -9,7 +9,7 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 
 | {% block header_backdrop %}
 .homepage.navbar-backdrop(
-	style="background-image: url({{ url_for('static', filename='assets/img/backgrounds/background_vincent_01.jpg')}})")
+	style="background-image: url({{ main_project.picture_header.thumbnail('l', api=api) }})")
 	//
 		video(loop, muted, autoplay, poster="{{ url_for('static', filename='assets/img/backgrounds/background_join_glass.jpg')}}", class="fullscreen-bg__video")
 			source(src="{{ url_for('static', filename='assets/video/header-glass_half.webm')}}", type="video/webm")
