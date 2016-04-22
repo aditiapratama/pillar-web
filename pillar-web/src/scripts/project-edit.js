@@ -211,3 +211,6 @@ $('#item_toggle_public').click(function(e){
 	});
 });
 
+$( document ).ready(function() {
+	$('ul.project-edit-tools').removeClass('disabled');
+});

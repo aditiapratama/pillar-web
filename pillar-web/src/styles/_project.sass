@@ -224,6 +224,15 @@ $z-index-base: 13
 
 		font-size: .9em
 
+		&.disabled
+			li
+				a
+					pointer-events: none
+					cursor: not-allowed
+					background: repeating-linear-gradient(-45deg, darken($color-background-nav, 0%), darken($color-background-nav, 0%) 10px, darken($color-background-nav, 5%) 10px, darken($color-background-nav, 5%) 20px)
+					border-color: darken($color-background-nav, 5%)
+					color: rgba(white, .5)
+
 		li
 			margin: 0
 			padding: 0
