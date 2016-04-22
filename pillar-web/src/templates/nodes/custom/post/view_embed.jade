@@ -34,9 +34,9 @@ meta(name="twitter:description", content="{{ node.properties.content }}")
 
 | {% block header_backdrop %}
 | {% if project and project.properties.picture_header %}
-.navbar-backdrop(style="background-image: url({{ project.properties.picture_header.thumbnail('m', api=api) }})")
+.navbar-backdrop(style="background-image: url({{ project.properties.picture_header.thumbnail('l', api=api) }})")
 | {% elif node and node.picture %}
-.navbar-backdrop(style="background-image: url({{ node.picture.thumbnail('m', api=api) }})")
+.navbar-backdrop(style="background-image: url({{ node.picture.thumbnail('l', api=api) }})")
 | {% else %}
 .navbar-backdrop
 | {% endif %}

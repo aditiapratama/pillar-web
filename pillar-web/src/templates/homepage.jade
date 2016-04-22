@@ -3,13 +3,13 @@
 | {% block og %}
 meta(property="og:title", content="Blender Cloud")
 meta(property="og:url", content="https://cloud.blender.org/")
-meta(property="og:image", content="https://cloud.blender.org/static/assets/img/background_caminandes_3_02.jpg")
+meta(property="og:image", content="https://cloud.blender.org/static/assets/img/background_vincent_01.jpg")
 | {% endblock %}
 
 
 | {% block header_backdrop %}
 .homepage.navbar-backdrop(
-	style="background-image: url({{ url_for('static', filename='assets/img/backgrounds/bg_tutorials_02.jpg')}})")
+	style="background-image: url({{ url_for('static', filename='assets/img/backgrounds/background_vincent_01.jpg')}})")
 	//
 		video(loop, muted, autoplay, poster="{{ url_for('static', filename='assets/img/backgrounds/background_join_glass.jpg')}}", class="fullscreen-bg__video")
 			source(src="{{ url_for('static', filename='assets/video/header-glass_half.webm')}}", type="video/webm")
@@ -26,26 +26,25 @@ meta(property="og:image", content="https://cloud.blender.org/static/assets/img/b
 		//- 	frameborder="0",
 		//- 	allowfullscreen)
 		.text
-			.title BlenRig is here.
+			.title Meet Vincent.
 				//- img(src="{{ url_for('static', filename='assets/img/logo_gallery.png')}}")
 
 			.lead
 				span.
-					Auto-rigging and skinning with advanced facial controls.
+					All-new BlenRig character, fully rigged and ready to render.
 					<hr/>
-					It's time to bring your characters to the next level.
+					CC-BY, free to use, free to share.
 				//
 					We make films, we build a production pipeline, and we share everything.
 					<br/>Get full access to the Blender Institute's Open Projects and training material.
 
 			.buttons
-				a.btn.btn-default.btn-outline.blue(href="https://cloud.blender.org/p/blenrig/#56e2fdafc379cf26b1cd8595")
-					i.pi-play
-					|  Watch the Videos
-
-				a.btn.btn-default.btn-outline.blue(href="https://cloud.blender.org/p/blenrig/#56965fc3c379cf44546120e1")
+				a.btn.btn-default.btn-outline.orange(href="https://cloud.blender.org/p/characters/#5718a967c379cf04929a4247")
 					i.pi-download
-					|  Download BlenRig
+					|  Download Vincent
+				a.btn.btn-default.btn-outline.orange(href="https://cloud.blender.org/p/blenrig/#56965fc3c379cf44546120e1")
+					i.pi-download
+					|  Get BlenRig
 
 				//
 					| {% if current_user.is_authenticated() %}

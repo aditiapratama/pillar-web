@@ -309,16 +309,6 @@
 		#blog_post-container+#blog_index-sidebar
 			display: none
 
-		#blog_post-container
-			padding: 0 0 20px 0
-			.item-title, .item-info
-				padding-left: 100px
-				padding-right: 100px
-
-			.item-content
-				padding-left: 80px
-				padding-right: 80px
-
 		#blog_index-container
 			padding: 25px 80px 20px 80px
 
@@ -327,4 +317,34 @@
 				padding: 25px 20px 20px 20px
 			+media-xs
 				width: 100%
-				padding: 25px 5px 20px 5px
+				padding: 25px 0 20px 0
+
+		#blog_post-container
+			padding: 0 0 20px 0
+
+			+media-sm
+				width: 100%
+				padding: 0 20px 20px 20px
+			+media-xs
+				width: 100%
+				padding: 0 0 20px 0
+
+			.item-title
+				+media-xs
+					font-size: 1.8em
+
+			.item-title, .item-info
+				padding-left: 100px
+				padding-right: 100px
+
+				+media-xs
+					padding-left: 10px
+					padding-right: 10px
+
+			.item-content
+				padding-left: 80px
+				padding-right: 80px
+
+				+media-xs
+					padding-left: 0
+					padding-right: 0
