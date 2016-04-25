@@ -33,20 +33,47 @@
 				li.node-details-meta-list-item.file.length
 					| {{ node.file.length | filesizeformat }}
 
-				li.node-details-meta-list-item.file.download
+				| {% if node.properties.license_type %}
+				| {% if node.properties.license_notes %}
+				li.node-details-meta-list-item.license(
+					id="asset-license",
+					data-toggle="popover",
+					data-placement="left",
+					data-trigger="hover",
+					data-content="{{ node.properties.license_notes }}",
+					title="Creative Commons {{ node.properties.license_type }}")
+					i.pi-license-cc
+					i(class="pi-license-{{ node.properties.license_type }}")
+				| {% else %}
+				li.node-details-meta-list-item.license(
+					id="asset-license",
+					data-toggle="tooltip",
+					data-placement="bottom",
+					title="Creative Commons {{ node.properties.license_type }}")
+					i.pi-license-cc
+					i(class="pi-license-{{ node.properties.license_type }}")
+				| {% endif %}
+				| {% endif %}
+
+				li.node-details-meta-list-item.file.download(title="Download File")
 					| {% if node.file.link %}
 					a(href="{{ node.file.link }}")
 						button.btn.btn-default(type="button")
-							| Download File
+							i.pi-download
 					| {% else %}
 					button.btn.btn-default.disabled.sorry(type="button")
-						| Download File
+						i.pi-download
 					| {% endif %}
 
 
 		| {% if node.description %}
 		.node-details-description#node-description
 			| {{node.description}}
+		| {% endif %}
+
+		| {% if node.properties.license_notes %}
+		.node-details-meta.license
+			{{ node.properties.license_notes }}
 		| {% endif %}
 
 		.node-details-meta.footer
@@ -73,6 +100,7 @@ include ../../_scripts
 
 | {% block footer_scripts %}
 script.
+	$('#asset-license').popover();
 	// Generate GA pageview
 	ga('send', 'pageview', (location.pathname + '#' + '{{node._id}}'));
 

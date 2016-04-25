@@ -5,6 +5,28 @@
 
 	h1.texture-title {{node.name}}
 
+	| {% if node.properties.license_type %}
+	| {% if node.properties.license_notes %}
+	.texture-license(
+		id="asset-license",
+		data-toggle="popover",
+		data-placement="left",
+		data-trigger="hover",
+		data-content="{{ node.properties.license_notes }}",
+		title="Creative Commons {{ node.properties.license_type }}")
+		i.pi-license-cc
+		i(class="pi-license-{{ node.properties.license_type }}")
+	| {% else %}
+	.texture-license(
+		id="asset-license",
+		data-toggle="tooltip",
+		data-placement="bottom",
+		title="Creative Commons {{ node.properties.license_type }}")
+		i.pi-license-cc
+		i(class="pi-license-{{ node.properties.license_type }}")
+	| {% endif %}
+	| {% endif %}
+
 	| {% for f in node.properties.files %}
 	section.node-row
 		section.node-preview.texture
@@ -71,6 +93,7 @@ include ../_scripts
 
 | {% block footer_scripts %}
 script.
+	$('#asset-license').popover();
 	// Generate GA pageview
 	ga('send', 'pageview', (location.pathname + '#' + '{{node._id}}'));
 

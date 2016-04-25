@@ -33,14 +33,36 @@
 				li.node-details-meta-list-item.image.length
 					| {{ node.file.length | filesizeformat }}
 
-				li.node-details-meta-list-item.image.download
+				| {% if node.properties.license_type %}
+				| {% if node.properties.license_notes %}
+				li.node-details-meta-list-item.license(
+					id="asset-license",
+					data-toggle="popover",
+					data-placement="left",
+					data-trigger="hover",
+					data-content="{{ node.properties.license_notes }}",
+					title="Creative Commons {{ node.properties.license_type }}")
+					i.pi-license-cc
+					i(class="pi-license-{{ node.properties.license_type }}")
+				| {% else %}
+				li.node-details-meta-list-item.license(
+					id="asset-license",
+					data-toggle="tooltip",
+					data-placement="bottom",
+					title="Creative Commons {{ node.properties.license_type }}")
+					i.pi-license-cc
+					i(class="pi-license-{{ node.properties.license_type }}")
+				| {% endif %}
+				| {% endif %}
+
+				li.node-details-meta-list-item.image.download(title="Download Image")
 					| {% if node.file.link %}
 					a(href="{{ node.file.link }}")
 						button.btn.btn-default(type="button")
-							| Download Image
+							i.pi-download
 					| {% else %}
 					button.btn.btn-default.disabled.sorry(type="button")
-						| Download Image
+						i.pi-download
 					| {% endif %}
 
 		| {% if node.description %}
@@ -48,10 +70,17 @@
 			| {{node.description}}
 		| {% endif %}
 
+		| {% if node.properties.license_notes %}
+		.node-details-meta.license
+			{{ node.properties.license_notes }}
+		| {% endif %}
+
 		.node-details-meta.footer
 			ul.node-details-meta-list
+				| {% if node.has_method('PUT') %}
 				li.node-details-meta-list-item.status
-						| {{node.properties.status}}
+					| {{node.properties.status}}
+				| {% endif %}
 
 				li.node-details-meta-list-item.author
 					| {{ node.user.full_name }}
@@ -61,7 +90,6 @@
 					| {% if (node._created | pretty_date) != (node._updated | pretty_date) %}
 					span(title="Updated {{ node._updated }}") (updated {{ node._updated | pretty_date }})
 					| {% endif %}
-
 
 		#comments-container
 			#comments-list-items-loading
@@ -73,6 +101,7 @@ include ../../_scripts
 
 | {% block footer_scripts %}
 script.
+	$('#asset-license').popover();
 	// Generate GA pageview
 	ga('send', 'pageview', (location.pathname + '#' + '{{node._id}}'));
 

@@ -38,14 +38,37 @@ link(rel="stylesheet", href="//releases.flowplayer.org/6.0.3/skin/minimalist.css
 					span Public
 				| {% endif %}
 
+				| {% if node.properties.license_type %}
+				| {% if node.properties.license_notes %}
+				li.node-details-meta-list-item.video.license(
+					id="asset-license",
+					data-toggle="popover",
+					data-placement="left",
+					data-trigger="hover",
+					data-content="{{ node.properties.license_notes }}",
+					title="Creative Commons {{ node.properties.license_type }}")
+					i.pi-license-cc
+					i(class="pi-license-{{ node.properties.license_type }}")
+				| {% else %}
+				li.node-details-meta-list-item.video.license(
+					id="asset-license",
+					data-toggle="tooltip",
+					data-placement="bottom",
+					title="Creative Commons {{ node.properties.license_type }}")
+					i.pi-license-cc
+					i(class="pi-license-{{ node.properties.license_type }}")
+				| {% endif %}
+				| {% endif %}
+
 				| {% if node.file_variations %}
-				li.btn-group.node-details-meta-list-item.video.download
+				li.btn-group.node-details-meta-list-item.video.download(
+					title="Download Video")
 					button.btn.btn-default.dropdown-toggle(
 						type="button",
 						data-toggle="dropdown",
 						aria-haspopup="true",
 						aria-expanded="false")
-						| Download
+						i.pi-download
 						i.pi-angle-down.icon-dropdown-menu
 
 					ul.dropdown-menu
@@ -60,15 +83,21 @@ link(rel="stylesheet", href="//releases.flowplayer.org/6.0.3/skin/minimalist.css
 
 						| {% endfor %}
 				| {% else %}
-				li.btn-group.node-details-meta-list-item.video.download.disabled
+				li.btn-group.node-details-meta-list-item.video.download.disabled(
+					title="Download Video")
 					button.btn.btn-default.sorry(type="button")
-						| Download Video
+						i.pi-download
 						i.pi-angle-down.icon-dropdown-menu
 				| {% endif %}
 
 		| {% if node.description %}
 		.node-details-description#node-description
 			| {{node.description}}
+		| {% endif %}
+
+		| {% if node.properties.license_notes %}
+		.node-details-meta.license
+			{{ node.properties.license_notes }}
 		| {% endif %}
 
 		.node-details-meta.footer
@@ -95,6 +124,7 @@ link(rel="stylesheet", href="//releases.flowplayer.org/6.0.3/skin/minimalist.css
 
 | {% block footer_scripts %}
 script(type="text/javascript").
+	$('#asset-license').popover();
 	// Generate GA pageview
 	ga('send', 'pageview', (location.pathname + '#' + '{{node._id}}'));
 

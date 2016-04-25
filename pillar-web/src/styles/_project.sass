@@ -569,8 +569,14 @@ $node-preview-max-height-lg: 500px
 	.texture-title
 		padding: 20px 20px 0 20px
 		margin: 0
+		float: left
 
 		text-transform: capitalize
+	.texture-license
+		float: right
+		padding: 20px 20px 0 0
+		i
+			font-size: 1.3em
 
 section.node-row
 	display: flex
@@ -630,7 +636,7 @@ section.node-row
 		width: 100%
 		flex: 1
 		position: relative
-		min-height: 150px
+		min-height: 200px
 
 		.node-details-header
 			width: 100%
@@ -998,11 +1004,12 @@ section.node-preview.group
 						font-size: 1.2em
 						color: $color-text-dark-secondary
 
-				&.access+li.node-details-meta-list-item.type
+				&.access+li.node-details-meta-list-item.type,
+				&.access+.tooltip+li.node-details-meta-list-item.type
 					margin-left: 0
 
 				&.access+li.node-details-meta-list-item.video.download,
-				.tooltip+li.node-details-meta-list-item.video.download
+				&.access+.tooltip+li.node-details-meta-list-item.video.download
 					margin-left: 10px
 
 				&.length
@@ -1011,6 +1018,24 @@ section.node-preview.group
 					font-weight: 400
 					color: $color-text-dark-hint
 					white-space: nowrap
+
+				&.license
+					margin-left: 15px
+					color: $color-text-dark-secondary
+
+					i
+						color: $color-text-dark-primary
+						font-size: 1.4em
+						position: relative
+						bottom: -2px
+						left: -5px
+
+				&.video.license
+					margin-left: auto
+
+				&.video.license+li.node-details-meta-list-item.video.download,
+				&.video.license+.popover+li.node-details-meta-list-item.video.download
+					margin-left: 0
 
 				/* Download button */
 				&.download
@@ -1027,6 +1052,9 @@ section.node-preview.group
 							right: 20px
 
 						font-size: .9em
+
+						i
+							margin-right: 0
 
 						/* Tweaks for specific icons */
 						i.icon-dropdown-menu
