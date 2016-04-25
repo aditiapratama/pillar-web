@@ -3,7 +3,7 @@
 | {% block og %}
 meta(property="og:title", content="Blender Cloud")
 meta(property="og:url", content="https://cloud.blender.org/")
-meta(property="og:image", content="https://cloud.blender.org/static/assets/img/background_vincent_01.jpg")
+meta(property="og:image", content="{{ url_for('static', filename='assets/img/backgrounds/background_vincent_01.jpg')}}")
 | {% endblock %}
 
 
