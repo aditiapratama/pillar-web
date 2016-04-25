@@ -103,9 +103,11 @@
 				| {% endif %}
 				| {% endif %}
 
-				span(title="Created {{ child._created }}")  {{ child._created | pretty_date }}
-				| {% if (child._created | pretty_date) != (child._updated | pretty_date) %}
-				span.updated(title="Updated {{ child._updated }}")  (updated {{ child._updated | pretty_date }})
+				| {% if child._updated %}
+				span(title="Updated on {{ child._created }}")  {{ child._updated | pretty_date }}
+				span.updated(title="Created on {{ child._updated }}") *
+				| {% else %}
+				span(title="Created on {{ child._created }}")  {{ child._created | pretty_date }}
 				| {% endif %}
 
 

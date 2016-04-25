@@ -73,7 +73,7 @@
 
 		| {% if node.properties.license_notes %}
 		.node-details-meta.license
-			{{ node.properties.license_notes }}
+			| {{ node.properties.license_notes }}
 		| {% endif %}
 
 		.node-details-meta.footer
