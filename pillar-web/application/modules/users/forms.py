@@ -14,7 +14,7 @@ from application import SystemUtility
 
 
 class UserLoginForm(Form):
-    email = StringField('Email', validators=[DataRequired()])
+    username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
     remember_me = BooleanField('Remember Me')
 

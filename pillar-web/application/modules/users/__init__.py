@@ -115,6 +115,30 @@ def login():
     return blender_id.authorize(callback=callback)
 
 
+@users.route('/login/local', methods=['GET', 'POST'])
+def login_local():
+    """Login with a local account, skipping OAuth. This provides access only
+    to the web application and is meant for limited access (for example in
+    the case of a shared account)."""
+    form = UserLoginForm()
+    # Forward credentials to server
+    if form.validate_on_submit():
+        payload = {
+            'username': form.username.data,
+            'password': form.password.data
+            }
+        r = requests.post("{0}/auth/make-token".format(
+            SystemUtility.attract_server_endpoint()), data=payload)
+        if r.status_code != 200:
+            return abort(r.status_code)
+        res = r.json()
+        # If correct, receive token and log in the user
+        user = UserClass(res['token'])
+        login_user(user)
+        return redirect(url_for('homepage'))
+    return render_template('users/login.html', form=form)
+
+
 @users.route('/oauth/blender-id/authorized')
 def blender_id_authorized():
     check_oauth_provider(blender_id)
