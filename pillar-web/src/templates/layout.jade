@@ -197,6 +197,7 @@ html(lang="en")
 										| {% endif %}
 
 								ul.dropdown-menu
+									| {% if not current_user.has_role('protected') %}
 									li.subscription-status(class="{{ subscription }}")
 										| {% if subscription == 'subscriber' %}
 										a.navbar-item(
@@ -218,7 +219,6 @@ html(lang="en")
 											span.info Your subscription is not active.
 												span.renew Click here to renew.
 										| {% endif %}
-
 									li
 										a.navbar-item(
 											href="{{url_for('users.settings_profile')}}"
@@ -232,6 +232,7 @@ html(lang="en")
 											i.pi-credit-card
 											| Subscription
 									li.divider(role="separator")
+									| {% endif %}
 									li
 										a.navbar-item(
 											href="{{ url_for('users.logout') }}")

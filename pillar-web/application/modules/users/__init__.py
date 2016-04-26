@@ -1,10 +1,8 @@
-import os
 import requests
 import json
 
 from flask.ext.oauthlib.client import OAuthException
 
-from pillarsdk import utils
 from pillarsdk.users import User
 from pillarsdk.nodes import Node
 from pillarsdk.nodes import NodeType
@@ -24,7 +22,6 @@ from application.modules.users.forms import UserLoginForm
 from application.modules.users.forms import UserProfileForm
 from application.modules.users.forms import UserSettingsEmailsForm
 from application.modules.users.forms import UserEditForm
-from application.helpers import Pagination
 
 from application import SystemUtility
 from application import UserClass
@@ -173,6 +170,8 @@ if blender_id:
 def settings_profile():
     """Profile view and edit page. This is a temporary implementation.
     """
+    if current_user.has_role('protected'):
+        return abort(404)  # TODO: make this 403, handle template properly
     api = SystemUtility.attract_api()
     user = User.find(current_user.objectid, api=api)
 
@@ -182,10 +181,10 @@ def settings_profile():
 
     if form.validate_on_submit():
         try:
-           user.full_name = form.full_name.data
-           user.username = form.username.data
-           user.update(api=api)
-           flash("Profile updated", 'success')
+            user.full_name = form.full_name.data
+            user.username = form.username.data
+            user.update(api=api)
+            flash("Profile updated", 'success')
         except ResourceInvalid as e:
             message = json.loads(e.content)
             flash(message)
@@ -196,8 +195,10 @@ def settings_profile():
 @users.route('/settings/emails', methods=['GET', 'POST'])
 @login_required
 def settings_emails():
-    """Main email settings
+    """Main email settings.
     """
+    if current_user.has_role('protected'):
+        return abort(404)  # TODO: make this 403, handle template properly
     api = SystemUtility.attract_api()
     user = User.find(current_user.objectid, api=api)
 
@@ -208,7 +209,7 @@ def settings_emails():
         user.settings = dict(email_communications=1)
         user.update(api=api)
 
-    if user.settings.email_communications == None:
+    if user.settings.email_communications is None:
         user.settings.email_communications = 1
         user.update(api=api)
 
@@ -233,6 +234,8 @@ def settings_emails():
 def settings_billing():
     """View the subscription status of a user
     """
+    if current_user.has_role('protected'):
+        return abort(404)  # TODO: make this 403, handle template properly
     api = SystemUtility.attract_api()
     user = User.find(current_user.objectid, api=api)
     groups = []
