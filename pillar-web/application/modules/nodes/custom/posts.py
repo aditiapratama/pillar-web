@@ -81,10 +81,8 @@ def posts_create(project_id):
         return abort(404)
     attach_project_pictures(project, api)
 
-    blog = Node.find_first({
-        'where': '{"node_type" : "blog", \
-            "project": "%s"}' % (project_id),
-        }, api=api)
+    blog = Node.find_one({
+        'where': {'node_type': 'blog', 'project': project_id}}, api=api)
     node_type = project.get_node_type('post')
     # Check if user is allowed to create a post in the blog
     if not project.node_type_has_method('post', 'POST', api=api):
