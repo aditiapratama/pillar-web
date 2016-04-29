@@ -9,11 +9,11 @@ meta(property="og:image", content="{{ url_for('static', filename='assets/img/bac
 
 | {% block header_backdrop %}
 .homepage.navbar-backdrop(
-	style="background-image: url({{ main_project.picture_header.thumbnail('l', api=api) }})")
+	style="background-image: url({% if main_project.picture_header %}{{ main_project.picture_header.thumbnail('l', api=api) }}{% else %}{{ url_for('static', filename='assets/img/backgrounds/background_caminandes_3_02.jpg.jpg')}}{% endif %})")
 	//
 		video(loop, muted, autoplay, poster="{{ url_for('static', filename='assets/img/backgrounds/background_join_glass.jpg')}}", class="fullscreen-bg__video")
 			source(src="{{ url_for('static', filename='assets/video/header-glass_half.webm')}}", type="video/webm")
-			source(src="{{ url_for('static', filename='assets/video/header-glass_half.mp4')}}", type="video/mp4")x
+			source(src="{{ url_for('static', filename='assets/video/header-glass_half.mp4')}}", type="video/mp4")
 .homepage.navbar-backdrop-overlay
 | {% endblock %}
 
