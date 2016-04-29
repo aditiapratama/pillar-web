@@ -179,13 +179,37 @@ def edit(project_url):
         if project.picture_header:
             form.picture_header.data = project.picture_header._id
 
-    # List of fields from the form that should be displayed in the sidebar
-    sidebar_selection = ['url', 'status', 'is_private', 'category']
+    # List of fields from the form that should be hidden to regular users
+    if current_user.has_role('admin'):
+        hidden_fields = []
+    else:
+        hidden_fields = ['url', 'status', 'is_private', 'category']
+
     return render_template('projects/edit.html',
         form=form,
-        sidebar_selection=sidebar_selection,
+        hidden_fields=hidden_fields,
         project=project,
+        title="edit",
         api=api)
+
+
+@projects.route('/<project_url>/edit/node-type')
+@login_required
+def edit_node_types(project_url):
+    api = SystemUtility.attract_api()
+    # Fetch the project or 404
+    try:
+        project = Project.find_one({
+            'where': '{"url" : "%s"}' % (project_url)}, api=api)
+    except ResourceNotFound:
+        return abort(404)
+
+    attach_project_pictures(project, api)
+
+    return render_template('projects/edit_node_types.html',
+                           api=api,
+                           title="edit_node_types",
+                           project=project)
 
 
 @projects.route('/<project_url>/e/node-type/<node_type_name>', methods=['GET', 'POST'])
@@ -223,6 +247,25 @@ def edit_node_type(project_url, node_type_name):
                            project=project,
                            api=api,
                            node_type=node_type)
+
+
+@projects.route('/<project_url>/edit/sharing')
+@login_required
+def sharing(project_url):
+    api = SystemUtility.attract_api()
+    # Fetch the project or 404
+    try:
+        project = Project.find_one({
+            'where': '{"url" : "%s"}' % (project_url)}, api=api)
+    except ResourceNotFound:
+        return abort(404)
+
+    attach_project_pictures(project, api)
+
+    return render_template('projects/sharing.html',
+                           api=api,
+                           title="sharing",
+                           project=project)
 
 
 @projects.route('/e/add-featured-node', methods=['POST'])

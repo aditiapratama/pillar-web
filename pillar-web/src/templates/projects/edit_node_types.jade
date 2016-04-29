@@ -1,0 +1,93 @@
+| {% extends 'layout.html' %}
+
+| {% block page_title %}Node Types: {{ project.name }}{% endblock %}
+
+| {% block header_backdrop %}
+| {% if project.picture_header %}
+.navbar-backdrop(style="background-image: url({{ project.picture_header.thumbnail('l', api=api) }})")
+| {% else %}
+.navbar-backdrop
+| {% endif %}
+.navbar-backdrop-overlay
+| {% endblock %}
+
+| {% block body %}
+#project_container
+
+	#project-flex
+
+		#project_nav
+			#project-header.navigation
+				ul.breadcrumb
+
+					li.project-title
+						a(href="{{url_for('projects.view', project_url=project.url, _external=True)}}") {{ project.name }}
+
+				#project-loading
+					i.pi-spin
+
+			// TODO - make list a macro
+			#project_tree
+				ul.project_nav-edit-list
+					li(class="{% if title == 'edit' %}active{% endif %}")
+						a(href="{{ url_for('projects.edit', project_url=project.url) }}")
+							i.pi-list
+							| Overview
+					li(class="{% if title == 'sharing' %}active{% endif %}")
+						a(href="{{ url_for('projects.sharing', project_url=project.url) }}")
+							i.pi-share
+							| Sharing
+					li(class="{% if title == 'edit_node_types' %}active{% endif %}")
+						a(href="{{ url_for('projects.edit_node_types', project_url=project.url) }}")
+							i.pi-puzzle
+							| Node Types
+
+
+		#project_nav-footer
+			.project_nav-collapse-btn(
+				title="Collapse Navigation [T]",
+				data-toggle="tooltip",
+				data-placement="right")
+				i.pi-angle-double-left
+
+		.project_split(title="Toggle Navigation [T]")
+
+		#project-header.context
+			ul.breadcrumb.context
+				li.project-title
+					a(href="") {{ project.name }}
+
+			span#project-statusbar
+
+			span#project-edit-title
+				| Edit Node Types
+
+		#project_context-container
+			.project_nav-expand-btn(
+				title="Expand Navigation [T]",
+				data-toggle="tooltip",
+				data-placement="right")
+				i.pi-angle-double-right
+
+			#project_context
+				#node-edit-container
+					div(id="node-edit-form")
+						h3 Node Types
+						p.
+							Node types editing is a very powerful thing.
+
+						| {% if current_user.has_role('admin') %}
+						ul
+							| {% for node_type in project.node_types %}
+							li
+								a(href="{{ url_for('projects.edit_node_type', project_url=project.url, node_type_name=node_type.name) }}")
+									| {{node_type.name}}
+							| {% endfor %}
+						| {% endif %}
+
+| {% endblock %}
+
+| {% block footer_navigation %}
+| {% endblock %}
+| {% block footer %}
+| {% endblock %}

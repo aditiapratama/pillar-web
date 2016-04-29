@@ -1,0 +1,84 @@
+| {% extends 'layout.html' %}
+
+| {% block page_title %}Sharing: {{ project.name }}{% endblock %}
+
+| {% block header_backdrop %}
+| {% if project.picture_header %}
+.navbar-backdrop(style="background-image: url({{ project.picture_header.thumbnail('l', api=api) }})")
+| {% else %}
+.navbar-backdrop
+| {% endif %}
+.navbar-backdrop-overlay
+| {% endblock %}
+
+| {% block body %}
+#project_container
+
+	#project-flex
+
+		#project_nav
+			#project-header.navigation
+				ul.breadcrumb
+
+					li.project-title
+						a(href="{{url_for('projects.view', project_url=project.url, _external=True)}}") {{ project.name }}
+
+				#project-loading
+					i.pi-spin
+
+			// TODO - make list a macro
+			#project_tree
+				ul.project_nav-edit-list
+					li(class="{% if title == 'edit' %}active{% endif %}")
+						a(href="{{ url_for('projects.edit', project_url=project.url) }}")
+							i.pi-list
+							| Overview
+					li(class="{% if title == 'sharing' %}active{% endif %}")
+						a(href="{{ url_for('projects.sharing', project_url=project.url) }}")
+							i.pi-share
+							| Sharing
+					li(class="{% if title == 'edit_node_types' %}active{% endif %}")
+						a(href="{{ url_for('projects.edit_node_types', project_url=project.url) }}")
+							i.pi-puzzle
+							| Node Types
+
+
+		#project_nav-footer
+			.project_nav-collapse-btn(
+				title="Collapse Navigation [T]",
+				data-toggle="tooltip",
+				data-placement="right")
+				i.pi-angle-double-left
+
+		.project_split(title="Toggle Navigation [T]")
+
+		#project-header.context
+			ul.breadcrumb.context
+				li.project-title
+					a(href="") {{ project.name }}
+
+			span#project-statusbar
+
+			span#project-edit-title
+				| Sharing
+
+		#project_context-container
+			.project_nav-expand-btn(
+				title="Expand Navigation [T]",
+				data-toggle="tooltip",
+				data-placement="right")
+				i.pi-angle-double-right
+
+			#project_context
+				#node-edit-container
+					div(id="node-edit-form")
+						h3 Sharing
+						p.
+							Sharing is a very powerful thing.
+
+| {% endblock %}
+
+| {% block footer_navigation %}
+| {% endblock %}
+| {% block footer %}
+| {% endblock %}

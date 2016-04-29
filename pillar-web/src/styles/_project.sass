@@ -102,7 +102,8 @@ $z-index-base: 13
 	min-height: $project_header-height
 	width: 100%
 	clear: both
-	background-color: $color-background-nav
+	background-color: lighten($color-background-nav, 5%)
+	border-bottom: thin solid darken($color-background-nav, 2%)
 
 	position: absolute
 	top: 0
@@ -119,328 +120,386 @@ $z-index-base: 13
 
 	&.context
 		right: 0
-		background-color: lighten($color-background-nav, 3%)
+		background-color: white
+		color: $color-text-dark-secondary
+		border-bottom: thin solid $color-text-dark-hint
 
-	span#project-statusbar
-		position: absolute
-		left: $project_nav-width
-		top: 10px
-		min-width: 50%
-		padding: 5px 15px
+span#project-statusbar
+	position: absolute
+	left: $project_nav-width
+	top: 10px
+	min-width: 50%
+	padding: 5px 15px
+	color: $color-text-dark
+	border-radius: 3px
+	opacity: 0
+	font-weight: 400
+	transition: all 250ms ease-in-out
+
+	i
+		margin-right: 5px
+
+	&.info
+		color: $color-info
+	&.error
+		color: $color-danger
+	&.warning
+		color: $color-warning
+	&.success
+		color: $color-success
+	&.default
 		color: $color-text-light
-		border-radius: 3px
+
+	&.active
+		opacity: 1
+
+span#project-edit-title
+	position: absolute
+	left: $project_nav-width
+	padding: 15px 20px
+	font:
+		size: 1.1em
+		weight: 400
+
+.project_split.collapsed+#project-header.context
+	span#project-edit-title
+		left: 0
+
+/* Breadcrumbs */
+ul.breadcrumb
+	position: relative
+	padding: 0
+	margin: 0 0 0 15px
+	background-color: transparent
+	display: inline-block
+	font-weight: 300
+
+	&.context
+		visibility: hidden
 		opacity: 0
-		font:
-			weight: 400
-
-		transition: all 250ms ease-in-out
-
-		i
-			margin-right: 5px
-
-		&.info
-			color: $color-info
-		&.error
-			color: $color-danger
-		&.warning
-			color: $color-warning
-		&.success
-			color: $color-success
-		&.default
-			color: $color-text-light
+		transition: opacity 250ms ease-in-out
 
 		&.active
+			visibility: visible
 			opacity: 1
 
-	/* Breadcrumbs */
-	ul.breadcrumb
-		position: relative
-		padding: 0
-		margin: 0 0 0 15px
-		background-color: transparent
-		display: inline-block
-		font-weight: 300
-
-		&.context
-			visibility: hidden
-			opacity: 0
-			transition: opacity 250ms ease-in-out
-
-			&.active
-				visibility: visible
-				opacity: 1
-
-		li
-			margin: 0
-			padding: 2px
-			float: left
-
-			a
-				color: lighten($color-text, 60%)
-
-		/* Name of the project */
-		.project-title
-			font-weight: 400
-			max-width: $project_nav-width - 35px
-			+text-overflow-ellipsis
-			a
-				color: white
-				font-family: $font-body
-
-		/* The > separating each breadcrumb */
-		li+li:before
-			color: lighten($color-text, 15%)
-			content: '\f3d3'
-			font:
-				family: 'Ionicons'
-
-		&:before
-			position: absolute
-			left: -13px
-			top: 2px
-
-	/* // Breadcrumbs */
-
-
-	/* Edit Asset buttons */
-	.project-mode-view,
-	.project-mode-edit,
-	.project-mode-add
-		display: none
-
-	ul.project-edit-tools
-		display: flex
-		align-items: center
-		height: 100%
-		padding: 0
-		margin:
-			top: 0
-			left: auto
-			right: 0
-			bottom: 0
-		color: $color-text-dark-hint
-
-		list-style-type: none
-
-		font-size: .9em
-
-		&.disabled
-			li
-				a
-					pointer-events: none
-					cursor: not-allowed
-					background: repeating-linear-gradient(-45deg, darken($color-background-nav, 0%), darken($color-background-nav, 0%) 10px, darken($color-background-nav, 5%) 10px, darken($color-background-nav, 5%) 20px)
-					border-color: darken($color-background-nav, 5%)
-					color: rgba(white, .5)
-
-		li
-			margin: 0
-			padding: 0
-			position: relative
-			float: left
-			user-select: none
-
-			a
-				min-width: 110px
-				user-select: none
-
-				&:focus, &:active
-					text-decoration: none
-					outline: none
-
-			&.button-save
-
-				a
-					border-color: $color-success
-					background-color: $color-success
-					color: white
-					margin-right: 10px
-
-					&:hover
-						background-color: lighten($color-success, 5%)
-
-				&.field-error
-					a
-						background-color: $color-danger
-						border-color: $color-danger
-						color: white
-
-				&.saving
-					a
-						pointer-events: none
-						cursor: default
-						+pulse-75
-
-				&.disabled
-					a
-						pointer-events: none
-						cursor: not-allowed
-						background: repeating-linear-gradient(-45deg, darken($color-success, 15%), darken($color-success, 15%) 10px, darken($color-success, 20%) 10px, darken($color-success, 20%) 20px)
-
-			&.button-move
-				&.moving
-					background-color: $color-success
-					border-color: $color-success
-					pointer-events: none
-					cursor: default
-					+pulse-75
-
-			&.button-add,
-			&.button-edit
-				min-width: 80px
-
-
-			&.button-dropdown
-				min-width: 50px
-				cursor: pointer
-				i
-					margin: auto
-					padding: 0
-
-				&.open
-					a.dropdown-toggle
-						color: $color-primary
-						background-color: lighten($color-background-nav, 10%)
-
-					li.button-delete:hover
-						a
-							color: $color-danger
-
-			&.featured
-				a
-					color: $color-warning
-					border-color: $color-warning
-
-					&:hover
-						background-color: rgba($color-warning, .1)
-
-			&.disabled
-				a
-					opacity: .6
-					background: repeating-linear-gradient(-45deg, lighten($color-background-nav, 15%), lighten($color-background-nav, 15%) 10px, lighten($color-background-nav, 5%) 10px, lighten($color-background-nav, 5%) 20px)
-					pointer-events: none
-					cursor: not-allowed
+	li
+		margin: 0
+		padding: 2px
+		float: left
 
 		a
-			margin: 5px
-			padding: 5px 15px
-			color: $color-text-light-primary
-			border-radius: 3px
-			border: thin solid lighten($color-background-nav, 20%)
-			text-align: center
-			text-transform: uppercase
-			transition: background-color 150ms ease-in-out
+			color: $color-text-dark-hint
 
-			i
-				margin-right: 5px
+	/* Name of the project */
+	.project-title
+		font-weight: 400
+		max-width: $project_nav-width - 35px
+		+text-overflow-ellipsis
+		a
+			color: white
+			font-family: $font-body
 
-			&:hover
-				background-color: lighten($color-background-nav, 5%)
-				color: $color-text-light
-				text-decoration: none
+	/* The > separating each breadcrumb */
+	li+li:before
+		color: lighten($color-text, 15%)
+		content: '\f3d3'
+		font:
+			family: 'Ionicons'
+
+	&:before
+		position: absolute
+		left: -13px
+		top: 2px
+
+/* // Breadcrumbs */
+
+
+/* Edit Asset buttons */
+.project-mode-view,
+.project-mode-edit,
+.project-mode-add
+	display: none
+
+ul.project-edit-tools
+	display: flex
+	align-items: center
+	height: 100%
+	padding: 0
+	margin:
+		top: 0
+		left: auto
+		right: 0
+		bottom: 0
+	color: $color-text-dark-hint
+
+	list-style-type: none
+	font-size: .9em
+
+	/* Bottons at the end of a form, like Save Changes */
+	&.bottom
+		+clearfix
+		padding: 20px 0 25px 0
+		border-top: thin solid $color-text-dark-hint
+		justify-content: flex-end
+		width: 100%
+
+	&.disabled
+		li
+			a
+				pointer-events: none
+				cursor: not-allowed
+				background: repeating-linear-gradient(-45deg, darken($color-text-dark-hint, 0%), darken($color-text-dark-hint, 0%) 10px, darken($color-text-dark-hint, 5%) 10px, darken($color-text-dark-hint, 5%) 20px)
+				border-color: darken($color-text-dark-hint, 5%)
+				color: rgba(white, .5)
+
+	li
+		margin: 0
+		padding: 0
+		position: relative
+		float: left
+		user-select: none
+
+		a
+			min-width: 110px
+			user-select: none
 
 			&:focus, &:active
 				text-decoration: none
 				outline: none
 
+		&.button-save
 
-			&#item_save,
-			&#item_cancel
-				i
-					font-size: 1em
+			a
+				border-color: $color-success
+				background-color: $color-success
+				color: white
+				margin-right: 10px
 
-			&#item_add,
-			&#item_edit,
-			&#item_move,
-			&#item_featured
-				li
-					i
-						margin-right: 10px
+				&:hover
+					background-color: lighten($color-success, 5%)
 
-			&#item_delete
-				li i
-					margin-right: 0
-			// &:not(:last-of-type)
-				// border-right: thin solid darken($color-background, 50%)
-
-		/* ul.project-edit-tools */
-
-		/* Extra asset tools in dropdown */
-		ul.dropdown-menu
-			width: auto
-			min-width: 180px
-			padding: 0
-			margin: 0
-			top: 33px
-			left: initial
-			right: 10px
-			bottom: initial
-			border: thin solid rgba(darken($color-background-nav, 5%), .3)
-			border-top: none
-			border-bottom-left-radius: 3px
-			border-bottom-right-radius: 3px
-			border-top-left-radius: 0
-			border-top-right-radius: 0
-			background-color: darken($color-background-nav, 3%)
-
-			li
-				padding: 0
-				clear: both
-				display: flex
-				align-items: center
-				width: 100%
-
+			&.field-error
 				a
-					margin: 0
-					padding: 10px 15px
-					width: 100%
-					border: 0
-					font-size: .9em
-					width: 100%
-					text-align: left
+					background-color: $color-danger
+					border-color: $color-danger
+					color: white
 
-					&:hover
-						color: $color-primary
-						background-color: transparent
-					&:active, &:focus
-						color: $color-primary
-						background-color: transparent
+			&.saving
+				a
+					pointer-events: none
+					cursor: default
+					+pulse-75
 
-					i
-						display: inline-block
-						margin: 0 15px 0 0
+			&.disabled
+				a
+					pointer-events: none
+					cursor: not-allowed
+					background: repeating-linear-gradient(-45deg, darken($color-success, 15%), darken($color-success, 15%) 10px, darken($color-success, 20%) 10px, darken($color-success, 20%) 20px)
 
-		/* // Extra asset tools in dropdown */
+		&.button-move
+			&.moving
+				background-color: $color-success
+				border-color: $color-success
+				pointer-events: none
+				cursor: default
+				+pulse-75
 
-		&.open
-			button
-				box-shadow: none
+		&.button-add,
+		&.button-edit
+			min-width: 80px
 
-	/* // Edit Asset buttons */
 
-	#project-loading
-		position: relative
-		color: $color-text-light-primary
-		margin-left: auto
-		right: 5px
-		padding-bottom: 5px
-		display: inline-block
-		opacity: 0
-		transition: opacity 150ms ease-in-out
+		&.button-dropdown
+			min-width: 50px
+			cursor: pointer
+			i
+				margin: auto
+				padding: 0
+
+			&.open
+				a.dropdown-toggle
+					color: $color-text-light
+					background-color: $color-primary
+					border-color: darken($color-primary, 5%)
+
+				li.button-delete:hover
+					a
+						color: $color-danger
+
+		&.featured
+			a
+				color: $color-warning
+				border-color: $color-warning
+
+				&:hover
+					background-color: rgba($color-warning, .1)
+
+		&.disabled
+			a
+				opacity: .6
+				background: repeating-linear-gradient(-45deg, lighten($color-text-dark-hint, 15%), lighten($color-text-dark-hint, 15%) 10px, lighten($color-text-dark-hint, 5%) 10px, lighten($color-text-dark-hint, 5%) 20px)
+				pointer-events: none
+				cursor: not-allowed
+
+	a
+		margin: 5px
+		padding: 5px 15px
+		color: $color-text-dark-primary
+		border-radius: 3px
+		border: thin solid $color-text-dark-primary
+		text-align: center
+		text-transform: uppercase
+		transition: background-color 150ms ease-in-out
 
 		i
-			position: relative
-			top: 2px
+			margin-right: 5px
 
-		&.active
-			opacity: 1
-			+spin
-			animation-duration: .5s
+		&:hover
+			background-color: $color-primary
+			border-color: darken($color-primary, 5%)
+			color: $color-text-light
+			text-decoration: none
+
+		&:focus, &:active
+			text-decoration: none
+			outline: none
+
+
+		&#item_save,
+		&#item_cancel
+			i
+				font-size: 1em
+
+		&#item_add,
+		&#item_edit,
+		&#item_move,
+		&#item_featured
+			li
+				i
+					margin-right: 10px
+
+		&#item_delete
+			li i
+				margin-right: 0
+		// &:not(:last-of-type)
+			// border-right: thin solid darken($color-background, 50%)
+
+	/* ul.project-edit-tools */
+
+	/* Extra asset tools in dropdown */
+	ul.dropdown-menu
+		width: auto
+		min-width: 180px
+		padding: 0
+		margin: 0
+		top: 33px
+		left: initial
+		right: 10px
+		bottom: initial
+		border: thin solid $color-text-dark-hint
+		border-top: none
+		border-bottom-left-radius: 3px
+		border-bottom-right-radius: 3px
+		border-top-left-radius: 0
+		border-top-right-radius: 0
+		background-color: white
+		color: $color-text-dark-primary
+		box-shadow: 1px 1px 25px rgba(black, .2)
+
+		li
+			padding: 0
+			clear: both
+			display: flex
+			align-items: center
+			width: 100%
+
+			a
+				margin: 0
+				padding: 10px 15px
+				width: 100%
+				border: 0
+				font-size: .9em
+				width: 100%
+				text-align: left
+
+				&:hover
+					color: $color-primary
+					background-color: transparent
+				&:active, &:focus
+					color: $color-primary
+					background-color: transparent
+
+				i
+					display: inline-block
+					margin: 0 15px 0 0
+
+	/* // Extra asset tools in dropdown */
+
+	&.open
+		button
+			box-shadow: none
+
+/* // Edit Asset buttons */
+
+#project-loading
+	position: relative
+	color: $color-text-light-primary
+	margin-left: auto
+	right: 5px
+	padding-bottom: 5px
+	display: inline-block
+	opacity: 0
+	transition: opacity 150ms ease-in-out
+
+	i
+		position: relative
+		top: 2px
+
+	&.active
+		opacity: 1
+		+spin
+		animation-duration: .5s
 
 
 #project-header+#project_tree,
 #project-header+#project_context-container
 	margin-top: $project_header-height
+
+
+ul.project_nav-edit-list
+	list-style: none
+	padding: 0
+	margin: 0
+
+	li
+		font:
+			size: .9em
+			weight: 400
+			family: $font-body
+		text-transform: uppercase
+		border-bottom: thin solid lighten($color-background-nav, 8%)
+		color: $color-text-light-primary
+		background-color: lighten($color-background-nav, 2%)
+
+		&:hover
+			color: $color-text-light
+			cursor: pointer
+			background-color: lighten($color-background-nav, 5%)
+
+		a
+			padding: 10px 15px
+			display: inline-block
+			width: 100%
+			text-decoration: none
+			color: $color-text-light-primary
+
+		i
+			padding-right: 15px
+
+		&.active
+			border-left: 5px solid $color-primary
+			background-color: lighten($color-background-nav, 5%)
 
 .project_nav-collapse-btn,
 .project_nav-expand-btn
@@ -1905,9 +1964,9 @@ section.node-children
 
 	#node-add-header,
 	#node-edit-header
-		background-color: rgba($color-background-nav, .95)
+		background-color: white
 		padding: 20px 20px 10px 20px
-		height: 100px
+		height: 80px
 		position: relative
 
 		.node-add-title,
@@ -1916,8 +1975,8 @@ section.node-children
 			bottom: 10px
 			left: 20px
 			+project-node-title
-			font-size: 2.5em
-			color: white
+			font-size: 2em
+			color: $color-text-dark-secondary
 
 	#node-add-form,
 	#node-edit-form
