@@ -60,7 +60,7 @@ class uploadfile():
 
 
     def get_file(self):
-        if self.type != None:
+        if self.type is not None:
             # POST an image
             if self.type.startswith('image'):
                 return {"name": self.name,
