@@ -13,18 +13,14 @@ from wtforms import FloatField
 from wtforms import TextAreaField
 from wtforms import DateTimeField
 from wtforms import SelectMultipleField
-from wtforms import Form as BasicForm
 from wtforms.validators import DataRequired
-from wtforms.widgets import HTMLString
-from wtforms.widgets import Select
-from wtforms.widgets import TextInput
 from application import SystemUtility
 from application import app
 from application.helpers.forms import FileSelectField
-# from application.helpers.forms import AttachmentSelectField
 from application.helpers.forms import ProceduralFileSelectForm
 from wtforms import FieldList
 from application.helpers.forms import CustomFormField
+from application.helpers.forms import build_file_select_form
 
 
 def add_form_properties(form_class, node_schema, form_schema, prefix=''):
@@ -76,9 +72,20 @@ def add_form_properties(form_class, node_schema, form_schema, prefix=''):
                         SelectMultipleField(choices=select, coerce=str))
         elif schema_prop['type'] == 'list':
             if prop == 'attachments':
+                # class AttachmentForm(Form):
+                #     pass
+                # setattr(AttachmentForm, 'file', FileSelectField('file'))
+                # setattr(AttachmentForm, 'size', StringField())
+                # setattr(AttachmentForm, 'slug', StringField())
                 setattr(form_class,
                         prop_name,
                         FieldList(CustomFormField(ProceduralFileSelectForm)))
+            elif prop == 'files':
+                schema = schema_prop['schema']['schema']
+                file_select_form = build_file_select_form(schema)
+                setattr(form_class,
+                        prop_name,
+                        FieldList(CustomFormField(file_select_form)))
             elif 'allowed' in schema_prop['schema']:
                 choices = [(c, c) for c in schema_prop['schema']['allowed']]
                 setattr(form_class,

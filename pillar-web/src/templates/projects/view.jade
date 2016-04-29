@@ -1,4 +1,6 @@
 | {% extends 'layout.html' %}
+| {% from '_macros/_add_new_menu.html' import add_new_menu %}
+
 
 | {% block page_title %}{{project.name}}{% endblock%}
 
@@ -68,6 +70,18 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 			span#project-statusbar
 
 			ul.project-edit-tools.disabled
+				li.button-dropdown
+					a.dropdown-toggle.project-mode-view(
+					type="button",
+					data-toggle="dropdown",
+					aria-haspopup="true",
+					aria-expanded="false")
+						i.button-add-icon.pi-collection-plus
+						| New
+
+					ul.dropdown-menu
+						| {{ add_new_menu(project.node_types) }}
+
 				li.button-add-group
 					a#item_add_group.project-mode-view(
 						href="#",
@@ -421,8 +435,10 @@ script.
 			// Temp fix to only let user add groups when viewing a group
 			if (data.node.original.type === 'group') {
 				$('.button-add').removeClass('disabled');
+				$('.button-asset').removeClass('disabled');
 			} else {
 				$('.button-add').addClass('disabled');
+				$('.button-asset').addClass('disabled');
 			};
 
 			/* Update scrollbar */

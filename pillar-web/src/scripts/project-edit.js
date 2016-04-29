@@ -50,6 +50,21 @@ function addNode() {
 	});
 }
 
+/* Add Real Node */
+function addRealNode(nodeTypeName, parentId) {
+	var url = '/nodes/create';
+	var node_props = {node_type_name: nodeTypeName, project_id: ProjectUtils.projectId()};
+	if (typeof(parentId) != 'undefined') {node_props.parent_id = parentId};
+	$.post(url, node_props)
+		.done(function(data) {
+			editNode(data.data.asset_id);
+	})
+	.always(function(){
+		$('.button-add-group-icon').addClass('pi-collection-plus').removeClass('pi-spin spin');
+	});
+}
+
+
 
 /* Add Group */
 function addGroup(parentId) {
@@ -97,7 +112,17 @@ $('#item_add_group').click(function(e){
 	} else {
 		addGroup(ProjectUtils.nodeId());
 	}
+});
 
+/* Add Node Type Button */
+$('.item_add_node').click(function(e){
+	e.preventDefault;
+	var nodeTypeName = $(this).data('node-type-name');
+	if (ProjectUtils.isProject() === 'True') {
+		addRealNode(nodeTypeName);
+	} else {
+		addRealNode(nodeTypeName, ProjectUtils.nodeId());
+	}
 });
 
 /* Move Node */

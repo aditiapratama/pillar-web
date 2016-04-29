@@ -57,7 +57,7 @@ $(function () {
                     project_id: ProjectUtils.projectId()
                 };
                 $.post("/files/create", payload)
-                    .done(function(data) {
+                .done(function(data) {
                     if (data.status === 'success') {
                         // If successful, add id to the picture hidden field
                         var field_name = '#' + data.data.field_name;
@@ -79,7 +79,10 @@ $(function () {
                         $('.progress-active').removeClass('progress-active');
                         $('.fileupload').fileupload('destroy');
                     }
-                });
+                    }).fail(function(response) {
+                        console.log('Error: ' + response.responseText);
+                    });
+
             }
         });
     });

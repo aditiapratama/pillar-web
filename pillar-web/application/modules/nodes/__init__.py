@@ -13,6 +13,9 @@ from flask import Blueprint
 from flask import render_template
 from flask import redirect
 from flask import url_for
+from flask import request
+from flask import jsonify
+from flask import abort
 from flask import g
 from wtforms import SelectMultipleField
 from flask.ext.login import login_required
@@ -27,6 +30,7 @@ from application.modules.projects import view as project_view
 from application.modules.projects import project_update_nodes_list
 from application.helpers import get_file
 from application.helpers import _get_file_cached
+from application.helpers.caching import delete_redis_cache_template
 from application.helpers.jstree import jstree_build_children
 from application.helpers.jstree import jstree_build_from_node
 from application.helpers.forms import ProceduralFileSelectForm
@@ -450,6 +454,13 @@ def edit(node_id):
                                     attachment_form.size = 'm'
                                     form[prop_name].append_entry(attachment_form)
                             pass
+                        elif prop_name == 'files':
+                            for f in data:
+                                attachment_form = ProceduralFileSelectForm()
+                                attachment_form.file = a['file']
+                                attachment_form.slug = a['slug']
+                                attachment_form.size = 'm'
+                                form[prop_name].append_entry(attachment_form)
                         # elif prop_name == 'tags':
                         #     form[prop_name].data = ', '.join(data)
                         else:
@@ -460,6 +471,13 @@ def edit(node_id):
                         if request.method == 'POST':
                             continue
                         if prop_name == 'attachments':
+                            if not data:
+                                attachment_form = ProceduralFileSelectForm()
+                                attachment_form.file = 'file'
+                                attachment_form.slug = ''
+                                attachment_form.size = ''
+                                form[prop_name].append_entry(attachment_form)
+                        if prop_name == 'files':
                             if not data:
                                 attachment_form = ProceduralFileSelectForm()
                                 attachment_form.file = 'file'
@@ -581,6 +599,51 @@ def delete(node_id):
             url_for('nodes.index', node_type_name=node_type['name']))
     else:
         return redirect(url_for('nodes.edit', node_id=node._id))
+
+
+@nodes.route('/create', methods=['POST'])
+@login_required
+def create():
+    """Create a node. Requires a number of params:
+
+    - project id
+    - node_type
+    - parent node (optional)
+    """
+    if request.method != 'POST':
+        return abort(403)
+
+    project_id = request.form['project_id']
+    parent_id = request.form.get('parent_id')
+    node_type_name = request.form['node_type_name']
+
+    api = SystemUtility.attract_api()
+    # Fetch the Project or 404
+    try:
+        project = Project.find(project_id, api=api)
+    except ResourceNotFound:
+        return abort(404)
+
+    node_type = project.get_node_type(node_type_name)
+
+    node_props = dict(
+        name='New {}'.format(node_type_name),
+        project=project['_id'],
+        user=current_user.objectid,
+        node_type=node_type['name'],
+        properties={}
+        # properties=dict(
+        #     content_type=filetype,
+        #     status='processing')
+        )
+
+    if parent_id:
+        node_props['parent'] = parent_id
+
+    node = Node(node_props)
+    node.create(api=api)
+
+    return jsonify(status='success', data=dict(asset_id=node['_id']))
 
 
 @app.route('/search')

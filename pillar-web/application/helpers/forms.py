@@ -2,6 +2,15 @@ from pillarsdk import File
 from flask import url_for
 from wtforms import Form
 from wtforms import StringField
+from wtforms import DateField
+from wtforms import SelectField
+from wtforms import HiddenField
+from wtforms import BooleanField
+from wtforms import IntegerField
+from wtforms import FloatField
+from wtforms import TextAreaField
+from wtforms import DateTimeField
+from wtforms import SelectMultipleField
 from wtforms.fields import FileField
 from wtforms.compat import text_type
 from wtforms.widgets import html_params
@@ -65,6 +74,24 @@ class ProceduralFileSelectForm(Form):
     file = FileSelectField('file')
     size = StringField()
     slug = StringField()
+
+
+def build_file_select_form(schema):
+    class FileSelectForm(Form):
+        pass
+    for field_name, field_schema in schema.iteritems():
+        if field_schema['type'] == 'boolean':
+            field = BooleanField()
+        elif field_schema['type'] == 'string':
+            field = StringField()
+            if 'allowed' in field_schema:
+                choices = [(c, c) for c in field_schema['allowed']]
+                field.choices = choices
+        elif field_schema['type'] == 'objectid':
+            FileSelectField('file')
+
+        setattr(FileSelectForm, field_name, field)
+    return FileSelectForm
 
 
 class CustomFormFieldWidget(object):
