@@ -110,8 +110,12 @@ class uploadfile():
 
 
 def allowed_file(filename):
-    return '.' in filename and \
-        filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
+    allowed_extensions = app.config['ALLOWED_EXTENSIONS']
+    if allowed_extensions:
+        return '.' in filename and \
+            filename.rsplit('.', 1)[1].lower() in allowed_extensions
+    else:
+        return True
 
 
 def gen_file_name(filename):
