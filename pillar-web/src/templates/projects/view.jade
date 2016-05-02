@@ -88,7 +88,7 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 						title="Edit",
 						data-project_id="{{project._id}}")
 						i.button-edit-icon.pi-edit
-						| Edit
+						| Edit Project
 
 				li.button-dropdown
 					a.dropdown-toggle.project-mode-view(
@@ -225,7 +225,6 @@ script.
 				$('.button-asset').addClass('disabled');
 				$('.button-group').addClass('disabled');
 			}
-			;
 
 			// Update scrollbars
 			Ps.update(document.getElementById('project_context-container'));
@@ -297,6 +296,10 @@ script.
 		$('.project-mode-edit').hide();
 
 		$("#project_context-container").scrollTop(0);
+
+		// Only let user add groups when viewing a group
+		$('a', '.button-edit').html('<i class="pi-edit"></i> Edit ' + ProjectUtils.nodeType());
+
 	}
 
 

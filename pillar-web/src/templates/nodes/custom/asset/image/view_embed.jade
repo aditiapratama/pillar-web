@@ -27,11 +27,13 @@
 					span Public
 				| {% endif %}
 
+				| {% if node.file %}
 				li.node-details-meta-list-item.type
 					| {{ node.file.content_type }}
 
 				li.node-details-meta-list-item.image.length
 					| {{ node.file.length | filesizeformat }}
+				| {% endif %}
 
 				| {% if node.properties.license_type %}
 				| {% if node.properties.license_notes %}
@@ -55,6 +57,7 @@
 				| {% endif %}
 				| {% endif %}
 
+				| {% if node.file %}
 				li.node-details-meta-list-item.image.download(title="Download Image")
 					| {% if node.file.link %}
 					a(href="{{ node.file.link }}")
@@ -64,6 +67,7 @@
 					button.btn.btn-default.disabled.sorry(type="button")
 						i.pi-download
 					| {% endif %}
+				| {% endif %}
 
 		| {% if node.description %}
 		.node-details-description#node-description

@@ -60,6 +60,7 @@ link(rel="stylesheet", href="//releases.flowplayer.org/6.0.3/skin/minimalist.css
 				| {% endif %}
 				| {% endif %}
 
+				| {% if node.file %}
 				| {% if node.file_variations %}
 				li.btn-group.node-details-meta-list-item.video.download(
 					title="Download Video")
@@ -88,6 +89,7 @@ link(rel="stylesheet", href="//releases.flowplayer.org/6.0.3/skin/minimalist.css
 					button.btn.btn-default.sorry(type="button")
 						i.pi-download
 						i.pi-angle-down.icon-dropdown-menu
+				| {% endif %}
 				| {% endif %}
 
 		| {% if node.description %}

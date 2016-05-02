@@ -57,6 +57,7 @@
 				| {% endif %}
 				| {% endif %}
 
+				| {% if node.file %}
 				li.node-details-meta-list-item.file.download(title="Download File")
 					| {% if node.file.link %}
 					a(href="{{ node.file.link }}")
@@ -66,6 +67,7 @@
 					button.btn.btn-default.disabled.sorry(type="button")
 						i.pi-download
 					| {% endif %}
+				| {% endif %}
 
 
 		| {% if node.description %}
