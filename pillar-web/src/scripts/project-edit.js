@@ -6,7 +6,7 @@ function editNode(nodeId) {
 		nodeId = nodeId.substr(2);
 	}
 
-	var url = '/nodes/' + nodeId + '/edit?embed=1'
+	var url = '/nodes/' + nodeId + '/edit?embed=1';
 	$.get(url, function(dataHtml) {
 		// Prevent flicker by scrolling to top before showing anything
 		$("#project_context-container").scrollTop(0);
@@ -47,7 +47,7 @@ function addNode(nodeTypeName, parentId) {
 $('#item_edit').click(function(e){
 	$('.button-edit-icon').addClass('pi-spin spin').removeClass('pi-edit');
 	// When clicking on the edit icon, embed the edit
-	e.preventDefault;
+	e.preventDefault();
 	if (ProjectUtils.isProject() === 'True') {
 		url = window.location.href + 'edit';
 		window.location.replace(url);
@@ -59,12 +59,12 @@ $('#item_edit').click(function(e){
 
 /* Add Node Type Button */
 $('.item_add_node').click(function(e){
-	e.preventDefault;
+	e.preventDefault();
 	var nodeTypeName = $(this).data('node-type-name');
 	if (ProjectUtils.isProject() === 'True') {
-		addRealNode(nodeTypeName);
+		addNode(nodeTypeName);
 	} else {
-		addRealNode(nodeTypeName, ProjectUtils.nodeId());
+		addNode(nodeTypeName, ProjectUtils.nodeId());
 	}
 });
 
@@ -77,7 +77,7 @@ function moveModeEnter() {
 
 	// Scroll to top so we can see the instructions/buttons
 	$("#project_context-container").scrollTop(0);
-};
+}
 
 function moveModeExit() {
 	/* Remove cookie, display current node, remove UI */
@@ -89,17 +89,17 @@ function moveModeExit() {
 	$('#overlay-mode-move-container').removeClass('visible');
 	$('.button-move').removeClass('disabled');
 	Cookies.remove('bcloud_moving_node_id');
-};
+}
 
 if (movingNodeId) {
 	moveModeEnter();
 } else {
 	$('#overlay-mode-move-container').removeClass('visible');
 	$('.button-move').removeClass('disabled');
-};
+}
 
 $('#item_move').click(function(e){
-	e.preventDefault;
+	e.preventDefault();
 	moveModeEnter();
 	// Set the nodeId in the cookie
 	Cookies.set('bcloud_moving_node_id', ProjectUtils.nodeId());
@@ -133,7 +133,7 @@ $("#item_move_cancel").click(function(e) {
 
 /* Featured Toggle */
 $('#item_featured').click(function(e){
-	e.preventDefault;
+	e.preventDefault();
 	$.post(urlNodeFeature, {node_id : ProjectUtils.nodeId()},
 		function(data){
 		// Feedback logic
@@ -146,7 +146,7 @@ $('#item_featured').click(function(e){
 
 /* Delete */
 $('#item_delete').click(function(e){
-	e.preventDefault;
+	e.preventDefault();
 	$.post(urlNodeDelete, {node_id : ProjectUtils.nodeId()},
 		function(data){
 		// Feedback logic
@@ -165,7 +165,7 @@ $('#item_delete').click(function(e){
 
 /* Toggle public */
 $('#item_toggle_public').click(function(e){
-	e.preventDefault;
+	e.preventDefault();
 	var currentNodeId = ProjectUtils.nodeId();
 	$.post(urlNodeTogglePublic, {node_id : currentNodeId},
 		function(data){
