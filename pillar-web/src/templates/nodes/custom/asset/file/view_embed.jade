@@ -41,7 +41,7 @@
 					data-placement="left",
 					data-trigger="hover",
 					data-content="{{ node.properties.license_notes }}",
-					title="Creative Commons {{ node.properties.license_type }}")
+					title="{{ node.properties.license_type }}")
 
 					i(class="pi-license-{{ node.properties.license_type }}")
 				| {% else %}
@@ -49,7 +49,7 @@
 					id="asset-license",
 					data-toggle="tooltip",
 					data-placement="bottom",
-					title="Creative Commons {{ node.properties.license_type }}")
+					title="{{ node.properties.license_type }}")
 
 					i(class="pi-license-{{ node.properties.license_type }}")
 				| {% endif %}

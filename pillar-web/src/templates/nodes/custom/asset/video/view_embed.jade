@@ -46,7 +46,7 @@ link(rel="stylesheet", href="//releases.flowplayer.org/6.0.3/skin/minimalist.css
 					data-placement="left",
 					data-trigger="hover",
 					data-content="{{ node.properties.license_notes }}",
-					title="Creative Commons {{ node.properties.license_type }}")
+					title="{{ node.properties.license_type }}")
 
 					i(class="pi-license-{{ node.properties.license_type }}")
 				| {% else %}
@@ -54,7 +54,7 @@ link(rel="stylesheet", href="//releases.flowplayer.org/6.0.3/skin/minimalist.css
 					id="asset-license",
 					data-toggle="tooltip",
 					data-placement="bottom",
-					title="Creative Commons {{ node.properties.license_type }}")
+					title="{{ node.properties.license_type }}")
 
 					i(class="pi-license-{{ node.properties.license_type }}")
 				| {% endif %}

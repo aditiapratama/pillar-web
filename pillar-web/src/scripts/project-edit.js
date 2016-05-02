@@ -196,9 +196,7 @@ $('#item_featured').click(function(e){
 		// Feedback logic
 	})
 	.done(function(){
-		// $('.button-featured').addClass('featured');
-		// $('.button-featured-icon').addClass('pi-star-filled').removeClass('pi-star');
-		statusBarSet('success', 'Featured status toggled', 'pi-star-filled');
+		statusBarSet('success', 'Featured status toggled successfully', 'pi-star-filled');
 	});
 });
 

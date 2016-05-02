@@ -21,16 +21,19 @@ NavbarTransparent();
 
 
 /* Status Bar */
-function statusBarSet(classes, html, icon_name){
+function statusBarSet(classes, html, icon_name, time){
 	/* Utility to notify the user by temporarily flashing text on the project header
 		 Usage:
 			'classes' can be: success, error, warning, info, default
 			'html': the text to display, can contain html tags
 				(in case of errors, it's better to use data.status + data.statusText instead )
 			'icon_name': optional, sets a custom icon (otherwise an icon based on the class will be used)
+			'time': optional, custom time in milliseconds for the text to be displayed
 	*/
 
 	var icon = '';
+
+	if (!time) { time = 2000;};
 
 	if (!icon_name) {
 		if (classes == 'error') {
@@ -56,6 +59,6 @@ function statusBarSet(classes, html, icon_name){
 	setTimeout(function(){
 	$("#project-statusbar").removeAttr('class');
 	$("#project-statusbar").html();
-	}, 2000);
+	}, time);
 };
 

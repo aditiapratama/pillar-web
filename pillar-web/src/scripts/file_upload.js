@@ -37,7 +37,7 @@ $(function () {
                 var progress = parseInt(data.loaded / data.total * 100, 10);
                 $(this).next().find('.form-upload-progress-bar').css(
                     {'width': progress + '%', 'display': 'block'}
-                    ).addClass('progress-active');
+                    ).removeClass('progress-error').addClass('progress-active');
 
                 fieldUpload = $(this);
             },
@@ -45,7 +45,7 @@ $(function () {
                 // Get the first file upload result (we only need one)
                 var fileData = data.result.files[0];
                 // Create a file object on the server and retrieve its id
-                statusBarSet('info', 'Uploading File');
+                statusBarSet('info', 'Uploading File', 'pi-upload-cloud');
 
                 $('.button-save').addClass('disabled');
                 $('li.button-save a#item_save').html('<i class="pi-spin spin"></i> Uploading Preview');
@@ -72,17 +72,21 @@ $(function () {
 
                         $(previewThumbnail).attr('src', data.data.link);
                         $('.node-preview-thumbnail').show();
-                        statusBarSet('success', 'File Uploaded Successfully');
+                        statusBarSet('success', 'File Uploaded Successfully', 'pi-check');
 
                         $('.button-save').removeClass('disabled');
                         $('li.button-save a#item_save').html('<i class="pi-check"></i> Save Changes');
-                        $('.progress-active').removeClass('progress-active');
+                        $('.progress-active').removeClass('progress-active progress-error');
                         $('.fileupload').fileupload('destroy');
                     }
-                    }).fail(function(response) {
-                        console.log('Error: ' + response.responseText);
+                    }).fail(function(data) {
+                        statusBarSet(data.textStatus, 'Upload error: ' + data.errorThrown, 'pi-attention', 8000);
                     });
 
+            },
+            fail: function (e, data) {
+                statusBarSet(data.textStatus, 'Upload error: ' + data.errorThrown, 'pi-attention', 8000);
+                $('.progress-active').addClass('progress-error').removeClass('progress-active');
             }
         });
     });
