@@ -509,10 +509,6 @@ def edit(node_id):
                 project_update_nodes_list(node, list_name='blog')
             else:
                 project_update_nodes_list(node)
-            # Delete memoized File object, hardcoded and working only for assets
-            if node.properties.file:
-                file_id = node.properties.file
-                cache.delete_memoized(_get_file_cached, file_id)
             # Emergency hardcore cache flush
             # cache.clear()
             return redirect(url_for('nodes.view', node_id=node_id, embed=1,
