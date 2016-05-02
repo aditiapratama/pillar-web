@@ -120,9 +120,9 @@ $z-index-base: 13
 
 	&.context
 		right: 0
-		background-color: white
+		background-color: lighten($color-background, 5%)
 		color: $color-text-dark-secondary
-		border-bottom: thin solid $color-text-dark-hint
+		border-bottom: thin solid lighten($color-text-dark-hint, 10%)
 
 span#project-statusbar
 	position: absolute
@@ -2043,12 +2043,17 @@ section.node-children
 				.select2-selection
 					+input-generic
 
-
 			select
 				text-transform: capitalize
 
 			label
 				+label-generic
+
+			&.error
+				label
+					color: $color-danger
+				padding: 10px 15px
+				border: 2px dashed $color-danger
 
 		.form-upload-progress
 			.form-upload-progress-bar

@@ -33,7 +33,7 @@ function statusBarSet(classes, html, icon_name, time){
 
 	var icon = '';
 
-	if (!time) { time = 2000;};
+	if (!time) { time = 3000 };
 
 	if (!icon_name) {
 		if (classes == 'error') {
