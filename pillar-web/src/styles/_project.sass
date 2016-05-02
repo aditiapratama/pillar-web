@@ -1838,11 +1838,40 @@ section.node-children
 		&.create
 			background-color: rgba($color-background-nav, .5)
 			box-shadow: none
-			border: 2px dashed white
+			border: 2px dashed rgba(white, .7)
 			border-radius: 6px
 			display: flex
 			align-items: center
 			justify-content: center
+			transition: background-color 250ms ease-in-out, border 250ms ease-in-out
+
+			&:hover
+				border: 2px dashed white
+
+			&.disabled
+				border: 2px dashed rgba(white, .5)
+				user-select: none
+				cursor: default
+				pointer-events: none
+				+stripes(rgba(lighten($color-background-nav, 15%), .5), rgba(lighten($color-background-nav, 5%), .5), -45deg, 50px)
+				+stripes-animate
+				animation-duration: 2s
+
+				.item-info .item-title
+					user-select: none
+					cursor: default
+					pointer-events: none
+					text-decoration: none
+					color: white
+
+					&:focus, &:active
+						text-decoration: none
+						color: white
+						outline: none
+
+					i
+						font-size: .9em
+						color: $color-text-light-secondary
 
 			.card-thumbnail
 				background-color: transparent
@@ -1869,6 +1898,7 @@ section.node-children
 				.item-title
 					width: initial
 					color: $color-text-light
+
 
 
 		a.item-header

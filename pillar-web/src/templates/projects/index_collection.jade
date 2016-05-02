@@ -106,11 +106,25 @@ meta(name="twitter:image", content="{% if title == 'open-projects' %}{{ url_for(
 				| {% if title == 'dashboard' and current_user.has_role('admin') %}
 				.node_index-collection-card.create
 					.item-info
-						a.item-title(
+						a.item-title#project-create(
 							href="{{ url_for('projects.create') }}")
 							i.pi-plus
 							| Create New Project
 				| {% endif %}
 
 
+| {% endblock %}
+
+
+| {% block footer_scripts %}
+script.
+	$('#project-create').on('click', function(e){
+		e.preventDefault();
+
+		$('.node_index-collection-card.create').addClass('disabled');
+		$(this).html('<i class="pi-spin spin"></i> Creating project...');
+
+		window.location.href = $(this).attr('href');
+
+	});
 | {% endblock %}

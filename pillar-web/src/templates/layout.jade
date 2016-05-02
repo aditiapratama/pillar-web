@@ -215,10 +215,18 @@ html(lang="en")
 										a.navbar-item(
 											href="https://store.blender.org/product/membership/"
 											title="Renew subscription")
-											i.pi-attention
+											i.pi-unhappy
 											span.info Your subscription is not active.
 												span.renew Click here to renew.
 										| {% endif %}
+									| {#
+									li
+										a.navbar-item(
+											href="{{url_for('projects.index')}}"
+											title="My Projects")
+											i.pi-star
+											| My Projects
+									| #}
 									li
 										a.navbar-item(
 											href="{{url_for('users.settings_profile')}}"

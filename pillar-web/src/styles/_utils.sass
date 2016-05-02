@@ -100,15 +100,16 @@
 	background: linear-gradient(to bottom, $from-color $from-percentage, $to-color $to-percentage)
 
 
-@mixin stripes($color-light, $color-dark, $deg)
-	background: repeating-linear-gradient($deg, $color-light, $color-light 10px, $color-dark 10px, $color-dark 20px)
+@mixin stripes($color-light, $color-dark, $deg, $size)
+	background-size: $size $size
+	background-image: linear-gradient($deg, $color-light 25%, $color-dark 25%, $color-dark 50%, $color-light 50%, $color-light 75%, $color-dark 75%, $color-dark)
 
 =stripes-animate
 	animation:
 		name: background-slide
 		duration: 1s
 		delay: 0s
-		fill-mode: forwards
+		// fill-mode: forwards
 		iteration-count: infinite
 		timing-function: linear
 
@@ -269,7 +270,7 @@
 	from
 		background-position: 0 0
 	to
-		background-position: 55px 55px
+		background-position: 50px 50px
 
 =list-bullets
 	ul
