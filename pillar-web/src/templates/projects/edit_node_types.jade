@@ -72,9 +72,14 @@
 			#project_context
 				#node-edit-container
 					div(id="node-edit-form")
-						h3 Node Types
+						h3 Node Types (coming soon)
 						p.
-							Node types editing is a very powerful thing.
+							Nodes are all the items that can be found in a project.
+							Everything is a node: a file, a folder, a comment. They are
+							defined with custom properties and properly presented to you,
+							so you don't have to worry about them. When we add support for new
+							node types in the future, it means we allow the creation of new
+							items (such as textures).
 
 						| {% if current_user.has_role('admin') %}
 						ul
