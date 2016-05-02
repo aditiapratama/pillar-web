@@ -821,6 +821,18 @@
       "src": "fontawesome"
     },
     {
+      "uid": "5408be43f7c42bccee419c6be53fdef5",
+      "css": "document-text",
+      "code": 59489,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "4a74a0f87d4089efe7aba1825bff4193",
+      "css": "license-copyright",
+      "code": 59490,
+      "src": "fontawesome"
+    },
+    {
       "uid": "091509aeaf9821c3a88ae755f54067bd",
       "css": "upload",
       "code": 59406,

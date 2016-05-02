@@ -164,16 +164,16 @@ script(type="text/javascript").
 		})
 		.fail(function(data){
 			/* Something went wrong, print it */
-			statusBarSet('error', data.status + ' ' + data.statusText);
+			statusBarSet('error', 'Oops! We\'ve been notified and working on it - ' + data.status + ' ' + data.statusText);
 
 			$("li.button-save").addClass('field-error');
-			$("li.button-save a#item_save").html('<i class="pi-warning"></i> Houston');
+			$("li.button-save a#item_save").html('<i class="pi-warning"></i> Houston!');
 
 			/* Back to normal */
 			setTimeout(function(){
 				$("li.button-save").removeClass('saving field-error');
-				$("li.button-save a#item_save").html('<i class="pi-check"></i> Try Again');
-			}, 2000);
+				$("li.button-save a#item_save").html('<i class="pi-check"></i> Save Changes');
+			}, 5000);
 		})
 		.done(function(dataHtml){
 			/* Success! */

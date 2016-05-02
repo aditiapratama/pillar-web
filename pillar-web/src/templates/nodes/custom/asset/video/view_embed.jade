@@ -47,7 +47,7 @@ link(rel="stylesheet", href="//releases.flowplayer.org/6.0.3/skin/minimalist.css
 					data-trigger="hover",
 					data-content="{{ node.properties.license_notes }}",
 					title="Creative Commons {{ node.properties.license_type }}")
-					i.pi-license-cc
+
 					i(class="pi-license-{{ node.properties.license_type }}")
 				| {% else %}
 				li.node-details-meta-list-item.video.license(
@@ -55,7 +55,7 @@ link(rel="stylesheet", href="//releases.flowplayer.org/6.0.3/skin/minimalist.css
 					data-toggle="tooltip",
 					data-placement="bottom",
 					title="Creative Commons {{ node.properties.license_type }}")
-					i.pi-license-cc
+
 					i(class="pi-license-{{ node.properties.license_type }}")
 				| {% endif %}
 				| {% endif %}

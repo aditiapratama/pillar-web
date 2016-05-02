@@ -42,7 +42,7 @@
 					data-trigger="hover",
 					data-content="{{ node.properties.license_notes }}",
 					title="Creative Commons {{ node.properties.license_type }}")
-					i.pi-license-cc
+
 					i(class="pi-license-{{ node.properties.license_type }}")
 				| {% else %}
 				li.node-details-meta-list-item.license(
@@ -50,7 +50,7 @@
 					data-toggle="tooltip",
 					data-placement="bottom",
 					title="Creative Commons {{ node.properties.license_type }}")
-					i.pi-license-cc
+
 					i(class="pi-license-{{ node.properties.license_type }}")
 				| {% endif %}
 				| {% endif %}
