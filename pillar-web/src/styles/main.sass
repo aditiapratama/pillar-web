@@ -1085,22 +1085,9 @@ label, label.control-label
 
 
 /* Font aliases */
-.pi-license-cc-0
-	@extend .pi-license-cc-zero
-	position: relative
-	top: 1px
-.pi-license-cc-by-sa
-	@extend .pi-license-cc-sa
-.pi-license-cc-by-nd
-	@extend .pi-license-cc-nd
-.pi-license-cc-by-nc
-	@extend .pi-license-cc-nc
-
-.pi-license-cc-by-sa,
-.pi-license-cc-by-nd,
-.pi-license-cc-by-nc
+.pi /* blank item with the right spacing */
 	&:after
-		content: '\e85b'
+		content: ''
 		font-family: "pillar-font"
 		font-style: normal
 		font-weight: normal
@@ -1117,9 +1104,27 @@ label, label.control-label
 		-webkit-font-smoothing: antialiased
 		-moz-osx-font-smoothing: grayscale
 		position: relative
-		left: -27px
 
 	&:before
 		position: relative
-		left: 27px
 
+.pi-license-cc-0
+	@extend .pi-license-cc-zero
+	position: relative
+	top: 1px
+.pi-license-cc-by-sa
+	@extend .pi-license-cc-sa
+.pi-license-cc-by-nd
+	@extend .pi-license-cc-nd
+.pi-license-cc-by-nc
+	@extend .pi-license-cc-nc
+
+.pi-license-cc-by-sa,
+.pi-license-cc-by-nd,
+.pi-license-cc-by-nc
+	&:after
+		content: '\e85b'
+		left: -27px
+
+	&:before
+		left: 27px

@@ -292,6 +292,9 @@ ul.project-edit-tools
 					+pulse-75
 
 			&.disabled
+				pointer-events: none
+				cursor: not-allowed
+
 				a
 					pointer-events: none
 					cursor: not-allowed
@@ -336,6 +339,9 @@ ul.project-edit-tools
 					background-color: rgba($color-warning, .1)
 
 		&.disabled
+			pointer-events: none
+			cursor: not-allowed
+
 			a
 				opacity: .6
 				background: repeating-linear-gradient(-45deg, lighten($color-text-dark-hint, 15%), lighten($color-text-dark-hint, 15%) 10px, lighten($color-text-dark-hint, 5%) 10px, lighten($color-text-dark-hint, 5%) 20px)
@@ -398,7 +404,6 @@ ul.project-edit-tools
 		right: 10px
 		bottom: initial
 		border: thin solid $color-text-dark-hint
-		border-top: none
 		border-bottom-left-radius: 3px
 		border-bottom-right-radius: 3px
 		border-top-left-radius: 0
@@ -413,6 +418,10 @@ ul.project-edit-tools
 			display: flex
 			align-items: center
 			width: 100%
+
+			&.disabled
+				pointer-events: none
+				cursor: not-allowed
 
 			a
 				margin: 0
@@ -433,6 +442,13 @@ ul.project-edit-tools
 				i
 					display: inline-block
 					margin: 0 15px 0 0
+
+					&.icon-group:after
+						content: '\e80d'
+					&.icon-asset:after
+						content: '\e825'
+					&.icon-page:after
+						content: '\e824'
 
 	/* // Extra asset tools in dropdown */
 
