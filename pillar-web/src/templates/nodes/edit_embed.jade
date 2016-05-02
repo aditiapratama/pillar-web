@@ -199,7 +199,7 @@ script(type="text/javascript").
 	$('#item_save').click(function(e){
 
 		// Assets always need a file
-		if ($('.form-group.file .fileupload').val() == ''){
+		if ($('.form-group.file #file').val() == ''){
 			$('.form-group.file').addClass('error');
 			statusBarSet('error', 'No File Selected', 'pi-warning', 5000);
 		} else {
