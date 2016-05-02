@@ -244,15 +244,6 @@ ul.project-edit-tools
 		justify-content: flex-end
 		width: 100%
 
-	&.disabled
-		li
-			a
-				pointer-events: none
-				cursor: not-allowed
-				background: repeating-linear-gradient(-45deg, darken($color-text-dark-hint, 0%), darken($color-text-dark-hint, 0%) 10px, darken($color-text-dark-hint, 5%) 10px, darken($color-text-dark-hint, 5%) 20px)
-				border-color: darken($color-text-dark-hint, 5%)
-				color: rgba(white, .5)
-
 	li
 		margin: 0
 		padding: 0
@@ -292,12 +283,9 @@ ul.project-edit-tools
 					+pulse-75
 
 			&.disabled
-				pointer-events: none
 				cursor: not-allowed
-
 				a
 					pointer-events: none
-					cursor: not-allowed
 					background: repeating-linear-gradient(-45deg, darken($color-success, 15%), darken($color-success, 15%) 10px, darken($color-success, 20%) 10px, darken($color-success, 20%) 20px)
 
 		&.button-move
@@ -339,14 +327,13 @@ ul.project-edit-tools
 					background-color: rgba($color-warning, .1)
 
 		&.disabled
-			pointer-events: none
 			cursor: not-allowed
 
 			a
-				opacity: .6
-				background: repeating-linear-gradient(-45deg, lighten($color-text-dark-hint, 15%), lighten($color-text-dark-hint, 15%) 10px, lighten($color-text-dark-hint, 5%) 10px, lighten($color-text-dark-hint, 5%) 20px)
 				pointer-events: none
-				cursor: not-allowed
+				background: repeating-linear-gradient(-45deg, lighten($color-text-dark-hint, 15%), lighten($color-text-dark-hint, 15%) 10px, lighten($color-text-dark-hint, 5%) 10px, lighten($color-text-dark-hint, 5%) 20px)
+				border-color: darken($color-text-dark-hint, 5%)
+				opacity: .6
 
 	a
 		margin: 5px
@@ -418,10 +405,6 @@ ul.project-edit-tools
 			display: flex
 			align-items: center
 			width: 100%
-
-			&.disabled
-				pointer-events: none
-				cursor: not-allowed
 
 			a
 				margin: 0
@@ -1148,6 +1131,9 @@ section.node-preview.group
 							padding:
 								left: 15px
 								right: 15px
+
+							i
+								margin-right: 0
 
 					/* Download dropdown options */
 					ul.dropdown-menu

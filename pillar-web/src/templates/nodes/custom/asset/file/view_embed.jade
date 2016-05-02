@@ -27,11 +27,13 @@
 					span Public
 				| {% endif %}
 
+				| {% if node.file %}
 				li.node-details-meta-list-item.type
 					| {{ node.file.content_type }}
 
 				li.node-details-meta-list-item.file.length
 					| {{ node.file.length | filesizeformat }}
+				| {% endif %}
 
 				| {% if node.properties.license_type %}
 				| {% if node.properties.license_notes %}
