@@ -309,6 +309,9 @@ ul.project-edit-tools
 				margin: auto
 				padding: 0
 
+				&.button-add-icon
+					margin-right: 5px
+
 			&.open
 				a.dropdown-toggle
 					color: $color-text-light
@@ -329,12 +332,14 @@ ul.project-edit-tools
 
 		&.disabled
 			cursor: not-allowed
+			border-bottom: thin solid $color-text-dark-hint
 
 			a
 				pointer-events: none
 				background: repeating-linear-gradient(-45deg, lighten($color-text-dark-hint, 15%), lighten($color-text-dark-hint, 15%) 10px, lighten($color-text-dark-hint, 5%) 10px, lighten($color-text-dark-hint, 5%) 20px)
 				border-color: darken($color-text-dark-hint, 5%)
 				opacity: .6
+				color: $color-text-dark
 
 	a
 		margin: 5px
@@ -433,6 +438,8 @@ ul.project-edit-tools
 						content: '\e825'
 					&.icon-page:after
 						content: '\e824'
+					&.icon-texture:after
+						content: '\e81e'
 
 	/* // Extra asset tools in dropdown */
 
