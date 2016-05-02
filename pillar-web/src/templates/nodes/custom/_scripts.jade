@@ -16,6 +16,7 @@ script(type="text/javascript").
 
 	{% if node %}
 		ProjectUtils.setProjectAttributes({nodeId: '{{node._id}}'});
+		ProjectUtils.setProjectAttributes({nodeType: '{{node.node_type}}'});
 		{% if parent %}
 		ProjectUtils.setProjectAttributes({parentNodeId: '{{parent._id}}'});
 		{% endif %}
