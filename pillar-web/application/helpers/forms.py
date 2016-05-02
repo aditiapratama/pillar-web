@@ -1,5 +1,8 @@
+from markupsafe import Markup
+
 from pillarsdk import File
-from flask import url_for
+from flask import current_app
+from flask.ext.login import current_user
 from wtforms import Form
 from wtforms import StringField
 from wtforms import DateField
@@ -35,13 +38,14 @@ class CustomFileSelectWidget(HiddenInput):
             try:
                 file_item = File.find(field.data, api=api)
 
+                filename = Markup.escape(file_item.filename)
                 if file_item.content_type.split('/')[0] == 'image':
                     button += '<img class="preview-thumbnail" src="{0}" />'.format(
                         file_item.thumbnail('s', api=api))
                 else:
-                    button += '<p>{}</p>'.format(file_item.filename)
+                    button += '<p>{}</p>'.format(filename)
                 button += '<ul class="form-upload-file-meta">'
-                button += '<li class="name">{0}</li>'.format(file_item.filename)
+                button += '<li class="name">{0}</li>'.format(filename)
                 button += '<li class="size">({0} MB)</li>'.format(round((file_item.length/1024)*0.001, 2))
                 button += '<li class="dimensions">{0}x{1}</li>'.format(file_item.width, file_item.height)
                 button += '<li class="delete"><a href="#" class="file_delete" data-field-name="{1}" \
@@ -52,12 +56,14 @@ class CustomFileSelectWidget(HiddenInput):
             except ResourceNotFound:
                 pass
 
+        upload_url = '%s/storage/stream/{project_id}' % current_app.config['PILLAR_SERVER_ENDPOINT']
+
         button += """
-        <input class="fileupload" type="file" name="file" data-url="{0}" data-field-name="{1}">
+        <input class="fileupload" type="file" name="file" data-url="{0}" data-field-name="{1}" data-token="{2}">
         <div class="form-upload-progress">
           <div class="form-upload-progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
           </div>
-        </div>""".format(url_for('files.upload'), field.name)
+        </div>""".format(upload_url, field.name, Markup.escape(current_user.id))
 
         button += '</div>'
 

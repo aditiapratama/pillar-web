@@ -23,66 +23,68 @@ $('.file_delete').click(function(e){
 });
 
 
+
 $(function () {
+    function inject_project_id_into_url(index, element) {
+        // console.log('Injecting ', ProjectUtils.projectId(), ' into ', element);
+        var url = element.getAttribute('data-url');
+        url = url.replace('{project_id}', ProjectUtils.projectId());
+        element.setAttribute('data-url', url);
+        // console.log('The new element is', element);
+    }
+
     var fieldUpload = '';
-    $('.fileupload').on('click', function(e) {
+    $('.fileupload')
+        .each(inject_project_id_into_url)
+        .on('click', function(e) {
         $('.fileupload').fileupload({
             dataType: 'json',
-            acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
             replaceFileInput:false,
             dropZone: $(this),
             formData: {},
+            beforeSend: function(xhr, data) {
+                var token = this.fileInput.attr('data-token');
+                xhr.setRequestHeader('Authorization', 'basic ' + btoa(token + ':'));
+                statusBarSet('info', 'Uploading File', 'pi-upload-cloud');
+                $('.button-save').addClass('disabled');
+                $('li.button-save a#item_save').html('<i class="pi-spin spin"></i> Uploading');
+            },
             progressall: function (e, data) {
                 // Update progressbar during upload
                 var progress = parseInt(data.loaded / data.total * 100, 10);
                 $(this).next().find('.form-upload-progress-bar').css(
                     {'width': progress + '%', 'display': 'block'}
                     ).removeClass('progress-error').addClass('progress-active');
-
-                fieldUpload = $(this);
             },
             done: function (e, data) {
-                // Get the first file upload result (we only need one)
-                var fileData = data.result.files[0];
-                // Create a file object on the server and retrieve its id
-                statusBarSet('info', 'Uploading File', 'pi-upload-cloud');
 
-                $('.button-save').addClass('disabled');
-                $('li.button-save a#item_save').html('<i class="pi-spin spin"></i> Uploading Preview');
-                var payload = {
-                    name: fileData.name,
-                    size: fileData.size,
-                    type: fileData.type,
-                    field_name: fieldUpload.attr('data-field-name'),
-                    project_id: ProjectUtils.projectId()
-                };
-                $.post("/files/create", payload)
-                .done(function(data) {
-                    if (data.status === 'success') {
-                        // If successful, add id to the picture hidden field
-                        var field_name = '#' + data.data.field_name;
-                        if ($(field_name).val()){
-                            $('.node-preview-thumbnail').hide();
-                            deleteFile($(field_name), data.data.id);
-                        } else {
-                            $(field_name).val(data.data.id);
-                        }
+                if (data.result.status !== 'ok') {
+                    if (console)
+                        console.log('FIXME, do error handling for non-ok status', data.result);
+                    return;
+                }
 
-                        var previewThumbnail = fieldUpload.prev().prev();
+                // Ensure the form refers to the correct Pillar file ID.
+                var pillar_file_id = data.result.file_id;
+                var field_name = '#' + $(this).attr('data-field-name');
 
-                        $(previewThumbnail).attr('src', data.data.link);
-                        $('.node-preview-thumbnail').show();
-                        statusBarSet('success', 'File Uploaded Successfully', 'pi-check');
+                if ($(field_name).val()) {
+                    $('.node-preview-thumbnail').hide();
+                    deleteFile($(field_name), pillar_file_id);
+                }
+                $(field_name).val(pillar_file_id);
 
-                        $('.button-save').removeClass('disabled');
-                        $('li.button-save a#item_save').html('<i class="pi-check"></i> Save Changes');
-                        $('.progress-active').removeClass('progress-active progress-error');
-                        $('.fileupload').fileupload('destroy');
-                    }
-                    }).fail(function(data) {
-                        statusBarSet(data.textStatus, 'Upload error: ' + data.errorThrown, 'pi-attention', 8000);
-                    });
+                // var previewThumbnail = fieldUpload.prev().prev();
+                //
+                // $(previewThumbnail).attr('src', data.data.link);
+                // $('.node-preview-thumbnail').show();
 
+                statusBarSet('success', 'File Uploaded Successfully', 'pi-check');
+
+                $('.button-save').removeClass('disabled');
+                $('li.button-save a#item_save').html('<i class="pi-check"></i> Save Changes');
+                $('.progress-active').removeClass('progress-active progress-error');
+                $('.fileupload').fileupload('destroy');
             },
             fail: function (e, data) {
                 statusBarSet(data.textStatus, 'Upload error: ' + data.errorThrown, 'pi-attention', 8000);
