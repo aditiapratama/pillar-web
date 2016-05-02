@@ -172,8 +172,10 @@ def get_projects(category):
     """
     api = SystemUtility.attract_api()
     projects = Project.all({
-        'where': '{"category": "%s"}' % category,
-        'sort': '-_created'
+        'where': {
+            'category': category,
+            'is_private': False},
+        'sort': '-_created',
         }, api=api)
     for project in projects._items:
         attach_project_pictures(project, api)

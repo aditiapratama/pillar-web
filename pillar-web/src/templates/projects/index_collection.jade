@@ -69,7 +69,7 @@ meta(name="twitter:image", content="{% if title == 'open-projects' %}{{ url_for(
 			.node_index-collection
 
 				| {% for project in projects %}
-				| {% if (project.status == 'published') or (project.status == 'pending' and current_user.is_authenticated() and current_user.has_role('admin')) and project._id != config.MAIN_PROJECT_ID %}
+				| {% if (project.status == 'published') or (project.status == 'pending' and current_user.is_authenticated()) and project._id != config.MAIN_PROJECT_ID %}
 
 				.node_index-collection-card
 					a.item-header(
