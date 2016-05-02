@@ -29,49 +29,11 @@ function editNode(nodeId) {
 
 
 /* Add Node */
-function addNode() {
-
-	var url = '/files/upload?embed=1'
-	$.get(url, function(dataHtml) {
-		// Prevent flicker by scrolling to top before showing anything
-		$("#project_context-container").scrollTop(0);
-
-		// Update the DOM injecting the generate HTML into the page
-		$('#project_context').html(dataHtml);
-
-		$('.project-mode-view, .project-mode-edit').hide();
-	})
-	.fail(function(dataResponse) {
-		$('#project_context').html($('<iframe id="server_error"/>'));
-		$('#server_error').attr('src', url);
-	})
-	.always(function(){
-		$('.button-add-icon').addClass('pi-collection-plus').removeClass('pi-spin spin');
-	});
-}
-
-/* Add Real Node */
-function addRealNode(nodeTypeName, parentId) {
+function addNode(nodeTypeName, parentId) {
 	var url = '/nodes/create';
 	var node_props = {node_type_name: nodeTypeName, project_id: ProjectUtils.projectId()};
 	if (typeof(parentId) != 'undefined') {node_props.parent_id = parentId};
 	$.post(url, node_props)
-		.done(function(data) {
-			editNode(data.data.asset_id);
-	})
-	.always(function(){
-		$('.button-add-group-icon').addClass('pi-collection-plus').removeClass('pi-spin spin');
-	});
-}
-
-
-
-/* Add Group */
-function addGroup(parentId) {
-	var url = '/nodes/groups/create';
-	var group = {name: "New Folder", project_id: ProjectUtils.projectId()};
-	if (typeof(parentId) != 'undefined') {group.parent_id = parentId};
-	$.post(url, group)
 		.done(function(data) {
 			editNode(data.data.asset_id);
 	})
@@ -94,25 +56,6 @@ $('#item_edit').click(function(e){
 	}
 });
 
-
-/* Add Asset Button */
-$('#item_add').click(function(e){
-	$('.button-add-icon').addClass('pi-spin spin').removeClass('pi-collection-plus');
-	e.preventDefault;
-	addNode();
-});
-
-
-/* Add Group Button */
-$('#item_add_group').click(function(e){
-	$('.button-add-group-icon').addClass('pi-spin spin').removeClass('pi-collection-plus');
-	e.preventDefault;
-	if (ProjectUtils.isProject() === 'True') {
-		addGroup();
-	} else {
-		addGroup(ProjectUtils.nodeId());
-	}
-});
 
 /* Add Node Type Button */
 $('.item_add_node').click(function(e){
