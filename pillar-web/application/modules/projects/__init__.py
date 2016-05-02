@@ -311,18 +311,15 @@ def delete_node():
     """Delete a node"""
     api = SystemUtility.attract_api()
     node = Node.find(request.form['node_id'], api=api)
-    if node.has_method('PUT'):
-        node.properties.status = 'deleted'
-        # Temporarily append a [D] at the name. We will properly display the
-        # node status from the properties later on.
-        node.name = u"[D] {0}".format(node.name)
-        node.update(api=api)
-        # Delete cached parent template fragment
-        if node.parent:
-            delete_redis_cache_template('group_view', node.parent)
-        return jsonify(status='success', data=dict(message='Node deleted'))
-    else:
+    if not node.has_method('DELETE'):
         return abort(403)
+
+    node.delete(api=api)
+    # Delete cached parent template fragment
+    if node.parent:
+        delete_redis_cache_template('group_view', node.parent)
+
+    return jsonify(status='success', data=dict(message='Node deleted'))
 
 
 @projects.route('/e/toggle-node-public', methods=['POST'])
