@@ -17,6 +17,13 @@ script(type="text/javascript").
 	{% if node %}
 		ProjectUtils.setProjectAttributes({nodeId: '{{node._id}}'});
 		ProjectUtils.setProjectAttributes({nodeType: '{{node.node_type}}'});
+
+		if (ProjectUtils.nodeType() === 'group'){
+			$('a', '.button-edit').html('<i class="pi-edit"></i> Edit Folder');
+		} else {
+			$('a', '.button-edit').html('<i class="pi-edit"></i> Edit ' + ProjectUtils.nodeType());
+		}
+
 		{% if parent %}
 		ProjectUtils.setProjectAttributes({parentNodeId: '{{parent._id}}'});
 		{% endif %}
