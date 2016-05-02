@@ -71,7 +71,7 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 
 			ul.project-edit-tools.disabled
 				li.button-dropdown
-					a.dropdown-toggle.project-mode-view(
+					a#item_add.dropdown-toggle.project-mode-view(
 					type="button",
 					data-toggle="dropdown",
 					aria-haspopup="true",
@@ -395,12 +395,11 @@ script.
 
 			if (typeof(data.node.original.path) === 'undefined') {
 				var moving_node_id = Cookies.get('bcloud_moving_node_id');
-				var node_id = document.getElementById("item_add");
 
 				// Check if we are in the process of moving a node
 				if (moving_node_id) {
 					// Allow moving nodes only inside of node_type group
-					if (data.node.original.type != 'group' || moving_node_id === data.node.original.id.substr(2) || moving_node_id === node_id.getAttribute('data-parent_node_id')) {
+					if (data.node.original.type != 'group' || moving_node_id === data.node.original.id.substr(2) || moving_node_id === ProjectUtils.parentNodeId()) {
 						$('#item_move_accept').addClass('disabled');
 						$('#item_move_accept').html('Select a Folder');
 					} else {
