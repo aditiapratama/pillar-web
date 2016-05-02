@@ -127,6 +127,8 @@ $("#item_move_accept").click(function(e) {
 
 $("#item_move_cancel").click(function(e) {
 	e.preventDefault();
+	$('.button-edit-icon').addClass('pi-spin spin').removeClass('pi-cancel');
+
 	moveModeExit();
 });
 
