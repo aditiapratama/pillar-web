@@ -89,6 +89,7 @@ script.
 	$("form").submit(function(e) {
 		$("#dyn_schema").val(dynSchemaEditor.getSession().getValue());
 		$("#form_schema").val(formSchemaEditor.getSession().getValue());
+		$("#permissions").val(permissionsEditor.getSession().getValue());
 	});
 | {% endblock %}
 
