@@ -14,17 +14,19 @@ function deleteFile(fileField, newFileId) {
     });
 }
 
-$('.file_delete').click(function(e){
-    e.preventDefault();
-    var field_name = '#' + $(this).data('field-name');
-    var file_field = $(field_name);
-    deleteFile(file_field);
-    $('.node-preview-thumbnail').hide();
-});
-
-
 
 $(function () {
+    // $('.file_delete').click(function(e){
+    $('body').unbind('click');
+    $('body').on('click', '.file_delete', function(e) {
+        e.preventDefault();
+        var field_name = '#' + $(this).data('field-name');
+        var file_field = $(field_name);
+        deleteFile(file_field);
+        $(this).parent().parent().hide();
+        $(this).parent().parent().prev().hide();
+    });
+
     function inject_project_id_into_url(index, element) {
         // console.log('Injecting ', ProjectUtils.projectId(), ' into ', element);
         var url = element.getAttribute('data-url');

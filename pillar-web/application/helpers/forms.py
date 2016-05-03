@@ -68,9 +68,10 @@ class CustomFileSelectWidget(HiddenInput):
                 # Delete button
                 button += '<li class="delete">' \
                           '<a href="#" class="file_delete" ' \
-                          'data-field-name="{1}" data-file_id="{0}"> ' \
+                          'data-field-name="{field_name}" ' \
+                          'data-file_id="{file_id}"> ' \
                           '<i class="pi-trash"></i> Delete</a></li>'.format(
-                           field.data, field.name)
+                           field_name=field.name, file_id=field.data)
                 # Download button for original file
                 button += '<li class="original">' \
                           '<a href="{}" class="file_original"> ' \
