@@ -18,10 +18,10 @@
 
 		#project_nav
 			#project-header.navigation
-				ul.breadcrumb
-
-					li.project-title
-						a(href="{{url_for('projects.view', project_url=project.url, _external=True)}}") {{ project.name }}
+				.project-title
+					a(href="{{url_for('projects.view', project_url=project.url, _external=True)}}")
+						i.pi-home
+						| {{ project.name }}
 
 				#project-loading
 					i.pi-spin
