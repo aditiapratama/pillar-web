@@ -25,45 +25,76 @@ from application import SystemUtility
 
 
 class CustomFileSelectWidget(HiddenInput):
-    def __init__(self, **kwargs):
+    def __init__(self, file_format=None, **kwargs):
         super(CustomFileSelectWidget, self).__init__(**kwargs)
+        self.file_format = file_format
 
     def __call__(self, field, **kwargs):
         html = super(CustomFileSelectWidget, self).__call__(field, **kwargs)
+
+        file_format = self.file_format
+        file_format_regex = ''
+        if file_format and file_format == 'image':
+            file_format_regex = '^image\/(gif|jpe?g|png|tif?f|tga)$'
 
         button = '<div class="form-upload-file">'
 
         if field.data:
             api = SystemUtility.attract_api()
             try:
+                # Load the existing file attached to the field
                 file_item = File.find(field.data, api=api)
-
-                filename = Markup.escape(file_item.filename)
-                if file_item.content_type.split('/')[0] == 'image':
-                    button += '<img class="preview-thumbnail" src="{0}" />'.format(
-                        file_item.thumbnail('s', api=api))
-                else:
-                    button += '<p>{}</p>'.format(filename)
-                button += '<ul class="form-upload-file-meta">'
-                button += '<li class="name">{0}</li>'.format(filename)
-                button += '<li class="size">({0} MB)</li>'.format(round((file_item.length/1024)*0.001, 2))
-                button += '<li class="dimensions">{0}x{1}</li>'.format(file_item.width, file_item.height)
-                button += '<li class="delete"><a href="#" class="file_delete" data-field-name="{1}" \
-                    data-file_id="{0}"> <i class="pi-trash"></i> Delete</a></li>'.format(field.data, field.name)
-                button += '<li class="original"><a href="{}" class="file_original"> <i class="pi-download"></i>Original</a></li>'.format(
-                    file_item.link)
-                button += '</ul>'
             except ResourceNotFound:
                 pass
+            else:
+                filename = Markup.escape(file_item.filename)
+                if file_item.content_type.split('/')[0] == 'image':
+                    # If a file of type image is available, display the preview
+                    button += '<img class="preview-thumbnail" ' \
+                              'src="{0}" />'.format(
+                               file_item.thumbnail('s', api=api))
+                else:
+                    button += '<p>{}</p>'.format(filename)
+
+                button += '<ul class="form-upload-file-meta">'
+                # File name
+                button += '<li class="name">{0}</li>'.format(filename)
+                # File size
+                button += '<li class="size">({0} MB)</li>'.format(
+                           round((file_item.length/1024)*0.001, 2))
+                # Image resolution (if image)
+                button += '<li class="dimensions">{0}x{1}</li>'.format(
+                          file_item.width, file_item.height)
+                # Delete button
+                button += '<li class="delete">' \
+                          '<a href="#" class="file_delete" ' \
+                          'data-field-name="{1}" data-file_id="{0}"> ' \
+                          '<i class="pi-trash"></i> Delete</a></li>'.format(
+                           field.data, field.name)
+                # Download button for original file
+                button += '<li class="original">' \
+                          '<a href="{}" class="file_original"> ' \
+                          '<i class="pi-download"></i>Original</a></li>'.format(
+                           file_item.link)
+                button += '</ul>'
 
         upload_url = '%s/storage/stream/{project_id}' % current_app.config['PILLAR_SERVER_ENDPOINT']
 
-        button += """
-        <input class="fileupload" type="file" name="file" data-url="{0}" data-field-name="{1}" data-token="{2}">
-        <div class="form-upload-progress">
-          <div class="form-upload-progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
-          </div>
-        </div>""".format(upload_url, field.name, Markup.escape(current_user.id))
+        button += '<input class="fileupload" type="file" name="file" ' \
+                  'data-url="{url}" ' \
+                  'data-field-name="{name}" ' \
+                  'data-token="{token}" ' \
+                  'data-file-format="{file_format}">' \
+                  '<div class="form-upload-progress"> ' \
+                  '<div class="form-upload-progress-bar" role="progressbar" ' \
+                  'aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" ' \
+                  'style="width: 0%;"> ' \
+                  '</div> ' \
+                  '</div>'.format(
+                   url=upload_url,
+                   name=field.name,
+                   token=Markup.escape(current_user.id),
+                   file_format=file_format_regex)
 
         button += '</div>'
 
@@ -71,9 +102,9 @@ class CustomFileSelectWidget(HiddenInput):
 
 
 class FileSelectField(StringField):
-    def __init__(self, name, **kwargs):
+    def __init__(self, name, file_format=None, **kwargs):
         super(FileSelectField, self).__init__(name, **kwargs)
-        self.widget = CustomFileSelectWidget()
+        self.widget = CustomFileSelectWidget(file_format=file_format)
 
 
 class ProceduralFileSelectForm(Form):

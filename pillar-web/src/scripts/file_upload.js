@@ -49,6 +49,25 @@ $(function () {
                 $('.button-save').addClass('disabled');
                 $('li.button-save a#item_save').html('<i class="pi-spin spin"></i> Uploading');
             },
+            add: function(e, data) {
+                var uploadErrors = [];
+                // Load regex if available (like /^image\/(gif|jpe?g|png)$/i;)
+                var acceptFileTypes = new RegExp($(this).data('file-format'));
+                if(data.originalFiles[0]['type'].length && !acceptFileTypes.test(data.originalFiles[0]['type'])) {
+                    uploadErrors.push('Not an accepted file type');
+                }
+                // Limit upload size to 1GB
+                if(data.originalFiles[0]['size'] && data.originalFiles[0]['size'] > 1262485504) {
+                    uploadErrors.push('Filesize is too big');
+                }
+                if(uploadErrors.length > 0) {
+                    $(this).parent().parent().addClass('error');
+                    $(this).after(uploadErrors.join("\n"));
+                } else {
+                    $(this).parent().parent().removeClass('error');
+                    data.submit();
+                }
+            },
             progressall: function (e, data) {
                 // Update progressbar during upload
                 var progress = parseInt(data.loaded / data.total * 100, 10);
