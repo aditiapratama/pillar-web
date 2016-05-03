@@ -315,9 +315,6 @@ def delete_node():
         return abort(403)
 
     node.delete(api=api)
-    # Delete cached parent template fragment
-    if node.parent:
-        delete_redis_cache_template('group_view', node.parent)
 
     return jsonify(status='success', data=dict(message='Node deleted'))
 

@@ -39,6 +39,9 @@ function addNode(nodeTypeName, parentId) {
 	})
 	.always(function(){
 		$('.button-add-group-icon').addClass('pi-collection-plus').removeClass('pi-spin spin');
+	})
+	.fail(function(data){
+		statusBarSet('error', 'Error creating node (' + data.status + ' - ' + data.statusText + ')', 'pi-warning', 5000);
 	});
 }
 
@@ -122,6 +125,9 @@ $("#item_move_accept").click(function(e) {
 		Cookies.remove('bcloud_moving_node_id');
 		moveModeExit();
 		$('#project_tree').jstree("refresh");
+	})
+	.fail(function(data){
+		statusBarSet('error', 'Error moving node (' + data.status + ' - ' + data.statusText + ')', 'pi-warning', 6000);
 	});
 });
 
@@ -142,6 +148,9 @@ $('#item_featured').click(function(e){
 	})
 	.done(function(){
 		statusBarSet('success', 'Featured status toggled successfully', 'pi-star-filled');
+	})
+	.fail(function(data){
+		statusBarSet('error', 'Error toggling feature (' + data.status + ' - ' + data.statusText + ')', 'pi-warning', 6000);
 	});
 });
 
@@ -154,13 +163,19 @@ $('#item_delete').click(function(e){
 		// Feedback logic
 	})
 	.done(function(){
-		statusBarSet('success', 'Node deleted', 'pi-trash');
+		statusBarSet('success', 'Node deleted successfully', 'pi-trash');
+
 		if (ProjectUtils.parentNodeId() != '') {
 			displayNode(ProjectUtils.parentNodeId());
 		} else {
 			// Display the project when the group is at the root of the tree
 			displayProject(ProjectUtils.projectId());
 		}
+
+		$('#project_tree').jstree("refresh");
+	})
+	.fail(function(data){
+		statusBarSet('error', 'Error deleting node (' + data.status + ' - ' + data.statusText + ')', 'pi-warning', 6000);
 	});
 });
 
@@ -176,6 +191,9 @@ $('#item_toggle_public').click(function(e){
 	.done(function(data){
 		statusBarSet('success', data.data.message);
 		displayNode(currentNodeId);
+	})
+	.fail(function(data){
+		statusBarSet('error', 'Error toggling status (' + data.status + ' - ' + data.statusText + ')', 'pi-warning', 6000);
 	});
 });
 

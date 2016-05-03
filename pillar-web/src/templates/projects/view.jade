@@ -294,6 +294,7 @@ script.
 		loadNodeContent(url, nodeId);
 
 		$("#project_context-container").scrollTop(0);
+		$('.project-mode-edit').hide();
 	}
 
 
@@ -302,6 +303,9 @@ script.
 		loadProjectContent(url, projectUrl);
 		$('.project-mode-view').show();
 		$('.project-mode-edit').hide();
+
+		// Clear the hash, we're in the root anyway
+		window.location.hash = '';
 	}
 
 
