@@ -1845,6 +1845,17 @@ section.node-children
 		box-shadow: 0 0 30px rgba(black, .2)
 		margin: 15px 10px
 
+		&:hover
+			cursor: pointer
+
+			.item-info .item-title
+				color: $color-primary
+
+			a.item-header
+				img.background
+					width: 120%
+
+
 		&.create
 			background-color: rgba($color-background-nav, .5)
 			box-shadow: none
@@ -1857,6 +1868,10 @@ section.node-children
 
 			&:hover
 				border: 2px dashed white
+				background-color: lighten(rgba($color-background-nav, .5), 10%)
+
+				.item-info .item-title
+					color: white
 
 			&.disabled
 				border: 2px dashed rgba(white, .5)
@@ -1909,6 +1924,8 @@ section.node-children
 					width: initial
 					color: $color-text-light
 
+					&:hover
+						color: white
 
 
 		a.item-header
@@ -1930,6 +1947,7 @@ section.node-children
 				filter: blur(15px)
 				transform: scale(1.2)
 				opacity: .6
+				transition: width 250ms ease-in-out
 
 		.card-thumbnail
 			position: absolute

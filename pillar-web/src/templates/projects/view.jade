@@ -108,6 +108,7 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 								i.button-featured-icon.pi-star
 								| Toggle Featured
 
+						| {% if current_user.has_role('admin') %}
 						li.button-toggle-public
 							a#item_toggle_public(
 								href="#",
@@ -116,6 +117,7 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 								data-placement="left")
 								i.pi-lock-open
 								| Toggle public
+						| {% endif %}
 
 						li.button-move
 							a#item_move(

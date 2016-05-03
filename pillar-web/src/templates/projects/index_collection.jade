@@ -71,7 +71,8 @@ meta(name="twitter:image", content="{% if title == 'open-projects' %}{{ url_for(
 				| {% for project in projects %}
 				| {% if (project.status == 'published') or (project.status == 'pending' and current_user.is_authenticated()) and project._id != config.MAIN_PROJECT_ID %}
 
-				.node_index-collection-card
+				.node_index-collection-card(
+					data-url="{{ url_for('projects.view', project_url=project.url) }}")
 					a.item-header(
 						href="{{ url_for('projects.view', project_url=project.url) }}")
 
@@ -104,7 +105,8 @@ meta(name="twitter:image", content="{% if title == 'open-projects' %}{{ url_for(
 				| {% endfor %}
 
 				| {% if title == 'dashboard' and (current_user.has_role('subscriber') or current_user.has_role('admin')) %}
-				.node_index-collection-card.create
+				.node_index-collection-card.create(
+					data-url="{{ url_for('projects.create') }}")
 					.item-info
 						a.item-title#project-create(
 							href="{{ url_for('projects.create') }}")
@@ -118,6 +120,11 @@ meta(name="twitter:image", content="{% if title == 'open-projects' %}{{ url_for(
 
 | {% block footer_scripts %}
 script.
+	$('.node_index-collection-card').on('click', function(e){
+		e.preventDefault();
+		window.location.href = $(this).data('url');
+	});
+
 	$('#project-create').on('click', function(e){
 		e.preventDefault();
 
@@ -125,6 +132,5 @@ script.
 		$(this).html('<i class="pi-spin spin"></i> Creating project...');
 
 		window.location.href = $(this).attr('href');
-
 	});
 | {% endblock %}
