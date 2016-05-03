@@ -158,25 +158,36 @@ $('#item_featured').click(function(e){
 /* Delete */
 $('#item_delete').click(function(e){
 	e.preventDefault();
-	$.post(urlNodeDelete, {node_id : ProjectUtils.nodeId()},
-		function(data){
-		// Feedback logic
-	})
-	.done(function(){
-		statusBarSet('success', 'Node deleted successfully', 'pi-trash');
+	if (ProjectUtils.isProject() === 'True') {
+		// url = window.location.href.split('#')[0] + 'delete';
+		// window.location.replace(url);
+		$.post(urlProjectDelete, {project_id: ProjectUtils.projectId()},
+			function (data) {
+				// Feedback logic
+			}).done(function () {
+				window.location.replace('/p/');
+		});
+	} else {
+		$.post(urlNodeDelete, {node_id: ProjectUtils.nodeId()},
+			function (data) {
+				// Feedback logic
+			})
+			.done(function () {
+				statusBarSet('success', 'Node deleted successfully', 'pi-trash');
 
-		if (ProjectUtils.parentNodeId() != '') {
-			displayNode(ProjectUtils.parentNodeId());
-		} else {
-			// Display the project when the group is at the root of the tree
-			displayProject(ProjectUtils.projectId());
-		}
+				if (ProjectUtils.parentNodeId() != '') {
+					displayNode(ProjectUtils.parentNodeId());
+				} else {
+					// Display the project when the group is at the root of the tree
+					displayProject(ProjectUtils.projectId());
+				}
 
-		$('#project_tree').jstree("refresh");
-	})
-	.fail(function(data){
-		statusBarSet('error', 'Error deleting node (' + data.status + ' - ' + data.statusText + ')', 'pi-warning', 6000);
-	});
+				$('#project_tree').jstree("refresh");
+			})
+			.fail(function (data) {
+				statusBarSet('error', 'Error deleting node (' + data.status + ' - ' + data.statusText + ')', 'pi-warning', 6000);
+			});
+	}
 });
 
 

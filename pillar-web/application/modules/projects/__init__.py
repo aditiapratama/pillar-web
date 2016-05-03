@@ -417,7 +417,8 @@ def create():
 def delete():
     """Unapologetically deletes a project"""
     api = SystemUtility.attract_api()
-    project_id = request.form.project_id.data
-    project = Project.delete(project_id, api=api)
+    project_id = request.form['project_id']
+    project = Project.find(project_id, api=api)
+    project.delete(api=api)
     return jsonify(dict(staus='success', data=dict(
         message='Project deleted {}'.format(project['_id']))))
