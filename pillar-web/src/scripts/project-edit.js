@@ -52,8 +52,7 @@ $('#item_edit').click(function(e){
 	// When clicking on the edit icon, embed the edit
 	e.preventDefault();
 	if (ProjectUtils.isProject() === 'True') {
-		url = window.location.href + 'edit';
-		window.location.replace(url);
+		window.location.replace(urlProjectEdit);
 	} else {
 		editNode(ProjectUtils.nodeId());
 	}
