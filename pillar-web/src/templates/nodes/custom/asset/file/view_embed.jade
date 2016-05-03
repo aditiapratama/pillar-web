@@ -112,9 +112,9 @@ script.
 
 	var content_type = $("li.node-details-meta-list-item.type").text();
 	var type_trimmed = content_type.substring(content_type.indexOf("/") + 1);
-	if (type_trimmed == 'blend'){
+
+	if (type_trimmed == 'x-blender' || type_trimmed == 'blend'){
 		type_trimmed = '<span class="blend"><i class="pi-blender-logo"></i></span>';
-		$('li.file.download button').html('Download Blend');
 	};
 
 	$("li.node-details-meta-list-item.type").html(type_trimmed);

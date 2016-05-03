@@ -37,7 +37,7 @@ html(lang="en")
 
 		| {% block head %}{% endblock %}
 
-		link(href="{{ url_for('static', filename='assets/css/main.css', v=02052016) }}", rel="stylesheet")
+		link(href="{{ url_for('static', filename='assets/css/main.css', v=03052016) }}", rel="stylesheet")
 
 	body
 		.container-page(class="{{title}}")
@@ -219,14 +219,14 @@ html(lang="en")
 											span.info Your subscription is not active.
 												span.renew Click here to renew.
 										| {% endif %}
-									| {#
+
 									li
 										a.navbar-item(
 											href="{{url_for('projects.index')}}"
 											title="My Projects")
 											i.pi-star
 											| My Projects
-									| #}
+
 									li
 										a.navbar-item(
 											href="{{url_for('users.settings_profile')}}"
@@ -362,8 +362,8 @@ html(lang="en")
 			var algolia = algoliasearch("{{config['ALGOLIA_USER']}}", "{{config['ALGOLIA_PUBLIC_KEY']}}");
 			var index = algolia.initIndex("{{config['ALGOLIA_INDEX_NODES']}}");
 
-		script(type="text/javascript", src="{{ url_for('static', filename='assets/js/markdown.min.js', v=02052016) }}")
-		script(type="text/javascript", src="{{ url_for('static', filename='assets/js/tutti.min.js', v=02052016) }}")
+		script(type="text/javascript", src="{{ url_for('static', filename='assets/js/markdown.min.js', v=03052016) }}")
+		script(type="text/javascript", src="{{ url_for('static', filename='assets/js/tutti.min.js', v=03052016) }}")
 
 		| {% block footer_scripts %}{% endblock %}
 
