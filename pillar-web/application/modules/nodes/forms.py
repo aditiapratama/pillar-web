@@ -156,18 +156,15 @@ def get_node_form(node_type):
     form_prop = node_type['form_schema'].to_dict()
     parent_prop = node_type['parent']
 
-    setattr(ProceduralForm, 'name', StringField(
-        'Name', validators=[DataRequired()]))
+    ProceduralForm.name = StringField('Name', validators=[DataRequired()])
     # Parenting
     if parent_prop:
         parent_names = ", ".join(parent_prop)
-        setattr(ProceduralForm, 'parent', HiddenField(
-            'Parent ({0})'.format(parent_names)))
+        ProceduralForm.parent = HiddenField('Parent ({0})'.format(parent_names))
 
-    setattr(ProceduralForm, 'description', TextAreaField('Description'))
-    setattr(ProceduralForm, 'picture', FileSelectField('Picture'))
-    setattr(ProceduralForm, 'node_type', HiddenField(
-        default=node_type['name']))
+    ProceduralForm.description = TextAreaField('Description')
+    ProceduralForm.picture = FileSelectField('Picture', file_format='image')
+    ProceduralForm.node_type = HiddenField(default=node_type['name'])
 
     add_form_properties(ProceduralForm, node_schema, form_prop)
 

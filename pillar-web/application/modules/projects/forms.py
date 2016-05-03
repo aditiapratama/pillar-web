@@ -23,11 +23,15 @@ class ProjectForm(Form):
     description = TextAreaField('Description', validators=[DataRequired()])
     is_private = BooleanField('Private')
     category = SelectField('Category', choices=[
-        ('film', 'Film'), ('training', 'Training'), ('assets', 'Assets')])
+        ('film', 'Film'),
+        ('training', 'Training'),
+        ('assets', 'Assets')])
     status = SelectField('Status', choices=[
-        ('published', 'Published'), ('pending', 'Pending'), ('deleted', 'Deleted')])
-    picture_header = FileSelectField('Picture header')
-    picture_square = FileSelectField('Picture square')
+        ('published', 'Published'),
+        ('pending', 'Pending'),
+        ('deleted', 'Deleted')])
+    picture_header = FileSelectField('Picture header', file_format='image')
+    picture_square = FileSelectField('Picture square', file_format='image')
 
     def validate(self):
         rv = Form.validate(self)
