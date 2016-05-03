@@ -71,7 +71,7 @@ meta(name="twitter:image", content="{% if title == 'open-projects' %}{{ url_for(
 				| {% for project in projects %}
 				| {% if (project.status == 'published') or (project.status == 'pending' and current_user.is_authenticated()) and project._id != config.MAIN_PROJECT_ID %}
 
-				.node_index-collection-card(
+				.node_index-collection-card.project(
 					data-url="{{ url_for('projects.view', project_url=project.url) }}")
 					a.item-header(
 						href="{{ url_for('projects.view', project_url=project.url) }}")
@@ -120,17 +120,17 @@ meta(name="twitter:image", content="{% if title == 'open-projects' %}{{ url_for(
 
 | {% block footer_scripts %}
 script.
-	$('.node_index-collection-card').on('click', function(e){
+	$('.node_index-collection-card.project').on('click', function(e){
 		e.preventDefault();
 		window.location.href = $(this).data('url');
 	});
 
-	$('#project-create').on('click', function(e){
+	$('.node_index-collection-card.create').on('click', function(e){
 		e.preventDefault();
 
 		$('.node_index-collection-card.create').addClass('disabled');
-		$(this).html('<i class="pi-spin spin"></i> Creating project...');
+		$('a', this).html('<i class="pi-spin spin"></i> Creating project...');
 
-		window.location.href = $(this).attr('href');
+		window.location.href = $(this).data('url');
 	});
 | {% endblock %}
