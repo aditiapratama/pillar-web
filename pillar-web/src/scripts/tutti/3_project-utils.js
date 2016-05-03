@@ -8,12 +8,14 @@ ProjectUtils.getProjectData = function() {
 	var projectId = projectData.getAttribute('data-project_id');
 	var isProject = projectData.getAttribute('data-is_project');
 	var nodeType = projectData.getAttribute('data-node_type');
+	var isModified = projectData.getAttribute('data-is_modified');
 	return {
 		nodeId: nodeId,
 		parentNodeId: parentNodeId,
 		projectId: projectId,
 		isProject: isProject,
-		nodeType: nodeType}
+		nodeType: nodeType,
+		isModified: isModified}
 };
 
 ProjectUtils.nodeId = function() {
@@ -34,6 +36,10 @@ ProjectUtils.isProject = function() {
 
 ProjectUtils.nodeType = function() {
 	return ProjectUtils.getProjectData().nodeType;
+}
+
+ProjectUtils.isModified = function() {
+	return ProjectUtils.getProjectData().isModified;
 }
 
 ProjectUtils.setProjectAttributes = function(props) {

@@ -183,6 +183,8 @@ script(type="text/javascript").
 
 	$('.button-save').on('click', function(e){
 		e.preventDefault();
+		// Disable beforeunolad when submitting a form
+		$(window).off('beforeunload');
 
 		$(this).children('a').html('<i class="pi-spin spin"></i> Saving');
 		$('#node-edit-form').submit();
@@ -221,6 +223,15 @@ script(type="text/javascript").
 				$preview.html(convert($textarea.val()));
 			};
 		}).trigger('keyup');
+
+		$('input, textarea').keypress(function () {
+			// Unused: save status of the page as 'edited'
+			ProjectUtils.setProjectAttributes({isModified: 'True'});
+			// Set the beforeunload to warn the user of unsaved changes
+			$(window).on('beforeunload', function () {
+				return 'You have unsaved changes in your project.';
+			});
+		});
 	});
 
 | {% endblock %}
