@@ -621,6 +621,8 @@ def create():
         return abort(404)
 
     node_type = project.get_node_type(node_type_name)
+    node_type_name = 'folder' if node_type['name'] == 'group' else \
+        node_type['name']
 
     node_props = dict(
         name='New {}'.format(node_type_name),
@@ -628,9 +630,6 @@ def create():
         user=current_user.objectid,
         node_type=node_type['name'],
         properties={}
-        # properties=dict(
-        #     content_type=filetype,
-        #     status='processing')
         )
 
     if parent_id:
