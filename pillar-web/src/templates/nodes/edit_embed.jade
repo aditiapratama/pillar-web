@@ -69,12 +69,20 @@
 
 		| {% endfor %}
 
-		.hidden
-			a#button-cancel.btn.btn-default(href="#", data-node_id='{{node._id}}') Cancel
+		ul.project-edit-tools.bottom
+			li.button-cancel
+				a#item_cancel.item-cancel.project-mode-edit(
+					href="#",
+					title="Cancel changes")
+					i.button-cancel-icon.pi-cancel
+					| Cancel
 
-			input#submit_edit_node.btn.btn-default.btn-success(
-				data-node-id="{{node._id}}",
-				type="submit")
+			li.button-save
+				a#item_save.item-save.project-mode-edit(
+					href="#",
+					title="Save changes")
+					i.button-save-icon.pi-check
+					| Save Changes
 
 script(type='text/javascript', src="{{ url_for('static', filename='jquery-file-upload/js/vendor/jquery.ui.widget.js') }}")
 script(type='text/javascript', src="{{ url_for('static', filename='jquery-file-upload/js/jquery.iframe-transport.js') }}")
@@ -196,8 +204,7 @@ script(type="text/javascript").
 
 	});
 
-	$('#item_save').click(function(e){
-
+	$('#item_save, .item-save').click(function(e){
 		// Assets always need a file
 		if ($('.form-group.file #file').val() == ''){
 			$('.form-group.file').addClass('error');
@@ -207,10 +214,9 @@ script(type="text/javascript").
 			$("#node-edit-form").submit();
 			$('#project_tree').jstree("refresh");
 		}
-
 	});
 
-	$('#item_cancel').click(function(e){
+	$('#item_cancel, .item-cancel').click(function(e){
 		displayNode('{{node._id}}');
 		$('.project-mode-view').show();
 		$('.project-mode-edit').hide();
