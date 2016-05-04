@@ -4,7 +4,7 @@
 
 | {% block header_backdrop %}
 | {% if project.picture_header %}
-.navbar-backdrop(style="background-image: url({{ project.picture_header.thumbnail('m', api=api) }})")
+.navbar-backdrop(style="background-image: url({{ project.picture_header.thumbnail('l', api=api) }})")
 .navbar-backdrop-overlay
 | {% else %}
 .navbar-backdrop

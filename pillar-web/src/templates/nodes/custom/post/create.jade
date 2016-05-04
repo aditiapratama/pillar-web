@@ -4,9 +4,9 @@
 
 | {% block header_backdrop %}
 | {% if project and project.picture_header %}
-.navbar-backdrop(style="background-image: url({{ project.picture_header.thumbnail('m', api=api) }})")
+.navbar-backdrop(style="background-image: url({{ project.picture_header.thumbnail('l', api=api) }})")
 | {% elif node and node.picture %}
-.navbar-backdrop(style="background-image: url({{ node.picture.thumbnail('m', api=api) }})")
+.navbar-backdrop(style="background-image: url({{ node.picture.thumbnail('l', api=api) }})")
 | {% else %}
 .navbar-backdrop
 | {% endif %}
