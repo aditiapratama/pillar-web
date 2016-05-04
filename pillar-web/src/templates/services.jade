@@ -1,0 +1,82 @@
+| {% extends 'layout.html' %}
+| {% block page_title %}Services{% endblock %}
+
+| {% block og %}
+meta(property="og:title", content="Services the Blender Cloud")
+meta(property="og:url", content="https://cloud.blender.org/services")
+meta(property="og:image", content="{{ url_for('static', filename='assets/img/backgrounds/background_gleb_locomotive.jpg')}}")
+| {% endblock %}
+
+| {% block header_backdrop %}
+.navbar-backdrop(
+	style="background-image: url({{ url_for('static', filename='assets/img/backgrounds/background_services.jpg')}})")
+| {% endblock %}
+
+| {% block body %}
+#page-container
+	#page-header
+		.page-title
+			i.pi-blender-cloud-logo
+			em SERVICES
+		.page-title-summary
+			| Personal Projects · Blender Integration · Texture Browsing · Production Management
+
+	#page-content
+		section.page-card.services-projects
+
+			.page-card-side
+				.page-card-title Private Projects
+				.page-card-summary.
+					Create and manage your own personal projects in the Blender Cloud!
+					Using the same interface we use for our open projects.
+
+				a.page-card-cta(
+					href="https://cloud.blender.org/blog/introducing-private-projects")
+					| Learn More
+
+			.page-card-side
+				.page-card-icon
+
+		section.page-card.right.services-textures
+
+			.page-card-side
+				.page-card-title Texture Browser Add-On
+				.page-card-summary.
+					Get access to the Blender Cloud Textures library from within Blender.
+					Using our exclusive add-on.
+
+				a.page-card-cta(
+					href="https://cloud.blender.org/blog/introducing-private-projects")
+					| Learn More
+
+			.page-card-side
+				.page-card-icon
+
+		section.page-card.services-attract
+
+			.page-card-side
+				.page-card-title
+					| Attract
+					small (soon)
+				.page-card-summary.
+					Production-management software for your film, game, freelance projects.
+
+			.page-card-side
+				.page-card-icon
+
+		| {% if not current_user.has_role('subscriber') %}
+		section.page-card.subscribe(style="background-image: url({{ url_for('static', filename='assets/img/backgrounds/background_services.jpg')}})")
+			.page-card-side
+				.page-card-title
+					| All of this, plus hours of training and production assets.
+				.page-card-summary
+					| Join us for only $9.90/month!
+				a.page-card-cta(
+					href="https://store.blender.org/product/membership/")
+					| Subscribe Now
+		| {% endif %}
+
+| {% endblock %}
+
+| {% block footer_scripts %}
+| {% endblock %}

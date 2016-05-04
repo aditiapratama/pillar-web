@@ -98,8 +98,14 @@ def error_404(e):
 def join():
     """Join page"""
     return redirect("https://store.blender.org/product/membership/")
+
+
+@app.route("/services")
+def services():
+    """Services page"""
     return render_template(
-        'join.html')
+        'services.html',
+        title="services")
 
 
 # @app.route("/stats")

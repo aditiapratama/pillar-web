@@ -22,6 +22,7 @@ pillar-web/application/templates/_modal.html
 pillar-web/application/templates/homepage.html
 pillar-web/application/templates/join.html
 pillar-web/application/templates/layout.html
+pillar-web/application/templates/services.html
 pillar-web/application/templates/stats.html
 pillar-web/application/templates/upload.html
 pillar-web/application/templates/upload_embed.html
