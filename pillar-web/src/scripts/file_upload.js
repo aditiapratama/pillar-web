@@ -47,9 +47,9 @@ $(function () {
             beforeSend: function(xhr, data) {
                 var token = this.fileInput.attr('data-token');
                 xhr.setRequestHeader('Authorization', 'basic ' + btoa(token + ':'));
-                statusBarSet('info', 'Uploading File', 'pi-upload-cloud');
+                statusBarSet('info', 'Uploading File...', 'pi-upload-cloud');
                 $('.button-save').addClass('disabled');
-                $('li.button-save a#item_save').html('<i class="pi-spin spin"></i> Uploading');
+                $('li.button-save a#item_save').html('<i class="pi-spin spin"></i> Uploading...');
             },
             add: function(e, data) {
                 var uploadErrors = [];

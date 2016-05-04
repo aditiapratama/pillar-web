@@ -172,7 +172,7 @@ script(type="text/javascript").
 		})
 		.fail(function(data){
 			/* Something went wrong, print it */
-			statusBarSet('error', 'Oops! We\'ve been notified and working on it - ' + data.status + ' ' + data.statusText, 8000);
+			statusBarSet('error', 'Error! We\'ve been notified and are working on it - ' + data.status + ' ' + data.statusText, 8000);
 
 			$("li.button-save").addClass('field-error');
 			$("li.button-save a#item_save").html('<i class="pi-warning"></i> Houston!');
@@ -260,10 +260,10 @@ script(type="text/javascript").
 				// Get the first file upload result (we only need one)
 				var fileData = data.result.files[0];
 				// Create a file object on the server and retrieve its id
-				statusBarSet('info', 'Uploading File', 'pi-upload-cloud');
+				statusBarSet('info', 'Uploading File...', 'pi-upload-cloud');
 
 				$('.button-save').addClass('disabled');
-				$('li.button-save a#item_save').html('<i class="pi-spin spin"></i> Uploading Preview');
+				$('li.button-save a#item_save').html('<i class="pi-spin spin"></i> Uploading Preview...');
 
 				var payload = {
 					name: fileData.name,

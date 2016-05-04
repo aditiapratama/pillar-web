@@ -20,8 +20,10 @@ script(type="text/javascript").
 
 		if (ProjectUtils.nodeType() === 'group'){
 			$('a', '.button-edit').html('<i class="pi-edit button-edit-icon"></i> Edit Folder');
+			$('a', '.button-delete').html('<i class="pi-trash button-delete-icon"></i>Delete Folder');
 		} else {
 			$('a', '.button-edit').html('<i class="pi-edit button-edit-icon"></i> Edit ' + ProjectUtils.nodeType());
+			$('a', '.button-delete').html('<i class="pi-trash button-delete-icon"></i>Delete ' + ProjectUtils.nodeType());
 		}
 
 		{% if parent %}
