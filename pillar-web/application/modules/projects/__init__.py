@@ -155,13 +155,19 @@ def edit(project_url):
         project.url = form.url.data
         project.summary = form.summary.data
         project.description = form.description.data
-        project.is_private = form.is_private.data
         project.category = form.category.data
         project.status = form.status.data
         if form.picture_square.data:
             project.picture_square = form.picture_square.data
         if form.picture_header.data:
             project.picture_header = form.picture_header.data
+
+        # Update world permissions from is_private checkbox
+        if form.is_private.data:
+            project.permissions.world = []
+        else:
+            project.permissions.world = ['GET']
+
         project.update(api=api)
         # Reattach the pictures
         attach_project_pictures(project, api)
