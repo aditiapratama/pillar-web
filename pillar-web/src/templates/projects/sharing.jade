@@ -60,7 +60,7 @@
 			span#project-statusbar
 
 			span#project-edit-title
-				| Manage users you want to collaborate with in this project.
+				| Manage users for this project
 
 		#project_context-container
 			.project_nav-expand-btn(
@@ -73,12 +73,18 @@
 				#node-edit-container
 					.row(id="node-edit-form")
 						.col-md-6
+							| {% if (project.user == current_user.objectid or current_user.has_role('admin')) %}
 							.sharing-users-search
 								.form-group
 									input#user-select.form-control(
 										name='contacts',
 										type='text',
 										placeholder='Add users by name')
+							| {% else %}
+							.sharing-users-search
+								.disabled Only project owners can manage users
+							| {% endif %}
+
 
 							ul.sharing-users-list
 								| {% for user in users %}
@@ -89,25 +95,30 @@
 										span.sharing-users-name {{user['full_name']}}
 										span.sharing-users-extra {{user['username']}}
 									.sharing-users-action
+										| {% if (project.user == current_user.objectid or current_user.has_role('admin')) %}
 										| {% if current_user.objectid != user['_id'] %}
 										button.user-remove(title="Remove this user from your project")
 											i.pi-trash
 										| {% else %}
 										span You
 										| {% endif %}
+										| {% endif %}
 								| {% endfor %}
 						.col-md-6
 							.sharing-users-info
 								h4 What can team members do?
 								p.
-									Users you add here will be able to upload new content to your
-									project, as well as see, edit, and comment on the content previously created.
+									Team members are able to upload new content to the
+									project; as well as view, edit, and comment on the content previously created.
 
 | {% endblock %}
 
 | {% block footer_navigation %}
 | {% endblock %}
+
 | {% block footer_scripts %}
+
+| {% if (project.user == current_user.objectid or current_user.has_role('admin')) %}
 script(src='//cdn.jsdelivr.net/autocomplete.js/0/autocomplete.jquery.min.js')
 script.
 	$(document).ready(function() {
@@ -220,4 +231,7 @@ script.
 		}
 
 	});
+
+| {% endif %}
+
 | {% endblock %}
