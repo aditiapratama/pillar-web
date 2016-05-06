@@ -22,6 +22,7 @@ from application.helpers import get_file
 from application.helpers import attach_project_pictures
 from application.helpers.jstree import jstree_get_children
 from application.helpers.caching import delete_redis_cache_template
+from application.helpers import gravatar
 
 projects = Blueprint('projects', __name__)
 
@@ -274,15 +275,19 @@ def sharing(project_url):
 
     # Fetch users that are part of the admin group
     users = project.get_users(api=api)
+    for user in users['_items']:
+        user['avatar'] = gravatar(user['email'])
 
     if request.method == 'POST':
         user_id = request.form['user_id']
         action = request.form['action']
         if action == 'add':
-            project.add_user(user_id, api=api)
+            user = project.add_user(user_id, api=api)
         elif action == 'remove':
-            project.remove_user(user_id, api=api)
-        return jsonify(_status='OK')
+            user = project.remove_user(user_id, api=api)
+        # Add gravatar to user
+        user['avatar'] = gravatar(user['email'])
+        return jsonify(user)
 
     attach_project_pictures(project, api)
 
