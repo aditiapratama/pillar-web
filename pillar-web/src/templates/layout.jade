@@ -357,7 +357,6 @@ html(lang="en")
 		script(src="//cdn.jsdelivr.net/typeahead.js/0.11.1/typeahead.jquery.min.js")
 		script(src="//cdn.jsdelivr.net/algoliasearch/3/algoliasearch.min.js")
 
-
 		script.
 			var algolia = algoliasearch("{{config['ALGOLIA_USER']}}", "{{config['ALGOLIA_PUBLIC_KEY']}}");
 			var index = algolia.initIndex("{{config['ALGOLIA_INDEX_NODES']}}");

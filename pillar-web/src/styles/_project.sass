@@ -176,6 +176,8 @@ span#project-statusbar
 	color: $color-text-dark
 	border-radius: 3px
 	opacity: 0
+	z-index: 1
+	background-color: $color-background-light
 	font-weight: 400
 	transition: all 250ms ease-in-out
 
@@ -1145,7 +1147,7 @@ section.node-preview.group
 
 					/* Actual button */
 					button
-						@include button-rounded($color-primary, 6px)
+						@include button-rounded($color-primary, 3px)
 						position: relative
 
 						padding:
@@ -1170,7 +1172,7 @@ section.node-preview.group
 
 					&.file.download
 						button
-							@include button-rounded-filled($color-primary, 6px)
+							@include button-rounded-filled($color-primary, 3px)
 							padding:
 								left: 15px
 								right: 15px
@@ -2341,27 +2343,27 @@ section.node-children
 	.fileupload-buttonbar
 		padding: 10px 0
 		.fileinput-button
-			@include button-rounded($color-success, 6px)
+			@include button-rounded($color-success, 3px)
 		.start
-			@include button-rounded($color-info, 6px)
+			@include button-rounded($color-info, 3px)
 		.cancel
-			@include button-rounded($color-warning, 6px)
+			@include button-rounded($color-warning, 3px)
 		.delete
-			@include button-rounded($color-danger, 6px)
+			@include button-rounded($color-danger, 3px)
 		.toggle
 			margin: 0 20px
 
 	.files
 		.btn
 			&.start
-				@include button-rounded($color-info, 6px)
+				@include button-rounded($color-info, 3px)
 			&.cancel
-				@include button-rounded($color-warning, 6px)
+				@include button-rounded($color-warning, 3px)
 			&.delete
-				@include button-rounded($color-danger, 6px)
+				@include button-rounded($color-danger, 3px)
 
 			&.create
-				@include button-rounded($color-success, 6px)
+				@include button-rounded($color-success, 3px)
 
 	.template-upload,
 	.template-download
