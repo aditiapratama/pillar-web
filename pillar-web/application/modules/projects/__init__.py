@@ -255,7 +255,7 @@ def edit_node_type(project_url, node_type_name):
                            node_type=node_type)
 
 
-@projects.route('/<project_url>/edit/sharing')
+@projects.route('/<project_url>/edit/sharing', methods=['GET', 'POST'])
 @login_required
 def sharing(project_url):
     api = SystemUtility.attract_api()
@@ -266,12 +266,25 @@ def sharing(project_url):
     except ResourceNotFound:
         return abort(404)
 
+    # Fetch users that are part of the admin group
+    users = project.get_users(api=api)
+
+    if request.method == 'POST':
+        user_id = request.form['user_id']
+        action = request.form['action']
+        if action == 'add':
+            project.add_user(user_id, api=api)
+        elif action == 'remove':
+            project.remove_user(user_id, api=api)
+        return jsonify(_status='OK')
+
     attach_project_pictures(project, api)
 
     return render_template('projects/sharing.html',
                            api=api,
                            title="sharing",
-                           project=project)
+                           project=project,
+                           users=users['_items'])
 
 
 @projects.route('/e/add-featured-node', methods=['POST'])

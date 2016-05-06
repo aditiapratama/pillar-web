@@ -2,6 +2,42 @@
 
 | {% block page_title %}Sharing: {{ project.name }}{% endblock %}
 
+| {% block head %}
+style.
+	.algolia-autocomplete {
+		width: 100%;
+	}
+
+	.algolia-autocomplete .aa-input, .algolia-autocomplete .aa-hint {
+		width: 100%;
+	}
+
+	.algolia-autocomplete .aa-hint {
+		color: #999;
+	}
+
+	.algolia-autocomplete .aa-dropdown-menu {
+		width: 100%;
+		background-color: #fff;
+		border: 1px solid #999;
+		border-top: none;
+	}
+
+	.algolia-autocomplete .aa-dropdown-menu .aa-suggestion {
+		cursor: pointer;
+		padding: 5px 4px;
+	}
+
+	.algolia-autocomplete .aa-dropdown-menu .aa-suggestion.aa-cursor {
+		background-color: #B2D7FF;
+	}
+
+	.algolia-autocomplete .aa-dropdown-menu .aa-suggestion em {
+		font-weight: bold;
+		font-style: normal;
+	}
+| {% endblock %}
+
 | {% block header_backdrop %}
 | {% if project.picture_header %}
 .navbar-backdrop(style="background-image: url({{ project.picture_header.thumbnail('l', api=api) }})")
@@ -45,9 +81,9 @@
 
 		#project_nav-footer
 			.project_nav-collapse-btn(
-				title="Collapse Navigation [T]",
-				data-toggle="tooltip",
-				data-placement="right")
+			title="Collapse Navigation [T]",
+			data-toggle="tooltip",
+			data-placement="right")
 				i.pi-angle-double-left
 
 		.project_split(title="Toggle Navigation [T]")
@@ -64,26 +100,82 @@
 
 		#project_context-container
 			.project_nav-expand-btn(
-				title="Expand Navigation [T]",
-				data-toggle="tooltip",
-				data-placement="right")
+			title="Expand Navigation [T]",
+			data-toggle="tooltip",
+			data-placement="right")
 				i.pi-angle-double-right
 
 			#project_context
 				#node-edit-container
 					div(id="node-edit-form")
-						h3 Sharing (coming soon)
+						h3 Sharing
 						p.
-							In this section, you will be able to manage (add and remove) users
-							you want to collaborate with.
+							In this section, you can manage (add and remove) users you want
+							to collaborate with.
+						ul
+							| {% for user in users %}
+							li {{user['full_name']}}
+							| {% endfor %}
 						p.
 							Once you add a user, they will be able to upload content to your
 							project and see the content you already created. You will also be
 							able to exchange comments on every item created in the project.
+						.row
+							.col-md-6
+								input#user-select.form-control(name='contacts', type='text', placeholder='Search by name')
+							.col-md-3
+								btn(class="btn btn-default" id="user-add") Add
+
 
 | {% endblock %}
 
 | {% block footer_navigation %}
 | {% endblock %}
-| {% block footer %}
+| {% block footer_scripts %}
+script(src='//cdn.jsdelivr.net/autocomplete.js/0/autocomplete.jquery.min.js')
+script.
+	$(document).ready(function() {
+		var APPLICATION_ID = '{{config.ALGOLIA_USER}}'
+		var SEARCH_ONLY_API_KEY = '{{config.ALGOLIA_PUBLIC_KEY}}';
+		var INDEX_NAME = '{{config.ALGOLIA_INDEX_USERS}}';
+		var client = algoliasearch(APPLICATION_ID, SEARCH_ONLY_API_KEY);
+		var index = client.initIndex(INDEX_NAME);
+		$('#user-select').autocomplete({hint: false}, [
+			{
+				source: function (q, cb) {
+					index.search(q, {hitsPerPage: 5}, function (error, content) {
+						if (error) {
+							cb([]);
+							return;
+						}
+						cb(content.hits, content);
+					});
+				},
+				displayKey: 'username',
+				templates: {
+					suggestion: function (suggestion) {
+						return suggestion._highlightResult.username.value;
+					}
+				}
+			}
+		]).on('autocomplete:selected', function (event, suggestion, dataset) {
+			// Append user-id to button
+			$('#user-add').attr('user-id', suggestion.objectID);
+		});
+
+		$('#user-add').click(function (event) {
+			var userId = $(this).attr('user-id');
+			if (userId.length > 0) {
+				$.post("{{url_for('projects.sharing', project_url=project.url)}}",
+								{user_id: userId, action: 'add'})
+								.done(function (data) {console.log("Data Loaded: " + data._status);
+				});
+			}
+		});
+
+		// Reset user-id if the form is edited
+		$('#user-select').on('change keypress', function () {
+			$('#user-add').attr('user-id', '');
+		});
+	});
 | {% endblock %}
