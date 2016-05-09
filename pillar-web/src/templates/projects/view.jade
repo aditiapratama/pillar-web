@@ -99,6 +99,7 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 						i.pi-more-vertical
 
 					ul.dropdown-menu
+						| {% if current_user.has_role('admin') %}
 						li.button-featured
 							a#item_featured(
 								href="#",
@@ -108,7 +109,6 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 								i.button-featured-icon.pi-star
 								| Toggle Featured
 
-						| {% if current_user.has_role('admin') %}
 						li.button-toggle-public
 							a#item_toggle_public(
 								href="#",
