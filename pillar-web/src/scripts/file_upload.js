@@ -100,6 +100,13 @@ $(function () {
                 // $(previewThumbnail).attr('src', data.data.link);
                 // $('.node-preview-thumbnail').show();
 
+                // Ugly workaround: If the asset has the default name, name it as the file
+                if ($('.form-group.name .form-control').val() == 'New asset') {
+                    var filename = data.files[0].name;
+                    $('.form-group.name .form-control').val(filename);
+                    $('.node-edit-title').html(filename);
+                }
+
                 statusBarSet('success', 'File Uploaded Successfully', 'pi-check');
 
                 $('.button-save').removeClass('disabled');
