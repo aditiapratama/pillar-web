@@ -145,7 +145,16 @@ script(type="text/javascript").
 		}).trigger('keyup');
 	});
 
-
+	$(function() {
+		$('input, textarea').keypress(function () {
+			// Unused: save status of the page as 'edited'
+			ProjectUtils.setProjectAttributes({isModified: 'True'});
+			// Set the beforeunload to warn the user of unsaved changes
+			$(window).on('beforeunload', function () {
+				return 'You have unsaved changes in your asset.';
+			});
+		});
+	});
 
 	$("#node-edit-form").unbind( "submit" );
 	$("#item_save").unbind( "click" );
@@ -213,6 +222,9 @@ script(type="text/javascript").
 			$('.form-group.file').removeClass('error');
 			$("#node-edit-form").submit();
 			$('#project_tree').jstree("refresh");
+
+			// Disable beforeunolad when submitting a form
+			$(window).off('beforeunload');
 		}
 	});
 
