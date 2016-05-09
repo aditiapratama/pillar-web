@@ -37,13 +37,13 @@ function statusBarSet(classes, html, icon_name, time){
 
 	if (!icon_name) {
 		if (classes == 'error') {
-			icon_name = 'ion-alert-circled';
+			icon_name = 'pi-attention';
 		} else if (classes == 'success') {
-			icon_name = 'ion-checkmark-round';
+			icon_name = 'pi-check';
 		} else if (classes == 'warning') {
-			icon_name = 'ion-alert-circled';
+			icon_name = 'pi-warning';
 		} else if (classes == 'info') {
-			icon_name = 'ion-information-circled';
+			icon_name = 'pi-info';
 		} else {
 			icon = '<i class="' + icon_name + '"></i>';
 		};
