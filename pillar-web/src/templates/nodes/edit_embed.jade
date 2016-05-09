@@ -161,6 +161,8 @@ script(type="text/javascript").
 	$("#item_cancel").unbind( "click" );
 	$(".file_delete").unbind( "click" );
 
+	$('#item_save, .item-save').attr('href', '#' + getHashId());
+
 	/* Reset Save Changes button status */
 	$("li.button-save").removeClass('field-error saving');
 	$("li.button-save a#item_save").html('<i class="pi-check"></i> Save Changes');

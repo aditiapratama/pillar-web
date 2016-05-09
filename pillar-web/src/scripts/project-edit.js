@@ -90,6 +90,7 @@ function moveModeExit() {
 	}
 	$('#overlay-mode-move-container').removeClass('visible');
 	$('.button-move').removeClass('disabled');
+	$('#item_move_accept').html('<i class="pi-check"></i> Move Here');
 	Cookies.remove('bcloud_moving_node_id');
 }
 
@@ -117,6 +118,10 @@ $("#item_move_accept").click(function(e) {
 		moveNodeParams.dest_parent_node_id = ProjectUtils.nodeId();
 	}
 
+	var this = $(this);
+
+	$(this).html('<i class="pi-spin spin"></i> Moving...');
+
 	$.post(urlNodeMove, moveNodeParams,
 		function(data){
 	}).done(function() {
@@ -127,6 +132,7 @@ $("#item_move_accept").click(function(e) {
 	})
 	.fail(function(data){
 		statusBarSet('error', 'Error moving node (' + data.status + ' - ' + data.statusText + ')', 'pi-warning', 6000);
+		$(this).html('<i class="pi-check"></i> Move Here');
 	});
 });
 
