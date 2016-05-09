@@ -296,10 +296,16 @@ script(type="text/javascript").
 						}
 					})
 					.fail(function(data) {
+						$('.button-save').removeClass('disabled');
+						$('li.button-save a#item_save').html('<i class="pi-check"></i> Save Changes');
+
 						statusBarSet(data.textStatus, 'Upload error: ' + data.errorThrown, 'pi-attention', 8000);
 					});
 			},
 			fail: function (e, data) {
+				$('.button-save').removeClass('disabled');
+				$('li.button-save a#item_save').html('<i class="pi-check"></i> Save Changes');
+
 				statusBarSet(data.textStatus, 'Upload error: ' + data.errorThrown, 'pi-attention', 8000);
 				$('.progress-active').addClass('progress-error').removeClass('progress-active');
 			}
