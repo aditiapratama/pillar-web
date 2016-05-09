@@ -31,13 +31,13 @@ def jstree_get_children(node_id, project_id=None):
             'name': 1, 'parent': 1, 'node_type': 1, 'properties.order': 1,
             'properties.status': 1, 'properties.content_type': 1, 'user': 1,
             'project': 1},
-        'sort': 'properties.order'}
+        'sort': [('properties.order', 1), ('_created', 1)]}
     if node_id:
         if node_id.startswith('n_'):
             node_id = node_id.split('_')[1]
-        lookup['where'] = '{"parent": "%s"}' % node_id
+        lookup['where'] = {'parent': node_id}
     elif project_id:
-        lookup['where'] = '{"project": "%s", "parent" : {"$exists": false}}' % project_id
+        lookup['where'] = {'project': project_id, 'parent': {'$exists': False}}
 
     try:
         children = Node.all(lookup, api=api)
