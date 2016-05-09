@@ -211,6 +211,7 @@ script(type="text/javascript").
 			$('.project-mode-view').show();
 			$('.project-mode-edit').hide();
 
+			$('#project_tree').jstree("refresh");
 		});
 
 	});
@@ -223,7 +224,6 @@ script(type="text/javascript").
 		} else {
 			$('.form-group.file').removeClass('error');
 			$("#node-edit-form").submit();
-			$('#project_tree').jstree("refresh");
 
 			// Disable beforeunolad when submitting a form
 			$(window).off('beforeunload');

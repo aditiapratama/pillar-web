@@ -178,7 +178,7 @@ $('#item_delete').click(function(e){
 				// Feedback logic
 			})
 			.done(function () {
-				statusBarSet('success', 'Node deleted successfully', 'pi-trash');
+				statusBarSet('success', 'Deleted successfully', 'pi-trash');
 
 				if (ProjectUtils.parentNodeId() != '') {
 					displayNode(ProjectUtils.parentNodeId());
@@ -187,10 +187,13 @@ $('#item_delete').click(function(e){
 					displayProject(ProjectUtils.projectId());
 				}
 
-				$('#project_tree').jstree("refresh");
+				setTimeout(function(){
+					$('#project_tree').jstree('refresh');
+				}, 1000);
+
 			})
 			.fail(function (data) {
-				statusBarSet('error', 'Error deleting node (' + data.status + ' - ' + data.statusText + ')', 'pi-warning', 6000);
+				statusBarSet('error', 'Error deleting (' + data.status + ' - ' + data.statusText + ')', 'pi-warning', 6000);
 			});
 	}
 });
