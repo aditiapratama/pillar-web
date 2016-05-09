@@ -30,10 +30,9 @@ $tree-color-highlight-background: $color-primary
 
 .jstree-default .jstree-node
 	max-width: 100% // Needed for ellipsis on long names
-	padding: 1px 0 1px 8px !important
+	padding: 0 !important
 	margin: 0 !important
 	font-weight: 400 !important
-	padding: 1px 0
 	color: $tree-color-text
 	min-height: 12px !important
 	line-height: 12px !important
@@ -84,12 +83,13 @@ $tree-color-highlight-background: $color-primary
 	padding-left: 28px !important
 
 .jstree .jstree-open > .jstree-children
-	padding-top: 2px
+	padding-top: 0 !important
 
 .jstree-default .jstree-anchor  /* The text of the last level item */
 	width: 100%
 	padding-left: 28px !important
 	height: inherit !important
+	line-height: 26px !important
 	white-space: nowrap
 	text-overflow: ellipsis
 	overflow: hidden
@@ -149,7 +149,8 @@ $tree-color-highlight-background: $color-primary
 			font-family: 'pillar-font'
 			color: $tree-color-highlight
 			position: absolute
-			right: 8px
+			right: 7px
+			top: 1px
 
 	li
 		a.jstree-anchor
@@ -170,7 +171,7 @@ a.jstree-anchor.jstree-clicked+ul li a.jstree-anchor.jstree-clicked+ul li a.jstr
 
 a.jstree-anchor+ul
 	border:
-		top: thin solid $color-background-nav !important
+		top: none !important
 		bottom: none !important
 	a.jstree-anchor
 		color: darken($color-text-light-primary, 10%) !important
@@ -213,24 +214,22 @@ a.jstree-anchor+ul
 
 .jstree-default .jstree-icon  /* Folder that you click to collapse/expand */
 	width: 20px !important
-	//width: 100% !important
 	text-align: left !important
 	background-color: transparent !important
 	position: absolute
-	left: 8px
 
 i.jstree-icon.jstree-ocl
-	height: 24px !important
+	height: 26px !important
 	color: rgba($tree-color-text, .5) !important
 	+media-xs
 		height: 40px !important
 
 .jstree-default .jstree-icon:empty
-	line-height: 24px
-	left: 10px
+	line-height: 26px
+	left: 5px
 
 .jstree-children .jstree-open i.jstree-icon.jstree-ocl
-	height: 28px !important
+	height: 26px !important
 
 .jstree-anchor > .jstree-themeicon
 	margin-right: 3px !important
@@ -252,5 +251,28 @@ i.jstree-icon.jstree-ocl
 	opacity: 1
 	width: 24px !important
 	color: lighten($color-text, 30%) !important
+
+	&.pi-image
+		font-size: .85em !important
+
+.jstree .jstree-open > .jstree-children > .jstree-node
+	padding-left: 15px !important
+
+	.jstree-icon:empty
+		left: 20px !important
+
+		// Tweaks for specific icons
+		&.pi-file-archive
+			left: 22px !important
+		&.pi-folder
+			left: 21px !important
+			font-size: .9em !important
+		&.pi-film-thick
+			left: 22px !important
+			font-size: .85em !important
+
+	.jstree-anchor
+		border-left: thin solid lighten($color-background-nav, 5%)
+
 
 /* /jsTree overrides */
