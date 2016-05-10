@@ -31,16 +31,28 @@ projects = Blueprint('projects', __name__)
 @login_required
 def index():
     api = SystemUtility.attract_api()
-    user_projects = Project.all({
+    projects_user = Project.all({
         'where': {'user': current_user.objectid},
         'sort': '-_created'
     }, api=api)
-    for project in user_projects['_items']:
+
+    projects_shared = Project.all({
+        'where': {'user': {'$ne': current_user.objectid}},
+        'in': {'permissions.groups': current_user.groups},
+        'sort': '-_created'
+    }, api=api)
+
+    # Merge the two lists
+    all_projects = projects_user['_items'] + projects_shared['_items']
+
+    # Attach project images
+    for project in all_projects:
         attach_project_pictures(project, api)
+
     return render_template(
         'projects/index_collection.html',
         title='dashboard',
-        projects=user_projects['_items'],
+        projects=all_projects,
         api=SystemUtility.attract_api())
 
 

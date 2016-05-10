@@ -94,6 +94,7 @@ def load_user(userid):
         login_user.username = user.username
         login_user.gravatar = gravatar(user.email)
         login_user.roles = user.roles
+        login_user.groups = user.groups
         try:
             login_user.full_name = user.full_name
         except KeyError:
