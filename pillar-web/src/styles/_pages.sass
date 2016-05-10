@@ -31,6 +31,27 @@
 			style: italic
 			size: 1.1em
 
+	.page-header-cta-container
+		display: flex
+		flex-direction: row
+		justify-content: center
+		align-items: center
+		margin: 20px auto
+
+	a.page-header-cta
+		+button-rounded-filled($color-info, 3px)
+		font:
+			size: 1.5em
+			weight: 500
+		padding: 5px 50px
+		display: inline-block
+
+	a.page-header-cta-extra
+		display: inline-block
+		font-size: 1.2em
+		padding: 5px 25px
+		color: white
+
 #page-content
 	background-color: white
 	width: 100%
@@ -43,7 +64,11 @@ $page-card-icon-size: 75px
 	justify-content: center
 	min-height: 200px
 	margin: 0 auto
-	background-color: white
+	background:
+		color: white
+		size: cover
+		position: 50% 50%
+
 	+clearfix
 
 	+media-sm
@@ -65,8 +90,9 @@ $page-card-icon-size: 75px
 	.page-card-side
 		width: 50%
 		padding: 60px 0
-		max-width: 350px
+		max-width: 450px
 		position: relative
+		align-self: stretch
 
 		+media-sm
 			padding: 40px 0
@@ -77,7 +103,7 @@ $page-card-icon-size: 75px
 
 	.page-card-title
 		font:
-			size: 1.8em
+			size: 2em
 			weight: 300
 		color: $color-danger
 		padding-bottom: 15px
@@ -100,6 +126,11 @@ $page-card-icon-size: 75px
 		font-size: 1.2em
 		color: $color-text-dark-primary
 		padding: 15px 0 25px 0
+
+	.page-card-image
+		width: 100%
+		img
+			max-width: 100%
 
 	.page-card-icon
 		display: block
@@ -126,9 +157,13 @@ $page-card-icon-size: 75px
 	a.page-card-cta
 		+button-rounded-filled($color-primary, 999em)
 		padding: 5px 30px
+		margin-right: 10px
 		font-size: 1em
 		font-weight: 500
 		display: inline-block
+
+		&.download
+			+button-rounded-filled($color-success, 999em)
 
 	/* Services specifics */
 	&.services-projects
@@ -165,5 +200,31 @@ $page-card-icon-size: 75px
 			font-size: 1.5em
 			padding: 10px 40px
 
+/* Page specific changes */
+.join
+	.page-card
+		&:nth-child(even)
+			background-color: white
+
+		&.oneofus
+			display: block
+			text-align: center
+			min-height: initial
+			padding: 25px
+			color: $color-text-dark-primary
+			background-color: $color-background-light
+			border-top: thin solid $color-background
+			font:
+				size: 1.2em
 
 
+	.page-card-side
+		max-width: 500px
+		padding: 40px 25px
+		margin:
+			top: 25px
+			bottom: 25px
+
+		.page-card-image
+			img
+				border-radius: 3px

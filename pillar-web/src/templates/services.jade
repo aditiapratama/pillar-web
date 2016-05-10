@@ -2,9 +2,9 @@
 | {% block page_title %}Services{% endblock %}
 
 | {% block og %}
-meta(property="og:title", content="Services the Blender Cloud")
+meta(property="og:title", content="Services - Blender Cloud")
 meta(property="og:url", content="https://cloud.blender.org/services")
-meta(property="og:image", content="{{ url_for('static', filename='assets/img/backgrounds/background_gleb_locomotive.jpg')}}")
+meta(property="og:image", content="{{ url_for('static', filename='assets/img/backgrounds/background_services.jpg')}}")
 | {% endblock %}
 
 | {% block header_backdrop %}
@@ -27,8 +27,8 @@ meta(property="og:image", content="{{ url_for('static', filename='assets/img/bac
 			.page-card-side
 				.page-card-title Private Projects
 				.page-card-summary.
-					Create and manage your own personal projects in the Blender Cloud!
-					Using the same interface we use for our open projects.
+					Create and manage your own personal projects.
+					Upload assets and collaborate with other Blender Cloud members.
 
 				a.page-card-cta(
 					href="https://cloud.blender.org/blog/introducing-private-projects")
@@ -42,9 +42,13 @@ meta(property="og:image", content="{{ url_for('static', filename='assets/img/bac
 			.page-card-side
 				.page-card-title Texture Browser Add-On
 				.page-card-summary.
-					Get access to the Blender Cloud Textures library from within Blender.
-					Using our exclusive add-on.
+					Access the <a href="https://cloud.blender.org/p/textures/">Blender Cloud Textures</a> library from within Blender using our exclusive add-on.
+					Soon you'll be able to browse <em>your own</em> texture library.
 
+				a.page-card-cta.download(
+					href="https://cloud.blender.org/blog/introducing-private-projects")
+					i.pi-download
+					| Download <small>v</small>1.0
 				a.page-card-cta(
 					href="https://cloud.blender.org/blog/introducing-private-projects")
 					| Learn More
@@ -59,13 +63,14 @@ meta(property="og:image", content="{{ url_for('static', filename='assets/img/bac
 					| Attract
 					small (soon)
 				.page-card-summary.
-					Production-management software for your film, game, freelance projects.
+					Production-management software for your film, game, or commercial projects.
 
 			.page-card-side
 				.page-card-icon
 
 		| {% if current_user.is_anonymous() or not current_user.has_role('subscriber') %}
-		section.page-card.subscribe(style="background-image: url({{ url_for('static', filename='assets/img/backgrounds/background_services.jpg')}})")
+		section.page-card.subscribe(
+			style="background-image: url({{ url_for('static', filename='assets/img/backgrounds/background_services.jpg')}});background-size: cover")
 			.page-card-side
 				.page-card-title
 					| All of this, plus hours of training and production assets.
