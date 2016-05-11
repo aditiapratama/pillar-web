@@ -141,7 +141,7 @@ class UserClass(UserMixin):
 
 
 class AnonymousUserMixin(flask_login.AnonymousUserMixin):
-    def has_role(self, role):
+    def has_role(self, *roles):
         return False
 
 
