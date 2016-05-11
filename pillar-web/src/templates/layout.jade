@@ -147,7 +147,15 @@ html(lang="en")
 									data-toggle="tooltip",
 									data-placement="bottom",
 									class="{% if category in ['open-projects', 'film']: %}active{% endif %}")
-									span Open Projects
+									span Projects
+							li
+								a.navbar-item(
+									href="{{ url_for('services') }}",
+									title="Blender Cloud Services",
+									data-toggle="tooltip",
+									data-placement="bottom",
+									class="{% if category in ['services']: %}active{% endif %}")
+									span Services
 
 							| {% if current_user.is_anonymous() %}
 							li
@@ -251,8 +259,7 @@ html(lang="en")
 
 							li.nav-item-sign-in
 								a.navbar-item(href="{{ url_for('users.login') }}")
-									i.pi-log-in(title="Log In")
-									|  Log in
+									| Log in
 							| {% endif %}
 
 			.page-content
