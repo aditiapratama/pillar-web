@@ -95,7 +95,7 @@ class CustomFileSelectWidget(HiddenInput):
                    url=upload_url,
                    name=field.name,
                    token=Markup.escape(current_user.id),
-                   file_format=file_format_regex)
+                   file_format=Markup.escape(file_format_regex))
 
         button += '</div>'
 
