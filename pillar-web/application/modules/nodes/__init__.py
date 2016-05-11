@@ -597,6 +597,23 @@ def delete(node_id):
         return redirect(url_for('nodes.edit', node_id=node._id))
 
 
+def ensure_lists_exist_as_empty(node_doc, node_type):
+    """Ensures that any properties of type 'list' exist as empty lists.
+
+    This allows us to iterate over lists without worrying that they
+    are set to None. Only works for top-level list properties.
+    """
+
+    node_properties = node_doc.setdefault('properties', {})
+
+    for prop, schema in node_type.dyn_schema.to_dict().iteritems():
+        if schema['type'] != 'list':
+            continue
+
+        if node_properties.get(prop) is None:
+            node_properties[prop] = []
+
+
 @nodes.route('/create', methods=['POST'])
 @login_required
 def create():
@@ -634,6 +651,8 @@ def create():
 
     if parent_id:
         node_props['parent'] = parent_id
+
+    ensure_lists_exist_as_empty(node_props, node_type)
 
     node = Node(node_props)
     node.create(api=api)
