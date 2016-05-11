@@ -190,7 +190,7 @@ def edit(project_url):
         form.url.data = project.url
         form.summary.data = project.summary
         form.description.data = project.description
-        form.is_private.data = u'GET' in project.permissions.world
+        form.is_private.data = u'GET' not in project.permissions.world
         form.category.data = project.category
         form.status.data = project.status
         if project.picture_square:
