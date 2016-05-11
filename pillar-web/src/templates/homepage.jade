@@ -172,7 +172,7 @@ meta(property="og:image", content="{{ url_for('static', filename='assets/img/bac
 				| {% endif %}
 
 
-| {% if current_user.is_anonymous() %}
+| {% if not current_user.has_role('subscriber', 'demo') %}
 
 section.homepage_container.statement
 	h2.
