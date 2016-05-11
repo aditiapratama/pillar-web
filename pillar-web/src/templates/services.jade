@@ -68,7 +68,7 @@ meta(property="og:image", content="{{ url_for('static', filename='assets/img/bac
 			.page-card-side
 				.page-card-icon
 
-		| {% if current_user.is_anonymous() or not current_user.has_role('subscriber') %}
+		| {% if not current_user.has_role('subscriber') %}
 		section.page-card.subscribe(
 			style="background-image: url({{ url_for('static', filename='assets/img/backgrounds/background_services.jpg')}});background-size: cover")
 			.page-card-side

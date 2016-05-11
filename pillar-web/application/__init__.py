@@ -1,3 +1,4 @@
+import flask_login
 import os
 import logging
 import config
@@ -65,7 +66,6 @@ if not app.config.get('TESTING'):
     bugsnag.before_notify(bugsnag_notify_callback)
     handle_exceptions(app)
 
-
 # Login manager
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -131,11 +131,21 @@ class UserClass(UserMixin):
         self.email = None
         self.roles = []
 
-    def has_role(self, role):
-        if self.roles and role in self.roles:
-            return True
-        else:
+    def has_role(self, *roles):
+        """Returns True iff the user has one or more of the given roles."""
+
+        if not self.roles:
             return False
+
+        return bool(set(self.roles).intersection(set(roles)))
+
+
+class AnonymousUserMixin(flask_login.AnonymousUserMixin):
+    def has_role(self, role):
+        return False
+
+
+login_manager.anonymous_user = AnonymousUserMixin
 
 
 class SystemUtility():
