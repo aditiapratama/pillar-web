@@ -135,7 +135,7 @@ def comments_rate(comment_id):
     :type rating: int
 
     """
-    rating_is_positive = False if request.form['is_positive'] == 'false' else True
+    rating_is_positive = request.form['is_positive'] != 'false'
 
     api = SystemUtility.attract_api()
     comment = Node.find(comment_id, api=api)
