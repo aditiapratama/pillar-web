@@ -1,5 +1,8 @@
 import json
+import logging
 from datetime import datetime
+
+from werkzeug.datastructures import MultiDict
 
 from pillarsdk import Node
 from pillarsdk import NodeType
@@ -17,7 +20,7 @@ from flask import request
 from flask import jsonify
 from flask import abort
 from flask import g
-from wtforms import SelectMultipleField
+from wtforms import SelectMultipleField, FieldList
 from flask.ext.login import login_required
 from jinja2.exceptions import TemplateNotFound
 
@@ -33,9 +36,11 @@ from application.helpers import _get_file_cached
 from application.helpers.caching import delete_redis_cache_template
 from application.helpers.jstree import jstree_build_children
 from application.helpers.jstree import jstree_build_from_node
-from application.helpers.forms import ProceduralFileSelectForm
+from application.helpers.forms import ProceduralFileSelectForm, build_file_select_form, \
+    CustomFormField
 
 nodes = Blueprint('nodes', __name__)
+log = logging.getLogger(__name__)
 
 
 class FakeUser(object):
@@ -413,11 +418,6 @@ def edit(node_id):
             form_prop = form_schema[prop]
             prop_name = "{0}{1}".format(prefix, prop)
 
-            if prop not in node_properties:
-                if prop_name == 'attachments':
-                    node_properties['attachments'] = []
-                else:
-                    continue
             if schema_prop['type'] == 'dict':
                 set_properties(
                     schema_prop['schema'],
@@ -425,65 +425,72 @@ def edit(node_id):
                     node_properties[prop_name],
                     form,
                     "{0}__".format(prop_name))
+                continue
+
+            if prop_name not in form:
+                continue
+
+            try:
+                db_prop_value = node_properties[prop]
+            except KeyError:
+                log.warning('%s not found in form for node %s', prop_name, node_id)
+                continue
+
+            if schema_prop['type'] == 'datetime':
+                db_prop_value = datetime.strptime(db_prop_value,
+                                                  app.config['RFC1123_DATE_FORMAT'])
+
+            if isinstance(form[prop_name], SelectMultipleField):
+                # If we are dealing with a multiselect field, check if
+                # it's empty (usually because we can't query the whole
+                # database to pick all the choices). If it's empty we
+                # populate the choices with the actual data.
+                if not form[prop_name].choices:
+                    form[prop_name].choices = [(d, d) for d in db_prop_value]
+                    # Choices should be a tuple with value and name
+
+            # Assign data to the field
+            if set_data:
+                if prop_name == 'attachments':
+                    for attachment_collection in db_prop_value:
+                        for a in attachment_collection['files']:
+                            attachment_form = ProceduralFileSelectForm()
+                            attachment_form.file = a['file']
+                            attachment_form.slug = a['slug']
+                            attachment_form.size = 'm'
+                            form[prop_name].append_entry(attachment_form)
+
+                elif prop_name == 'files':
+                    schema = schema_prop['schema']['schema']
+                    for file_data in db_prop_value:
+                        file_form_class = build_file_select_form(schema)
+                        subform = file_form_class()
+                        for key, value in file_data.iteritems():
+                            setattr(subform, key, value)
+                        form[prop_name].append_entry(subform)
+
+                # elif prop_name == 'tags':
+                #     form[prop_name].data = ', '.join(data)
+                else:
+                    form[prop_name].data = db_prop_value
             else:
-                try:
-                    data = node_properties[prop]
-                except KeyError:
-                    print ("{0} not found in form".format(prop_name))
-                if schema_prop['type'] == 'datetime':
-                    data = datetime.strptime(data,
-                                             app.config['RFC1123_DATE_FORMAT'])
-                if prop_name in form:
-                    # Other field types
-                    if isinstance(form[prop_name], SelectMultipleField):
-                        # If we are dealing with a multiselect field, check if
-                        # it's empty (usually because we can't query the whole
-                        # database to pick all the choices). If it's empty we
-                        # populate the choices with the actual data.
-                        if not form[prop_name].choices:
-                            form[prop_name].choices = [(d, d) for d in data]
-                            # Choices should be a tuple with value and name
-                    # Assign data to the field
-                    if set_data:
-                        if prop_name == 'attachments':
-                            for attachment_collection in data:
-                                for a in attachment_collection['files']:
-                                    attachment_form = ProceduralFileSelectForm()
-                                    attachment_form.file = a['file']
-                                    attachment_form.slug = a['slug']
-                                    attachment_form.size = 'm'
-                                    form[prop_name].append_entry(attachment_form)
-                            pass
-                        elif prop_name == 'files':
-                            for f in data:
-                                attachment_form = ProceduralFileSelectForm()
-                                attachment_form.file = a['file']
-                                attachment_form.slug = a['slug']
-                                attachment_form.size = 'm'
-                                form[prop_name].append_entry(attachment_form)
-                        # elif prop_name == 'tags':
-                        #     form[prop_name].data = ', '.join(data)
-                        else:
-                            form[prop_name].data = data
-                    else:
-                        # Default population of multiple file form list (only if
-                        # we are getting the form)
-                        if request.method == 'POST':
-                            continue
-                        if prop_name == 'attachments':
-                            if not data:
-                                attachment_form = ProceduralFileSelectForm()
-                                attachment_form.file = 'file'
-                                attachment_form.slug = ''
-                                attachment_form.size = ''
-                                form[prop_name].append_entry(attachment_form)
-                        if prop_name == 'files':
-                            if not data:
-                                attachment_form = ProceduralFileSelectForm()
-                                attachment_form.file = 'file'
-                                attachment_form.slug = ''
-                                attachment_form.size = ''
-                                form[prop_name].append_entry(attachment_form)
+                # Default population of multiple file form list (only if
+                # we are getting the form)
+                if request.method == 'POST':
+                    continue
+                if prop_name == 'attachments':
+                    if not db_prop_value:
+                        attachment_form = ProceduralFileSelectForm()
+                        attachment_form.file = 'file'
+                        attachment_form.slug = ''
+                        attachment_form.size = ''
+                        form[prop_name].append_entry(attachment_form)
+                if prop_name == 'files' and not db_prop_value:
+                    schema = schema_prop['schema']['schema']
+                    for _ in db_prop_value:
+                        file_form_class = build_file_select_form(schema)
+                        subform = file_form_class()
+                        form[prop_name].append_entry(subform)
 
     api = SystemUtility.attract_api()
     node = Node.find(node_id, api=api)
@@ -494,10 +501,10 @@ def edit(node_id):
     dyn_schema = node_type['dyn_schema'].to_dict()
     form_schema = node_type['form_schema'].to_dict()
     error = ""
-    node_type_name = node_type.name
 
     node_properties = node.properties.to_dict()
 
+    ensure_lists_exist_as_empty(node.to_dict(), node_type)
     set_properties(dyn_schema, form_schema, node_properties, form,
                    set_data=False)
 

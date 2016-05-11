@@ -50,6 +50,15 @@
 
 		.form-group(class="{{field.name}}")
 			| {{ field(class='form-control') }}
+
+		| {% elif field.name == 'files' %}
+		#files-actions
+			.btn.btn-info#files-action-add
+				i.pi-plus
+				| Add New File
+
+		.form-group(class="{{field.name}}")
+			| {{ field }}
 		| {% else %}
 
 		.form-group(class="{{field.name}}{% if field.errors %} error{% endif %}")

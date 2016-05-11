@@ -129,6 +129,8 @@ def build_file_select_form(schema):
                 field = StringField()
         elif field_schema['type'] == 'objectid':
             field = FileSelectField('file')
+        else:
+            raise ValueError('field type %s not supported' % field_schema['type'])
 
         setattr(FileSelectForm, field_name, field)
     return FileSelectForm
