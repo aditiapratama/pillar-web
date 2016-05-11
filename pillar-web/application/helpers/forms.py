@@ -117,16 +117,18 @@ class ProceduralFileSelectForm(Form):
 def build_file_select_form(schema):
     class FileSelectForm(Form):
         pass
+
     for field_name, field_schema in schema.iteritems():
         if field_schema['type'] == 'boolean':
             field = BooleanField()
         elif field_schema['type'] == 'string':
-            field = StringField()
             if 'allowed' in field_schema:
                 choices = [(c, c) for c in field_schema['allowed']]
-                field.choices = choices
+                field = SelectField(choices=choices)
+            else:
+                field = StringField()
         elif field_schema['type'] == 'objectid':
-            FileSelectField('file')
+            field = FileSelectField('file')
 
         setattr(FileSelectForm, field_name, field)
     return FileSelectForm
