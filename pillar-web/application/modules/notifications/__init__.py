@@ -59,7 +59,9 @@ def index():
         'sort': '-_created',
         'max_results': str(limit),
         'parse': '1'}, api=api)
-    items = [notification_parse(n) for n in user_notifications['_items'] if n]
+    # TODO: properly investigate and handle missing actors
+    items = [notification_parse(n) for n in user_notifications['_items'] if
+             notification_parse(n)]
 
     return jsonify(items=items)
 
