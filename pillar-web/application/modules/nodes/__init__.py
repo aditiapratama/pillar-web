@@ -20,6 +20,7 @@ from flask import request
 from flask import jsonify
 from flask import abort
 from flask import g
+from werkzeug.exceptions import NotFound
 from wtforms import SelectMultipleField, FieldList
 from flask.ext.login import login_required
 from jinja2.exceptions import TemplateNotFound
@@ -670,6 +671,75 @@ def create():
 @app.route('/search')
 def nodes_search_index():
     return render_template('nodes/search.html')
+
+
+@nodes.route("/<node_id>/redir")
+def redirect_to_context(node_id):
+    """Redirects to the context URL of the node.
+
+    Comment: redirects to whatever the comment is attached to + #node_id
+        (unless 'whatever the comment is attached to' already contains '#', then
+         '#node_id' isn't appended)
+    Post: redirects to main or project-specific blog post
+    Other: redirects to project.url + #node_id
+    """
+
+    url = _url_for_node(node_id)
+    return redirect(url)
+
+
+def _url_for_node(node_id=None, node=None):
+    assert isinstance(node_id, (basestring, type(None)))
+    assert isinstance(node, (Node, type(None)))
+
+    api = SystemUtility.attract_api()
+
+    if node is None:
+        node = Node.find(node_id, api=api)
+    elif node_id is None:
+        node_id = node['_id']
+    else:
+        raise ValueError('Either node or node_id must be given')
+
+    def find_for_comment():
+        """Returns the URL for a comment."""
+
+        parent = node
+        while parent.node_type == 'comment':
+            parent = Node.find(parent.parent, api=api)
+
+        # Find the redirection URL for the parent node.
+        parent_url = _url_for_node(node=parent)
+        if '#' in parent_url:
+            # We can't attach yet another fragment, so just don't link to the comment for now.
+            return parent_url
+        return parent_url + '#{}'.format(node_id)
+
+    def find_for_post():
+        """Returns the URL for a blog post."""
+
+        if str(node.project) == app.config['MAIN_PROJECT_ID']:
+            return url_for('main_blog',
+                           url=node.properties.url)
+
+        proj = Project.find(node.project, {'projection': {'url': 1}}, api=api)
+        return url_for('project_blog',
+                       project_url=proj.url,
+                       url=node.properties.url)
+
+    # Fallback: Assets, textures, and other node types.
+    def find_for_other():
+        proj = Project.find(node.project, {'projection': {'url': 1}}, api=api)
+        return url_for('projects.view', project_url=proj.url) + '#{}'.format(node_id)
+
+    # Determine which function to use to find the correct URL.
+    url_finders = {
+        'comment': find_for_comment,
+        'post': find_for_post,
+    }
+
+    finder = url_finders.get(node.node_type, find_for_other)
+    return finder()
 
 
 # Import of custom modules (using the same nodes decorator)
