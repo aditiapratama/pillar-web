@@ -31,6 +31,11 @@ from application.helpers import get_file
 def homepage():
     """Homepage"""
 
+    if not current_user.is_authenticated():
+        return render_template(
+            'join.html',
+            title="join")
+
     # Get latest blog posts
     api = SystemUtility.attract_api()
     latest_posts = Node.all({

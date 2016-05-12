@@ -483,7 +483,7 @@
 
 	h2
 		text-align: center
-		font-size: 2.8em
+		font-size: 2.6em
 		margin:
 			top: 20px
 			bottom: 50px
@@ -493,24 +493,26 @@
 			font-size: 1.6em
 
 	.box
-		padding: 0 15px
-		border: 1px solid rgba(black, .4)
-		height: 450px
+		padding: 0 20px
+		border: 1px solid $color-text-dark-hint
+		height: 480px
+		min-height: 480px
 		position: relative
+		border-radius: 3px
 
 		+media-xs
 			margin-bottom: 15px
 
 		h3
-			font-size: 1.8em
+			font:
+				size: 1.8em
+				family: $font-body
 			padding-bottom: 0
-			margin: 10px 0 0 10px
-
-
+			margin: 25px 0 0 10px
 
 		.pricing-display
 			position: relative
-			margin-top: -15x
+			color: $color-info
 
 			.currency-sign,
 			.digit-dec
@@ -524,11 +526,14 @@
 				font-weight: 100
 
 		.pricing-caption
-			border-bottom: 1px solid rgba(black, .4)
+			color: $color-text-dark-secondary
+			font-size: .9em
+			padding-bottom: 0
+
+		+list-bullets
 
 		ul
-			color: rgba(black, .3)
-			list-style: none
+			color: $color-text-dark-primary
 			padding-left: 10px
 			margin-top: 15px
 
@@ -536,23 +541,27 @@
 				padding-bottom: 8px
 
 		.sign-up-now
-			// margin-left: -10px
 			position: absolute
 			bottom: 25px
 			width: 50%
 			left: 50%
 			transform: translateX(-50%)
-			@include button-rounded($color-text-light, 999em)
-			@include button-rounded-filled($color-primary, 999em)
-			margin-right: 10px
-			&:hover
-				border-color: $color-info
-				background-color: transparent
-				color: $color-info
-				text-decoration: none
+			font-size: 1.2em
+
+			@include button-rounded($color-primary, 999em)
+			padding: 5px 25px
+			text-align: center
+
+		&:hover
+			.sign-up-now
+				@include button-rounded-filled($color-primary, 999em)
+
 
 	.groups-text
-		margin: 20px 15px 0 15px
+		margin: 20px auto
+		color: $color-text-dark-secondary
+		text-align: center
+		max-width: 700px
 
 
 .container-fluid.our-content
@@ -796,7 +805,6 @@ section.homepage_container.supported-by
 	background-color: $color-background
 	padding: 50px 0
 
-
 	display: flex
 	align-items: center
 	justify-content: center
@@ -809,6 +817,7 @@ section.homepage_container.supported-by
 			font-size: 2em
 
 	img.logos
+		max-height: 500px
 		padding: 60px 0 100px 0
 
 		+media-xs
@@ -841,12 +850,16 @@ section.homepage_container.supported-by
 
 
 .team
-	background: white
-	padding: 40px 0
+	background:
+		color: white
+		size: cover
+		position: 50% 50%
+	padding: 50px 0 40px 0
 
 	h2
-		padding-bottom: 20px
-		color: $color-primary
+		padding-bottom: 30px
+		font-size: 2.2em
+		color: $color-text-light
 
 	.people-container
 		max-width: $screen-lg
@@ -857,34 +870,52 @@ section.homepage_container.supported-by
 			position: relative
 			top: 0
 			transition: opacity 100ms ease-in-out, top 150ms ease-out
+
 			&.active
 				opacity: 0
 				top: 15px
 
+			h3
+				font:
+					family: $font-body
+				color: $color-danger
+
+			span
+				color: $color-text-light-primary
+
 		.people-faces
-			margin-top: 20px
+			padding-top: 40px
 			display: flex
 			flex: row flex
-			align-items: stretch
+			flex-wrap: wrap
+			margin: 0 auto
+			align-items: center
 			justify-content: center
 			width: 100%
+			max-width: 750px
 
 			.face
-				background-color: $color-primary
+				background-color: $color-background
+				border-radius: 50%
+				padding: 4px
+
 				opacity: 1
 				width: 128px
 				height: 128px
+				margin-left: 15px
+				margin-right: 15px
 				z-index: 0
 				position: relative
-				transition: transform 150ms ease-in-out
+				transition: transform 100ms ease-in-out, background-color 100ms ease-in-out, opacity 100ms ease-in-out
 
 				+media-xs
 					height: initial
+					margin-top: 20px
 
 				&:hover
-
 					transform: scale(1.1)
 					z-index: 1
+					background-color: $color-primary
 
 					img
 						opacity: .8
@@ -892,9 +923,8 @@ section.homepage_container.supported-by
 				img
 					position: relative
 					width: 100%
+					border-radius: 50%
 					transition: opacity 150ms ease-in-out
-
-
 
 
 		.people-bio
@@ -902,31 +932,51 @@ section.homepage_container.supported-by
 			width: 100%
 			position: relative
 
+			+media-xs
+				display: none
+
+
 			.bio
 				opacity: 0
 				visibility: hidden
 				margin: 0
 				padding: 0
 				position: absolute
-				top: -200px
+				top: -340px
 				left: 50%
 				transform: translateX(-50%)
 
 				transition: opacity 180ms ease-in-out, top 150ms ease-out
 
 				&.active
-					top: -220px
+					top: -360px
 					opacity: 1
 					visibility: visible
 
 				h3
 					position: relative
 					top: -18px
+					font-family: $font-body
+					color: $color-info
+
 					small
 						position: absolute
 						left: 50%
 						transform: translateX(-50%)
-						bottom: -20px
+						bottom: -22px
 						white-space: nowrap
 						font-size: .6em
-						color: $color-text-dark-hint
+						color: $color-text-light-primary
+				span
+					color: $color-text-light-hint
+
+		&.online
+			.people-faces
+				max-width: 1000px
+
+			.people-bio
+				.bio
+					top: -200px
+					&.active
+						top: -220px
+
