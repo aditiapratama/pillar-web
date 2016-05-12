@@ -6,7 +6,6 @@ meta(property="og:url", content="https://cloud.blender.org/")
 meta(property="og:image", content="{{ url_for('static', filename='assets/img/backgrounds/background_vincent_01.jpg')}}")
 | {% endblock %}
 
-
 | {% block header_backdrop %}
 .homepage.navbar-backdrop(
 	style="background-image: url({% if main_project.picture_header %}{{ main_project.picture_header.thumbnail('l', api=api) }}{% else %}{{ url_for('static', filename='assets/img/backgrounds/background_caminandes_3_02.jpg')}}{% endif %})")
@@ -34,25 +33,15 @@ meta(property="og:image", content="{{ url_for('static', filename='assets/img/bac
 					Create your personal projects, collaborate with other Cloud members
 					<br>
 					and access the Texture Library from within Blender.
-				//
-					We make films, we build a production pipeline, and we share everything.
-					<br/>Get full access to the Blender Institute's Open Projects and training material.
 
 			.buttons
-				a.btn.btn-default.btn-outline.orange(href="https://storage.googleapis.com/institute-storage/addons/blender_cloud-1.0.1-bundle.zip")
+				a.btn.btn-default.btn-outline.orange(
+					href="https://storage.googleapis.com/institute-storage/addons/blender_cloud-1.0.1-bundle.zip")
 					i.pi-download
 					|  Download Add-on
-				a.btn.btn-default.btn-outline.blue(href="{{ url_for('services') }}")
+				a.btn.btn-default.btn-outline.blue(
+					href="{{ url_for('services') }}")
 					|  Learn More
-
-				//
-					| {% if current_user.is_authenticated() %}
-					| {% elif current_user.is_anonymous() %}
-					a.btn.btn-default.btn-outline.orange.go-to-pricing
-						| Sign up
-					a.btn.btn-default.btn-outline.blue(href="https://www.youtube.com/watch?v=SkVqJ1SGeL0")
-						| Watch Caminandes: Llamigos
-					| {% endif %}
 
 .homepage_container.page-content
 	#content
@@ -170,245 +159,10 @@ meta(property="og:image", content="{{ url_for('static', filename='assets/img/bac
 
 				| {% endif %}
 
-
-| {% if not current_user.has_role('subscriber', 'demo') %}
-
-section.homepage_container.statement
-	h2.
-		Blender Cloud is our open production platform where we share our work on 3D content and provide professional training.
-	h2.
-		Our mission is to improve 3D creation with free/open source software by making compelling 3D media content - empowering artists and developers to shine and tell their own stories.
-
-
-.container-fluid.our-content
-	.row-fluid
-		.col-md-12.text-center
-			h2 Check out our content
-	.row-fluid
-		#links-container
-			a.links-item.training(href="{{ url_for('training') }}")
-				img.logos(src="{{ url_for('static', filename='assets/img/frontpage_link_training.jpg') }}")
-				span.bar
-				span.title Training
-
-				p.content.
-					Learn from the masters - production quality
-					training videos by 3d professionals.
-
-
-			a.links-item.open_projects(href="{{ url_for('open_projects') }}")
-				img.logos(src="{{ url_for('static', filename='assets/img/frontpage_link_openprojects.jpg') }}")
-				span.bar
-				span.title Open Movies
-
-				p.content Full production data and tutorials from all open movies, for you to use freely.
-
-
-			a.links-item.artgallery(href="{{ url_for('gallery') }}")
-				img.logos(src="{{ url_for('static', filename='assets/img/frontpage_link_gallery.jpg') }}")
-				span.bar
-				span.title Art Gallery
-
-				p.content.
-					Learn by example - Documentation & source files
-					of the best Blender artwork out there
-
-
-.container.pricing
-	.row-fluid
-		.col-md-12
-			h2 Simple Pricing. Any payment method.
-	.row-fluid
-		.col-md-4.col-md-offset-2
-			.box
-				h3 Monthly
-				.pricing-display
-					span.currency-sign $
-					span.digit-int 9
-					span.digit-dec .90 / month*
-
-				.pricing-caption
-					p * With a 3-month minimum period
-
-				ul
-					li Hundreds of hours of training videos
-					li Production quality assets free to use
-					li New content added regularly
-					li Full access to all Blender Open Movies
-					li Comment and interact with the team
-					li Downloadable assets and videos
-
-				a.btn.btn-default.btn-outline.sign-up-now(href="https://store.blender.org/product/membership/")
-					| Sign up now
-
-		.col-md-4
-			.box
-				h3 Yearly
-				.pricing-display
-					span.currency-sign $
-					span.digit-int 109
-					span.digit-dec .00 / year*
-				.pricing-caption
-					p * 1 month free!
-					//- p * Save 20% on the monthly price!
-
-				ul
-					li Hundreds of hours of training videos
-					li Production quality assets free to use
-					li New content added regularly
-					li Full access to all Blender Open Movies
-					li Comment and interact with the team
-					li Downloadable assets and videos
-					li A free pick from the Blender Store!
-
-				a.btn.btn-default.btn-outline.sign-up-now(href="https://store.blender.org/product/membership/")
-					| Sign up now
-
-	.row-fluid
-		.col-md-8.col-md-offset-2.groups-text.
-			<strong>For groups:</strong> we also provide flexible options for group subscription
-			ideal for schools or teams. Get in touch to discuss direct support, custom solutions,
-			team management tools and Single sign-on
-
-
-.container-fluid.team
-	.row-fluid
-		.col-md-12.text-center
-			h2.
-				A restless team of artists and developers <br/>
-				wants to share their work with you
-
-			.people-container
-				.people-intro
-					h3 Blender Institute
-					span Amsterdam, The Netherlands
-
-				.people-faces
-					.face(data-blenderhead='ton')
-						img(src="{{ url_for('static', filename='assets/img/people/ton.jpg')}}")
-					.face(data-blenderhead='francesco')
-						img(src="{{ url_for('static', filename='assets/img/people/francesco.jpg')}}")
-					.face(data-blenderhead='pablo')
-						img(src="{{ url_for('static', filename='assets/img/people/pablo.jpg')}}")
-					.face(data-blenderhead='hjalti')
-						img(src="{{ url_for('static', filename='assets/img/people/hjalti.jpg')}}")
-					.face(data-blenderhead='andy')
-						img(src="{{ url_for('static', filename='assets/img/people/andy.jpg')}}")
-					.face(data-blenderhead='sergey')
-						img(src="{{ url_for('static', filename='assets/img/people/sergey.jpg')}}")
-
-				.people-bio
-					.bio#ton
-						h3 Ton Roosendaal
-							small The Netherlands
-						span.
-							CEO Blender Foundation. Producer Blender Institute.
-					.bio#francesco
-						h3 Francesco Siddi
-							small Italy
-						span.
-							Pipeline Tools & Back-end Web Development.
-					.bio#pablo
-						h3 Pablo Vázquez
-							small Argentina
-						span.
-							Lighting, Rendering. Front-end Web Development.
-					.bio#andy
-						h3 Andy Goralczyk
-							small Germany
-						span.
-							Shading, Lighting, Rendering, FX.
-					.bio#hjalti
-						h3 Hjalti Hjálmarsson
-							small Iceland
-						span.
-							Animation. Layout Artist.
-					.bio#sergey
-						h3 Sergey Sharybin
-							small Russia
-						span.
-							Blender & Cycles Core Developer.
-
-			.people-container
-				.people-intro
-					h3 Online Collaborators
-					span Contributing to Blender Cloud from all over the globe
-
-				.people-faces
-					.face(data-blenderhead='gleb')
-						img(src="{{ url_for('static', filename='assets/img/people/gleb.jpg')}}")
-					.face(data-blenderhead='david')
-						img(src="{{ url_for('static', filename='assets/img/people/david.jpg')}}")
-					.face(data-blenderhead='jpbouza')
-						img(src="{{ url_for('static', filename='assets/img/people/jpbouza.jpg')}}")
-					.face(data-blenderhead='bassam')
-						img(src="{{ url_for('static', filename='assets/img/people/bassam.jpg')}}")
-					.face(data-blenderhead='sebastian')
-						img(src="{{ url_for('static', filename='assets/img/people/sebastian.jpg')}}")
-
-				.people-bio
-					.bio#gleb
-						h3 Gleb Alexandrov
-							small (Belarus)
-						span.
-							Lighting & Shading
-					.bio#david
-						h3 David Revoy
-							small (France)
-						span.
-							Illustrator & Concept Artist
-					.bio#jpbouza
-						h3 Juan Pablo Bouza
-							small (Argentina)
-						span.
-							Rigging
-					.bio#bassam
-						h3 Bassam Kurdali
-							small (United States)
-						span.
-							Rigging & Pipeline
-					.bio#sebastian
-						h3 Sebastian König
-							small (Germany)
-						span.
-							VFX
-
-
-section.homepage_container.supported-by
-	h1 Our Open Projects were supported by
-	img.logos(src="{{ url_for('static', filename='assets/img/support_logos.png') }}")
-
-
-.container-fluid.get-started
-	.row-fluid
-		.col-md-12.text-center
-			h2 Join us, for only $9.90/month!
-			a.btn.btn-default.btn-outline.blue(href="https://store.blender.org/product/membership/")
-				| Sign up Now
-
-
-| {% endif %}
-
 | {% endblock %}
 
 | {% block footer_scripts %}
 script.
-	$('.people-faces .face').hover(
-		function(){
-			var who = $(this).data('blenderhead');
-			$('#' + who).addClass('active');
-			$(this).parent().prev().addClass('active');
-		},
-		function(){
-			$('.bio, .people-intro').removeClass('active');
-		}
-	);
-
-	$('.go-to-pricing').on('click', function(e){
-		e.preventDefault;
-		$("html, body").animate({scrollTop: $('.pricing').offset().top }, 350);
-	})
-
 	/* cleanup mentions in comments  */
 	$('li.node-updates-list-item.comments a.title').each(function(){
 		$(this).text($(this).text().replace(/\*|\@|\<(.*?)\>/g, ''));

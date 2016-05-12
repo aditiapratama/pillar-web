@@ -454,11 +454,8 @@
 
 
 .homepage.navbar-backdrop
-	// width: 105%
-	// width: 105%
 	width: 100%
 	left: 0
-	// filter: blur(10px)
 	filter: blur(0)
 	max-height: 650px
 	background-image: none
@@ -496,8 +493,8 @@ section.pricing
 		padding: 0 20px
 		border: 1px solid $color-text-dark-hint
 		background-color: white
-		height: 320px
-		min-height: 320px
+		height: 340px
+		min-height: 340px
 		position: relative
 		text-align: center
 		border-top: 3px solid rgba($color-text-dark-secondary, .5)
@@ -519,6 +516,7 @@ section.pricing
 				padding: 25px
 				color: $color-text-dark-secondary
 				font-size: 1.1em
+				transition: color 100ms ease-in-out
 
 			&:hover
 				.pricing-caption
@@ -761,8 +759,8 @@ section.homepage_container.statement
 				opacity: 1
 				padding: 10px 35px
 
-section.homepage_container.bullets,
-section.homepage_container.supported-by
+section.bullets,
+section.supported-by
 	padding: 80px 0
 	border-top: 5px solid $color-background-dark
 	background-color: white
@@ -821,13 +819,11 @@ section.homepage_container.supported-by
 				font:
 					size: 3.6em
 
-section.homepage_container.supported-by
+section.supported-by
 	background-color: $color-background
 	padding: 50px 0
+	text-align: center
 
-	display: flex
-	align-items: center
-	justify-content: center
 
 	h1
 		margin-bottom: 0
