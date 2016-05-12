@@ -18,12 +18,15 @@ meta(property="og:image", content="{{ url_for('static', filename='assets/img/bac
 	#page-overlay.video
 		.video-embed
 
-
 	#page-header
+		.page-title-icons
+			i.pi-blender
+			i.pi-plus
+			i.pi-blender-cloud
 		.page-title
 			| Your Own Production Platform
 		.page-title-summary
-			| Get inspiration, knowledge, and tools in one place.
+			| Get inspiration, knowledge, and tools all in one place.
 
 		.page-header-cta-container
 			a.page-header-cta(href="https://store.blender.org/product/membership/")
@@ -92,9 +95,9 @@ meta(property="og:image", content="{{ url_for('static', filename='assets/img/bac
 				.page-card-title Exclusive Production Insights
 				.page-card-summary
 					p.
-						Watch the original author of a shot breaking it down into a detailed
+						Watch the original authors of shots breaking it down into a detailed
 						explanation and share their insight in the production process. Watch
-						animation review sessions, narrated timelapses, shot walk-throughs.
+						animation reviews, narrated timelapses, shot walk-throughs.
 
 			.page-card-side
 				.page-card-image
@@ -103,7 +106,8 @@ meta(property="og:image", content="{{ url_for('static', filename='assets/img/bac
 
 		.get-the-tools(
 			style="background-image: url({{ url_for('static', filename='assets/img/backgrounds/pattern_bw_01.jpg')}})")
-			section.page-card-header.dark Get the Tools
+			//- i.pi-blender
+			section.page-card-header.dark Connect Blender with the Cloud
 
 			section.page-card.dark
 
@@ -160,199 +164,171 @@ meta(property="og:image", content="{{ url_for('static', filename='assets/img/bac
 								path(d='M50 50.414l-4.707-4.707 1.414-1.414L50 47.586l3.293-3.293 1.414 1.414M27 40h2v9h-2z')
 								path(d='M28 50.414l-4.707-4.707 1.414-1.414L28 47.586l3.293-3.293 1.414 1.414M6 12c-3.31 0-6-2.692-6-6s2.69-6 6-6 6 2.692 6 6-2.69 6-6 6zM6 2C3.794 2 2 3.794 2 6s1.794 4 4 4 4-1.794 4-4-1.794-4-4-4zm22 10c-3.31 0-6-2.692-6-6s2.69-6 6-6 6 2.692 6 6-2.69 6-6 6zm0-10c-2.206 0-4 1.794-4 4s1.794 4 4 4 4-1.794 4-4-1.794-4-4-4zm22 10c-3.31 0-6-2.692-6-6s2.69-6 6-6 6 2.692 6 6-2.69 6-6 6zm0-10c-2.206 0-4 1.794-4 4s1.794 4 4 4 4-1.794 4-4-1.794-4-4-4zM6 64c-3.31 0-6-2.692-6-6s2.69-6 6-6 6 2.692 6 6-2.69 6-6 6zm0-10c-2.206 0-4 1.794-4 4s1.794 4 4 4 4-1.794 4-4-1.794-4-4-4zm22 10c-3.31 0-6-2.692-6-6s2.69-6 6-6 6 2.692 6 6-2.69 6-6 6zm0-10c-2.206 0-4 1.794-4 4s1.794 4 4 4 4-1.794 4-4-1.794-4-4-4zm22 10c-3.31 0-6-2.692-6-6s2.69-6 6-6 6 2.692 6 6-2.69 6-6 6zm0-10c-2.206 0-4 1.794-4 4s1.794 4 4 4 4-1.794 4-4-1.794-4-4-4zM27 31h2v2h-2zm-4 0h2v2h-2zm8 0h2v2h-2z')
 
+		section.pricing
+			.container
+				.row
+					.col-md-12
+						h2 Simple Pricing. Any payment method.
+				.row
+					.col-md-4.col-sm-4
+						.box.monthly
+							h3 Monthly
+							.pricing-display
+								span.currency-sign $
+								span.digit-int 9
+								span.digit-dec .90 / month*
 
-		.container.pricing
-			.row-fluid
-				.col-md-12
-					h2 Simple Pricing. Any payment method.
-			.row-fluid
-				.col-md-4
-					.box
-						h3 Monthly
-						.pricing-display
-							span.currency-sign $
-							span.digit-int 9
-							span.digit-dec .90 / month*
+							.pricing-caption
+								p * with a 3-months minimum period
 
-						.pricing-caption
-							p * With a 3-months minimum period
+							a.sign-up-now(href="https://store.blender.org/product/membership/")
+								| Subscribe Now
 
-						ul
-							li Hundreds of hours of training videos
-							li Production quality assets free to use
-							li New content added regularly
-							li Full access to all Blender Open Movies
-							li Comment and interact with the team
-							li Downloadable assets and videos
+					.col-md-4.col-sm-4
+						.box.yearly
+							h3 Yearly
+							.pricing-display
+								span.currency-sign $
+								span.digit-int 109
+								span.digit-dec .00 / year
+							.pricing-caption
+								p 1 month free!
+								p Free copy of the <a href="https://store.blender.org/product/art-of-blender-2/">Art of Blender</a>
 
-						a.sign-up-now(href="https://store.blender.org/product/membership/")
-							| Sign up now
+							a.sign-up-now(href="https://store.blender.org/product/membership/")
+								| Subscribe Now
 
-				.col-md-4
-					.box
-						h3 Half-Yearly
-						.pricing-display
-							span.currency-sign $
-							span.digit-int 54
-							span.digit-dec .90*
-						.pricing-caption
-							p * 2 weeks free!
+					.col-md-4.col-sm-4
+						.box.education
+							h3 Education
 
-						ul
-							li Hundreds of hours of training videos
-							li Production quality assets free to use
-							li New content added regularly
-							li Full access to all Blender Open Movies
-							li Comment and interact with the team
-							li Downloadable assets and videos
+							.pricing-caption
+								p.
+									We also provide flexible options for group subscription
+									ideal for schools or teams.
+								p.
+									Get in touch to discuss direct support, custom solutions,
+									team management tools and Single Sign-on.
 
-						a.sign-up-now(href="https://store.blender.org/product/membership/")
-							| Sign up now
+							a.sign-up-now(href="mailto:cloudsupport@blender.org")
+								i.pi-email
+								| Get in Touch
 
-				.col-md-4
-					.box
-						h3 Yearly
-						.pricing-display
-							span.currency-sign $
-							span.digit-int 109
-							span.digit-dec .00 / year*
-						.pricing-caption
-							p * 1 month free!
-
-						ul
-							li Hundreds of hours of training videos
-							li Production quality assets free to use
-							li New content added regularly
-							li Full access to all Blender Open Movies
-							li Comment and interact with the team
-							li Downloadable assets and videos
-							li A free pick from the Blender Store!
-
-						a.sign-up-now(href="https://store.blender.org/product/membership/")
-							| Sign up now
-
-			.row-fluid
-				.col-md-12
-					.groups-text.
-						<strong>For groups:</strong> we also provide flexible options for group subscription
-						ideal for schools or teams. Get in touch to discuss direct support, custom solutions,
-						team management tools and Single Sign-on
-
-
-		.container-fluid.team(
+		section.team(
 			style="background-image: url({{ url_for('static', filename='assets/img/backgrounds/pattern_01.jpg')}})")
-			.row-fluid
-				.col-md-12.text-center
-					h2.
-						A restless team of artists and developers <br/>
-						wants to share their work with you.
+			.container
+				.row
+					.col-md-12
+						h2.
+							A restless team of artists and developers <br/>
+							wants to share their work with you.
 
-					.people-container
-						.people-intro
-							h3 Blender Institute
-							span Amsterdam, The Netherlands
+						.people-container
+							.people-intro
+								h3 Blender Institute
+								span Amsterdam, The Netherlands
 
-						.people-faces
-							.face(data-blenderhead='ton')
-								img(src="{{ url_for('static', filename='assets/img/people/ton.jpg')}}")
-							.face(data-blenderhead='francesco')
-								img(src="{{ url_for('static', filename='assets/img/people/francesco.jpg')}}")
-							.face(data-blenderhead='pablo')
-								img(src="{{ url_for('static', filename='assets/img/people/pablo.jpg')}}")
-							.face(data-blenderhead='andy')
-								img(src="{{ url_for('static', filename='assets/img/people/andy.jpg')}}")
-							.face(data-blenderhead='hjalti')
-								img(src="{{ url_for('static', filename='assets/img/people/hjalti.jpg')}}")
-							.face(data-blenderhead='sergey')
-								img(src="{{ url_for('static', filename='assets/img/people/sergey.jpg')}}")
-							.face(data-blenderhead='sybren')
-								img(src="{{ url_for('static', filename='assets/img/people/sybren.jpg')}}")
+							.people-faces
+								.face(data-blenderhead='ton')
+									img(src="{{ url_for('static', filename='assets/img/people/ton.jpg')}}")
+								.face(data-blenderhead='francesco')
+									img(src="{{ url_for('static', filename='assets/img/people/francesco.jpg')}}")
+								.face(data-blenderhead='pablo')
+									img(src="{{ url_for('static', filename='assets/img/people/pablo.jpg')}}")
+								.face(data-blenderhead='andy')
+									img(src="{{ url_for('static', filename='assets/img/people/andy.jpg')}}")
+								.face(data-blenderhead='hjalti')
+									img(src="{{ url_for('static', filename='assets/img/people/hjalti.jpg')}}")
+								.face(data-blenderhead='sergey')
+									img(src="{{ url_for('static', filename='assets/img/people/sergey.jpg')}}")
+								.face(data-blenderhead='sybren')
+									img(src="{{ url_for('static', filename='assets/img/people/sybren.jpg')}}")
 
-						.people-bio
-							.bio#ton
-								h3 Ton Roosendaal
-									small CEO Blender Foundation. Producer Blender Institute
-								span The Netherlands
+							.people-bio
+								.bio#ton
+									h3 Ton Roosendaal
+										small CEO Blender Foundation. Producer Blender Institute
+									span The Netherlands
 
-							.bio#francesco
-								h3 Francesco Siddi
-									small Pipeline Tools & Back-end Web Development
-								span Italy
+								.bio#francesco
+									h3 Francesco Siddi
+										small Pipeline Tools & Back-end Web Development
+									span Italy
 
-							.bio#pablo
-								h3 Pablo Vázquez
-									small Lighting, Rendering. Front-end Web Development
-								span Argentina
+								.bio#pablo
+									h3 Pablo Vázquez
+										small Lighting, Rendering. Front-end Web Development
+									span Argentina
 
-							.bio#andy
-								h3 Andy Goralczyk
-									small Shading, Lighting, Rendering, FX
-								span Germany
+								.bio#andy
+									h3 Andy Goralczyk
+										small Shading, Lighting, Rendering, FX
+									span Germany
 
-							.bio#hjalti
-								h3 Hjalti Hjálmarsson
-									small Animation. Layout Artist.
-								span Iceland
+								.bio#hjalti
+									h3 Hjalti Hjálmarsson
+										small Animation. Layout Artist.
+									span Iceland
 
-							.bio#sergey
-								h3 Sergey Sharybin
-									small Blender & Cycles Core Developer
-								span Russia
+								.bio#sergey
+									h3 Sergey Sharybin
+										small Blender & Cycles Core Developer
+									span Russia
 
-							.bio#sybren
-								h3 Sybren Stüvel
-									small Blender Cloud Developer
-								span The Netherlands
+								.bio#sybren
+									h3 Sybren Stüvel
+										small Blender Cloud Developer
+									span The Netherlands
 
 
-					.people-container.online
-						.people-intro
-							h3 Online Collaborators
-							span Contributing to Blender Cloud from all over the globe.
+						.people-container.online
+							.people-intro
+								h3 Online Collaborators
+								span Contributing to Blender Cloud from all over the globe.
 
-						.people-faces
-							.face(data-blenderhead='gleb')
-								img(src="{{ url_for('static', filename='assets/img/people/gleb.jpg')}}")
-							.face(data-blenderhead='david')
-								img(src="{{ url_for('static', filename='assets/img/people/david.jpg')}}")
-							.face(data-blenderhead='sebastian')
-								img(src="{{ url_for('static', filename='assets/img/people/sebastian.jpg')}}")
-							.face(data-blenderhead='jpbouza')
-								img(src="{{ url_for('static', filename='assets/img/people/jpbouza.jpg')}}")
-							.face(data-blenderhead='bassam')
-								img(src="{{ url_for('static', filename='assets/img/people/bassam.jpg')}}")
+							.people-faces
+								.face(data-blenderhead='gleb')
+									img(src="{{ url_for('static', filename='assets/img/people/gleb.jpg')}}")
+								.face(data-blenderhead='david')
+									img(src="{{ url_for('static', filename='assets/img/people/david.jpg')}}")
+								.face(data-blenderhead='sebastian')
+									img(src="{{ url_for('static', filename='assets/img/people/sebastian.jpg')}}")
+								.face(data-blenderhead='jpbouza')
+									img(src="{{ url_for('static', filename='assets/img/people/jpbouza.jpg')}}")
+								.face(data-blenderhead='bassam')
+									img(src="{{ url_for('static', filename='assets/img/people/bassam.jpg')}}")
 
-						.people-bio
-							.bio#gleb
-								h3 Gleb Alexandrov
-									small Lighting & Shading
-								span Belarus
+							.people-bio
+								.bio#gleb
+									h3 Gleb Alexandrov
+										small Lighting & Shading
+									span Belarus
 
-							.bio#david
-								h3 David Revoy
-									small Illustrator & Concept Artist
-								span France
+								.bio#david
+									h3 David Revoy
+										small Illustrator & Concept Artist
+									span France
 
-							.bio#jpbouza
-								h3 Juan Pablo Bouza
-									small Rigging
-								span Argentina
+								.bio#jpbouza
+									h3 Juan Pablo Bouza
+										small Rigging
+									span Argentina
 
-							.bio#bassam
-								h3 Bassam Kurdali
-									small Rigging & Pipeline
-								span United States
+								.bio#bassam
+									h3 Bassam Kurdali
+										small Rigging & Pipeline
+									span United States
 
-							.bio#sebastian
-								h3 Sebastian König
-									small VFX
-								span Germany
+								.bio#sebastian
+									h3 Sebastian König
+										small VFX
+									span Germany
 
 
 		section.page-card.oneofus.
-			Join <strong>2015</strong> awesome people, <a href="">subscribe to Blender Cloud</a> now.
+			Join <strong>2021</strong> awesome people, <a href="">subscribe to Blender Cloud</a> now.
 
-		section.homepage_container.supported-by
+		section.supported-by
 			h2 Our projects were supported by
 			img.logos(src="{{ url_for('static', filename='assets/img/support_logos.png') }}")
 
@@ -392,10 +368,20 @@ script.
 		}
 	);
 
-	// Click anywhere in the page to hide #notifications
-	$(document).click(function() {
+	// Click anywhere in the page to hide the overlay
+	function hideOverlay() {
 		$('#page-overlay.video').removeClass('active');
 		$('#page-overlay.video .video-embed').html('');
+	}
+
+	$(document).click(function() {
+		hideOverlay();
+	});
+
+	$(document).keyup(function(e) {
+		if (e.keyCode == 27) {
+			hideOverlay();
+		}
 	});
 
 	$('a.watch-video').click(function(e){
@@ -405,7 +391,7 @@ script.
 		$('#page-overlay.video').addClass('active');
 
 		var videoId = $(this).attr('youtube-id');
-		$('#page-overlay .video-embed').html('<iframe src="https://www.youtube.com/embed/' + videoId +'?rel=0&amp;showinfo=0" frameborder="0" allowfullscreen></iframe>')
+		$('#page-overlay .video-embed').html('<iframe src="https://www.youtube.com/embed/' + videoId +'?rel=0&amp;showinfo=0;autoplay=1" frameborder="0" allowfullscreen></iframe>')
 	});
 
 | {% endblock %}
