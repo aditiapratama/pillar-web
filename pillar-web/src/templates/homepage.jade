@@ -26,25 +26,24 @@ meta(property="og:image", content="{{ url_for('static', filename='assets/img/bac
 		//- 	frameborder="0",
 		//- 	allowfullscreen)
 		.text
-			.title Meet Vincent.
+			.title Blender Cloud Services
 				//- img(src="{{ url_for('static', filename='assets/img/logo_gallery.png')}}")
 
 			.lead
 				span.
-					All-new BlenRig character, fully rigged and ready to render.
-					<hr/>
-					CC-BY, free to use, free to share.
+					Create your personal projects, collaborate with other Cloud members
+					<br>
+					and access the Texture Library from within Blender.
 				//
 					We make films, we build a production pipeline, and we share everything.
 					<br/>Get full access to the Blender Institute's Open Projects and training material.
 
 			.buttons
-				a.btn.btn-default.btn-outline.orange(href="https://cloud.blender.org/p/characters/#5718a967c379cf04929a4247")
+				a.btn.btn-default.btn-outline.orange(href="https://storage.googleapis.com/institute-storage/addons/blender_cloud-1.0.1-bundle.zip")
 					i.pi-download
-					|  Download Vincent
-				a.btn.btn-default.btn-outline.orange(href="https://cloud.blender.org/p/blenrig/#56965fc3c379cf44546120e1")
-					i.pi-download
-					|  Get BlenRig
+					|  Download Add-on
+				a.btn.btn-default.btn-outline.blue(href="{{ url_for('services') }}")
+					|  Learn More
 
 				//
 					| {% if current_user.is_authenticated() %}
