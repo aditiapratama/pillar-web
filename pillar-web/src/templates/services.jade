@@ -9,7 +9,8 @@ meta(property="og:image", content="{{ url_for('static', filename='assets/img/bac
 
 | {% block header_backdrop %}
 .navbar-backdrop(
-	style="background-image: url({{ url_for('static', filename='assets/img/backgrounds/background_services.jpg')}})")
+	style="background-image: url({{ url_for('static', filename='assets/img/backgrounds/services_projects.jpg')}})")
+.navbar-backdrop-overlay.join
 | {% endblock %}
 
 | {% block body %}
@@ -36,6 +37,15 @@ meta(property="og:image", content="{{ url_for('static', filename='assets/img/bac
 
 			.page-card-side
 				.page-card-icon
+					svg(xmlns='http://www.w3.org/2000/svg', width='56', height='64', viewbox='0 0 56 64')
+						g(fill='#555')
+							path(d='M42 38H14V26h28v12zm-26-2h24v-8H16v8zm-4-5H8c-1.654 0-3-1.346-3-3V15h2v13c0 .55.45 1 1 1h4v2z')
+							path(d='M9.293 19.707L6 16.414l-3.293 3.293-1.414-1.414 4-4c.39-.39 1.023-.39 1.414 0l4 4-1.414 1.414zM48 31h-4v-2h4c.55 0 1-.45 1-1V15h2v13c0 1.654-1.346 3-3 3z')
+							path(d='M53.293 19.707L50 16.414l-3.293 3.293-1.414-1.414L50 13.586l4.707 4.707M27 15h2v9h-2z')
+							path(d='M31.293 19.707L28 16.414l-3.293 3.293-1.414-1.414L28 13.586l4.707 4.707M7 49H5V36c0-1.654 1.346-3 3-3h4v2H8c-.55 0-1 .45-1 1v13z')
+							path(d='M6 50c-.256 0-.512-.098-.707-.293l-4-4 1.414-1.414L6 47.586l3.293-3.293 1.414 1.414-4 4c-.195.195-.45.293-.707.293zm45-1h-2V36c0-.55-.45-1-1-1h-4v-2h4c1.654 0 3 1.346 3 3v13z')
+							path(d='M50 50.414l-4.707-4.707 1.414-1.414L50 47.586l3.293-3.293 1.414 1.414M27 40h2v9h-2z')
+							path(d='M28 50.414l-4.707-4.707 1.414-1.414L28 47.586l3.293-3.293 1.414 1.414M6 12c-3.31 0-6-2.692-6-6s2.69-6 6-6 6 2.692 6 6-2.69 6-6 6zM6 2C3.794 2 2 3.794 2 6s1.794 4 4 4 4-1.794 4-4-1.794-4-4-4zm22 10c-3.31 0-6-2.692-6-6s2.69-6 6-6 6 2.692 6 6-2.69 6-6 6zm0-10c-2.206 0-4 1.794-4 4s1.794 4 4 4 4-1.794 4-4-1.794-4-4-4zm22 10c-3.31 0-6-2.692-6-6s2.69-6 6-6 6 2.692 6 6-2.69 6-6 6zm0-10c-2.206 0-4 1.794-4 4s1.794 4 4 4 4-1.794 4-4-1.794-4-4-4zM6 64c-3.31 0-6-2.692-6-6s2.69-6 6-6 6 2.692 6 6-2.69 6-6 6zm0-10c-2.206 0-4 1.794-4 4s1.794 4 4 4 4-1.794 4-4-1.794-4-4-4zm22 10c-3.31 0-6-2.692-6-6s2.69-6 6-6 6 2.692 6 6-2.69 6-6 6zm0-10c-2.206 0-4 1.794-4 4s1.794 4 4 4 4-1.794 4-4-1.794-4-4-4zm22 10c-3.31 0-6-2.692-6-6s2.69-6 6-6 6 2.692 6 6-2.69 6-6 6zm0-10c-2.206 0-4 1.794-4 4s1.794 4 4 4 4-1.794 4-4-1.794-4-4-4zM27 31h2v2h-2zm-4 0h2v2h-2zm8 0h2v2h-2z')
 
 		section.page-card.right.services-textures
 
@@ -55,6 +65,14 @@ meta(property="og:image", content="{{ url_for('static', filename='assets/img/bac
 
 			.page-card-side
 				.page-card-icon
+					svg(xmlns="http://www.w3.org/2000/svg",
+							width="64", height="60",
+							viewBox="0 0 64 60")
+							g(fill="#555")
+								path(d="M32 60c-.188 0-.377-.053-.542-.16l-31-20C.173 39.656 0 39.34 0 39s.173-.656.458-.84l31-20c.33-.213.754-.213 1.084 0l31 20c.285.184.458.5.458.84s-.173.656-.458.84l-31 20c-.165.107-.354.16-.542.16zM2.845 39L32 57.81 61.155 39 32 20.19 2.845 39z")
+								path(d="M32 51c-.188 0-.377-.053-.542-.16l-31-20C.173 30.656 0 30.34 0 30s.173-.656.458-.84l31-20c.33-.213.754-.213 1.084 0l31 20c.285.184.458.5.458.84s-.173.656-.458.84l-31 20c-.165.107-.354.16-.542.16zM2.845 30L32 48.81 61.155 30 32 11.19 2.845 30z")
+								path(d="M32 42c-.188 0-.377-.053-.542-.16l-31-20C.173 21.656 0 21.34 0 21s.173-.656.458-.84l31-20c.33-.213.754-.213 1.084 0l31 20c.285.184.458.5.458.84s-.173.656-.458.84l-31 20c-.165.107-.354.16-.542.16zM2.845 21L32 39.81 61.155 21 32 2.19 2.845 21z")
+								path(d="M31 27h2v2h-2zm0-4h2v2h-2zm0 8h2v2h-2zm4-4h2v2h-2zm4 2h2v2h-2zm-16 0h2v2h-2zm12 2h2v2h-2zm-8-4h2v2h-2zm0 4h2v2h-2zm4 4h2v2h-2zm31 15h2v2h-2zm0-4h2v2h-2zm0 8h2v2h-2zm0 4h2v2h-2zm0-54h2v2h-2zm0-4h2v2h-2zm0 8h2v2h-2zm0 4h2v2h-2zM0 50h2v2H0zm0-4h2v2H0zm0 8h2v2H0zm0 4h2v2H0zM0 4h2v2H0zm0-4h2v2H0zm4 0h2v2H4zm4 0h2v2H8zm4 0h2v2h-2zm4 0h2v2h-2zm4 0h2v2h-2zm22 0h2v2h-2zm4 0h2v2h-2zm4 0h2v2h-2zm4 0h2v2h-2zm4 0h2v2h-2zM4 58h2v2H4zm4 0h2v2H8zm4 0h2v2h-2zm4 0h2v2h-2zm4 0h2v2h-2zm22 0h2v2h-2zm4 0h2v2h-2zm4 0h2v2h-2zm4 0h2v2h-2zm4 0h2v2h-2zM0 8h2v2H0zm0 4h2v2H0z")
 
 		section.page-card.services-attract
 
