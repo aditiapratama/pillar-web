@@ -9,7 +9,7 @@ from pillarsdk import Api
 from pillarsdk import NodeType
 from pillarsdk.users import User
 from pillarsdk.tokens import Token
-from pillarsdk.exceptions import UnauthorizedAccess
+from pillarsdk import exceptions as sdk_exceptions
 
 from flask import Flask
 from flask import session
@@ -245,7 +245,7 @@ app.register_blueprint(projects, url_prefix='/p')
 app.register_blueprint(notifications, url_prefix='/notifications')
 
 
-@app.errorhandler(UnauthorizedAccess)
+@app.errorhandler(sdk_exceptions.UnauthorizedAccess)
 def handle_invalid_usage(error):
     """Global exception handling for pillarsdk UnauthorizedAccess
     Currently the api is fully locked down so we need to constantly
@@ -253,3 +253,16 @@ def handle_invalid_usage(error):
     """
     return redirect(url_for('users.login'))
 
+
+@app.errorhandler(sdk_exceptions.ForbiddenAccess)
+def handle_sdk_forbidden(error):
+    from werkzeug.exceptions import Forbidden
+    log.info('Forwarding ForbiddenAccess exception to client: %s', error)
+    raise Forbidden()
+
+
+@app.errorhandler(sdk_exceptions.ResourceNotFound)
+def handle_sdk_resource_not_found(error):
+    from werkzeug.exceptions import NotFound
+    log.info('Forwarding ResourceNotFound exception to client: %s', error)
+    raise NotFound()
