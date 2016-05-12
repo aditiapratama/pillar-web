@@ -1,133 +1,443 @@
 | {% extends 'layout.html' %}
-| {% block page_title %}Join{% endblock %}
+| {% block page_title %}Welcome{% endblock %}
 
 | {% block og %}
 meta(property="og:title", content="Join the Blender Cloud")
-meta(property="og:url", content="https://cloud.blender.org/join")
-meta(property="og:image", content="https://cloud.blender.org/static/assets/img/backgrounds/background_join_bbb.jpg")
+meta(property="og:url", content="https://cloud.blender.org/")
+meta(property="og:image", content="{{ url_for('static', filename='assets/img/backgrounds/background_services.jpg')}}")
+| {% endblock %}
+
+| {% block header_backdrop %}
+.navbar-backdrop(
+	style="background-image: url({{ url_for('static', filename='assets/img/backgrounds/background_join_gooseberry.jpg')}})")
+.navbar-backdrop-overlay.join
 | {% endblock %}
 
 | {% block body %}
-.join
-
-	.slide.image.main(
-		style="background-image: url({{ url_for('static', filename='assets/img/backgrounds/background_join_bbb.jpg')}})")
-		.gradient
-		.overlay
-			h1 Your Blender Backstage Pass
-			h2.
-				Full access to all the Blender Institute's open projects
-				trainings, and more in one place
-			a(href="https://store.blender.org/product/membership/")
-				h4
-					button.btn.btn-default.btn-outline
-						| Join the Cloud
-
-	.slide.icons
-		.join__points_item
-			span.join__points_item-icon
-				i.ion-ios-folder-outline
-
-			span.join__points_item-title
-				| Inside Projects
-
-			span.join__points_item-description
-				| Browse all the project files as they're made plus extra art, animatics, and Gooseberry content not found elsewhere.
-
-		.join__points_item
-			span.join__points_item-icon
-				i.ion-ios-film-outline
-
-			span.join__points_item-title
-				| All Open Movies
-
-			span.join__points_item-description
-				| You'll find everything you'd find on each open movie's DVD...plus access to the project repositories and other extras!
-
-		.join__points_item
-			span.join__points_item-icon
-				i.ion-ios-circle-filled
-
-			span.join__points_item-title
-				| Hours of Training
-
-			span.join__points_item-description
-				| Build your Blender skills with the lessons from the Blender training DVDs plus special tutorials from the open movies.
-
-		.join__points_item
-			span.join__points_item-icon
-				i.ion-ios-chatboxes-outline
-
-			span.join__points_item-title
-				| Support the Team
-
-			span.join__points_item-description
-				| Help make Blender's open projects possible, and later you'll also be able to share your own ideas and work.
+#page-container.join
+	#page-overlay.video
+		.video-embed
 
 
-	.slide.image(
-		style="background-image: url({{ url_for('static', filename='assets/img/backgrounds/background_join_tos.jpg')}})")
-		.gradient.right
-		.lead.right
-			h1 Create Your Own Films
-			p.
-				Download scripts, models, rigs, textures, and everything else you need to recreate each of our films (or make your own).
+	#page-header
+		.page-title
+			| Your Own Production Platform
+		.page-title-summary
+			| Get the inspiration, knowledge, and tools in one place.
+
+		.page-header-cta-container
+			a.page-header-cta(href="https://store.blender.org/product/membership/")
+				| Join Now
+
+			a.page-header-cta-extra(href="")
+				| Explore
+				i.pi-angle-right
 
 
-	.slide.image(
-		style="background-image: url({{ url_for('static', filename='assets/img/backgrounds/background_join_andyusingblender.jpg')}})")
-		.gradient.left
-		.lead.left
-			h1 Learn from the Experts
-			p.
-				Whether you're a Blender beginner or an advanced animator, the techniques you'll pick up in the 70+ hours of trainings & tutorials will help you improve.
+	#page-content
+
+		section.page-card-header Get Inspired
+
+		section.page-card.services-projects
+
+			.page-card-side
+				.page-card-title Open Projects
+				.page-card-summary
+					p.
+						Create and manage your own personal projects.
+						Upload assets and collaborate with other Blender Cloud members.
+					ul
+						li Blenderella
+						li Track Match Blend
+
+			.page-card-side
+				.page-card-image
+					img(
+						src="{{ url_for('static', filename='assets/img/features/open_movies_01.jpg')}}")
 
 
-	.slide.image(
-		style="background-image: url({{ url_for('static', filename='assets/img/backgrounds/background_join_gooseberry.jpg')}})")
-		.gradient.right
-		.lead.right
-			h1 Watch Gooseberry Unfold
-			p.
-				Get your hands on <a href="http://gooseberry.blender.org">Project Gooseberry</a>'s art and other assets the moment they're made, learning about the animation process directly from the studio team members as they work.
+		section.page-card.right.services-projects
+
+			.page-card-side
+				.page-card-title High Quality Assets
+				.page-card-summary
+					p.
+						Create and manage your own personal projects.
+						Upload assets and collaborate with other Blender Cloud members.
+
+					ul
+						li Fully-rigged characters ready to animate
+						li Art Gallery by Gleb Alexandrov
+						li Complete highly-detailed scenes
+						li Production-level assets and shaders
 
 
-	.slide.image(
-		style="background-image: url({{ url_for('static', filename='assets/img/backgrounds/background_join_peoplecodingblender.jpg')}})")
-		.gradient.left
-		.lead.left
-			h1 Future Features
-			p.
-				Your support will help us build a better Cloud where you will also be able to participate in our open content creation process.
-
-	.slide.image.main(
-		style="background-image: url({{ url_for('static', filename='assets/img/backgrounds/background_join_bbb_frankite.jpg')}})")
-		.gradient
-		.overlay
-			h1 Break Down Barriers
-			h2.
-				We believe open content creation will lead to a fairer, more sustainable future where makers and viewers can interact directly. Help us prove this.
+			.page-card-side
+				.page-card-image
+					img(
+						src="{{ url_for('static', filename='assets/img/features/assets_01.jpg')}}")
 
 
-	.slide.subscribe
-		.box
-			h2 Get Your Backstage Pass
-			ul
-				li Just 10 USD per month
-				li Prepay for a set number of months or set up a monthly subscription
-				li Join for 8+ months for a credit in the Cosmos Laundromat pilot film
-				li Cancel anytime
-				li
-					a(href="mailto:cloudsupport@blender.org") Contact us
-					|  to discuss team membership packages
 
-			a.subscribe(href="/subscribe")
-				button.btn.btn-outline.subscribe
+		section.page-card-header Get the Knowledge
+
+		section.page-card.services-projects
+
+			.page-card-side
+				.page-card-title Complete Training Series
+				.page-card-summary
+					p.
+						From character modeling and 3D printing to VFX and rigging.
+						12 training series with +100 hours of training.
+
+					ul
+						li
+							a(href="https://cloud.blender.org/p/blenderella/", target="_blank")
+								| Blenderella
+						li
+							a(href="https://cloud.blender.org/p/track-match-2/", target="_blank")
+								| Track Match Blend
+						li
+							a(href="https://cloud.blender.org/p/3d-printing/", target="_blank")
+								| Blender for 3D Printing
+						li
+							a(href="https://cloud.blender.org/p/game-asset-creation/", target="_blank")
+								| Game Asset Creation
+						li
+							a(href="https://cloud.blender.org/training", target="_blank") and many more!
+
+			.page-card-side
+				.page-card-image
+					img(
+						src="{{ url_for('static', filename='assets/img/features/training_01.jpg')}}")
+					span ...and more to come!
+
+		section.page-card.right.services-projects
+
+			.page-card-side
+				.page-card-title Exclusive Production Insights
+				.page-card-summary
+					p.
+						Awesome
+
+					ul
+						li Animation Reviews
+						li Shot Walk-throughs
+						li Timelapses
+
+			.page-card-side
+				.page-card-image
+					img(
+						src="{{ url_for('static', filename='assets/img/features/animation_review_01.gif')}}")
+
+		.get-the-tools(
+			style="background-image: url({{ url_for('static', filename='assets/img/backgrounds/pattern_bw_01.jpg')}})")
+			section.page-card-header.dark Get the Tools
+
+			section.page-card.dark
+
+				.page-card-side
+					.page-card-title Texture Browser Add-On
+					.page-card-summary
+						p.
+							Access the <a href="https://cloud.blender.org/p/textures/">Blender Cloud Textures</a>
+							library from within Blender using our exclusive add-on.
+							With it you'll soon be able to browse <em>your own</em> texture library.
+
+					a.page-card-cta.download(
+						href="https://storage.googleapis.com/institute-storage/addons/blender_cloud-1.0.1-bundle.zip")
+						i.pi-download
+						| Download <small>v</small>1.0
+					a.page-card-cta.watch-video(
+						youtube-id="-srXYv2Osjw")
+						i.pi-play
+						| Watch Video
+
+				.page-card-side
+					.page-card-icon
+						svg(xmlns="http://www.w3.org/2000/svg",
+								width="64", height="60",
+								viewBox="0 0 64 60")
+								g(fill="#aaa")
+									path(d="M32 60c-.188 0-.377-.053-.542-.16l-31-20C.173 39.656 0 39.34 0 39s.173-.656.458-.84l31-20c.33-.213.754-.213 1.084 0l31 20c.285.184.458.5.458.84s-.173.656-.458.84l-31 20c-.165.107-.354.16-.542.16zM2.845 39L32 57.81 61.155 39 32 20.19 2.845 39z")
+									path(d="M32 51c-.188 0-.377-.053-.542-.16l-31-20C.173 30.656 0 30.34 0 30s.173-.656.458-.84l31-20c.33-.213.754-.213 1.084 0l31 20c.285.184.458.5.458.84s-.173.656-.458.84l-31 20c-.165.107-.354.16-.542.16zM2.845 30L32 48.81 61.155 30 32 11.19 2.845 30z")
+									path(d="M32 42c-.188 0-.377-.053-.542-.16l-31-20C.173 21.656 0 21.34 0 21s.173-.656.458-.84l31-20c.33-.213.754-.213 1.084 0l31 20c.285.184.458.5.458.84s-.173.656-.458.84l-31 20c-.165.107-.354.16-.542.16zM2.845 21L32 39.81 61.155 21 32 2.19 2.845 21z")
+									path(d="M31 27h2v2h-2zm0-4h2v2h-2zm0 8h2v2h-2zm4-4h2v2h-2zm4 2h2v2h-2zm-16 0h2v2h-2zm12 2h2v2h-2zm-8-4h2v2h-2zm0 4h2v2h-2zm4 4h2v2h-2zm31 15h2v2h-2zm0-4h2v2h-2zm0 8h2v2h-2zm0 4h2v2h-2zm0-54h2v2h-2zm0-4h2v2h-2zm0 8h2v2h-2zm0 4h2v2h-2zM0 50h2v2H0zm0-4h2v2H0zm0 8h2v2H0zm0 4h2v2H0zM0 4h2v2H0zm0-4h2v2H0zm4 0h2v2H4zm4 0h2v2H8zm4 0h2v2h-2zm4 0h2v2h-2zm4 0h2v2h-2zm22 0h2v2h-2zm4 0h2v2h-2zm4 0h2v2h-2zm4 0h2v2h-2zm4 0h2v2h-2zM4 58h2v2H4zm4 0h2v2H8zm4 0h2v2h-2zm4 0h2v2h-2zm4 0h2v2h-2zm22 0h2v2h-2zm4 0h2v2h-2zm4 0h2v2h-2zm4 0h2v2h-2zm4 0h2v2h-2zM0 8h2v2H0zm0 4h2v2H0z")
+
+
+			section.page-card.dark.right
+
+				.page-card-side
+					.page-card-title Personal Projects
+					.page-card-summary.
+						Create and manage your own private, personal projects.
+						Upload assets and collaborate with other Blender Cloud members.
+
+					a.page-card-cta.download(
+						href="https://cloud.blender.org/p/")
+						| Create a Project
+					a.page-card-cta(
+						href="https://cloud.blender.org/blog/introducing-private-projects")
+						| Learn More
+
+				.page-card-side
+					.page-card-icon
+						svg(xmlns='http://www.w3.org/2000/svg', width='56', height='64', viewbox='0 0 56 64')
+							g(fill='#aaa')
+								path(d='M42 38H14V26h28v12zm-26-2h24v-8H16v8zm-4-5H8c-1.654 0-3-1.346-3-3V15h2v13c0 .55.45 1 1 1h4v2z')
+								path(d='M9.293 19.707L6 16.414l-3.293 3.293-1.414-1.414 4-4c.39-.39 1.023-.39 1.414 0l4 4-1.414 1.414zM48 31h-4v-2h4c.55 0 1-.45 1-1V15h2v13c0 1.654-1.346 3-3 3z')
+								path(d='M53.293 19.707L50 16.414l-3.293 3.293-1.414-1.414L50 13.586l4.707 4.707M27 15h2v9h-2z')
+								path(d='M31.293 19.707L28 16.414l-3.293 3.293-1.414-1.414L28 13.586l4.707 4.707M7 49H5V36c0-1.654 1.346-3 3-3h4v2H8c-.55 0-1 .45-1 1v13z')
+								path(d='M6 50c-.256 0-.512-.098-.707-.293l-4-4 1.414-1.414L6 47.586l3.293-3.293 1.414 1.414-4 4c-.195.195-.45.293-.707.293zm45-1h-2V36c0-.55-.45-1-1-1h-4v-2h4c1.654 0 3 1.346 3 3v13z')
+								path(d='M50 50.414l-4.707-4.707 1.414-1.414L50 47.586l3.293-3.293 1.414 1.414M27 40h2v9h-2z')
+								path(d='M28 50.414l-4.707-4.707 1.414-1.414L28 47.586l3.293-3.293 1.414 1.414M6 12c-3.31 0-6-2.692-6-6s2.69-6 6-6 6 2.692 6 6-2.69 6-6 6zM6 2C3.794 2 2 3.794 2 6s1.794 4 4 4 4-1.794 4-4-1.794-4-4-4zm22 10c-3.31 0-6-2.692-6-6s2.69-6 6-6 6 2.692 6 6-2.69 6-6 6zm0-10c-2.206 0-4 1.794-4 4s1.794 4 4 4 4-1.794 4-4-1.794-4-4-4zm22 10c-3.31 0-6-2.692-6-6s2.69-6 6-6 6 2.692 6 6-2.69 6-6 6zm0-10c-2.206 0-4 1.794-4 4s1.794 4 4 4 4-1.794 4-4-1.794-4-4-4zM6 64c-3.31 0-6-2.692-6-6s2.69-6 6-6 6 2.692 6 6-2.69 6-6 6zm0-10c-2.206 0-4 1.794-4 4s1.794 4 4 4 4-1.794 4-4-1.794-4-4-4zm22 10c-3.31 0-6-2.692-6-6s2.69-6 6-6 6 2.692 6 6-2.69 6-6 6zm0-10c-2.206 0-4 1.794-4 4s1.794 4 4 4 4-1.794 4-4-1.794-4-4-4zm22 10c-3.31 0-6-2.692-6-6s2.69-6 6-6 6 2.692 6 6-2.69 6-6 6zm0-10c-2.206 0-4 1.794-4 4s1.794 4 4 4 4-1.794 4-4-1.794-4-4-4zM27 31h2v2h-2zm-4 0h2v2h-2zm8 0h2v2h-2z')
+
+
+		.container.pricing
+			.row-fluid
+				.col-md-12
+					h2 Simple Pricing. Any payment method.
+			.row-fluid
+				.col-md-4
+					.box
+						h3 Monthly
+						.pricing-display
+							span.currency-sign $
+							span.digit-int 9
+							span.digit-dec .90 / month*
+
+						.pricing-caption
+							p * With a 3-months minimum period
+
+						ul
+							li Hundreds of hours of training videos
+							li Production quality assets free to use
+							li New content added regularly
+							li Full access to all Blender Open Movies
+							li Comment and interact with the team
+							li Downloadable assets and videos
+
+						a.sign-up-now(href="https://store.blender.org/product/membership/")
+							| Sign up now
+
+				.col-md-4
+					.box
+						h3 Half-Yearly
+						.pricing-display
+							span.currency-sign $
+							span.digit-int 54
+							span.digit-dec .90*
+						.pricing-caption
+							p * 2 weeks free!
+
+						ul
+							li Hundreds of hours of training videos
+							li Production quality assets free to use
+							li New content added regularly
+							li Full access to all Blender Open Movies
+							li Comment and interact with the team
+							li Downloadable assets and videos
+
+						a.sign-up-now(href="https://store.blender.org/product/membership/")
+							| Sign up now
+
+				.col-md-4
+					.box
+						h3 Yearly
+						.pricing-display
+							span.currency-sign $
+							span.digit-int 109
+							span.digit-dec .00 / year*
+						.pricing-caption
+							p * 1 month free!
+
+						ul
+							li Hundreds of hours of training videos
+							li Production quality assets free to use
+							li New content added regularly
+							li Full access to all Blender Open Movies
+							li Comment and interact with the team
+							li Downloadable assets and videos
+							li A free pick from the Blender Store!
+
+						a.sign-up-now(href="https://store.blender.org/product/membership/")
+							| Sign up now
+
+			.row-fluid
+				.col-md-12
+					.groups-text.
+						<strong>For groups:</strong> we also provide flexible options for group subscription
+						ideal for schools or teams. Get in touch to discuss direct support, custom solutions,
+						team management tools and Single Sign-on
+
+
+		.container-fluid.team(
+			style="background-image: url({{ url_for('static', filename='assets/img/backgrounds/pattern_01.jpg')}})")
+			.row-fluid
+				.col-md-12.text-center
+					h2.
+						A restless team of artists and developers <br/>
+						wants to share their work with you.
+
+					.people-container
+						.people-intro
+							h3 Blender Institute
+							span Amsterdam, The Netherlands
+
+						.people-faces
+							.face(data-blenderhead='ton')
+								img(src="{{ url_for('static', filename='assets/img/people/ton.jpg')}}")
+							.face(data-blenderhead='francesco')
+								img(src="{{ url_for('static', filename='assets/img/people/francesco.jpg')}}")
+							.face(data-blenderhead='pablo')
+								img(src="{{ url_for('static', filename='assets/img/people/pablo.jpg')}}")
+							.face(data-blenderhead='andy')
+								img(src="{{ url_for('static', filename='assets/img/people/andy.jpg')}}")
+							.face(data-blenderhead='hjalti')
+								img(src="{{ url_for('static', filename='assets/img/people/hjalti.jpg')}}")
+							.face(data-blenderhead='sergey')
+								img(src="{{ url_for('static', filename='assets/img/people/sergey.jpg')}}")
+							.face(data-blenderhead='sybren')
+								img(src="{{ url_for('static', filename='assets/img/people/sybren.jpg')}}")
+
+						.people-bio
+							.bio#ton
+								h3 Ton Roosendaal
+									small CEO Blender Foundation. Producer Blender Institute
+								span The Netherlands
+
+							.bio#francesco
+								h3 Francesco Siddi
+									small Pipeline Tools & Back-end Web Development
+								span Italy
+
+							.bio#pablo
+								h3 Pablo Vázquez
+									small Lighting, Rendering. Front-end Web Development
+								span Argentina
+
+							.bio#andy
+								h3 Andy Goralczyk
+									small Shading, Lighting, Rendering, FX
+								span Germany
+
+							.bio#hjalti
+								h3 Hjalti Hjálmarsson
+									small Animation. Layout Artist.
+								span Iceland
+
+							.bio#sergey
+								h3 Sergey Sharybin
+									small Blender & Cycles Core Developer
+								span Russia
+
+							.bio#sybren
+								h3 Sybren Stüvel
+									small Blender Cloud Developer
+								span The Netherlands
+
+
+					.people-container.online
+						.people-intro
+							h3 Online Collaborators
+							span Contributing to Blender Cloud from all over the globe.
+
+						.people-faces
+							.face(data-blenderhead='gleb')
+								img(src="{{ url_for('static', filename='assets/img/people/gleb.jpg')}}")
+							.face(data-blenderhead='david')
+								img(src="{{ url_for('static', filename='assets/img/people/david.jpg')}}")
+							.face(data-blenderhead='sebastian')
+								img(src="{{ url_for('static', filename='assets/img/people/sebastian.jpg')}}")
+							.face(data-blenderhead='jpbouza')
+								img(src="{{ url_for('static', filename='assets/img/people/jpbouza.jpg')}}")
+							.face(data-blenderhead='bassam')
+								img(src="{{ url_for('static', filename='assets/img/people/bassam.jpg')}}")
+
+						.people-bio
+							.bio#gleb
+								h3 Gleb Alexandrov
+									small Lighting & Shading
+								span Belarus
+
+							.bio#david
+								h3 David Revoy
+									small Illustrator & Concept Artist
+								span France
+
+							.bio#jpbouza
+								h3 Juan Pablo Bouza
+									small Rigging
+								span Argentina
+
+							.bio#bassam
+								h3 Bassam Kurdali
+									small Rigging & Pipeline
+								span United States
+
+							.bio#sebastian
+								h3 Sebastian König
+									small VFX
+								span Germany
+
+
+		section.page-card.oneofus.
+			Join <strong>2015</strong> awesome people, <a href="">subscribe to Blender Cloud</a> now.
+
+		section.homepage_container.supported-by
+			h2 Our projects were supported by
+			img.logos(src="{{ url_for('static', filename='assets/img/support_logos.png') }}")
+
+		section.page-card.subscribe(
+			style="background-image: url({{ url_for('static', filename='assets/img/backgrounds/background_services.jpg')}});")
+			.page-card-side
+				.page-card-title
+					| All of this, plus hours of training and production assets.
+				.page-card-summary
+					| Join us for only $9.90/month!
+				a.page-card-cta(
+					href="https://store.blender.org/product/membership/")
 					| Subscribe Now
-					i.ion-ios-arrow-right
 
 
 | {% endblock %}
 
 | {% block footer_scripts %}
+script.
+	function getSubscribers(){
+		$.get('https://store.blender.org/product-counter/?prod=cloud', function(data) {
+		}).done(function(data){
+			$('.page-card.oneofus strong').html(data.total_sold);
+		});
+	}
+
+	getSubscribers();
+
+	$('.people-faces .face').hover(
+		function(){
+			var who = $(this).data('blenderhead');
+			$('#' + who).addClass('active');
+			$(this).parent().prev().addClass('active');
+		},
+		function(){
+			$('.bio, .people-intro').removeClass('active');
+		}
+	);
+
+	// Click anywhere in the page to hide #notifications
+	$(document).click(function() {
+		$('#page-overlay.video').removeClass('active');
+		$('#page-overlay.video .video-embed').html('');
+	});
+
+	$('a.watch-video').click(function(e){
+		e.preventDefault();
+		e.stopPropagation();
+
+		$('#page-overlay.video').addClass('active');
+
+		var videoId = $(this).attr('youtube-id');
+		$('#page-overlay .video-embed').html('<iframe src="https://www.youtube.com/embed/' + videoId +'?rel=0&amp;showinfo=0" frameborder="0" allowfullscreen></iframe>')
+	});
+
 | {% endblock %}
