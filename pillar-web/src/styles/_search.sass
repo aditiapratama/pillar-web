@@ -246,11 +246,13 @@ $search-hit-width_list: 48px
 
 						span
 							&:before
-								content: '\e84a'
+								/* x icon */
+								content: '\e84b'
 								font-family: 'pillar-font'
 					span
 						&:before
-							content: '\e849'
+							/* circle with dot */
+							content: '\e82f'
 							font-family: 'pillar-font'
 							position: relative
 							left: -7px
@@ -258,7 +260,8 @@ $search-hit-width_list: 48px
 
 				span
 					&:before
-						content: '\e848'
+						/* empty circle */
+						content: '\e82c'
 						font-family: 'pillar-font'
 						position: relative
 						left: -7px
@@ -622,11 +625,11 @@ $search-hit-width_list: 48px
 		.pi-group:before
 			font-family: 'pillar-font'
 		.pi-video:before
-			content: '\e81f'
+			content: '\e81d'
 		.pi-file:before
-			content: '\e822'
+			content: '\e825'
 		.pi-group:before
-			content: '\e820'
+			content: '\e80d'
 
 		.search-hit-thumbnail-icon
 			position: absolute
@@ -634,7 +637,6 @@ $search-hit-width_list: 48px
 			left: 50%
 			transform: translate(-50%, -50%)
 			color: white
-			// text-shadow: 1px 1px 1px rgba(black, .2), 0 0 50px rgba(black, .3)
 			font-size: 1.2em
 			transition: none
 			color: $color-text-dark-secondary

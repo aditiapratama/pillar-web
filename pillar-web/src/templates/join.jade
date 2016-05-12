@@ -29,7 +29,7 @@ meta(property="og:image", content="{{ url_for('static', filename='assets/img/bac
 			a.page-header-cta(href="https://store.blender.org/product/membership/")
 				| Join Now
 
-			a.page-header-cta-extra(href="")
+			a.page-header-cta-extra(href="{{ url_for('nodes_search_index') }}")
 				| Explore
 				i.pi-angle-right
 
