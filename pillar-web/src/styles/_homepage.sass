@@ -473,17 +473,17 @@
 	// background: linear-gradient(to bottom, rgba(black, 0) 0%, rgba(black, 0) 25%, rgba(black,.6) 90%, rgba(black,.5) 100%)
 	background: linear-gradient(to bottom, rgba(black, .5) 0%, rgba(black, .2) 25%, transparent 56%, rgba($color-background,.4) 90%, $color-background 100%)
 
-.container.pricing
-	height: initial
+section.pricing
 	padding: 50px 0
 	margin-bottom: 25px
-
+	background-color: $color-background-light
+	+clearfix
 	+media-xs
 		padding: 0
 
 	h2
 		text-align: center
-		font-size: 2.6em
+		font-size: 2.4em
 		margin:
 			top: 20px
 			bottom: 50px
@@ -495,13 +495,37 @@
 	.box
 		padding: 0 20px
 		border: 1px solid $color-text-dark-hint
-		height: 480px
-		min-height: 480px
+		background-color: white
+		height: 320px
+		min-height: 320px
 		position: relative
-		border-radius: 3px
+		text-align: center
+		border-top: 3px solid rgba($color-text-dark-secondary, .5)
 
 		+media-xs
 			margin-bottom: 15px
+
+		&.yearly
+			border-top: 3px solid $color-info
+
+			a.sign-up-now
+				+button-rounded-filled($color-primary, 999em)
+
+				&:hover
+					+button-rounded-filled($color-success, 999em)
+
+		&.education
+			.pricing-caption
+				padding: 25px
+				color: $color-text-dark-secondary
+				font-size: 1.1em
+
+			&:hover
+				.pricing-caption
+					color: $color-text-dark-primary
+
+			a.sign-up-now
+				width: 70%
 
 		h3
 			font:
@@ -510,9 +534,11 @@
 			padding-bottom: 0
 			margin: 25px 0 0 10px
 
+
 		.pricing-display
 			position: relative
 			color: $color-info
+			padding: 10px 0
 
 			.currency-sign,
 			.digit-dec
@@ -526,8 +552,8 @@
 				font-weight: 100
 
 		.pricing-caption
-			color: $color-text-dark-secondary
-			font-size: .9em
+			color: $color-text-dark
+			// font-size: .9em
 			padding-bottom: 0
 
 		+list-bullets
@@ -543,26 +569,19 @@
 		.sign-up-now
 			position: absolute
 			bottom: 25px
-			width: 50%
+			width: 65%
 			left: 50%
 			transform: translateX(-50%)
 			font-size: 1.2em
 
-			@include button-rounded($color-primary, 999em)
+			+button-rounded($color-primary, 999em)
 			padding: 5px 25px
 			white-space: nowrap
 			text-align: center
 
 		&:hover
 			.sign-up-now
-				@include button-rounded-filled($color-primary, 999em)
-
-
-	.groups-text
-		margin: 20px auto
-		color: $color-text-dark-secondary
-		text-align: center
-		max-width: 700px
+				+button-rounded-filled($color-success, 999em)
 
 
 .container-fluid.our-content
@@ -850,12 +869,13 @@ section.homepage_container.supported-by
 		font-size: 1.5em
 
 
-.team
+section.team
 	background:
 		color: white
 		size: cover
 		position: 50% 50%
 	padding: 50px 0 40px 0
+	text-align: center
 
 	h2
 		padding-bottom: 30px
