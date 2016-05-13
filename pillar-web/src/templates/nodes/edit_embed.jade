@@ -192,7 +192,12 @@ script(type="text/javascript").
 		})
 		.fail(function(data){
 			/* Something went wrong, print it */
-			statusBarSet('error', 'Error! We\'ve been notified and are working on it - ' + data.status + ' ' + data.statusText, 8000);
+			if (data.status == 422) {
+				statusBarSet('error', 'The submitted data could not be validated.', 8000);
+			} else {
+				statusBarSet('error', 'Error! We\'ve been notified and are working on it - '
+						+ data.status + ' ' + data.statusText, 8000);
+			}
 
 			$("li.button-save").addClass('field-error');
 			$("li.button-save a#item_save").html('<i class="pi-warning"></i> Houston!');
