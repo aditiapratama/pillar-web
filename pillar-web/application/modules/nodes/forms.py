@@ -1,4 +1,5 @@
-import json
+import logging
+
 from datetime import datetime
 from datetime import date
 import pillarsdk
@@ -21,6 +22,8 @@ from application.helpers.forms import ProceduralFileSelectForm
 from wtforms import FieldList
 from application.helpers.forms import CustomFormField
 from application.helpers.forms import build_file_select_form
+
+log = logging.getLogger(__name__)
 
 
 def add_form_properties(form_class, node_schema, form_schema, prefix=''):
@@ -143,7 +146,9 @@ def process_node_form(form, node_id=None, node_type=None, user=None):
     """Generic function used to process new nodes, as well as edits
     """
     if not user:
+        log.warning('process_node_form(node_id=%s) called while user not logged in', node_id)
         return False
+
     api = SystemUtility.attract_api()
     node_schema = node_type['dyn_schema'].to_dict()
     form_schema = node_type['form_schema'].to_dict()
@@ -210,11 +215,13 @@ def process_node_form(form, node_id=None, node_type=None, user=None):
                 else:
                     node.properties[prop_name] = data
         update_data(node_schema, form_schema)
-        update = node.update(api=api)
+        ok = node.update(api=api)
+        if not ok:
+            log.warning('Unable to update node: %s', node.error)
         # if form.picture.data:
         #     image_data = request.files[form.picture.name].read()
         #     post = node.replace_picture(image_data, api=api)
-        return update
+        return ok
     else:
         # Create a new node
         node = pillarsdk.Node()

@@ -514,8 +514,7 @@ def edit(node_id):
                    set_data=False)
 
     if form.validate_on_submit():
-        if process_node_form(form, node_id=node_id, node_type=node_type,
-                             user=user_id):
+        if process_node_form(form, node_id=node_id, node_type=node_type, user=user_id):
             # Handle the specific case of a blog post
             if node_type.name == 'post':
                 project_update_nodes_list(node, list_name='blog')
@@ -527,11 +526,11 @@ def edit(node_id):
                                     _external=True,
                                     _scheme=app.config['SCHEME']))
         else:
-            error = "Server error"
-            print ("Error sending data")
+            log.debug('Error sending data to Pillar, see Pillar logs.')
+            error = 'Server error'
     else:
         if form.errors:
-            print form.errors
+            log.debug('Form errors: %s', form.errors)
 
     # Populate Form
     form.name.data = node.name
