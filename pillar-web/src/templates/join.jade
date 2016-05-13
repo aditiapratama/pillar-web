@@ -9,9 +9,8 @@ meta(property="og:image", content="{{ url_for('static', filename='assets/img/bac
 
 | {% block header_backdrop %}
 .navbar-backdrop.join(
-	style="background-image: url({{ url_for('static', filename='assets/img/backgrounds/background_join_gooseberry.jpg')}})")
-	video(loop, muted, autoplay, preload="none", poster="{{ url_for('static', filename='assets/img/backgrounds/background_join_gooseberry.jpg')}}")
-		source(src="{{ url_for('static', filename='assets/video/header-cosmos_tornado.mp4')}}", type="video/mp4")
+	style="background-image: url({{ url_for('static', filename='assets/img/backgrounds/cloud_services_oti.jpg')}})")
+
 .navbar-backdrop-overlay.join
 | {% endblock %}
 
@@ -353,6 +352,7 @@ script.
 	function getSubscribers(){
 		$.get('https://store.blender.org/product-counter/?prod=cloud', function(data) {
 		}).done(function(data){
+			$('.page-card.oneofus').addClass('active');
 			$('.page-card.oneofus strong').html(data.total_sold);
 		});
 	}
