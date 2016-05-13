@@ -49,3 +49,27 @@ BLENDER_ID_BASE_URL = 'http://blender_id:8000/'
 BLENDER_ID_OAUTH_URL = BLENDER_ID_BASE_URL + 'api/'
 BLENDER_ID_BASE_ACCESS_TOKEN_URL = BLENDER_ID_BASE_URL + 'oauth/token'
 BLENDER_ID_AUTHORIZE_URL = BLENDER_ID_BASE_URL + 'oauth/authorize'
+
+# See https://docs.python.org/2/library/logging.config.html#configuration-dictionary-schema
+LOGGING = {
+    'version': 1,
+    'formatters': {
+        'default': {'format': '%(asctime)-15s %(levelname)8s %(name)s %(message)s'}
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'default',
+            'stream': 'ext://sys.stderr',
+        }
+    },
+    'loggers': {
+        'application': {'level': 'INFO'},
+    },
+    'root': {
+        'level': 'WARNING',
+        'handlers': [
+            'console',
+        ],
+    }
+}

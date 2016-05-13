@@ -1,6 +1,7 @@
 import flask_login
 import os
 import logging
+import logging.config
 import config
 import bugsnag
 import redis
@@ -40,9 +41,8 @@ if from_envvar:
     app.config.from_pyfile(from_envvar, silent=False)
 
 # Configure logging
-logging.basicConfig(level=logging.WARNING)
+logging.config.dictConfig(app.config['LOGGING'])
 log = logging.getLogger(__name__)
-log.setLevel(logging.DEBUG if app.config['DEBUG'] else logging.INFO)
 log.info('Pillar Web starting')
 
 # Configure Bugsnag
