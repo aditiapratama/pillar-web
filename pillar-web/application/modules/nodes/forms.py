@@ -197,6 +197,10 @@ def process_node_form(form, node_id=None, node_type=None, user=None):
                     if pr == 'attachments':
                         # data = json.loads(data)
                         data = [dict(field='description', files=data)]
+                    elif pr == 'files':
+                        # Only keep those items that actually refer to a file.
+                        data = [file_item for file_item in data
+                                if file_item.get('file')]
                     # elif pr == 'tags':
                     #     data = [tag.strip() for tag in data.split(',')]
                 elif schema_prop['type'] == 'objectid':

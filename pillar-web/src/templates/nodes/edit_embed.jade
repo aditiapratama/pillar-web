@@ -252,20 +252,35 @@ script(type="text/javascript").
 
 	var attrs = ['for', 'id', 'name', 'data-field-name'];
 	function resetAttributeNames(section) {
-		var tags = section.find('input, label, div'), idx = section.index();
+		var tags = section.find('input, select, label, div, a');
+		var idx = section.index();
 		tags.each(function () {
 			var $this = $(this);
+
+			// Renumber certain attributes.
 			$.each(attrs, function (i, attr) {
 				var attr_val = $this.attr(attr);
 				if (attr_val) {
-					$this.attr(attr, attr_val.replace(/-\d+/, '-' + (idx + 1)))
+					$this.attr(attr, attr_val.replace(/-\d+/, '-' + idx))
 				}
-			})
+			});
+
 			// Clear input field values
-			if ($this.prop('tagName') == 'INPUT') {
-				$this.val('');
+			var tagname = $this.prop('tagName');
+			if (tagname == 'INPUT') {
+				if ($this.attr('type') == 'checkbox') {
+					$this.prop('checked', false);
+				} else {
+					$this.val('');
+				}
+			} else if (tagname == 'SELECT') {
+				$this.find(':nth-child(1)').prop('selected', true);
 			}
-		})
+		});
+
+		// Click on all file delete buttons to clear all file widgets.
+		section.find('a.file_delete').click();
+		section.find('div.form-upload-progress-bar').hide();
 	}
 
 	var initUploadFields = function(selector_string) {
@@ -343,13 +358,20 @@ script(type="text/javascript").
 	if (document.getElementById("attachments") !== null) {
 		$("#attachments-action-add").on('click', function(){
 			var lastRepeatingGroup = $('#attachments > li').last();
-			var cloned = lastRepeatingGroup.clone(true)
+			var cloned = lastRepeatingGroup.clone(true);
 			cloned.insertAfter(lastRepeatingGroup);
 			resetAttributeNames(cloned);
 		});
+	}
 
-	};
-
+	if (document.getElementById("files") !== null) {
+		$("#files-action-add").on('click', function () {
+			var lastRepeatingGroup = $('#files > li').last();
+			var cloned = lastRepeatingGroup.clone(true);
+			cloned.insertAfter(lastRepeatingGroup);
+			resetAttributeNames(cloned);
+		});
+	}
 	//- console.log($._data($(elementSelector)[0], "events"));
 
 
