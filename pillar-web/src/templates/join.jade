@@ -8,8 +8,10 @@ meta(property="og:image", content="{{ url_for('static', filename='assets/img/bac
 | {% endblock %}
 
 | {% block header_backdrop %}
-.navbar-backdrop(
+.navbar-backdrop.join(
 	style="background-image: url({{ url_for('static', filename='assets/img/backgrounds/background_join_gooseberry.jpg')}})")
+	video(loop, muted, autoplay, preload="none", poster="{{ url_for('static', filename='assets/img/backgrounds/background_join_gooseberry.jpg')}}")
+		source(src="{{ url_for('static', filename='assets/video/header-cosmos_tornado.mp4')}}", type="video/mp4")
 .navbar-backdrop-overlay.join
 | {% endblock %}
 
