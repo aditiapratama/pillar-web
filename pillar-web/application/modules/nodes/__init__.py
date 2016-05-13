@@ -462,12 +462,17 @@ def edit(node_id):
 
                 elif prop_name == 'files':
                     schema = schema_prop['schema']['schema']
+                    # Extra entries are caused by min_entries=1 in the form creation.
+                    field_list = form[prop_name]
+                    while len(field_list):
+                        field_list.pop_entry()
+
                     for file_data in db_prop_value:
                         file_form_class = build_file_select_form(schema)
                         subform = file_form_class()
                         for key, value in file_data.iteritems():
                             setattr(subform, key, value)
-                        form[prop_name].append_entry(subform)
+                        field_list.append_entry(subform)
 
                 # elif prop_name == 'tags':
                 #     form[prop_name].data = ', '.join(data)

@@ -63,7 +63,8 @@ def add_form_properties(form_class, node_schema, form_schema, prefix=''):
             elif prop == 'files':
                 schema = schema_prop['schema']['schema']
                 file_select_form = build_file_select_form(schema)
-                field = FieldList(CustomFormField(file_select_form))
+                field = FieldList(CustomFormField(file_select_form),
+                                  min_entries=1)
             elif 'allowed' in schema_prop['schema']:
                 choices = [(c, c) for c in schema_prop['schema']['allowed']]
                 field = SelectMultipleField(choices=choices)
