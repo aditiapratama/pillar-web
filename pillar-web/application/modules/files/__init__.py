@@ -306,7 +306,7 @@ def create():
     file_item = process_and_create_file(project_id, name, size, content_type)
     api = SystemUtility.attract_api()
     f = File.find(file_item['_id'], api=api)
-    thumbnail_link = f.thumbnail_file('s', api=api)
+    thumbnail_link = f.thumbnail('s', api=api)
 
     return jsonify(status='success', data=dict(id=file_item._id,
         link=thumbnail_link, field_name=field_name))
