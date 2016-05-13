@@ -1,17 +1,9 @@
 function deleteFile(fileField, newFileId) {
-    newFileId = newFileId || null;
-    var fileId = fileField.val();
-    var url = '/files/delete/' + fileId;
-    $.post(url, function(data){}).success(function(dataResponse){
-        // Notify of successful request
-        //- statusBarSet('success', 'Original File Removed Successfully');
-        // If we provide the id of a previously uploaded file, add it here
-        if (newFileId) {
-            fileField.val(newFileId);
-        } else {
-            fileField.val('');
-        }
-    });
+    if (newFileId) {
+        fileField.val(newFileId);
+    } else {
+        fileField.val('');
+    }
 }
 
 
