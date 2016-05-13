@@ -24,12 +24,14 @@
 			padding: 0 15px
 
 	.page-title
+		text-align: center
 		font:
 			family: $font-headings
 			size: 3em
 			weight: 300
 
 		padding: 15px
+		text-shadow: 0 0 30px black, 0 0 1px rgba(black, .2)
 
 		+media-xs
 			font-size: 2.5em
@@ -43,6 +45,7 @@
 
 
 	.page-title-summary
+		text-align: center
 		padding: 10px 15px
 		font:
 			style: italic
@@ -307,16 +310,35 @@ $page-card-icon-size: 75px
 				height: 480px
 
 /* Page specific changes */
+.join.navbar-backdrop
+	position: relative
+	video
+		display: block
+		+position-center-translate
+
+
+		+media-xs
+			display: none
+		+media-sm
+			display: none
+		+media-md
+			width: 100%
+		+media-lg
+			width: 100%
+
 .join.navbar-backdrop-overlay
-	background: rgba(black, .7)
+	background: linear-gradient(rgba(black, .8), rgba(black, .2))
 
 .join
 	#page-header
+		.page-title
+			font:
+				size: 2.8em
 		.page-title-summary
 			font:
 				style: normal
 				size: 1.4em
-				weight: 300
+				weight: 400
 
 	.page-card
 		&:nth-child(even)
