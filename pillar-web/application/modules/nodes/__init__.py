@@ -465,7 +465,7 @@ def edit(node_id):
                     # Extra entries are caused by min_entries=1 in the form
                     # creation.
                     field_list = form[prop_name]
-                    if len(field_list) > 0:
+                    if len(db_prop_value) > 0:
                         while len(field_list):
                             field_list.pop_entry()
 
@@ -492,11 +492,6 @@ def edit(node_id):
                         attachment_form.slug = ''
                         attachment_form.size = ''
                         form[prop_name].append_entry(attachment_form)
-                if prop_name == 'files' and not db_prop_value:
-                    schema = schema_prop['schema']['schema']
-                    file_form_class = build_file_select_form(schema)
-                    subform = file_form_class()
-                    form[prop_name].append_entry(subform)
 
     api = SystemUtility.attract_api()
     node = Node.find(node_id, api=api)
