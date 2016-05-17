@@ -39,20 +39,23 @@ def index():
     projects_shared = Project.all({
         'where': {'user': {'$ne': current_user.objectid}},
         'in': {'permissions.groups': current_user.groups},
-        'sort': '-_created'
+        'sort': '-_created',
+        'embedded': {'user': 1},
     }, api=api)
 
-    # Merge the two lists
-    all_projects = projects_user['_items'] + projects_shared['_items']
-
     # Attach project images
-    for project in all_projects:
+    for project in projects_user['_items']:
+        attach_project_pictures(project, api)
+
+    for project in projects_shared['_items']:
         attach_project_pictures(project, api)
 
     return render_template(
-        'projects/index_collection.html',
+        'projects/index_dashboard.html',
+        gravatar=gravatar(current_user.email, size=128),
         title='dashboard',
-        projects=all_projects,
+        projects_user=projects_user['_items'],
+        projects_shared=projects_shared['_items'],
         api=SystemUtility.attract_api())
 
 
