@@ -352,8 +352,10 @@ script.
 	function getSubscribers(){
 		$.get('https://store.blender.org/product-counter/?prod=cloud', function(data) {
 		}).done(function(data){
-			$('.page-card.oneofus').addClass('active');
-			$('.page-card.oneofus strong').html(data.total_sold);
+			if (data.total_sold > 0) {
+				$('.page-card.oneofus').addClass('active');
+				$('.page-card.oneofus strong').html(data.total_sold);
+			}
 		});
 	}
 
