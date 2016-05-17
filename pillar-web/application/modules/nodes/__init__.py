@@ -433,7 +433,7 @@ def edit(node_id):
             try:
                 db_prop_value = node_properties[prop]
             except KeyError:
-                log.warning('%s not found in form for node %s', prop_name, node_id)
+                log.debug('%s not found in form for node %s', prop_name, node_id)
                 continue
 
             if schema_prop['type'] == 'datetime':
@@ -462,10 +462,12 @@ def edit(node_id):
 
                 elif prop_name == 'files':
                     schema = schema_prop['schema']['schema']
-                    # Extra entries are caused by min_entries=1 in the form creation.
+                    # Extra entries are caused by min_entries=1 in the form
+                    # creation.
                     field_list = form[prop_name]
-                    while len(field_list):
-                        field_list.pop_entry()
+                    if len(field_list) > 0:
+                        while len(field_list):
+                            field_list.pop_entry()
 
                     for file_data in db_prop_value:
                         file_form_class = build_file_select_form(schema)
@@ -492,10 +494,9 @@ def edit(node_id):
                         form[prop_name].append_entry(attachment_form)
                 if prop_name == 'files' and not db_prop_value:
                     schema = schema_prop['schema']['schema']
-                    for _ in db_prop_value:
-                        file_form_class = build_file_select_form(schema)
-                        subform = file_form_class()
-                        form[prop_name].append_entry(subform)
+                    file_form_class = build_file_select_form(schema)
+                    subform = file_form_class()
+                    form[prop_name].append_entry(subform)
 
     api = SystemUtility.attract_api()
     node = Node.find(node_id, api=api)
