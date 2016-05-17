@@ -74,7 +74,7 @@ def format_comment(comment, is_reply=False, is_team=False, replies=None):
                 is_rated_positive = rating.is_positive
                 continue
     return dict(_id=comment._id,
-        gravatar=gravatar(comment.user.email),
+        gravatar=gravatar(comment.user.email, size=32),
         time_published=pretty_date(comment._created),
         rating_up=comment.properties.rating_positive,
         rating_down=comment.properties.rating_negative,
