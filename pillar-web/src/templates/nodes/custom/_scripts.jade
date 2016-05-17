@@ -43,4 +43,25 @@ script(type="text/javascript").
 		{% endif %}
 	{% endif %}
 
+	var node_preview = document.getElementById("node-preview-thumbnail");
+
+	if (node_preview) {
+		node_preview.addEventListener('load', function() {
+			var preview_aspect = this.naturalWidth / this.naturalHeight
+
+			if (preview_aspect > 1.0){
+				$('.node-preview, .node-preview-thumbnail').css({'max-height': 'auto', 'width': '100%'});
+				$('.node-preview img').css({'max-height': '100%'});
+			}
+
+		});
+	}
+
+	$('#node-overlay').click(function(){
+		$(this).removeClass('active').hide().html();
+	});
+
+	$('#asset-license').popover();
+	$('[data-toggle="tooltip"]').tooltip({'delay' : {'show': 1250, 'hide': 250}})
+
 
