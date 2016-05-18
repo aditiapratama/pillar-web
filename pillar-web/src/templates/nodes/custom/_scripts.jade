@@ -35,7 +35,7 @@ script(type="text/javascript").
 
 
 		function loadComments(){
-			var commentsUrl = "_{{ url_for('nodes.comments_index', parent_id=node._id) }}";
+			var commentsUrl = "{{ url_for('nodes.comments_index', parent_id=node._id) }}";
 
 			$.get(commentsUrl, function(dataHtml) {
 				// Update the DOM injecting the generate HTML into the page
