@@ -33,11 +33,25 @@ script(type="text/javascript").
 		ProjectUtils.setProjectAttributes({parentNodeId: '{{parent._id}}'});
 		{% endif %}
 
-		var url = "{{url_for('nodes.comments_index')}}?parent_id={{node._id}}"
-		$.get(url, function(dataHtml) {
-			// Update the DOM injecting the generate HTML into the page
-			$('#comments-container').replaceWith(dataHtml);
-		})
+
+		function loadComments(){
+			var commentsUrl = "_{{ url_for('nodes.comments_index', parent_id=node._id) }}";
+
+			$.get(commentsUrl, function(dataHtml) {
+				// Update the DOM injecting the generate HTML into the page
+				$('#comments-container').replaceWith(dataHtml);
+			})
+			.fail(function(e, data){
+				statusBarSet('error', 'Couldn\'t load comments. Error: ' + data.errorThrown, 'pi-attention', 5000);
+				$('#comments-container').html('<a id="comments-reload"><i class="pi-refresh"></i> Reload comments</a>');
+			});
+		}
+
+		loadComments();
+
+		$('body').on('click', '#comments-reload', function(){
+			loadComments();
+		});
 
 		{% if node.has_method('PUT') %}
 			$('.project-mode-view').show();
