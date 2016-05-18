@@ -2398,6 +2398,16 @@ section.node-children
 		opacity: 1
 		top: 0
 
+		.overlay-container
+			.title
+				i
+					animation:
+						name: overlay-mode-move-icon
+						duration: 1.5s
+						delay: 0
+						fill-mode: forwards
+						iteration-count: infinite
+
 
 	.overlay-container
 		width: 100%
@@ -2425,13 +2435,6 @@ section.node-children
 				position: relative
 				right: 0
 				padding-right: 15px
-
-				animation:
-					name: overlay-mode-move-icon
-					duration: 1.5s
-					delay: 0
-					fill-mode: forwards
-					iteration-count: infinite
 
 			strong
 				font-weight: 400
