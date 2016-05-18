@@ -219,3 +219,38 @@ $('#item_toggle_public').click(function(e){
 $( document ).ready(function() {
 	$('ul.project-edit-tools').removeClass('disabled');
 });
+
+
+/* Small utility to enable specific node_types under the Add New dropdown */
+/* It takes:
+	 * empty: Enable every item
+	 * false: Disable every item
+	 * array: Disable every item except a list of node_types, e.g: ['asset', 'group']
+*/
+function addMenuEnable(node_types){
+	$("#item_add").parent().removeClass('disabled');
+	$("ul.add_new-menu li[class^='button-']").hide().addClass('disabled');
+
+	if (node_types === undefined) {
+		$("ul.add_new-menu li[class^='button-']").show().removeClass('disabled');
+	} else if (node_types == false) {
+		$("#item_add").parent().addClass('disabled');
+	} else {
+		$.each(node_types, function(index, value) {
+			$("ul.add_new-menu li[class*='button-" + value +"']").show().removeClass('disabled');
+		});
+	}
+}
+
+function addMenuDisable(node_types){
+	$.each(node_types, function(index, value) {
+		$("ul.add_new-menu li[class*='button-" + value +"']").addClass('disabled');
+	});
+}
+
+/* Completely hide specific items (like Texture when on project root) */
+function addMenuHide(node_types){
+	$.each(node_types, function(index, value) {
+		$("ul.add_new-menu li[class*='button-" + value +"']").hide().addClass('disabled');
+	});
+}

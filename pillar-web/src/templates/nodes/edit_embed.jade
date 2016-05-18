@@ -1,3 +1,5 @@
+| {% from '_macros/_node_edit_form.html' import render_field %}
+
 | {% block body %}
 
 | {% with errors = errors %}
@@ -22,11 +24,9 @@
 
 #node-edit-container
 
-	#node-edit-header
-		.node-edit-title {{node.name}}
-
 	form(
 		id="node-edit-form",
+		class="{{ node.node_type }}",
 		method="POST",
 		enctype="multipart/form-data",
 		action="{{url_for('nodes.edit', node_id=node._id)}}")
@@ -35,7 +35,6 @@
 
 		| {% if field.name == 'csrf_token' %}
 		| {{ field }}
-
 		| {% else %}
 
 		| {% if field.type == 'HiddenField' %}
@@ -48,33 +47,24 @@
 				i.pi-plus
 				| Add New Attachment
 
-		.form-group(class="{{field.name}}")
-			| {{ field(class='form-control') }}
+		| {{ render_field(field) }}
 
 		| {% elif field.name == 'files' %}
-		#files-actions
-			.btn.btn-info#files-action-add
-				i.pi-plus
-				| Add New File
+		.files-header
+			#files-actions
+				#files-action-add
+					i.pi-plus
+					| Add New File
 
-		.form-group(class="{{field.name}}")
-			| {{ field }}
+		| {{ render_field(field) }}
+
 		| {% else %}
 
-		.form-group(class="{{field.name}}{% if field.errors %} error{% endif %}")
-			| {{ field.label }}
-			| {{ field(class='form-control') }}
+		| {{ render_field(field) }}
 
-			| {% if field.errors %}
-			ul.error
-				| {% for error in field.errors %}
-				li {{ error }}
-				| {% endfor %}
-			| {% endif %}
-
-		| {% endif %}
-		| {% endif %}
-		| {% endif %}
+		| {% endif %} {# // attachments/files #}
+		| {% endif %} {# // HiddenField #}
+		| {% endif %} {# // csrf_token #}
 
 		| {% endfor %}
 
@@ -141,16 +131,6 @@ script(type="text/javascript").
 				// Convert markdown
 				$preview.html(convert($textarea.val()));
 			}
-		}).trigger('keyup');
-	});
-
-
-	$(function() {
-		var $namefield = $('.form-group.name input'),
-				$name = $('.node-edit-title');
-
-		$namefield.keyup(function() {
-			$name.html($namefield.val());
 		}).trigger('keyup');
 	});
 

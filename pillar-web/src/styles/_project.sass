@@ -153,11 +153,11 @@ $z-index-base: 13
 			&:hover, &:active, &:focus
 				text-decoration: none
 				outline: none
-				padding-left: 35px
+				padding-left: 30px
 
 				i
 					opacity: 1
-					left: 10px
+					left: 5px
 
 			i
 				opacity: 0
@@ -240,9 +240,9 @@ ul.breadcrumb
 	/* The > separating each breadcrumb */
 	li+li:before
 		color: lighten($color-text, 15%)
-		content: '\f3d3'
+		content: '\e83a'
 		font:
-			family: 'Ionicons'
+			family: 'pillar-font'
 
 	&:before
 		position: absolute
@@ -385,6 +385,9 @@ ul.project-edit-tools
 				opacity: .6
 				color: $color-text-dark
 
+		&.button-dropdown.disabled
+			border-bottom: none
+
 	a
 		margin: 5px
 		padding: 5px 15px
@@ -478,12 +481,15 @@ ul.project-edit-tools
 
 					&.icon-group:after
 						content: '\e80d'
+					&.icon-group_texture:after
+						content: '\e85c'
+						font-size: 1.1em
 					&.icon-asset:after
 						content: '\e825'
 					&.icon-page:after
 						content: '\e824'
 					&.icon-texture:after
-						content: '\e81e'
+						content: '\e80a'
 
 	/* // Extra asset tools in dropdown */
 
@@ -2242,10 +2248,78 @@ section.node-children
 
 #node-add-container,
 #node-edit-container
-	// display: flex
-	// flex-direction: column
-	// flex: 1
+	display: flex
+	flex-direction: column
+	flex: 1
 	color: $color-text-dark
+
+	form#node-edit-form
+
+		&.texture
+			.form-group.status,
+			.form-group.description,
+			.form-group.categories,
+			.form-group.order,
+			.form-group.resolution,
+			.form-group.aspect_ratio,
+			.form-group.is_landscape,
+			.form-group.is_tileable
+				display: none
+
+		.files-header
+			width: 100%
+
+		#files-action-add
+			+button-rounded-filled($color-success, 3px)
+			width: 200px
+			padding: 5px 10px
+			margin-bottom: 10px
+			opacity: 1
+
+	.fieldlist
+		list-style: none
+		padding: 0
+		margin: 0
+
+		li.fieldlist-item
+			background-color: $color-background-light
+			border: thin solid $color-background
+			border-bottom: 2px solid $color-background
+			border-radius: 3px
+			margin-bottom: 10px
+			padding: 0 15px
+			display: flex
+			flex-direction: row-reverse
+			align-items: center
+
+			.form-group
+				margin-bottom: 0 !important
+
+			.form-upload-file
+				margin-bottom: 0 !important
+
+			div[class*="map_type"],
+			div[class*="is_tileable"]
+				padding: 10px 15px
+				width: 25%
+				border-left: thin solid $color-background
+
+			div[class*="map_type"]
+				select.form-control
+					background: white !important
+				label
+					display: none
+
+			div[class*="is_tileable"]
+				label label
+					font-weight: 400 !important
+					padding-left: 0
+
+			div[class$="file"]
+				flex: 1
+				label
+					display: none
+
 
 #overlay-mode-move-container
 	visibility: hidden

@@ -79,7 +79,7 @@ link(href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/st
 						i.button-add-icon.pi-collection-plus
 						| New...
 
-					ul.dropdown-menu
+					ul.dropdown-menu.add_new-menu
 						| {{ add_new_menu(project.node_types) }}
 
 				li.button-edit
@@ -219,15 +219,15 @@ script.
 			// Update the DOM injecting the generate HTML into the page
 			$('#project_context').html(dataHtml);
 
-			// Only let user add groups when viewing a group
+			// Enable specific items under the Add New dropdown
 			if (ProjectUtils.nodeType() === 'group') {
-				$('.button-add').removeClass('disabled');
-				$('.button-asset').removeClass('disabled');
-				$('.button-group').removeClass('disabled');
+				addMenuEnable(['asset', 'group']);
+
+			} else if (ProjectUtils.nodeType() === 'group_texture') {
+				addMenuEnable(['group_texture', 'texture']);
+
 			} else {
-				$('.button-add').addClass('disabled');
-				$('.button-asset').addClass('disabled');
-				$('.button-group').addClass('disabled');
+				addMenuEnable(false);
 			}
 
 			// Update scrollbars
@@ -273,6 +273,9 @@ script.
 			Ps.update(document.getElementById('project_context-container'));
 
 			$('#project-loading').removeAttr('class');
+
+			addMenuEnable();
+			addMenuDisable(['texture']);
 		})
 		.fail(function(dataResponse) {
 			$('#project_context').html($('<iframe id="server_error"/>'));
@@ -381,12 +384,13 @@ script.
 						"#": {"valid_children": ["collection"]},
 						"chapter" : {"icon": "pi-folder"},
 						"group" : {"icon": "pi-folder"},
+						"group_texture" : {"icon": "pi-folder-texture"},
 						"group_storage" : {"icon": "pi-folder"},
 						"filesystem_node" : {"icon": "pi-folder"},
 						"file" : {"icon": "pi-file-archive", "max_children": 0},
 						"filesystem_file" : {"icon": "pi-document", "max_children": 0},
 						"image" : {"icon": "pi-image", "max_children": 0},
-						"texture" : {"icon": "pi-image", "max_children": 0},
+						"texture" : {"icon": "pi-texture", "max_children": 0},
 						"video" : {"icon": "pi-film-thick", "max_children": 0},
 						"blog" : {"icon": "pi-chatbubble-working", "max_children": 0},
 						"default" : {"icon": "pi-folder"}

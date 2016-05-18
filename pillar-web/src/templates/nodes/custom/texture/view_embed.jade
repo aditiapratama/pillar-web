@@ -35,13 +35,13 @@
 				data-preview="{{ f.file.thumbnail('l', api=api) }}",
 				data-aspect_ratio="{{ node.properties.aspect_ratio }}")
 
-		| {% if f.map_type == 'col' %}
+		| {% if f.map_type == 'color' %}
 		| {% set map_type = 'Color Map' %}
 		| {% elif f.map_type == 'bump' %}
 		| {% set map_type = 'Bump Map' %}
-		| {% elif f.map_type == 'spec' %}
+		| {% elif f.map_type == 'specular' %}
 		| {% set map_type = 'Specular Map' %}
-		| {% elif f.map_type == 'nor' %}
+		| {% elif f.map_type == 'normal' %}
 		| {% set map_type = 'Normal Map' %}
 		| {% elif f.map_type == 'translucency' %}
 		| {% set map_type = 'Translucency' %}
@@ -79,7 +79,8 @@
 						| {% if f.file.link %}
 						a(href="{{ f.file.link }}", download="{{ f.file.filename }}")
 							button.btn.btn-default(type="button")
-								| Download {{map_type}}
+								i.pi-download
+								|  {{map_type}}
 						| {% else %}
 						button.btn.btn-default.disabled.sorry(type="button")
 							| Download {{map_type}}
@@ -98,7 +99,7 @@ script.
 	ga('send', 'pageview', (location.pathname + '#' + '{{node._id}}'));
 
 	var str = $('.texture-title').text();
-	var to_replace = /_col|_bump|_spec|_nor|_translucency|_emission|_alpha|_tileable|.jpg|.png/g;
+	var to_replace = /_color|_bump|_specular|_normal|_translucency|_emission|_alpha|_tileable|.jpg|.png/g;
 	$('.texture-title').text(str.replace(to_replace,'').replace(/_/g,' '));
 
 	$('.node-preview-thumbnail').each(function(i){

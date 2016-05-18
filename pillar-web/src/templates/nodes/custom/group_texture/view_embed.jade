@@ -62,13 +62,13 @@
 						span.variations
 							| {% if child.properties.files %}
 							| {% for f in child.properties.files %}
-							| {% if f.map_type == 'col' %}
+							| {% if f.map_type == 'color' %}
 							span Color
 							| {% elif f.map_type == 'bump' %}
 							span Bump
-							| {% elif f.map_type == 'spec' %}
+							| {% elif f.map_type == 'specular' %}
 							span Specular
-							| {% elif f.map_type == 'nor' %}
+							| {% elif f.map_type == 'normal' %}
 							span Normal Map
 							| {% elif f.map_type == 'translucency' %}
 							span Translucency
