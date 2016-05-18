@@ -66,13 +66,15 @@
 							| {{ child.picture.width }}
 							small x
 							| {{ child.picture.height }}
+						| {% else %}
+						span.sizes {{ child.name }}
 						| {% endif %}
 						span.icons
 							| {% if child.properties.is_tileable %}
 							i.pi-puzzle(title="Tileable", data-toggle="tooltip", data-placement="bottom", data-delay=0)
 							| {% endif %}
+						| {% if child.properties.files %}
 						span.variations
-							| {% if child.properties.files %}
 							| {% for f in child.properties.files %}
 							| {% if f.map_type == 'color' %}
 							span Color
@@ -90,7 +92,7 @@
 							span Alpha
 							| {% endif %}
 							| {% endfor %}
-							| {% endif %}
+						| {% endif %}
 					| {% endif %}
 
 				| {% if child.node_type == 'group_texture' %}
