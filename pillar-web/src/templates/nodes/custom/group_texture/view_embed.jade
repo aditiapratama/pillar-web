@@ -28,17 +28,26 @@
 		| 	{% for child in children %}
 		| 	{% if child.properties.status == 'published' %}
 
-		a.list-node-children-container(href="#", data-node_id="{{ child._id }}", class="item_icon")
+		a.list-node-children-container(
+			href="#",
+			data-node_id="{{ child._id }}",
+			class="item_icon {{child.node_type}} {% if child.picture %}thumbnail{% endif %}")
 			.list-node-children-item-preview
 				span.texture-name {{child.name}}
 				| {% if child.picture %}
 				img.texture-preview(src="#", data-preview="{{ child.picture.thumbnail('m', api=api)}}")
 				| {% endif %}
-			.list-node-children-item.texture
+			.list-node-children-item(class="{{child.node_type}}")
 				.list-node-children-item-thumbnail
-
 					| {% if child.picture %}
 					img.texture-thumbnail(src="{{ child.picture.thumbnail('b', api=api)}}")
+					| {% else %}
+					.list-node-children-item-thumbnail-icon
+						| {% if child.node_type == 'group_texture' %}
+						i.pi-folder-texture
+						| {% else %}
+						i.pi-texture
+						| {% endif %}
 					| {% endif %}
 
 					| {% if child.properties.status != 'published' %}
@@ -50,11 +59,14 @@
 						span free
 					| {% endif %}
 
+					| {% if child.node_type == 'texture' %}
 					.list-node-children-item-name
+						| {% if child.picture.width %}
 						span.sizes
 							| {{ child.picture.width }}
 							small x
 							| {{ child.picture.height }}
+						| {% endif %}
 						span.icons
 							| {% if child.properties.is_tileable %}
 							i.pi-puzzle(title="Tileable", data-toggle="tooltip", data-placement="bottom", data-delay=0)
@@ -79,9 +91,19 @@
 							| {% endif %}
 							| {% endfor %}
 							| {% endif %}
+					| {% endif %}
+
+				| {% if child.node_type == 'group_texture' %}
+				.list-node-children-item-name
+					i.pi-folder-texture
+					span {{ child.name }}
+				| {% endif %}
 
 		| 	{% endif %}
 		| 	{% endfor %}
+		| {% else %}
+		.list-node-children-container
+			.list-node-children-empty No textures... yet!
 		| {% endif %}
 
 script.
@@ -89,7 +111,7 @@ script.
 	ga('send', 'pageview', (location.pathname + '#' + '{{node._id}}'));
 
 	// Display texture preview on mouse hover
-	$('a.list-node-children-container').hover(
+	$('a.list-node-children-container.texture.thumbnail').hover(
 		function(){
 
 			var src = $(this).find('.texture-thumbnail').attr('src');
@@ -109,7 +131,7 @@ script.
 				$(preview).css({'right': 0});
 			};
 
-			if (offset.top > offset_min_y) {
+			if (offset.top > (offset_min_y + 150)) {
 				$(preview).css({'top': (preview.height() * (-1))});
 			};
 

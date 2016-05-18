@@ -676,6 +676,7 @@ ul.project_nav-edit-list
 		family: $font-body
 		size: 2em
 		weight: 300
+	color: lighten($color-background-nav, 15%)
 
 $node-preview-max-height-sm: 300px
 $node-preview-max-height-md: 450px
@@ -686,8 +687,9 @@ $node-preview-max-height-lg: 500px
 		padding: 20px 20px 0 20px
 		margin: 0
 		float: left
-
 		text-transform: capitalize
+		+project-node-title
+
 	.texture-license
 		float: right
 		padding: 20px 20px 0 0
@@ -708,15 +710,17 @@ section.node-row
 		overflow: hidden
 
 		width: 50%
-		max-height: 500px
+		max-height: 320px
+		max-width: 320px
 		float: left
 		position: relative
 		background-color: $color-background
 		border-radius: 3px
 		user-select: none
+		cursor: grabbing
 
 		img.node-preview-thumbnail
-			position: absolute
+			+position-center-translate
 			width: 100%
 			border-radius: 3px
 			user-select: none
@@ -761,11 +765,20 @@ section.node-row
 			float: none
 			padding-top: 0
 
+			&.nofiles
+				padding: 0
+				.node-title
+					color: $color-text-dark-secondary
+					font:
+						weight: 400
+						size: 1.2em
+
 			.node-title
+				color: $color-text-dark-primary
 				font:
 					family: $font-body
-					weight: 300
-					size: 1.8em
+					weight: 500
+					size: 1.7em
 				+text-overflow-ellipsis
 
 
@@ -777,10 +790,11 @@ section.node-row
 				display: block
 
 				&.sizes, &.extra
+					color: $color-text-dark-primary
 					padding: 5px 0
 					font:
-						size: 1.4em
-						weight: 300
+						size: 1.3em
+						weight: 400
 					small
 						padding: 0 5px
 
@@ -878,14 +892,14 @@ section.node-preview
 			left: 20px
 			bottom: 10px
 			font:
-				size: 2.4em
+				size: 2.2em
 				weight: 300
 
 		.author
 			color: $color-text-dark-secondary
 
 	&.group
-		height: 100px
+		height: 80px
 
 		.node-title
 			max-width: 80%
@@ -1433,6 +1447,21 @@ section.node-children
 	float: left
 	margin: 10px 15px 10px 0
 
+	&.group_texture
+		.list-node-children-item.group_texture
+			height: $list-node-children-item-width
+			margin-top: 5px
+			.list-node-children-item-thumbnail
+				.list-node-children-item-thumbnail-icon i
+					position: relative
+					bottom: 10px
+			.list-node-children-item-name
+				bottom: 28px
+
+	.list-node-children-empty
+		color: $color-text-dark-secondary
+		font-size: 1.2em
+
 	.list-node-children-item-preview
 		margin: 0
 		position: absolute
@@ -1715,7 +1744,6 @@ section.node-children
 			transition: opacity 100ms ease-out
 
 		.list-node-children-item-name
-			font-family: $font-headings
 			text-shadow: 1px 1px 2px rgba(black, .5)
 			display: block
 			opacity: 0
@@ -2254,6 +2282,11 @@ section.node-children
 	color: $color-text-dark
 
 	form#node-edit-form
+
+		&.group_texture
+			.form-group.status,
+			.form-group.description
+				display: none
 
 		&.texture
 			.form-group.status,

@@ -3,7 +3,8 @@
 #node-container.texture
 	#node-overlay
 
-	h1.texture-title {{node.name}}
+	.texture-title
+		| {{node.name}}
 
 	| {% if node.properties.license_type %}
 	| {% if node.properties.license_notes %}
@@ -27,6 +28,8 @@
 	| {% endif %}
 	| {% endif %}
 
+
+	| {% if node.properties.files %}
 	| {% for f in node.properties.files %}
 	section.node-row
 		section.node-preview.texture
@@ -86,6 +89,13 @@
 							| Download {{map_type}}
 						| {% endif %}
 	| {% endfor %}
+	| {% else %}
+	section.node-row
+		section.node-details-container.texture
+			.node-details-header.nofiles
+				.node-title No texture maps... yet!
+
+	| {% endif %}
 
 
 include ../_scripts
@@ -127,9 +137,10 @@ script.
 				var preview = $(this);
 
 				/* Replace image src with larger one */
-				$(thumbnail).attr('src', src_xl);
-
-				$(preview).css({width: src_xl_width + 'px', height: src_xl_height + 'px'});
+				if (src_xl_width > 350 || src_xl_height > 250) {
+					$(thumbnail).attr('src', src_xl);
+					$(preview).css({width: src_xl_width + 'px', height: src_xl_height + 'px'});
+				}
 
 				var parent = $(preview).parent();
 				var parentOffset = parent.offset();
@@ -139,7 +150,9 @@ script.
 					$(document).on('mousemove', function(e){
 						$(preview).css({
 							left:  e.pageX - parentOffset.left - (src_xl_width / 2),
-							top:   e.pageY - parentOffset.top - (src_xl_height / 2)
+							top:   e.pageY - parentOffset.top - (src_xl_height / 2),
+							transform: 'initial',
+							cursor: 'grabbing',
 						});
 					});
 				};
@@ -149,7 +162,7 @@ script.
 				$(document).off('mousemove');
 				$(this).attr('src', src);
 
-				$(this).css({left: 0, top: 0, width: '100%', height: 'auto'});
+				$(this).css({left: '50%', top: "50%", width: '100%', height: 'auto', transform: 'translate(-50%, -50%)'});
 
 			}
 		);
