@@ -404,17 +404,27 @@ script.
 		$('#project_tree').on("select_node.jstree", function (e, data) {
 
 			if (typeof(data.node.original.path) === 'undefined') {
-				var moving_node_id = Cookies.get('bcloud_moving_node_id');
+				var movingMode = Cookies.getJSON('bcloud_moving_node');
 
 				// Check if we are in the process of moving a node
-				if (moving_node_id) {
+				if (movingMode) {
 					// Allow moving nodes only inside of node_type group
-					if (data.node.original.type != 'group' || moving_node_id === data.node.original.id.substr(2) || moving_node_id === ProjectUtils.parentNodeId()) {
-						$('#item_move_accept').addClass('disabled');
-						$('#item_move_accept').html('Select a Folder');
+					if (data.node.original.type != 'group' || movingMode.node_id === data.node.original.id.substr(2) || movingMode.node_id === ProjectUtils.parentNodeId()) {
+
+						if (movingMode.node_type === 'texture'){
+
+							if (data.node.original.type === 'group_texture') {
+								$('#item_move_accept').html('<i class="pi-check"></i>Move Here').removeClass('disabled');
+							} else {
+								$('#item_move_accept').html('Select a Texture Folder').addClass('disabled');
+							}
+
+						} else {
+							$('#item_move_accept').html('Select a Folder').addClass('disabled');
+						}
+
 					} else {
-						$('#item_move_accept').removeClass('disabled');
-						$('#item_move_accept').html('<i class="pi-check"></i>Move Here');
+						$('#item_move_accept').html('<i class="pi-check"></i>Move Here').removeClass('disabled');
 					}
 				}
 

@@ -10,9 +10,13 @@ script(type="text/javascript").
 	});
 
 	ProjectUtils.setProjectAttributes({isProject: 'True', nodeId: '', parentNodeId: ''});
-	var movingNodeId = Cookies.get('bcloud_moving_node_id');
+	var movingMode = Cookies.getJSON('bcloud_moving_node');
 
-	if (movingNodeId){
-		$('#item_move_accept').removeClass('disabled');
-		$('#item_move_accept').html('<i class="pi-check"></i> Move to Root');
+	if (movingMode){
+		$('#item_move_accept').removeClass('disabled').html('<i class="pi-check"></i> Move to Root');
+
+		if (movingMode.node_type === 'texture'){
+			$('#item_move_accept').addClass('disabled').html('Select a Texture Folder');
+		}
+
 	};
