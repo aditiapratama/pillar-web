@@ -717,7 +717,6 @@ section.node-row
 		background-color: $color-background
 		border-radius: 3px
 		user-select: none
-		cursor: grabbing
 
 		img.node-preview-thumbnail
 			+position-center-translate
@@ -725,6 +724,7 @@ section.node-row
 			border-radius: 3px
 			user-select: none
 			cursor: grabbing
+			cursor: -webkit-grabbing
 
 		.loading
 			position: absolute
@@ -2292,6 +2292,7 @@ section.node-children
 			.form-group.status,
 			.form-group.description,
 			.form-group.categories,
+			.form-group.tags,
 			.form-group.order,
 			.form-group.resolution,
 			.form-group.aspect_ratio,
