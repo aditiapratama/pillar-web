@@ -121,7 +121,14 @@ $z-index-base: 13
 		#project-loading
 			position: absolute
 			top: 13px
-			right: 10px
+			right: 6px
+
+			/* Give it a background so it overlays text nicely */
+			width: 25px
+			height: 25px
+			background: lighten($color-background-nav, 5%)
+			text-align: center
+			border-radius: 50%
 
 	&.context
 		right: 0
