@@ -32,11 +32,11 @@ def notification_parse(notification):
         object_type=notification.object_type,
         object_name=notification.object_name,
         object_url=url_for(
-            'nodes.view', node_id=notification.object_id, redir=1),
+            'nodes.redirect_to_context', node_id=notification.object_id),
         context_object_type=notification.context_object_type,
         context_object_name=notification.context_object_name,
         context_object_url=url_for(
-            'nodes.view', node_id=notification.context_object_id, redir=1),
+            'nodes.redirect_to_context', node_id=notification.context_object_id),
         date=pretty_date(notification['_created']),
         is_read=notification.is_read,
         is_subscribed=notification.is_subscribed,

@@ -47,13 +47,13 @@ function getNotifications(){
 					content += no['username'] + ' ' + no['action'] + ' ';
 
 					// Object
-					content += '<a '+read_info+'" href="'+no['context_object_url']+'" class="nc-a">';
+					content += '<a '+read_info+'" href="'+no['object_url']+'" class="nc-a">';
 					content += no['context_object_name'] + ' ';
 					content += '</a> ';
 
 					// Date
 					content += '<span class="nc-date">';
-					content += '<a '+read_info+'" href="'+no['context_object_url']+'" class="nc-a">';
+					content += '<a '+read_info+'" href="'+no['object_url']+'" class="nc-a">';
 					content += no['date'];
 					content += '</a>';
 					content += '</span>';

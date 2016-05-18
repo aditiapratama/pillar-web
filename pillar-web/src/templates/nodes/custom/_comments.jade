@@ -84,6 +84,7 @@
 				| {{#list items }}
 
 				.comment-container(
+					id="{{ _id }}",
 					data-node_id="{{ _id }}",
 					class="{{#if is_team}}is-team{{/if}}{{#if is_reply}}is-reply{{else}}is-first{{/if}}")
 
