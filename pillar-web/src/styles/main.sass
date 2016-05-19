@@ -520,6 +520,11 @@ header.navbar-header
 		color: white
 		image: url(https://cloud.blender.org/static/assets/img/backgrounds/background_gleb_locomotive.jpg)
 
+	filter: none
+
+	&.project, &.blog
+		+media-lg
+			filter: blur(10px)
 
 .navbar-backdrop-overlay
 	position: absolute

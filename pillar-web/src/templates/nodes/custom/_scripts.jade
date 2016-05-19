@@ -38,6 +38,8 @@ script(type="text/javascript").
 			var commentsUrl = "{{ url_for('nodes.comments_index', parent_id=node._id) }}";
 
 			$.get(commentsUrl, function(dataHtml) {
+			})
+			.done(function(dataHtml){
 				// Update the DOM injecting the generate HTML into the page
 				$('#comments-container').replaceWith(dataHtml);
 			})

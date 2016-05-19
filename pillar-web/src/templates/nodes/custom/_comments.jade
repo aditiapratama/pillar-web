@@ -54,7 +54,7 @@
 						data-parent_id="{{ parent_id }}",
 						placeholder="")
 					.sign-in
-						| Want to be part of the conversation? &nbsp; <a href="https://store.blender.org/product/membership/">Get a Blender Cloud subscription</a>
+						| Join the conversation!&nbsp;<a href="https://store.blender.org/product/membership/">Subscribe to Blender Cloud now.</a>
 			| {% endif %}
 
 			| {% else %}
@@ -222,6 +222,16 @@ script.
 		} else {
 			$('#comments-list-items').html('');
 		}
+	})
+	.done(function(){
+
+		if (ProjectUtils.nodeType() === 'post'){
+			if (location.hash.length > 1) {
+				$('html,body').animate({scrollTop: $(String(location.hash)).offset().top }, 250, function() {
+				});
+			}
+		}
+
 	});
 
 

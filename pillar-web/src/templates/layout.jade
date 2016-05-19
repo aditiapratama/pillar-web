@@ -37,7 +37,7 @@ html(lang="en")
 
 		| {% block head %}{% endblock %}
 
-		link(href="{{ url_for('static', filename='assets/css/main.css', v=120520161) }}", rel="stylesheet")
+		link(href="{{ url_for('static', filename='assets/css/main.css', v=190520161) }}", rel="stylesheet")
 
 	body
 		.container-page(class="{{title}}")
@@ -368,7 +368,7 @@ html(lang="en")
 			var index = algolia.initIndex("{{config['ALGOLIA_INDEX_NODES']}}");
 
 		script(type="text/javascript", src="{{ url_for('static', filename='assets/js/markdown.min.js', v=03052016) }}")
-		script(type="text/javascript", src="{{ url_for('static', filename='assets/js/tutti.min.js', v=03052016) }}")
+		script(type="text/javascript", src="{{ url_for('static', filename='assets/js/tutti.min.js', v=190520161) }}")
 
 		script.
 			$(document).ready(function() {
