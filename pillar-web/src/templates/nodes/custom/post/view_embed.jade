@@ -60,9 +60,11 @@ meta(name="twitter:description", content="{{ node.properties.content }}")
 					| Back to Blog
 
 				| {% if node.has_method('PUT') %}
-				a.btn.btn-default.button-create(href="{{url_for('nodes.posts_edit', post_id=node._id)}}")
+				a.btn.btn-default.button-edit(href="{{url_for('nodes.posts_edit', post_id=node._id)}}")
+					i.pi-edit
 					| Edit Post
 				| {% endif %}
+
 				.clearfix
 				| {% endif %}
 

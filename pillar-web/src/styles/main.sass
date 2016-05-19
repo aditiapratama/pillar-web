@@ -522,8 +522,13 @@ header.navbar-header
 
 	filter: none
 
-	&.project, &.blog
+	&.project
 		+media-lg
+			filter: blur(10px)
+	&.blog
+		+media-lg
+			filter: blur(10px)
+		+media-md
 			filter: blur(10px)
 
 .navbar-backdrop-overlay

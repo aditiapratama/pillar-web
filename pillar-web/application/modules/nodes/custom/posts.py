@@ -63,6 +63,11 @@ def posts_view(project_id, url=None):
             'embedded': '{"user": 1}',
             'sort': '-_created'
             }, api=api)
+
+        for post in posts._items:
+            if post.picture:
+                post.picture = get_file(post.picture)
+
         return render_template(
             'nodes/custom/blog/index.html',
             node_type_post=node_type_post,
