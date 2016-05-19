@@ -334,103 +334,104 @@
 		#blog_post-container+#blog_index-sidebar
 			display: none
 
-		#blog_index-container
-			padding: 0 0 50px 0
+	&.cloud-blog #blog_index-container,
+	#blog_index-container
+		padding: 0 0 50px 0
 
-			+media-sm
-				width: 100%
-				padding: 25px 20px 20px 20px
+		+media-sm
+			width: 100%
+			padding: 25px 20px 20px 20px
+		+media-xs
+			width: 100%
+			padding: 0 0 20px 0
+
+		.blog_index-item
+			padding: 25px 80px 20px 80px
+			position: relative
+
 			+media-xs
 				width: 100%
-				padding: 0 0 20px 0
+				padding: 25px 0 20px 0
 
-			.blog_index-item
-				padding: 25px 80px 20px 80px
-				position: relative
+			&.list
+				margin: 0 auto
+				padding: 15px 0
+				margin: 0 80px
+				border-bottom: thin solid $color-background
+
+				&:last-child
+					border-bottom: none
 
 				+media-xs
 					width: 100%
+					padding: 15px 10px
+					margin: 0
+
+				a.item-title
+					padding:
+						top: 0
+						bottom: 5px
+					font:
+						size: 1.6em
+						weight: 400
+						family: $font-body
+
+				.item-info
+					color: $color-text-dark-secondary
+					font-size: .9em
+					padding:
+						left: 25px
+						right: 25px
+
+
+				.item-header
+					width: 50px
+					height: 50px
+					position: absolute
+					top: 20px
+					border-radius: 3px
+					background-color: $color-background
+					overflow: hidden
+
+					img
+						+position-center-translate
+						width: 100%
+
+					i
+						+position-center-translate
+						font-size: 1.2em
+						color: $color-text-dark-hint
+
+					&.nothumb
+						border-radius: 50%
+
+				a.item-title, .item-info
+					padding-left: 70px
+
+		h4.blog_index-title
+			margin-left: 80px
+			padding-top: 25px
+			font:
+				family: $font-body
+			color: $color-text-dark-secondary
+
+
+	#blog_index-container
+		.blog_index-item
+				padding: 25px 10px 20px 10px
+				position: relative
+
+				+media-xs
 					padding: 25px 0 20px 0
 
 				&.list
-					padding: 25px 80px 20px 80px
-					margin: 0 auto
-					padding: 15px 0
-					margin: 0 80px
-					border-top: thin solid $color-background
+					padding: 15px 10px
+					margin: 0 25px
 
 					+media-xs
 						width: 100%
 						padding: 15px 10px
 						margin: 0
 
-					a.item-title
-						padding:
-							top: 0
-							bottom: 5px
-						font:
-							size: 1.6em
-							weight: 400
-							family: $font-body
-
-					.item-info
-						color: $color-text-dark-secondary
-						font-size: .9em
-						padding:
-							left: 25px
-							right: 25px
-
-
-					.item-header
-						width: 50px
-						height: 50px
-						position: absolute
-						top: 20px
-						border-radius: 3px
-						background-color: $color-background
-						overflow: hidden
-
-						img
-							+position-center-translate
-							width: 100%
-
-						i
-							+position-center-translate
-							font-size: 1.2em
-							color: $color-text-dark-hint
-
-						&.nothumb
-							border-radius: 50%
-
-					a.item-title, .item-info
-						padding-left: 70px
-
-		#blog_post-container
-			padding: 0 0 20px 0
-
-			+media-sm
-				width: 100%
-				padding: 0 20px 20px 20px
-			+media-xs
-				width: 100%
-				padding: 0 0 20px 0
-
-			.item-title
-				+media-xs
-					font-size: 1.8em
-
-			.item-title, .item-info
-				padding-left: 100px
-				padding-right: 100px
-
-				+media-xs
-					padding-left: 10px
-					padding-right: 10px
-
-			.item-content
-				padding-left: 80px
-				padding-right: 80px
-
-				+media-xs
-					padding-left: 0
-					padding-right: 0
+		h4.blog_index-title
+			margin-left: 35px
