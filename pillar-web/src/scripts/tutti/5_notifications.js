@@ -101,7 +101,7 @@ function getNotifications(){
 				data['items'][0]['action'],
 				data['items'][0]['date'],
 				data['items'][0]['context_object_name'],
-				data['items'][0]['context_object_url']);
+				data['items'][0]['object_url']);
 
 		} else {
 			var content = '<li class="nc-item nc-item-empty">';
@@ -154,12 +154,12 @@ function popNotification(){
 };
 
 
-function checkPopNotification(id,username,username_avatar,action,date,context_object_name,context_object_url)
+function checkPopNotification(id,username,username_avatar,action,date,context_object_name,object_url)
 	{
 		// If there's new content
 		if (unread_new > unread_on_load){
 			// Fill in the urls for redirect on click, and mark-read
-			$("#notification-pop").attr('data-url', context_object_url);
+			$("#notification-pop").attr('data-url', object_url);
 			$("#notification-pop").attr('data-read-toggle', '/notifications/' + id + '/read-toggle');
 			// The text in the pop
 			var text = '<span class="nc-author">' + username + '</span> ';
