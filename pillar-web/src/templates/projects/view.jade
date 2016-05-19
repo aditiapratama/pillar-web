@@ -186,7 +186,7 @@ script(src="//releases.flowplayer.org/6.0.3/flowplayer.min.js", async)
 
 | {% if project.has_method('PUT') %}
 | {# JS containing the Edit, Add, Featured, and Move functions #}
-script(type="text/javascript", src="{{ url_for('static', filename='assets/js/project-edit.min.js') }}")
+script(type="text/javascript", src="{{ url_for('static', filename='assets/js/project-edit.min.js', v=190520161) }}")
 | {% endif %}
 
 script.
