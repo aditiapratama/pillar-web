@@ -269,7 +269,7 @@ def handle_sdk_resource_not_found(error):
 
 
 @app.errorhandler(sdk_exceptions.ResourceInvalid)
-def handle_sdk_resource_not_found(error):
+def handle_sdk_resource_invalid(error):
     log.info('Forwarding ResourceInvalid exception to client: %s', error)
 
     # Raising a Werkzeug 422 exception doens't work, as Flask turns it into a 500.
