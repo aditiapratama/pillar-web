@@ -31,7 +31,14 @@ meta(name="twitter:image", content="{{ url_for('static', filename='assets/img/ba
 		.user-avatar
 			img(src="{{ gravatar }}")
 		.user-name
+			| {% if current_user.full_name == 'None None' %}
+			span
+				a(href="{{ url_for('users.settings_profile') }}")
+					i.pi-edit
+					| Set name
+			| {% else %}
 			span {{current_user.full_name}}
+			| {% endif %}
 
 	#project_dashboard-main
 		#node_index-container
@@ -64,6 +71,7 @@ meta(name="twitter:image", content="{{ url_for('static', filename='assets/img/ba
 				.tab-content
 					#projects_user.tab-pane.active(role='tabpanel')
 						.node_index-collection
+							| {% if projects_user %}
 							| {% for project in projects_user %}
 							.node_index-collection-card.project(
 								data-url="{{ url_for('projects.view', project_url=project.url) }}")
@@ -90,10 +98,15 @@ meta(name="twitter:image", content="{{ url_for('static', filename='assets/img/ba
 									| {% endif %}
 
 							| {% endfor %}
+							| {% else %}
+							.node_index-collection-card.empty
+								| Create a project to get started!
+							| {% endif %}
 
 
 					#projects_shared.tab-pane(role='tabpanel')
 						.node_index-collection
+							| {% if projects_shared %}
 							| {% for project in projects_shared %}
 							.node_index-collection-card.project(
 								data-url="{{ url_for('projects.view', project_url=project.url) }}")
@@ -123,6 +136,10 @@ meta(name="twitter:image", content="{{ url_for('static', filename='assets/img/ba
 										| By {{ project.user.full_name }}
 
 							| {% endfor %}
+							| {% else %}
+							.node_index-collection-card.empty
+								| No projects shared with you... yet!
+							| {% endif %}
 
 | {% endblock %}
 
