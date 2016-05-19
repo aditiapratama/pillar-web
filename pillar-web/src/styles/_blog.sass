@@ -53,6 +53,11 @@
 		.blog_index-item
 			margin: 0 auto 15px auto
 
+			&:hover
+				.item-info a
+					color: $color-primary
+
+
 			.item-picture
 				position: relative
 				width: 100%
@@ -93,6 +98,11 @@
 				padding:
 					left: 25px
 					right: 25px
+
+				a
+					color: $color-text-dark-secondary
+					&:hover
+						color: $color-primary
 
 			.item-content
 				+node-details-description
@@ -311,15 +321,28 @@
 
 #blog_post-container
 	.button-create
-		float: right
-		display: inline-block
 		+button-rounded($color-success, 6px)
-		margin: 15px 15px 20px 0 !important
 	.button-back
-		float: right
-		display: inline-block
-		+button-rounded($color-info, 6px)
-		margin: 15px 20px 20px 0
+		position: absolute
+		top: 15px
+		right: 15px
+		z-index: 2
+		+button-rounded-filled($color-info, 6px)
+	.button-create, .button-edit
+		position: absolute
+		z-index: 2
+		top: 15px
+		right: 15px
+		+button-rounded-filled($color-success, 6px)
+
+	.button-edit
+		right: 170px
+		top: 15px
+
+	.button-back+.button-edit
+		right: 15px
+		top: 15px
+
 
 #blog_container
 	&.cloud-blog
@@ -335,7 +358,8 @@
 			display: none
 
 	&.cloud-blog #blog_index-container,
-	#blog_index-container
+	&.cloud-blog #blog_post-container,
+	#blog_index-container, #blog_post-container
 		padding: 0 0 50px 0
 
 		+media-sm
@@ -416,22 +440,29 @@
 			color: $color-text-dark-secondary
 
 
-	#blog_index-container
+	#blog_index-container,
+	#blog_post-container
 		.blog_index-item
-				padding: 25px 10px 20px 10px
-				position: relative
+			padding: 25px 10px 20px 10px
+			position: relative
+
+			+media-xs
+				padding: 25px 0 20px 0
+
+			&.list
+				padding: 15px 10px
+				margin: 0 25px
 
 				+media-xs
-					padding: 25px 0 20px 0
-
-				&.list
+					width: 100%
 					padding: 15px 10px
-					margin: 0 25px
-
-					+media-xs
-						width: 100%
-						padding: 15px 10px
-						margin: 0
+					margin: 0
 
 		h4.blog_index-title
 			margin-left: 35px
+
+	&.cloud-blog #blog_post-container,
+	#blog_post-container
+		.blog_index-item
+			padding-top: 55px
+			font-size: .9em
