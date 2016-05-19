@@ -222,6 +222,16 @@ script.
 		} else {
 			$('#comments-list-items').html('');
 		}
+	})
+	.done(function(){
+
+		if (ProjectUtils.nodeType() === 'post'){
+			if (location.hash.length > 1) {
+				$('html,body').animate({scrollTop: $(String(location.hash)).offset().top }, 250, function() {
+				});
+			}
+		}
+
 	});
 
 
