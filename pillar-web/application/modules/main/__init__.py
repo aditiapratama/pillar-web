@@ -135,18 +135,6 @@ def main_posts_create():
     return posts_create(project_id)
 
 
-@app.route("/<name>/")
-@cache.memoize(timeout=3600, unless=current_user_is_authenticated)
-def user_view(name):
-    """View a user or organization."""
-    user = UserProxy(name)
-    projects = user.projects()
-    return render_template(
-        'nodes/custom/project/index_collection.html',
-        user=user,
-        projects=projects._items)
-
-
 @app.route("/p/<project_url>/blog/")
 @app.route("/p/<project_url>/blog/<url>")
 @cache.memoize(timeout=3600, unless=current_user_is_authenticated)
