@@ -268,8 +268,11 @@ def edit_node_type(project_url, node_type_name):
             node_type.dyn_schema.to_dict(), indent=4)
         form.form_schema.data = json.dumps(
             node_type.form_schema.to_dict(), indent=4)
-        form.permissions.data = json.dumps(
-            node_type.permissions.to_dict(), indent=4)
+        if 'permissions' in node_type:
+            permissions = node_type.permissions.to_dict()
+        else:
+            permissions = {}
+        form.permissions.data = json.dumps(permissions, indent=4)
     return render_template('projects/edit_node_type.html',
                            form=form,
                            project=project,
