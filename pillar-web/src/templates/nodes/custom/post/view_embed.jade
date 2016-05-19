@@ -34,11 +34,11 @@ meta(name="twitter:description", content="{{ node.properties.content }}")
 
 | {% block header_backdrop %}
 | {% if project and project.properties.picture_header %}
-.navbar-backdrop(style="background-image: url({{ project.properties.picture_header.thumbnail('l', api=api) }})")
+.navbar-backdrop.blog(style="background-image: url({{ project.properties.picture_header.thumbnail('l', api=api) }})")
 | {% elif node and node.picture %}
-.navbar-backdrop(style="background-image: url({{ node.picture.thumbnail('l', api=api) }})")
+.navbar-backdrop.blog(style="background-image: url({{ node.picture.thumbnail('l', api=api) }})")
 | {% else %}
-.navbar-backdrop
+.navbar-backdrop.blog
 | {% endif %}
 .navbar-backdrop-overlay
 | {% endblock %}
