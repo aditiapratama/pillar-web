@@ -1,6 +1,7 @@
 import flask_login
 import os
 import logging
+import logging.config
 import config
 import bugsnag
 import redis
@@ -40,9 +41,8 @@ if from_envvar:
     app.config.from_pyfile(from_envvar, silent=False)
 
 # Configure logging
-logging.basicConfig(level=logging.WARNING)
+logging.config.dictConfig(app.config['LOGGING'])
 log = logging.getLogger(__name__)
-log.setLevel(logging.DEBUG if app.config['DEBUG'] else logging.INFO)
 log.info('Pillar Web starting')
 
 # Configure Bugsnag
@@ -266,3 +266,11 @@ def handle_sdk_resource_not_found(error):
     from werkzeug.exceptions import NotFound
     log.info('Forwarding ResourceNotFound exception to client: %s', error)
     raise NotFound()
+
+
+@app.errorhandler(sdk_exceptions.ResourceInvalid)
+def handle_sdk_resource_not_found(error):
+    log.info('Forwarding ResourceInvalid exception to client: %s', error)
+
+    # Raising a Werkzeug 422 exception doens't work, as Flask turns it into a 500.
+    return 'The submitted data could not be validated.', 422

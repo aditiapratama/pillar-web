@@ -121,16 +121,14 @@ link(rel="stylesheet", href="//releases.flowplayer.org/6.0.3/skin/minimalist.css
 			#comments-list-items-loading
 				i.pi-spin
 
+include ../../_scripts
 
 | {% endblock %}
 
 | {% block footer_scripts %}
 script(type="text/javascript").
-	$('#asset-license').popover();
 	// Generate GA pageview
 	ga('send', 'pageview', (location.pathname + '#' + '{{node._id}}'));
-
-	$('[data-toggle="tooltip"]').tooltip({'delay' : {'show': 1250, 'hide': 250}})
 
 	var content_type = $("li.node-details-meta-list-item.type").text();
 	$("li.node-details-meta-list-item.type").text(content_type.substring(content_type.indexOf("/") + 1));
@@ -157,11 +155,5 @@ script(type="text/javascript").
 		})
 	});
 	{% endif %}
-
-	$('#node-overlay').click(function(){
-		$(this).removeClass('active').hide().html();
-	});
-
-include ../../_scripts
 
 | {% endblock %}

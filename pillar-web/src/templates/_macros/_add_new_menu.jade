@@ -1,7 +1,7 @@
 | {% macro add_new_menu(node_types) %}
 
 | {% for node_type in node_types %}
-| {% if node_type['name'] in ['group', 'asset', 'texture', 'page'] %}
+| {% if node_type['name'] in ['group', 'group_texture', 'asset', 'texture', 'page'] %}
 | {% set node_type_name = node_type['name'] %}
 | {% if node_type_name == 'group' %}
 | {% set node_type_name = 'folder' %}
@@ -14,7 +14,11 @@ li(class="button-{{ node_type['name'] }}")
 	data-toggle="tooltip",
 	data-placement="left")
 		i.pi(class="icon-{{ node_type['name'] }}")
+		| {% if node_type_name == 'group_texture' %}
+		| Texture Folder
+		| {% else %}
 		| {{ node_type_name }}
+		| {% endif %}
 | {% endif %}
 | {% endfor %}
 

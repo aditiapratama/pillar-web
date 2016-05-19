@@ -71,7 +71,7 @@ $('.item_add_node').click(function(e){
 });
 
 /* Move Node */
-var movingNodeId = Cookies.get('bcloud_moving_node_id');
+var movingMode = Cookies.getJSON('bcloud_moving_node');
 
 function moveModeEnter() {
 	$('#overlay-mode-move-container').addClass('visible');
@@ -91,10 +91,10 @@ function moveModeExit() {
 	$('#overlay-mode-move-container').removeClass('visible');
 	$('.button-move').removeClass('disabled');
 	$('#item_move_accept').html('<i class="pi-check"></i> Move Here');
-	Cookies.remove('bcloud_moving_node_id');
+	Cookies.remove('bcloud_moving_node');
 }
 
-if (movingNodeId) {
+if (movingMode) {
 	moveModeEnter();
 } else {
 	$('#overlay-mode-move-container').removeClass('visible');
@@ -105,12 +105,12 @@ $('#item_move').click(function(e){
 	e.preventDefault();
 	moveModeEnter();
 	// Set the nodeId in the cookie
-	Cookies.set('bcloud_moving_node_id', ProjectUtils.nodeId());
+	Cookies.set('bcloud_moving_node', { node_id: ProjectUtils.nodeId(), node_type: ProjectUtils.nodeType()});
 });
 
 $("#item_move_accept").click(function(e) {
 	e.preventDefault();
-	var movingNodeId = Cookies.get('bcloud_moving_node_id');
+	var movingNodeId = Cookies.getJSON('bcloud_moving_node').node_id;
 	var moveNodeParams = {node_id: movingNodeId};
 	// If we are not at the root of the project, add the parent node id to the
 	// request params
@@ -126,7 +126,7 @@ $("#item_move_accept").click(function(e) {
 		function(data){
 	}).done(function() {
 		statusBarSet('success', 'Moved just fine');
-		Cookies.remove('bcloud_moving_node_id');
+		Cookies.remove('bcloud_moving_node');
 		moveModeExit();
 		$('#project_tree').jstree("refresh");
 	})

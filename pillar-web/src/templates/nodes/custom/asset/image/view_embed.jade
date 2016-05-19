@@ -105,29 +105,16 @@ include ../../_scripts
 
 | {% block footer_scripts %}
 script.
-	$('#asset-license').popover();
 	// Generate GA pageview
 	ga('send', 'pageview', (location.pathname + '#' + '{{node._id}}'));
-
-	$('[data-toggle="tooltip"]').tooltip({'delay' : {'show': 1250, 'hide': 250}})
 
 	var content_type = $("li.node-details-meta-list-item.type").text();
 	$("li.node-details-meta-list-item.type").text(content_type.substring(content_type.indexOf("/") + 1));
 
-	var node_preview = document.getElementById("node-preview");
-
-	if (node_preview && node_preview.offsetWidth > 750) {
-		$('.node-preview, .node-preview-thumbnail').css({'max-height': 'auto', 'width': '100%'});
-		$('.node-preview img').css({'max-height': '100%'});
-	}
 	$('.sorry').click(function() {
 		$.get('/403', function(data) {
 			$('#node-overlay').html(data).addClass('active');
 		})
-	});
-
-	$('#node-overlay').click(function(){
-		$(this).removeClass('active').hide().html();
 	});
 
 | {% endblock %}

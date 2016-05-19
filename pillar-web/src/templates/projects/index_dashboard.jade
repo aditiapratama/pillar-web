@@ -1,0 +1,145 @@
+| {% extends 'layout.html' %}
+
+| {% block og %}
+meta(property="og:title", content="Dashboard")
+meta(property="og:url", content="https://cloud.blender.org")
+meta(property="og:type", content="website")
+| {% endblock %}
+
+| {% block tw %}
+meta(name="twitter:card", content="summary_large_image")
+meta(name="twitter:site", content="@Blender_Cloud")
+meta(name="twitter:title", content="Blender Cloud")
+meta(name="twitter:description", content="")
+meta(name="twitter:image", content="{{ url_for('static', filename='assets/img/backgrounds/cloud_services_oti.jpg')}}")
+| {% endblock %}
+
+| {% block page_title %}
+| {{current_user.full_name}}
+| {% endblock %}
+
+| {% block header_backdrop %}
+.navbar-backdrop(
+	style="background-image: url({{ url_for('static', filename='assets/img/backgrounds/cloud_services_oti.jpg')}})")
+.navbar-backdrop-overlay.collection
+| {% endblock %}
+
+| {% block body %}
+
+#project_dashboard-container
+	#project_dashboard-sidebar
+		.user-avatar
+			img(src="{{ gravatar }}")
+		.user-name
+			span {{current_user.full_name}}
+
+	#project_dashboard-main
+		#node_index-container
+			#node_index-header.dashboard
+				#node_index-collection-info
+					.node_index-collection-name
+						span Projects
+					.node_index-collection-description
+						span Create and manage your own projects on Blender Cloud
+
+		#node_index-collection
+			#node_index-collection-container
+				ul.nav.nav-tabs(role='tablist')
+					li.active(role='presentation')
+						a(href='#projects_user', aria-controls='projects_user', role='tab', data-toggle='tab') Own Projects
+					li(role='presentation')
+						a(href='#projects_shared', aria-controls='projects_shared', role='tab', data-toggle='tab') Shared with me
+
+					| {% if (current_user.has_role('subscriber') or current_user.has_role('admin')) %}
+
+					.create(
+						data-url="{{ url_for('projects.create') }}")
+						a#project-create(
+							href="{{ url_for('projects.create') }}")
+							i.pi-plus
+							| Create New Project
+
+					| {% endif %}
+
+				.tab-content
+					#projects_user.tab-pane.active(role='tabpanel')
+						.node_index-collection
+							| {% for project in projects_user %}
+							.node_index-collection-card.project(
+								data-url="{{ url_for('projects.view', project_url=project.url) }}")
+
+								a.card-thumbnail(
+									href="{{ url_for('projects.view', project_url=project.url) }}")
+									| {% if project.picture_square %}
+									img.thumb(src="{{ project.picture_square.thumbnail('m', api=api) }}")
+									| {% else %}
+									i.pi-blender-cloud
+									| {% endif %}
+
+								.item-info
+									a.item-title(
+										href="{{ url_for('projects.view', project_url=project.url) }}")
+										| {{project.name}}
+										| {% if project.status == 'pending' and current_user.is_authenticated() and current_user.has_role('admin') %}
+										small (pending)
+										| {% endif %}
+
+									| {% if project.summary %}
+									p.item-description
+										| {{project.summary|safe}}
+									| {% endif %}
+
+							| {% endfor %}
+
+
+					#projects_shared.tab-pane(role='tabpanel')
+						.node_index-collection
+							| {% for project in projects_shared %}
+							.node_index-collection-card.project(
+								data-url="{{ url_for('projects.view', project_url=project.url) }}")
+
+								a.card-thumbnail(
+									href="{{ url_for('projects.view', project_url=project.url) }}")
+									| {% if project.picture_square %}
+									img.thumb(src="{{ project.picture_square.thumbnail('m', api=api) }}")
+									| {% else %}
+									i.pi-blender-cloud
+									| {% endif %}
+
+								.item-info
+									a.item-title(
+										href="{{ url_for('projects.view', project_url=project.url) }}")
+										| {{project.name}}
+										| {% if project.status == 'pending' and current_user.is_authenticated() and current_user.has_role('admin') %}
+										small (pending)
+										| {% endif %}
+
+									| {% if project.summary %}
+									p.item-description
+										| {{project.summary|safe}}
+									| {% endif %}
+
+									p.item-user
+										| By {{ project.user.full_name }}
+
+							| {% endfor %}
+
+| {% endblock %}
+
+
+| {% block footer_scripts %}
+script.
+	$('.node_index-collection-card.project').on('click', function(e){
+		e.preventDefault();
+		window.location.href = $(this).data('url');
+	});
+
+	$('ul.nav.nav-tabs .create').on('click', function(e){
+		e.preventDefault();
+
+		$('ul.nav.nav-tabs .create').addClass('disabled');
+		$('a', this).html('<i class="pi-spin spin"></i> Creating project...');
+
+		window.location.href = $(this).data('url');
+	});
+| {% endblock %}

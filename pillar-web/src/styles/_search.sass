@@ -291,7 +291,7 @@ $search-hit-width_list: 48px
 				text-align: center
 				list-style-type: none
 				margin: 0
-				padding: 0 10px
+				padding: 0
 				width: 100%
 				+clearfix
 
@@ -373,17 +373,16 @@ $search-hit-width_list: 48px
 			.ps-scrollbar-y-rail
 				z-index: 1
 
+			#error_container
+				position: relative
+				background: white
+				padding: 20px
+
 		#search-error
 			display: none
 			margin: 20px auto
 			color: $color-danger
 			text-align: center
-
-	#error_container.404
-		#error-box
-			background: none
-			box-shadow: none
-			width: 80%
 
 	#node-container
 		width: 100%

@@ -1,4 +1,5 @@
-import json
+import logging
+
 from datetime import datetime
 from datetime import date
 import pillarsdk
@@ -22,6 +23,8 @@ from wtforms import FieldList
 from application.helpers.forms import CustomFormField
 from application.helpers.forms import build_file_select_form
 
+log = logging.getLogger(__name__)
+
 
 def add_form_properties(form_class, node_schema, form_schema, prefix=''):
     """Add fields to a form based on the node and form schema provided.
@@ -33,113 +36,70 @@ def add_form_properties(form_class, node_schema, form_schema, prefix=''):
     :param form_schema: description of how to build the form (which fields to
             show and hide)
     """
-    api = SystemUtility.attract_api()
 
-    for prop in node_schema:
-        schema_prop = node_schema[prop]
+    for prop, schema_prop in node_schema.iteritems():
         form_prop = form_schema[prop]
         if prop == 'items':
             continue
-        if 'visible' in form_prop and not form_prop['visible']:
+        if not form_prop.get('visible', True):
             continue
         prop_name = "{0}{1}".format(prefix, prop)
 
         # Recursive call if detects a dict
-        if schema_prop['type'] == 'dict':
+        field_type = schema_prop['type']
+        if field_type == 'dict':
             # This works if the dictionary schema is hardcoded.
             # If we define it using propertyschema and valueschema, this
             # validation pattern does not work and crahses.
             add_form_properties(form_class, schema_prop['schema'],
                                 form_prop['schema'], "{0}__".format(prop_name))
             continue
-        if schema_prop['type'] == 'list' and 'items' in form_prop:
-            # Attempt at populating the content of a select menu. If this
-            # is a large collection this will not work because of
-            # pagination.
-            # See the next statement for an improved approach to this.
-            for item in form_prop['items']:
-                items = eval("pillarsdk.{0}".format(item[0]))
-                items_to_select = items.all(api=api)
-                if items_to_select:
-                    items_to_select = items_to_select["_items"]
-                else:
-                    items_to_select = []
-                select = []
-                for select_item in items_to_select:
-                    select.append((select_item['_id'], select_item[item[1]]))
-                setattr(form_class,
-                        prop_name,
-                        SelectMultipleField(choices=select, coerce=str))
-        elif schema_prop['type'] == 'list':
+
+        if field_type == 'list':
             if prop == 'attachments':
                 # class AttachmentForm(Form):
                 #     pass
-                # setattr(AttachmentForm, 'file', FileSelectField('file'))
-                # setattr(AttachmentForm, 'size', StringField())
-                # setattr(AttachmentForm, 'slug', StringField())
-                setattr(form_class,
-                        prop_name,
-                        FieldList(CustomFormField(ProceduralFileSelectForm)))
+                # AttachmentForm.file = FileSelectField('file')
+                # AttachmentForm.size = StringField()
+                # AttachmentForm.slug = StringField()
+                field = FieldList(CustomFormField(ProceduralFileSelectForm))
             elif prop == 'files':
                 schema = schema_prop['schema']['schema']
                 file_select_form = build_file_select_form(schema)
-                setattr(form_class,
-                        prop_name,
-                        FieldList(CustomFormField(file_select_form)))
+                field = FieldList(CustomFormField(file_select_form),
+                                  min_entries=1)
             elif 'allowed' in schema_prop['schema']:
                 choices = [(c, c) for c in schema_prop['schema']['allowed']]
-                setattr(form_class,
-                        prop_name,
-                        SelectMultipleField(choices=choices))
+                field = SelectMultipleField(choices=choices)
             else:
-                setattr(form_class,
-                        prop_name,
-                        SelectMultipleField(choices=[]))
+                field = SelectMultipleField(choices=[])
         elif 'allowed' in schema_prop:
             select = []
             for option in schema_prop['allowed']:
                 select.append((str(option), str(option)))
-            setattr(form_class,
-                    prop_name,
-                    SelectField(choices=select))
-        elif schema_prop['type'] == 'datetime':
-            if 'dateonly' in form_prop and form_prop['dateonly']:
-                setattr(form_class,
-                        prop_name,
-                        DateField(prop_name, default=date.today()))
+            field = SelectField(choices=select)
+        elif field_type == 'datetime':
+            if form_prop.get('dateonly'):
+                field = DateField(prop_name, default=date.today())
             else:
-                setattr(form_class,
-                        prop_name,
-                        DateTimeField(prop_name, default=datetime.now()))
-        elif schema_prop['type'] == 'integer':
-            setattr(form_class,
-                    prop_name,
-                    IntegerField(prop_name, default=0))
-        elif schema_prop['type'] == 'float':
-            setattr(form_class,
-                    prop_name,
-                    FloatField(prop_name, default=0))
-        elif schema_prop['type'] == 'boolean':
-            setattr(form_class,
-                    prop_name,
-                    BooleanField(prop_name))
-        elif schema_prop['type'] == 'objectid' and 'data_relation' in schema_prop:
+                field = DateTimeField(prop_name, default=datetime.now())
+        elif field_type == 'integer':
+            field = IntegerField(prop_name, default=0)
+        elif field_type == 'float':
+            field = FloatField(prop_name, default=0)
+        elif field_type == 'boolean':
+            field = BooleanField(prop_name)
+        elif field_type == 'objectid' and 'data_relation' in schema_prop:
             if schema_prop['data_relation']['resource'] == 'files':
-                setattr(form_class,
-                        prop_name,
-                        FileSelectField(prop_name))
+                field = FileSelectField(prop_name)
             else:
-                setattr(form_class,
-                        prop_name,
-                        StringField(prop_name))
-        elif 'maxlength' in schema_prop and schema_prop['maxlength'] > 64:
-            setattr(form_class,
-                    prop_name,
-                    TextAreaField(prop_name))
+                field = StringField(prop_name)
+        elif schema_prop.get('maxlength', 0) > 64:
+            field = TextAreaField(prop_name)
         else:
-            setattr(form_class,
-                    prop_name,
-                    StringField(prop_name))
+            field = StringField(prop_name)
+
+        setattr(form_class, prop_name, field)
 
 
 def get_node_form(node_type):
@@ -186,7 +146,9 @@ def process_node_form(form, node_id=None, node_type=None, user=None):
     """Generic function used to process new nodes, as well as edits
     """
     if not user:
+        log.warning('process_node_form(node_id=%s) called while user not logged in', node_id)
         return False
+
     api = SystemUtility.attract_api()
     node_schema = node_type['dyn_schema'].to_dict()
     form_schema = node_type['form_schema'].to_dict()
@@ -235,6 +197,10 @@ def process_node_form(form, node_id=None, node_type=None, user=None):
                     if pr == 'attachments':
                         # data = json.loads(data)
                         data = [dict(field='description', files=data)]
+                    elif pr == 'files':
+                        # Only keep those items that actually refer to a file.
+                        data = [file_item for file_item in data
+                                if file_item.get('file')]
                     # elif pr == 'tags':
                     #     data = [tag.strip() for tag in data.split(',')]
                 elif schema_prop['type'] == 'objectid':
@@ -253,11 +219,13 @@ def process_node_form(form, node_id=None, node_type=None, user=None):
                 else:
                     node.properties[prop_name] = data
         update_data(node_schema, form_schema)
-        update = node.update(api=api)
+        ok = node.update(api=api)
+        if not ok:
+            log.warning('Unable to update node: %s', node.error)
         # if form.picture.data:
         #     image_data = request.files[form.picture.name].read()
         #     post = node.replace_picture(image_data, api=api)
-        return update
+        return ok
     else:
         # Create a new node
         node = pillarsdk.Node()

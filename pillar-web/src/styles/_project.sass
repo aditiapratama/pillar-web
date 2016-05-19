@@ -121,7 +121,14 @@ $z-index-base: 13
 		#project-loading
 			position: absolute
 			top: 13px
-			right: 10px
+			right: 6px
+
+			/* Give it a background so it overlays text nicely */
+			width: 25px
+			height: 25px
+			background: lighten($color-background-nav, 5%)
+			text-align: center
+			border-radius: 50%
 
 	&.context
 		right: 0
@@ -153,11 +160,11 @@ $z-index-base: 13
 			&:hover, &:active, &:focus
 				text-decoration: none
 				outline: none
-				padding-left: 35px
+				padding-left: 30px
 
 				i
 					opacity: 1
-					left: 10px
+					left: 5px
 
 			i
 				opacity: 0
@@ -240,9 +247,9 @@ ul.breadcrumb
 	/* The > separating each breadcrumb */
 	li+li:before
 		color: lighten($color-text, 15%)
-		content: '\f3d3'
+		content: '\e83a'
 		font:
-			family: 'Ionicons'
+			family: 'pillar-font'
 
 	&:before
 		position: absolute
@@ -385,6 +392,9 @@ ul.project-edit-tools
 				opacity: .6
 				color: $color-text-dark
 
+		&.button-dropdown.disabled
+			border-bottom: none
+
 	a
 		margin: 5px
 		padding: 5px 15px
@@ -478,12 +488,15 @@ ul.project-edit-tools
 
 					&.icon-group:after
 						content: '\e80d'
+					&.icon-group_texture:after
+						content: '\e85c'
+						font-size: 1.1em
 					&.icon-asset:after
 						content: '\e825'
 					&.icon-page:after
 						content: '\e824'
 					&.icon-texture:after
-						content: '\e81e'
+						content: '\e80a'
 
 	/* // Extra asset tools in dropdown */
 
@@ -670,6 +683,7 @@ ul.project_nav-edit-list
 		family: $font-body
 		size: 2em
 		weight: 300
+	color: lighten($color-background-nav, 15%)
 
 $node-preview-max-height-sm: 300px
 $node-preview-max-height-md: 450px
@@ -680,8 +694,9 @@ $node-preview-max-height-lg: 500px
 		padding: 20px 20px 0 20px
 		margin: 0
 		float: left
-
 		text-transform: capitalize
+		+project-node-title
+
 	.texture-license
 		float: right
 		padding: 20px 20px 0 0
@@ -702,7 +717,8 @@ section.node-row
 		overflow: hidden
 
 		width: 50%
-		max-height: 500px
+		max-height: 320px
+		max-width: 320px
 		float: left
 		position: relative
 		background-color: $color-background
@@ -710,11 +726,12 @@ section.node-row
 		user-select: none
 
 		img.node-preview-thumbnail
-			position: absolute
+			+position-center-translate
 			width: 100%
 			border-radius: 3px
 			user-select: none
 			cursor: grabbing
+			cursor: -webkit-grabbing
 
 		.loading
 			position: absolute
@@ -755,11 +772,20 @@ section.node-row
 			float: none
 			padding-top: 0
 
+			&.nofiles
+				padding: 0
+				.node-title
+					color: $color-text-dark-secondary
+					font:
+						weight: 400
+						size: 1.2em
+
 			.node-title
+				color: $color-text-dark-primary
 				font:
 					family: $font-body
-					weight: 300
-					size: 1.8em
+					weight: 500
+					size: 1.7em
 				+text-overflow-ellipsis
 
 
@@ -771,10 +797,11 @@ section.node-row
 				display: block
 
 				&.sizes, &.extra
+					color: $color-text-dark-primary
 					padding: 5px 0
 					font:
-						size: 1.4em
-						weight: 300
+						size: 1.3em
+						weight: 400
 					small
 						padding: 0 5px
 
@@ -803,7 +830,7 @@ section.node-preview
 		min-height: 200px
 		flex: 1
 		max-height: 500px
-		background-color: $color-background-nav
+		background-color: black
 		display: flex
 		justify-content: center
 		align-items: center
@@ -872,14 +899,14 @@ section.node-preview
 			left: 20px
 			bottom: 10px
 			font:
-				size: 2.4em
+				size: 2.2em
 				weight: 300
 
 		.author
 			color: $color-text-dark-secondary
 
 	&.group
-		height: 100px
+		height: 80px
 
 		.node-title
 			max-width: 80%
@@ -1427,6 +1454,21 @@ section.node-children
 	float: left
 	margin: 10px 15px 10px 0
 
+	&.group_texture
+		.list-node-children-item.group_texture
+			height: $list-node-children-item-width
+			margin-top: 5px
+			.list-node-children-item-thumbnail
+				.list-node-children-item-thumbnail-icon i
+					position: relative
+					bottom: 10px
+			.list-node-children-item-name
+				bottom: 28px
+
+	.list-node-children-empty
+		color: $color-text-dark-secondary
+		font-size: 1.2em
+
 	.list-node-children-item-preview
 		margin: 0
 		position: absolute
@@ -1709,7 +1751,6 @@ section.node-children
 			transition: opacity 100ms ease-out
 
 		.list-node-children-item-name
-			font-family: $font-headings
 			text-shadow: 1px 1px 2px rgba(black, .5)
 			display: block
 			opacity: 0
@@ -1764,13 +1805,17 @@ section.node-children
 		width: 100%
 		color: white
 
-		&.user
-			padding: 0 20px
-
 		&.collection
 			background-color: transparent
 			padding: 25px 0 45px 0
 			font-size: 1.2em
+
+		&.dashboard
+			padding: 25px 0 45px 0
+			font-size: 1.2em
+
+			#node_index-collection-info
+				text-align: left
 
 		#node_index-user-avatar
 			padding: 15px
@@ -2238,10 +2283,84 @@ section.node-children
 
 #node-add-container,
 #node-edit-container
-	// display: flex
-	// flex-direction: column
-	// flex: 1
+	display: flex
+	flex-direction: column
+	flex: 1
 	color: $color-text-dark
+
+	form#node-edit-form
+
+		&.group_texture
+			.form-group.status,
+			.form-group.description
+				display: none
+
+		&.texture
+			.form-group.status,
+			.form-group.description,
+			.form-group.categories,
+			.form-group.tags,
+			.form-group.order,
+			.form-group.resolution,
+			.form-group.aspect_ratio,
+			.form-group.is_landscape,
+			.form-group.is_tileable
+				display: none
+
+		.files-header
+			width: 100%
+
+		#files-action-add
+			+button-rounded-filled($color-success, 3px)
+			width: 200px
+			padding: 5px 10px
+			margin-bottom: 10px
+			opacity: 1
+
+	.fieldlist
+		list-style: none
+		padding: 0
+		margin: 0
+
+		li.fieldlist-item
+			background-color: $color-background-light
+			border: thin solid $color-background
+			border-bottom: 2px solid $color-background
+			border-radius: 3px
+			margin-bottom: 10px
+			padding: 0 15px
+			display: flex
+			flex-direction: row-reverse
+			align-items: center
+
+			.form-group
+				margin-bottom: 0 !important
+
+			.form-upload-file
+				margin-bottom: 0 !important
+
+			div[class*="map_type"],
+			div[class*="is_tileable"]
+				padding: 10px 15px
+				width: 25%
+				border-left: thin solid $color-background
+
+			div[class*="map_type"]
+				select.form-control
+					background: white !important
+				label
+					display: none
+
+			div[class*="is_tileable"]
+				label label
+					font-weight: 400 !important
+					padding-left: 0
+
+			div[class$="file"]
+				flex: 1
+				label
+					display: none
+
 
 #overlay-mode-move-container
 	visibility: hidden
@@ -2279,6 +2398,16 @@ section.node-children
 		opacity: 1
 		top: 0
 
+		.overlay-container
+			.title
+				i
+					animation:
+						name: overlay-mode-move-icon
+						duration: 1.5s
+						delay: 0
+						fill-mode: forwards
+						iteration-count: infinite
+
 
 	.overlay-container
 		width: 100%
@@ -2306,13 +2435,6 @@ section.node-children
 				position: relative
 				right: 0
 				padding-right: 15px
-
-				animation:
-					name: overlay-mode-move-icon
-					duration: 1.5s
-					delay: 0
-					fill-mode: forwards
-					iteration-count: infinite
 
 			strong
 				font-weight: 400

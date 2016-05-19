@@ -1,3 +1,5 @@
+$comments-width-max: 710px
+
 #comments-container
 	margin-top: 15px
 	padding: 5px 20px 20px 20px
@@ -9,6 +11,12 @@
 	&.texture
 		border-top: none
 
+	#comments-reload
+		text-align: center
+		cursor: pointer
+		padding: 15px 0
+		display: block
+
 	#comments-list-header
 		#comments-list-title
 			padding: 15px 0 10px 0
@@ -18,7 +26,6 @@
 				weight: 300
 				family: $font-body
 			color: $color-text-dark-primary
-
 
 	#comments-list-items-loading
 		font-size: 2em
@@ -38,9 +45,9 @@
 		+media-sm
 			max-width: 100%
 		+media-md
-			max-width: 710px
+			max-width: $comments-width-max
 		+media-lg
-			max-width: 710px
+			max-width: $comments-width-max
 
 		.nocomments
 			color: $color-text-dark-hint

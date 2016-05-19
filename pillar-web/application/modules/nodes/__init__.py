@@ -1,5 +1,8 @@
 import json
+import logging
 from datetime import datetime
+
+from werkzeug.datastructures import MultiDict
 
 from pillarsdk import Node
 from pillarsdk import NodeType
@@ -17,7 +20,8 @@ from flask import request
 from flask import jsonify
 from flask import abort
 from flask import g
-from wtforms import SelectMultipleField
+from werkzeug.exceptions import NotFound
+from wtforms import SelectMultipleField, FieldList
 from flask.ext.login import login_required
 from jinja2.exceptions import TemplateNotFound
 
@@ -33,9 +37,11 @@ from application.helpers import _get_file_cached
 from application.helpers.caching import delete_redis_cache_template
 from application.helpers.jstree import jstree_build_children
 from application.helpers.jstree import jstree_build_from_node
-from application.helpers.forms import ProceduralFileSelectForm
+from application.helpers.forms import ProceduralFileSelectForm, build_file_select_form, \
+    CustomFormField
 
 nodes = Blueprint('nodes', __name__)
+log = logging.getLogger(__name__)
 
 
 class FakeUser(object):
@@ -413,11 +419,6 @@ def edit(node_id):
             form_prop = form_schema[prop]
             prop_name = "{0}{1}".format(prefix, prop)
 
-            if prop not in node_properties:
-                if prop_name == 'attachments':
-                    node_properties['attachments'] = []
-                else:
-                    continue
             if schema_prop['type'] == 'dict':
                 set_properties(
                     schema_prop['schema'],
@@ -425,65 +426,73 @@ def edit(node_id):
                     node_properties[prop_name],
                     form,
                     "{0}__".format(prop_name))
+                continue
+
+            if prop_name not in form:
+                continue
+
+            try:
+                db_prop_value = node_properties[prop]
+            except KeyError:
+                log.debug('%s not found in form for node %s', prop_name, node_id)
+                continue
+
+            if schema_prop['type'] == 'datetime':
+                db_prop_value = datetime.strptime(db_prop_value,
+                                                  app.config['RFC1123_DATE_FORMAT'])
+
+            if isinstance(form[prop_name], SelectMultipleField):
+                # If we are dealing with a multiselect field, check if
+                # it's empty (usually because we can't query the whole
+                # database to pick all the choices). If it's empty we
+                # populate the choices with the actual data.
+                if not form[prop_name].choices:
+                    form[prop_name].choices = [(d, d) for d in db_prop_value]
+                    # Choices should be a tuple with value and name
+
+            # Assign data to the field
+            if set_data:
+                if prop_name == 'attachments':
+                    for attachment_collection in db_prop_value:
+                        for a in attachment_collection['files']:
+                            attachment_form = ProceduralFileSelectForm()
+                            attachment_form.file = a['file']
+                            attachment_form.slug = a['slug']
+                            attachment_form.size = 'm'
+                            form[prop_name].append_entry(attachment_form)
+
+                elif prop_name == 'files':
+                    schema = schema_prop['schema']['schema']
+                    # Extra entries are caused by min_entries=1 in the form
+                    # creation.
+                    field_list = form[prop_name]
+                    if len(db_prop_value) > 0:
+                        while len(field_list):
+                            field_list.pop_entry()
+
+                    for file_data in db_prop_value:
+                        file_form_class = build_file_select_form(schema)
+                        subform = file_form_class()
+                        for key, value in file_data.iteritems():
+                            setattr(subform, key, value)
+                        field_list.append_entry(subform)
+
+                # elif prop_name == 'tags':
+                #     form[prop_name].data = ', '.join(data)
+                else:
+                    form[prop_name].data = db_prop_value
             else:
-                try:
-                    data = node_properties[prop]
-                except KeyError:
-                    print ("{0} not found in form".format(prop_name))
-                if schema_prop['type'] == 'datetime':
-                    data = datetime.strptime(data,
-                                             app.config['RFC1123_DATE_FORMAT'])
-                if prop_name in form:
-                    # Other field types
-                    if isinstance(form[prop_name], SelectMultipleField):
-                        # If we are dealing with a multiselect field, check if
-                        # it's empty (usually because we can't query the whole
-                        # database to pick all the choices). If it's empty we
-                        # populate the choices with the actual data.
-                        if not form[prop_name].choices:
-                            form[prop_name].choices = [(d, d) for d in data]
-                            # Choices should be a tuple with value and name
-                    # Assign data to the field
-                    if set_data:
-                        if prop_name == 'attachments':
-                            for attachment_collection in data:
-                                for a in attachment_collection['files']:
-                                    attachment_form = ProceduralFileSelectForm()
-                                    attachment_form.file = a['file']
-                                    attachment_form.slug = a['slug']
-                                    attachment_form.size = 'm'
-                                    form[prop_name].append_entry(attachment_form)
-                            pass
-                        elif prop_name == 'files':
-                            for f in data:
-                                attachment_form = ProceduralFileSelectForm()
-                                attachment_form.file = a['file']
-                                attachment_form.slug = a['slug']
-                                attachment_form.size = 'm'
-                                form[prop_name].append_entry(attachment_form)
-                        # elif prop_name == 'tags':
-                        #     form[prop_name].data = ', '.join(data)
-                        else:
-                            form[prop_name].data = data
-                    else:
-                        # Default population of multiple file form list (only if
-                        # we are getting the form)
-                        if request.method == 'POST':
-                            continue
-                        if prop_name == 'attachments':
-                            if not data:
-                                attachment_form = ProceduralFileSelectForm()
-                                attachment_form.file = 'file'
-                                attachment_form.slug = ''
-                                attachment_form.size = ''
-                                form[prop_name].append_entry(attachment_form)
-                        if prop_name == 'files':
-                            if not data:
-                                attachment_form = ProceduralFileSelectForm()
-                                attachment_form.file = 'file'
-                                attachment_form.slug = ''
-                                attachment_form.size = ''
-                                form[prop_name].append_entry(attachment_form)
+                # Default population of multiple file form list (only if
+                # we are getting the form)
+                if request.method == 'POST':
+                    continue
+                if prop_name == 'attachments':
+                    if not db_prop_value:
+                        attachment_form = ProceduralFileSelectForm()
+                        attachment_form.file = 'file'
+                        attachment_form.slug = ''
+                        attachment_form.size = ''
+                        form[prop_name].append_entry(attachment_form)
 
     api = SystemUtility.attract_api()
     node = Node.find(node_id, api=api)
@@ -494,16 +503,15 @@ def edit(node_id):
     dyn_schema = node_type['dyn_schema'].to_dict()
     form_schema = node_type['form_schema'].to_dict()
     error = ""
-    node_type_name = node_type.name
 
     node_properties = node.properties.to_dict()
 
+    ensure_lists_exist_as_empty(node.to_dict(), node_type)
     set_properties(dyn_schema, form_schema, node_properties, form,
                    set_data=False)
 
     if form.validate_on_submit():
-        if process_node_form(form, node_id=node_id, node_type=node_type,
-                             user=user_id):
+        if process_node_form(form, node_id=node_id, node_type=node_type, user=user_id):
             # Handle the specific case of a blog post
             if node_type.name == 'post':
                 project_update_nodes_list(node, list_name='blog')
@@ -515,11 +523,11 @@ def edit(node_id):
                                     _external=True,
                                     _scheme=app.config['SCHEME']))
         else:
-            error = "Server error"
-            print ("Error sending data")
+            log.debug('Error sending data to Pillar, see Pillar logs.')
+            error = 'Server error'
     else:
         if form.errors:
-            print form.errors
+            log.debug('Form errors: %s', form.errors)
 
     # Populate Form
     form.name.data = node.name
@@ -663,6 +671,75 @@ def create():
 @app.route('/search')
 def nodes_search_index():
     return render_template('nodes/search.html')
+
+
+@nodes.route("/<node_id>/redir")
+def redirect_to_context(node_id):
+    """Redirects to the context URL of the node.
+
+    Comment: redirects to whatever the comment is attached to + #node_id
+        (unless 'whatever the comment is attached to' already contains '#', then
+         '#node_id' isn't appended)
+    Post: redirects to main or project-specific blog post
+    Other: redirects to project.url + #node_id
+    """
+
+    url = _url_for_node(node_id)
+    return redirect(url)
+
+
+def _url_for_node(node_id=None, node=None):
+    assert isinstance(node_id, (basestring, type(None)))
+    assert isinstance(node, (Node, type(None)))
+
+    api = SystemUtility.attract_api()
+
+    if node is None:
+        node = Node.find(node_id, api=api)
+    elif node_id is None:
+        node_id = node['_id']
+    else:
+        raise ValueError('Either node or node_id must be given')
+
+    def find_for_comment():
+        """Returns the URL for a comment."""
+
+        parent = node
+        while parent.node_type == 'comment':
+            parent = Node.find(parent.parent, api=api)
+
+        # Find the redirection URL for the parent node.
+        parent_url = _url_for_node(node=parent)
+        if '#' in parent_url:
+            # We can't attach yet another fragment, so just don't link to the comment for now.
+            return parent_url
+        return parent_url + '#{}'.format(node_id)
+
+    def find_for_post():
+        """Returns the URL for a blog post."""
+
+        if str(node.project) == app.config['MAIN_PROJECT_ID']:
+            return url_for('main_blog',
+                           url=node.properties.url)
+
+        proj = Project.find(node.project, {'projection': {'url': 1}}, api=api)
+        return url_for('project_blog',
+                       project_url=proj.url,
+                       url=node.properties.url)
+
+    # Fallback: Assets, textures, and other node types.
+    def find_for_other():
+        proj = Project.find(node.project, {'projection': {'url': 1}}, api=api)
+        return url_for('projects.view', project_url=proj.url) + '#{}'.format(node_id)
+
+    # Determine which function to use to find the correct URL.
+    url_finders = {
+        'comment': find_for_comment,
+        'post': find_for_post,
+    }
+
+    finder = url_finders.get(node.node_type, find_for_other)
+    return finder()
 
 
 # Import of custom modules (using the same nodes decorator)

@@ -1,3 +1,5 @@
+| {% from '_macros/_node_edit_form.html' import render_field %}
+
 | {% block body %}
 
 | {% with errors = errors %}
@@ -22,11 +24,9 @@
 
 #node-edit-container
 
-	#node-edit-header
-		.node-edit-title {{node.name}}
-
 	form(
 		id="node-edit-form",
+		class="{{ node.node_type }}",
 		method="POST",
 		enctype="multipart/form-data",
 		action="{{url_for('nodes.edit', node_id=node._id)}}")
@@ -35,7 +35,6 @@
 
 		| {% if field.name == 'csrf_token' %}
 		| {{ field }}
-
 		| {% else %}
 
 		| {% if field.type == 'HiddenField' %}
@@ -48,24 +47,24 @@
 				i.pi-plus
 				| Add New Attachment
 
-		.form-group(class="{{field.name}}")
-			| {{ field(class='form-control') }}
+		| {{ render_field(field) }}
+
+		| {% elif field.name == 'files' %}
+		.files-header
+			#files-actions
+				#files-action-add
+					i.pi-plus
+					| Add New File
+
+		| {{ render_field(field) }}
+
 		| {% else %}
 
-		.form-group(class="{{field.name}}{% if field.errors %} error{% endif %}")
-			| {{ field.label }}
-			| {{ field(class='form-control') }}
+		| {{ render_field(field) }}
 
-			| {% if field.errors %}
-			ul.error
-				| {% for error in field.errors %}
-				li {{ error }}
-				| {% endfor %}
-			| {% endif %}
-
-		| {% endif %}
-		| {% endif %}
-		| {% endif %}
+		| {% endif %} {# // attachments/files #}
+		| {% endif %} {# // HiddenField #}
+		| {% endif %} {# // csrf_token #}
 
 		| {% endfor %}
 
@@ -135,16 +134,6 @@ script(type="text/javascript").
 		}).trigger('keyup');
 	});
 
-
-	$(function() {
-		var $namefield = $('.form-group.name input'),
-				$name = $('.node-edit-title');
-
-		$namefield.keyup(function() {
-			$name.html($namefield.val());
-		}).trigger('keyup');
-	});
-
 	$(function() {
 		$('input, textarea').keypress(function () {
 			// Unused: save status of the page as 'edited'
@@ -183,7 +172,12 @@ script(type="text/javascript").
 		})
 		.fail(function(data){
 			/* Something went wrong, print it */
-			statusBarSet('error', 'Error! We\'ve been notified and are working on it - ' + data.status + ' ' + data.statusText, 8000);
+			if (data.status == 422) {
+				statusBarSet('error', 'The submitted data could not be validated.', 8000);
+			} else {
+				statusBarSet('error', 'Error! We\'ve been notified and are working on it - '
+						+ data.status + ' ' + data.statusText, 8000);
+			}
 
 			$("li.button-save").addClass('field-error');
 			$("li.button-save a#item_save").html('<i class="pi-warning"></i> Houston!');
@@ -238,20 +232,35 @@ script(type="text/javascript").
 
 	var attrs = ['for', 'id', 'name', 'data-field-name'];
 	function resetAttributeNames(section) {
-		var tags = section.find('input, label, div'), idx = section.index();
+		var tags = section.find('input, select, label, div, a');
+		var idx = section.index();
 		tags.each(function () {
 			var $this = $(this);
+
+			// Renumber certain attributes.
 			$.each(attrs, function (i, attr) {
 				var attr_val = $this.attr(attr);
 				if (attr_val) {
-					$this.attr(attr, attr_val.replace(/-\d+/, '-' + (idx + 1)))
+					$this.attr(attr, attr_val.replace(/-\d+/, '-' + idx))
 				}
-			})
+			});
+
 			// Clear input field values
-			if ($this.prop('tagName') == 'INPUT') {
-				$this.val('');
+			var tagname = $this.prop('tagName');
+			if (tagname == 'INPUT') {
+				if ($this.attr('type') == 'checkbox') {
+					$this.prop('checked', false);
+				} else {
+					$this.val('');
+				}
+			} else if (tagname == 'SELECT') {
+				$this.find(':nth-child(1)').prop('selected', true);
 			}
-		})
+		});
+
+		// Click on all file delete buttons to clear all file widgets.
+		section.find('a.file_delete').click();
+		section.find('div.form-upload-progress-bar').hide();
 	}
 
 	var initUploadFields = function(selector_string) {
@@ -329,13 +338,20 @@ script(type="text/javascript").
 	if (document.getElementById("attachments") !== null) {
 		$("#attachments-action-add").on('click', function(){
 			var lastRepeatingGroup = $('#attachments > li').last();
-			var cloned = lastRepeatingGroup.clone(true)
+			var cloned = lastRepeatingGroup.clone(true);
 			cloned.insertAfter(lastRepeatingGroup);
 			resetAttributeNames(cloned);
 		});
+	}
 
-	};
-
+	if (document.getElementById("files") !== null) {
+		$("#files-action-add").on('click', function () {
+			var lastRepeatingGroup = $('#files > li').last();
+			var cloned = lastRepeatingGroup.clone(true);
+			cloned.insertAfter(lastRepeatingGroup);
+			resetAttributeNames(cloned);
+		});
+	}
 	//- console.log($._data($(elementSelector)[0], "events"));
 
 

@@ -1,0 +1,124 @@
+
+#project_dashboard-container
+	+container-behavior
+	display: flex
+
+#project_dashboard-sidebar
+	width: 20%
+
+	.user-avatar
+		img
+			display: block
+			margin: 20px auto
+			border-radius: 50%
+
+	.user-name
+		color: white
+		font:
+			family: $font-body
+			size: 2.1em
+			weight: 600
+		padding: 0 35px
+
+		span
+			+text-background($color-background-nav, 3px, 5px 0)
+
+#project_dashboard-main
+	width: 80%
+
+	.node_index-collection-name
+		margin-left: 10px
+
+	.node_index-collection .node_index-collection-card
+		width: 100%
+
+		.item-info
+			min-height: 110px
+
+.nav.nav-tabs
+	border-bottom: none
+
+	li
+		background: transparent
+		border: none
+		border-radius: 0
+		font:
+			size: 1.2em
+			weight: 500
+
+
+		a
+			background: $color-background
+			border: none
+			border-top: 3px solid $color-text-dark-hint
+			border-radius: 0
+			color: $color-text-dark-primary
+			margin: 0
+			font-weight: 400
+			transition: background 100ms ease-in-out, border-top 100ms ease-in-out
+
+
+
+			&:hover
+				background: $color-background-light
+				color: $color-primary
+				border-color: $color-primary
+
+		&.active
+			border: none
+
+			a
+				font-weight: 500
+				background: white
+				border: none
+				border-top: 3px solid $color-primary
+				border-radius: 0
+				color: $color-primary
+
+	li:first-of-type a
+		border-top-left-radius: 3px
+	li:last-of-type a
+		border-top-right-radius: 3px
+
+	.create
+		float: right
+		a
+			+button-rounded-filled($color-success, 6px)
+			padding: 7px 15px
+			opacity: 1
+			position: relative
+			top: 10px
+
+
+.tab-content
+	background-color: white
+	border-bottom-left-radius: 3px
+	border-bottom-right-radius: 3px
+	overflow: hidden
+
+	.node_index-collection
+		.node_index-collection-card
+			box-shadow: none
+			margin: 0
+			border-radius: 0
+
+			a.card-thumbnail
+				top: 0
+
+			.item-info
+				padding: 5px 10px
+				min-height: 100px !important
+
+				a.item-title
+					padding: 5px 0
+					font-weight: 400
+
+					small
+						font-weight: 300
+
+			.item-description
+				font-size: 1.1em
+				color: $color-text-dark-primary
+
+			.item-user
+				color: $color-text-dark-secondary

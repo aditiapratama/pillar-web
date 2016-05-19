@@ -21,6 +21,9 @@ script(type="text/javascript").
 		if (ProjectUtils.nodeType() === 'group'){
 			$('a', '.button-edit').html('<i class="pi-edit button-edit-icon"></i> Edit Folder');
 			$('a', '.button-delete').html('<i class="pi-trash button-delete-icon"></i>Delete Folder');
+		} else if (ProjectUtils.nodeType() === 'group_texture'){
+			$('a', '.button-edit').html('<i class="pi-edit button-edit-icon"></i>Edit Texture Folder');
+			$('a', '.button-delete').html('<i class="pi-trash button-delete-icon"></i>Delete Texture Folder');
 		} else {
 			$('a', '.button-edit').html('<i class="pi-edit button-edit-icon"></i> Edit ' + ProjectUtils.nodeType());
 			$('a', '.button-delete').html('<i class="pi-trash button-delete-icon"></i>Delete ' + ProjectUtils.nodeType());
@@ -30,11 +33,25 @@ script(type="text/javascript").
 		ProjectUtils.setProjectAttributes({parentNodeId: '{{parent._id}}'});
 		{% endif %}
 
-		var url = "{{url_for('nodes.comments_index')}}?parent_id={{node._id}}"
-		$.get(url, function(dataHtml) {
-			// Update the DOM injecting the generate HTML into the page
-			$('#comments-container').replaceWith(dataHtml);
-		})
+
+		function loadComments(){
+			var commentsUrl = "{{ url_for('nodes.comments_index', parent_id=node._id) }}";
+
+			$.get(commentsUrl, function(dataHtml) {
+				// Update the DOM injecting the generate HTML into the page
+				$('#comments-container').replaceWith(dataHtml);
+			})
+			.fail(function(e, data){
+				statusBarSet('error', 'Couldn\'t load comments. Error: ' + data.errorThrown, 'pi-attention', 5000);
+				$('#comments-container').html('<a id="comments-reload"><i class="pi-refresh"></i> Reload comments</a>');
+			});
+		}
+
+		loadComments();
+
+		$('body').on('click', '#comments-reload', function(){
+			loadComments();
+		});
 
 		{% if node.has_method('PUT') %}
 			$('.project-mode-view').show();
@@ -42,5 +59,26 @@ script(type="text/javascript").
 			$('.project-mode-view').hide();
 		{% endif %}
 	{% endif %}
+
+	var node_preview = document.getElementById("node-preview-thumbnail");
+
+	if (node_preview) {
+		node_preview.addEventListener('load', function() {
+			var preview_aspect = this.naturalWidth / this.naturalHeight
+
+			if (preview_aspect > 1.0){
+				$('.node-preview, .node-preview-thumbnail').css({'max-height': 'auto', 'width': '100%'});
+				$('.node-preview img').css({'max-height': '100%'});
+			}
+
+		});
+	}
+
+	$('#node-overlay').click(function(){
+		$(this).removeClass('active').hide().html();
+	});
+
+	$('#asset-license').popover();
+	$('[data-toggle="tooltip"]').tooltip({'delay' : {'show': 1250, 'hide': 250}})
 
 
