@@ -480,10 +480,11 @@ section.pricing
 
 	h2
 		text-align: center
-		font-size: 2.4em
+		font-size: 2.3em
+		text-shadow: 1px 1px 0 white
 		margin:
-			top: 20px
-			bottom: 50px
+			top: 10px
+			bottom: 70px
 		padding: 0
 
 		+media-xs
@@ -498,12 +499,18 @@ section.pricing
 		position: relative
 		text-align: center
 		border-top: 3px solid rgba($color-text-dark-secondary, .5)
+		border-bottom-left-radius: 3px
+		border-bottom-right-radius: 3px
 
 		+media-xs
 			margin-bottom: 15px
 
 		&.yearly
 			border-top: 3px solid $color-info
+			transform: scale(1.1)
+
+			+media-xs
+				transform: scale(1)
 
 			a.sign-up-now
 				+button-rounded-filled($color-primary, 999em)
