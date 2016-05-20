@@ -163,7 +163,16 @@ def edit(project_url):
     except ResourceNotFound:
         abort(404)
     attach_project_pictures(project, api)
-    form = ProjectForm()
+    form = ProjectForm(
+        project_id=project._id,
+        name=project.name,
+        url=project.url,
+        summary=project.summary,
+        description=project.description,
+        is_private=u'GET' not in project.permissions.world,
+        category=project.category,
+        status=project.status,
+    )
 
     if form.validate_on_submit():
         project = Project.find(project._id, api=api)
@@ -188,14 +197,6 @@ def edit(project_url):
         # Reattach the pictures
         attach_project_pictures(project, api)
     else:
-        form.project_id.data = project._id
-        form.name.data = project.name
-        form.url.data = project.url
-        form.summary.data = project.summary
-        form.description.data = project.description
-        form.is_private.data = u'GET' not in project.permissions.world
-        form.category.data = project.category
-        form.status.data = project.status
         if project.picture_square:
             form.picture_square.data = project.picture_square._id
         if project.picture_header:
@@ -208,11 +209,11 @@ def edit(project_url):
         hidden_fields = ['url', 'status', 'is_private', 'category']
 
     return render_template('projects/edit.html',
-        form=form,
-        hidden_fields=hidden_fields,
-        project=project,
-        title="edit",
-        api=api)
+                           form=form,
+                           hidden_fields=hidden_fields,
+                           project=project,
+                           title="edit",
+                           api=api)
 
 
 @projects.route('/<project_url>/edit/node-type')
