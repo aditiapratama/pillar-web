@@ -37,8 +37,9 @@ def index():
     }, api=api)
 
     projects_shared = Project.all({
-        'where': {'user': {'$ne': current_user.objectid}},
-        'in': {'permissions.groups': current_user.groups},
+        'where': {'user': {'$ne': current_user.objectid},
+                  'permissions.groups.group': {'$in': current_user.groups},
+                  'is_private': True},
         'sort': '-_created',
         'embedded': {'user': 1},
     }, api=api)
