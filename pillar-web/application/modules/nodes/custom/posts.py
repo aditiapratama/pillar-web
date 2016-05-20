@@ -54,6 +54,7 @@ def posts_view(project_id, url=None):
             blog=blog,
             node=post,
             project=project,
+            title='blog',
             api=api)
     else:
         node_type_post = project.get_node_type('post')
@@ -73,6 +74,7 @@ def posts_view(project_id, url=None):
             node_type_post=node_type_post,
             posts=posts._items,
             project=project,
+            title='blog',
             api=api)
 
 

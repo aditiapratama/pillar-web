@@ -95,7 +95,8 @@ html(lang="en")
 									href="{{ url_for('main_blog') }}",
 									title="Blender Cloud Blog",
 									data-toggle="tooltip",
-									data-placement="bottom")
+									data-placement="bottom",
+									class="{% if category == 'blog' %}active{% endif %}")
 									span Blog
 
 							li(class="dropdown libraries")
@@ -138,7 +139,7 @@ html(lang="en")
 									title="Training & Tutorials",
 									data-toggle="tooltip",
 									data-placement="bottom",
-									class="{% if category == 'training': %}active{% endif %}")
+									class="{% if category == 'training' %}active{% endif %}")
 									span Training
 							li
 								a.navbar-item(
@@ -146,7 +147,7 @@ html(lang="en")
 									title="Browse all the Open Projects",
 									data-toggle="tooltip",
 									data-placement="bottom",
-									class="{% if category in ['open-projects', 'film']: %}active{% endif %}")
+									class="{% if category in ['open-projects', 'film'] %}active{% endif %}")
 									span Projects
 							li
 								a.navbar-item(
@@ -154,7 +155,7 @@ html(lang="en")
 									title="Blender Cloud Services",
 									data-toggle="tooltip",
 									data-placement="bottom",
-									class="{% if category in ['services']: %}active{% endif %}")
+									class="{% if category == 'services' %}active{% endif %}")
 									span Services
 
 							| {% if current_user.is_anonymous() %}
