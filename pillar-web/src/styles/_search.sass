@@ -45,29 +45,52 @@ $search-hit-width_list: 48px
 	.search-icon
 		position: absolute
 		color: white
-		top: 6px
+		top: 4px
 		left: 10px
 		cursor: pointer
+
+		&:after
+			opacity: 0
+			content: 'Use advanced search...'
+			font-style: normal
+			background: darken($color-background-nav, 5%)
+			color: $color-text-light-primary
+			box-shadow: 1px 1px 3px rgba(black, .4)
+			padding: 3px 10px
+			font-size: .85em
+			border-radius: 3px
+			top: 30px
+			left: -10px
+			width: 150px
+			position: absolute
+			transition: top 150ms ease-in-out, opacity 150ms ease-in-out
+			pointer-events: none
+
+		&:hover
+			&:after
+				opacity: 1
+				top: 35px
+
 
 	#cloud-search, .tt-hint
 		background-color: transparent
 		width: 100%
-		border: none
 		outline: none
-		border:
-			bottom: 3px solid transparent
+		border: thin solid transparent
+		border-bottom: 3px solid transparent
 		font:
-			size: 1.1em
+			size: 1em
 			weight: 400
 			family: $font-body
 		margin: 0
 		padding: 0 20px 0 40px
-		min-height: 34px
+		min-height: 32px
 		color: white
 		+text-overflow-ellipsis
 		transition: border 100ms ease-in-out
 
 		&:focus
+			border: thin solid transparent
 			border-bottom: 3px solid lighten($color-primary, 5%)
 			outline: none
 

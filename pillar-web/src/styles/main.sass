@@ -209,13 +209,16 @@ header.navbar-header
 		.search-input
 			margin: 8px 0
 			border-radius: 3px
+			border: thin solid transparent
 
 			+media-sm
-				background-color: darken($color-background-nav, 7%)
+				background-color: darken($color-background-nav, 6%)
 			+media-md
-				background-color: darken($color-background-nav, 7%)
+				background-color: darken($color-background-nav, 6%)
 			+media-lg
-				background-color: rgba(darken($color-background-nav, 7%), .35)
+				border: thin solid rgba(white, .2)
+				background-color: transparent
+
 				#cloud-search, .tt-hint
 					&::placeholder
 						color: rgba(white, .8)
@@ -227,13 +230,13 @@ header.navbar-header
 
 		&+.navbar-container
 			.search-input
-
 				+media-sm
-					background-color: darken($color-background-nav, 7%)
+					background-color: darken($color-background-nav, 6%)
 				+media-md
-					background-color: darken($color-background-nav, 7%)
+					background-color: darken($color-background-nav, 6%)
 				+media-lg
-					background-color: darken($color-background-nav, 7%)
+					border: thin solid transparent
+					background-color: darken($color-background-nav, 6%)
 
 				#cloud-search, .tt-hint
 					&::placeholder
@@ -390,11 +393,15 @@ header.navbar-header
 			left: 15px
 			right: 20px // overrides bs
 
+		&:hover
+			span.app-logo
+				transform: scale(1.1)
+
 		span.app-logo
 			font-size: 1.2em
 			position: relative
 			top: 3px
-
+			transition: transform 150ms ease-in-out
 
 	.dropdown
 		position: relative
