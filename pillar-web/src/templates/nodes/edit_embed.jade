@@ -195,8 +195,6 @@ script(type="text/javascript").
 			$('#project_context').html(dataHtml);
 			statusBarSet('success', 'Saved Successfully', 'pi-check');
 
-			$("#project_context-container").scrollTop(0);
-
 			/* Style button */
 			$("li.button-save").removeClass('saving field-error');
 			$("li.button-save a#item_save").html('<i class="pi-check"></i> Save Changes');
@@ -208,6 +206,7 @@ script(type="text/javascript").
 			// XXX TODO - Keeps displaying 'loading', needs further investigation
 			//- $('#project_tree').jstree("refresh");
 
+			updateUi();
 		});
 
 	});
