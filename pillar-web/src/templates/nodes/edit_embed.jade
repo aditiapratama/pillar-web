@@ -205,7 +205,9 @@ script(type="text/javascript").
 			$('.project-mode-view').show();
 			$('.project-mode-edit').hide();
 
-			$('#project_tree').jstree("refresh");
+			// XXX TODO - Keeps displaying 'loading', needs further investigation
+			//- $('#project_tree').jstree("refresh");
+
 		});
 
 	});
