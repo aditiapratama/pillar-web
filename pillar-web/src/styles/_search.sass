@@ -45,9 +45,8 @@ $search-hit-width_list: 48px
 	.search-icon
 		position: absolute
 		color: white
-		font-size: 1.1em
-		top: 15px
-		right: 15px
+		top: 6px
+		left: 10px
 		cursor: pointer
 
 	#cloud-search, .tt-hint
@@ -57,14 +56,13 @@ $search-hit-width_list: 48px
 		outline: none
 		border:
 			bottom: 3px solid transparent
-			radius: 0
 		font:
-			size: 1.2em
+			size: 1.1em
 			weight: 400
 			family: $font-body
 		margin: 0
-		padding: 0 45px 0 20px
-		min-height: 50px
+		padding: 0 20px 0 40px
+		min-height: 34px
 		color: white
 		+text-overflow-ellipsis
 		transition: border 100ms ease-in-out
@@ -74,7 +72,7 @@ $search-hit-width_list: 48px
 			outline: none
 
 		&::placeholder
-			color: rgba(white, .3)
+			color: rgba(white, .5)
 			transition: color 150ms ease-in-out
 
 		&:hover
