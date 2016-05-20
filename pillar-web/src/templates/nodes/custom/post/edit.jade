@@ -4,11 +4,11 @@
 
 | {% block header_backdrop %}
 | {% if project and project.picture_header %}
-.navbar-backdrop(style="background-image: url({{ project.picture_header.thumbnail('m', api=api) }})")
+.navbar-backdrop.blog(style="background-image: url({{ project.picture_header.thumbnail('m', api=api) }})")
 | {% elif node and node.picture %}
-.navbar-backdrop(style="background-image: url({{ node.picture.thumbnail('m', api=api) }})")
+.navbar-backdrop.blog(style="background-image: url({{ node.picture.thumbnail('m', api=api) }})")
 | {% else %}
-.navbar-backdrop
+.navbar-backdrop.blog
 | {% endif %}
 .navbar-backdrop-overlay
 | {% endblock %}
@@ -79,13 +79,16 @@
 						| {% endif %}
 						| {% endfor %}
 
-					input.btn.btn-default.button-create(type='submit', value='Update {{ node_type.name }}')
+					button.btn.btn-default.button-create(type='submit')
+						i.pi-check
+						| Update {{ node_type.name }}
 
 					a.btn.btn-default.button-back(href="{{ url_for('nodes.view', node_id=post._id, redir=1) }}")
+						i.pi-angle-left
 						| Back to Post
 
 					a.btn.btn-default.button-back(href="{{ url_for('projects.view', project_url=project.url) }}blog")
-						| Back to Blog
+						| Go to Blog
 
 			#blog_post-edit-container
 				#blog_post-edit-title
