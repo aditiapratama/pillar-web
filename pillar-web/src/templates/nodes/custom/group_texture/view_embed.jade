@@ -77,9 +77,9 @@
 						span.variations
 							| {% for f in child.properties.files %}
 
-							| {% if loop.last and loop.index > 4 %}
+							| {% if loop.last and loop.index > 5 %}
 							span.more +{{ loop.length - 5 }} more
-							| {% elif loop.index < 6 %}
+							| {% elif loop.index <= 5 %}
 
 							| {% if f.map_type == 'color' %}
 							span Color
