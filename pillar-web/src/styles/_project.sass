@@ -713,12 +713,32 @@ section.node-row
 	margin-bottom: 0
 	border-bottom: thin solid rgba($color-text-dark, .2)
 
+	&.texture-map
+		width: 50%
+		float: left
+		clear: none
+
+		border-right: thin solid rgba($color-text-dark, .2)
+
+	&.texture-info
+		padding: 10px 20px
+		color: $color-text-dark-secondary
+
+		span
+			&:not(:first-child)
+				padding-left: 15px
+
+			i
+				position: relative
+				top: -1px
+				right: 2px
+
+
 	section.node-preview.texture
 		overflow: hidden
-
 		width: 50%
-		max-height: 320px
-		max-width: 320px
+		max-height: 200px
+		max-width: 200px
 		float: left
 		position: relative
 		background-color: $color-background
@@ -770,7 +790,8 @@ section.node-row
 			max-width: 100%
 			display: block
 			float: none
-			padding-top: 0
+			padding: 5px 20px 0 20px
+			min-height: initial
 
 			&.nofiles
 				padding: 0
@@ -786,36 +807,41 @@ section.node-row
 				font:
 					family: $font-body
 					weight: 500
-					size: 1.7em
+					size: 1.5em
 				+text-overflow-ellipsis
 
 
-
 		.node-details-attributes
-			padding: 0 20px 20px
+			padding: 0 20px 10px
 
 			span
 				display: block
 
-				&.sizes, &.extra
-					color: $color-text-dark-primary
+				&.sizes, &.extra, &.length, &.content_type
+					color: $color-text-dark-secondary
 					padding: 5px 0
 					font:
-						size: 1.3em
+						size: 1.1em
 						weight: 400
-					small
-						padding: 0 5px
 
+					strong
+						padding-left: 5px
+
+				&.content_type
+					color: $color-text-dark-hint
+					font-size: .9em
+					text-transform: uppercase
 
 		.node-details-meta
-			display: flex
+			display: block
 			width: 100%
 			max-width: 100%
-			flex: 1
-			justify-content: flex-end
 			position: absolute
 			bottom: 0
-			padding-bottom: 20px
+			padding: 0 0 0 10px
+
+			.node-details-meta-list button
+				width: 100%
 
 			.node-details-meta-list-item.type
 				text-transform: uppercase
@@ -898,9 +924,9 @@ section.node-preview
 			color: lighten($color-background-nav, 15%)
 			text-shadow: 1px 1px 0 rgba(white, .2)
 			left: 20px
-			bottom: 10px
+			padding: 20px 20px 20px 0
 			font:
-				size: 2.2em
+				size: 2em
 				weight: 300
 
 		.author
@@ -1219,6 +1245,9 @@ section.node-preview.group
 
 							i
 								margin-right: 0
+
+					&.texture.download
+						width: 100%
 
 					/* Download dropdown options */
 					ul.dropdown-menu
@@ -2321,8 +2350,7 @@ section.node-children
 			.form-group.order,
 			.form-group.resolution,
 			.form-group.aspect_ratio,
-			.form-group.is_landscape,
-			.form-group.is_tileable
+			.form-group.is_landscape
 				display: none
 
 			.form-group
@@ -2341,6 +2369,11 @@ section.node-children
 			padding: 5px 10px
 			margin-bottom: 10px
 			opacity: 1
+
+			&.notallowed
+				opacity: .2
+				pointer-events: none
+				cursor: progress
 
 	.fieldlist
 		list-style: none

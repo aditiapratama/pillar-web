@@ -29,9 +29,19 @@
 	| {% endif %}
 
 
+	section.node-row.texture-info
+		| {% if node.properties.files %}
+		span.texture-info-files
+			i.pi-texture
+			| {{ node.properties.files|length }} map{% if node.properties.files|length != 1 %}s{% endif %}
+		| {% endif %}
+		span.texture-info-seamless
+			i.pi-puzzle
+			| {% if not node.properties.is_tileable %}Not {% endif %}Seamless
+
 	| {% if node.properties.files %}
 	| {% for f in node.properties.files %}
-	section.node-row
+	section.node-row.texture-map
 		section.node-preview.texture
 			img.node-preview-thumbnail(
 				src="{{ f.file.thumbnail('m', api=api) }}",
@@ -65,29 +75,25 @@
 
 			.node-details-attributes
 				span.sizes
-					| Width: {{ f.file.width }}
-					br
-					| Height: {{ f.file.height }}
-
-				span.extra.
-					{% if f.is_tileable %}
-						Tileable (seamless)
-					{% endif %}
+					span.x
+						| Width:
+						strong {{ f.file.width }}
+					span.y
+						| Height:
+						strong {{ f.file.height }}
+				span.length
+					| {{ f.file.length | filesizeformat }}
+				span.content_type
+					| {{ f.file.content_type }}
 
 			.node-details-meta
 				ul.node-details-meta-list
-					li.node-details-meta-list-item.type
-						| {{ f.file.content_type }}
-
-					li.node-details-meta-list-item.image.length
-						| {{ f.file.length | filesizeformat }}
-
-					li.node-details-meta-list-item.image.download
+					li.node-details-meta-list-item.texture.download
 						| {% if f.file.link %}
 						a(href="{{ f.file.link }}", download="{{ f.file.filename }}")
 							button.btn.btn-default(type="button")
 								i.pi-download
-								|  {{map_type}}
+								|  Download
 						| {% else %}
 						button.btn.btn-default.disabled.sorry(type="button")
 							| Download {{map_type}}
