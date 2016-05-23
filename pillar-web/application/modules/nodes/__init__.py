@@ -101,6 +101,10 @@ def view(node_id):
 
     node_type_name = node.node_type
 
+    if node_type_name == 'post':
+        # Posts shouldn't be shown using this end point, redirect to the correct one.
+        return redirect(url_for_node(node=node))
+
     rewrite_url = None
     embedded_node_id = None
     if request.args.get('redir') and request.args.get('redir') == '1':
