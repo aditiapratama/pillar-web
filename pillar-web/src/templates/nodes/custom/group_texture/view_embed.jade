@@ -76,6 +76,11 @@
 						| {% if child.properties.files %}
 						span.variations
 							| {% for f in child.properties.files %}
+
+							| {% if loop.index > 4 and loop.last %}
+							span.more +{{ loop.length - 4 }} more
+							| {% else %}
+
 							| {% if f.map_type == 'color' %}
 							span Color
 							| {% elif f.map_type == 'bump' %}
@@ -90,7 +95,14 @@
 							span Emission
 							| {% elif f.map_type == 'alpha' %}
 							span Alpha
+							| {% elif f.map_type == 'id' %}
+							span ID Map
+							| {% else %}
+							span {{ f.map_type }}
 							| {% endif %}
+
+							| {% endif %}
+
 							| {% endfor %}
 						| {% endif %}
 					| {% endif %}

@@ -65,9 +65,9 @@
 
 			.node-details-attributes
 				span.sizes
-					| {{ f.file.width }}
-					small x
-					| {{ f.file.height }}
+					| Width: {{ f.file.width }}
+					br
+					| Height: {{ f.file.height }}
 
 				span.extra.
 					{% if f.is_tileable %}
