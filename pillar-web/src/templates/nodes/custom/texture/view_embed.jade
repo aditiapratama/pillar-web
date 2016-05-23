@@ -52,6 +52,10 @@
 		| {% set map_type = 'Emission' %}
 		| {% elif f.map_type == 'alpha' %}
 		| {% set map_type = 'Alpha' %}
+		| {% elif f.map_type == 'id' %}
+		| {% set map_type = 'ID Map' %}
+		| {% else %}
+		| {% set map_type = f.map_type %}
 		| {% endif %}
 
 		section.node-details-container.texture
