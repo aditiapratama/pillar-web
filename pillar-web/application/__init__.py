@@ -1,15 +1,11 @@
 import flask_login
 import os
-import logging
 import logging.config
-import config
 import bugsnag
 import redis
 from bugsnag.flask import handle_exceptions
 from pillarsdk import Api
-from pillarsdk import NodeType
 from pillarsdk.users import User
-from pillarsdk.tokens import Token
 from pillarsdk import exceptions as sdk_exceptions
 
 from flask import Flask
