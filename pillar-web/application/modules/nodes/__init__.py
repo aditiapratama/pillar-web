@@ -360,17 +360,16 @@ def view(node_id):
     for child in children:
         child.picture = get_file(child.picture) if child.picture else None
 
-    if request.args.get('format'):
-        if request.args.get('format') == 'json':
-            node = node.to_dict()
-            node['url_edit'] = url_for('nodes.edit', node_id=node['_id']),
-            if parent:
-                parent = parent.to_dict()
-            return_content = jsonify({
-                'node': node,
-                'children': children.to_dict(),
-                'parent': parent
-            })
+    if request.args.get('format') == 'json':
+        node = node.to_dict()
+        node['url_edit'] = url_for('nodes.edit', node_id=node['_id']),
+        if parent:
+            parent = parent.to_dict()
+        return_content = jsonify({
+            'node': node,
+            'children': children.to_dict(),
+            'parent': parent
+        })
     else:
         embed_string = ''
         # Check if we want to embed the content via an AJAX call
