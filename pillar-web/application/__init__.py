@@ -82,25 +82,22 @@ def load_user(userid):
         token=userid
     )
 
-    params = {'where': 'token=="{0}"'.format(userid)}
-    token = Token.all(params, api=api)
-    if token:
-        user_id = token['_items'][0]['user']
-        user = User.find(user_id, api=api)
-    if token and user:
-        login_user = UserClass(userid)
-        login_user.email = user.email
-        login_user.objectid = user._id
-        login_user.username = user.username
-        login_user.gravatar = gravatar(user.email)
-        login_user.roles = user.roles
-        login_user.groups = user.groups
-        try:
-            login_user.full_name = user.full_name
-        except KeyError:
-            pass
-    else:
-        login_user = None
+    user = User.me(api=api)
+    if not user:
+        return None
+
+    login_user = UserClass(userid)
+    login_user.email = user.email
+    login_user.objectid = user._id
+    login_user.username = user.username
+    login_user.gravatar = gravatar(user.email)
+    login_user.roles = user.roles
+    login_user.groups = user.groups
+    try:
+        login_user.full_name = user.full_name
+    except KeyError:
+        pass
+
     return login_user
 
 # Set up authentication
