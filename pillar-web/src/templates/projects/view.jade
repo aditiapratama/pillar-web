@@ -230,6 +230,7 @@ script.
 		// If a nodeId is specified, update the interface for editing and deletion
 		if (typeof(nodeId) != 'undefined') {
 			window.location.replace('#' + nodeId);
+			window.location.hash = nodeId;
 		};
 
 		var nodeTitle = document.getElementById('node-title');
@@ -238,7 +239,6 @@ script.
 		document.title = nodeTitleText;
 
 		$('#project-loading').removeAttr('class');
-
 	}
 
 
@@ -255,7 +255,7 @@ script.
 
 		})
 		.done(function(){
-			updateUi();
+			updateUi(nodeId);
 		})
 		.fail(function(dataResponse) {
 			$('#project_context').html($('<iframe id="server_error"/>'));
