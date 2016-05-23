@@ -35,7 +35,7 @@
 					| {% for n in project.nodes_blog %}
 					li.node-blog-list-item
 						.info
-							a.title(href="{{ url_for('nodes.view', node_id=n._id, redir=1) }}", data-node_id="{{ n._id }}") {{ n.name }}
+							a.title(href="{{ url_for_node(node=n) }}", data-node_id="{{ n._id }}") {{ n.name }}
 							span.details
 								span.when {{ n._updated | pretty_date }} by
 								span.who {{ n.user.full_name }}

@@ -83,7 +83,7 @@
 						i.pi-check
 						| Update {{ node_type.name }}
 
-					a.btn.btn-default.button-back(href="{{ url_for('nodes.view', node_id=post._id, redir=1) }}")
+					a.btn.btn-default.button-back(href="{{ url_for_node(node=post) }}")
 						i.pi-angle-left
 						| Back to Post
 

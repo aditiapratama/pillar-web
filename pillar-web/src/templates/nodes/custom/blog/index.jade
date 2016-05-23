@@ -36,7 +36,7 @@
 			| {% endif %}
 			.blog_index-item
 				a.item-title(
-					href="{{ url_for('nodes.view', node_id=node._id, redir=1) }}")
+					href="{{ url_for_node(node=node) }}")
 					| {{node.name}}
 
 				.item-info.
@@ -46,14 +46,14 @@
 					{% endif %}
 					{% if node.properties.category %}| {{node.properties.category}}{% endif %}
 					| by {{node.user.full_name}}
-					| <a href="{{ url_for('nodes.view', node_id=node._id, redir=1) }}#comments">Leave a comment</a>
+					| <a href="{{ url_for_node(node=node) }}#comments">Leave a comment</a>
 					{% if node.properties.status != 'published' %} | {{ node.properties.status}} {% endif %}
 
 				.item-content
 					| {{node.properties.content}}
 
 				.item-meta
-					a(href="{{ url_for('nodes.view', node_id=node._id, redir=1) }}#comments") Leave a comment
+					a(href="{{ url_for_node(node=node) }}#comments") Leave a comment
 
 			| {% else %}
 
@@ -70,7 +70,7 @@
 					i.pi-document-text
 				| {% endif %}
 				a.item-title(
-					href="{{ url_for('nodes.view', node_id=node._id, redir=1) }}")
+					href="{{ url_for_node(node=node) }}")
 					| {{node.name}}
 
 				.item-info.
@@ -80,7 +80,6 @@
 					{% endif %}
 					{% if node.properties.category %}| {{node.properties.category}}{% endif %}
 					| by {{node.user.full_name}}
-					| <a href="{{ url_for('nodes.view', node_id=node._id, redir=1) }}#comments">Leave a comment</a>
 					{% if node.properties.status != 'published' %} | {{ node.properties.status}} {% endif %}
 
 			| {% endif %} {# loop #}

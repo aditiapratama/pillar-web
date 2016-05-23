@@ -65,17 +65,17 @@ meta(name="twitter:image", content="{% if main_project.picture_header %}{{ main_
 					| {% for n in latest_posts %}
 					li.node-updates-list-item
 						| {% if n.picture %}
-						a(href="{{ url_for('nodes.view', node_id=n._id, redir=1) }}")
+						a(href="{{ url_for_node(node=n) }}")
 							img.image(src="{{ n.picture.thumbnail('s', api=api) }}")
 						| {% endif %}
 						.info
-							a.title(href="{{ url_for('nodes.view', node_id=n._id, redir=1) }}") {{ n.name }}
+							a.title(href="{{ url_for_node(node=n) }}") {{ n.name }}
 							span.details
 								a.where(href="{{ url_for('projects.view', project_url=n.project.url) }}") {{ n.project.name }}
 								span.who <small>by</small> {{ n.user.full_name }}
 								| ·
 								a.when(
-									href="{{ url_for('nodes.view', node_id=n._id, redir=1) }}",
+									href="{{ url_for_node(node=n) }}",
 									title="Updated {{ n._updated | pretty_date }}") {{ n._created | pretty_date }}
 					| {% endfor %}
 
@@ -95,15 +95,15 @@ meta(name="twitter:image", content="{% if main_project.picture_header %}{{ main_
 					| {% for n in latest_comments %}
 					li.node-updates-list-item.comments
 						.info
-							a.title(href="{{ url_for('nodes.view', node_id=n.parent._id, redir=1) }}") {{ n.properties.content }}
+							a.title(href="{{ url_for_node(node=n) }}") {{ n.properties.content }}
 							span.details
 								span.who {{ n.user.full_name }} ·
 								a.when(
-									href="{{ url_for('nodes.view', node_id=n.parent._id, redir=1) }}",
+									href="{{ url_for_node(node=n.parent) }}",
 									title="{{ n._created }}") {{ n._created | pretty_date }}
 								span.where
 									|  ·
-									a.parent(href="{{ url_for('nodes.view', node_id=n.parent._id, redir=1) }}") {{ n.parent.name }}
+									a.parent(href="{{ url_for_node(node=n.parent) }}") {{ n.parent.name }}
 									| ·
 									a.project(href="{{ url_for('projects.view', project_url=n.project.url) }}") {{ n.project.name }}
 
@@ -125,7 +125,7 @@ meta(name="twitter:image", content="{% if main_project.picture_header %}{{ main_
 
 				| {% for n in latest_assets %}
 
-				a.latestassets-list-item(href="{{ url_for('nodes.view', node_id=n._id, redir=1) }}", data-node_id="{{ n._id }}")
+				a.latestassets-list-item(href="{{ url_for_node(node=n) }}", data-node_id="{{ n._id }}")
 					| {% if n.picture %}
 					img.image(src="{{ n.picture.thumbnail('b', api=api) }}")
 					| {% else %}

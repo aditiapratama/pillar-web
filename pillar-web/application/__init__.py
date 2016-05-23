@@ -206,7 +206,7 @@ else:
 
 # Import controllers
 from modules.node_types import node_types
-from modules.nodes import nodes
+from modules.nodes import nodes, url_for_node
 from modules.users import users
 from helpers import url_for_other_page
 from modules.stats import stats
@@ -230,6 +230,7 @@ def format_pretty_date(d):
 
 # Pagination global to use un Jinja template
 app.jinja_env.globals['url_for_other_page'] = url_for_other_page
+app.jinja_env.globals['url_for_node'] = url_for_node
 
 # Register blueprints for the imported controllers
 app.register_blueprint(node_types, url_prefix='/node-types')

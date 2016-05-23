@@ -4,6 +4,7 @@ from datetime import datetime
 
 from werkzeug.datastructures import MultiDict
 
+import pillarsdk
 from pillarsdk import Node
 from pillarsdk import NodeType
 from pillarsdk import User
@@ -684,32 +685,70 @@ def redirect_to_context(node_id):
     Other: redirects to project.url + #node_id
     """
 
-    url = _url_for_node(node_id)
+    url = url_for_node(node_id)
     return redirect(url)
 
 
-def _url_for_node(node_id=None, node=None):
+
+def url_for_node(node_id=None, node=None):
     assert isinstance(node_id, (basestring, type(None)))
-    assert isinstance(node, (Node, type(None)))
+    # assert isinstance(node, (Node, type(None))), 'wrong type for node: %r' % type(node)
 
     api = SystemUtility.attract_api()
 
+    # Find node by its ID, or the ID by the node, depending on what was passed as parameters.
     if node is None:
-        node = Node.find(node_id, api=api)
+        try:
+            node = Node.find(node_id, api=api)
+        except ResourceNotFound:
+            log.warning('url_for_node(node_id=%r, node=None): Unable to find node.', node_id)
+            raise ValueError('Unable to find node %r' % node_id)
     elif node_id is None:
         node_id = node['_id']
     else:
         raise ValueError('Either node or node_id must be given')
+
+    # Find the node's project, or its ID, depending on whether a project was embedded.
+    # This is needed in two of the three finder functions.
+    project_id = node.project
+    if isinstance(project_id, pillarsdk.Resource):
+        # Embedded project
+        project = project_id
+        project_id = project['_id']
+    else:
+        project = None
+
+    def project_or_error():
+        """Returns the project, raising a ValueError if it can't be found."""
+
+        if project is not None:
+            return project
+
+        try:
+            return Project.find(project_id, {'projection': {'url': 1}}, api=api)
+        except ResourceNotFound:
+            log.warning('url_for_node(node_id=%r): Unable to find project %r',
+                        node_id, project_id)
+            raise ValueError('Unable to find node project %r' % project_id)
 
     def find_for_comment():
         """Returns the URL for a comment."""
 
         parent = node
         while parent.node_type == 'comment':
-            parent = Node.find(parent.parent, api=api)
+            if isinstance(parent.parent, pillarsdk.Resource):
+                parent = parent.parent
+                continue
+
+            try:
+                parent = Node.find(parent.parent, api=api)
+            except ResourceNotFound:
+                log.warning('url_for_node(node_id=%r): Unable to find parent node %r',
+                            node_id, parent.parent)
+                raise ValueError('Unable to find parent node %r' % parent.parent)
 
         # Find the redirection URL for the parent node.
-        parent_url = _url_for_node(node=parent)
+        parent_url = url_for_node(node=parent)
         if '#' in parent_url:
             # We can't attach yet another fragment, so just don't link to the comment for now.
             return parent_url
@@ -718,19 +757,18 @@ def _url_for_node(node_id=None, node=None):
     def find_for_post():
         """Returns the URL for a blog post."""
 
-        if str(node.project) == app.config['MAIN_PROJECT_ID']:
+        if str(project_id) == app.config['MAIN_PROJECT_ID']:
             return url_for('main_blog',
                            url=node.properties.url)
 
-        proj = Project.find(node.project, {'projection': {'url': 1}}, api=api)
         return url_for('project_blog',
-                       project_url=proj.url,
+                       project_url=project_or_error().url,
                        url=node.properties.url)
 
     # Fallback: Assets, textures, and other node types.
     def find_for_other():
-        proj = Project.find(node.project, {'projection': {'url': 1}}, api=api)
-        return url_for('projects.view', project_url=proj.url) + '#{}'.format(node_id)
+        return url_for('projects.view',
+                       project_url=project_or_error().url) + '#{}'.format(node_id)
 
     # Determine which function to use to find the correct URL.
     url_finders = {

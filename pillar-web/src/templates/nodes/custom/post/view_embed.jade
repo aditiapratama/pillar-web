@@ -12,7 +12,7 @@ meta(property="og:type", content="article")
 meta(property="article:type", content="{{node.user.full_name}}")
 meta(property="article:published_time", content="{{node._created | pretty_date }}")
 meta(property="og:see_also", content="https://cloud.blender.org/blog")
-meta(property="og:url", content="https://cloud.blender.org{{ url_for('nodes.view', node_id=node._id, redir=1) }}")
+meta(property="og:url", content="https://cloud.blender.org{{ url_for_node(node=node) }}")
 | {% endblock %}
 
 | {% block tw %}

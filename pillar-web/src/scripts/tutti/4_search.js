@@ -24,7 +24,7 @@ var tu = $('#cloud-search').typeahead({hint: true}, {
 			};
 
 			return '' +
-				'<a href="/nodes/'+ hit.objectID + '/view?redir=1" class="search-site-result" id="'+ hit.objectID + '">' +
+				'<a href="/nodes/'+ hit.objectID + '/redir" class="search-site-result" id="'+ hit.objectID + '">' +
 					'<div class="search-hit">' +
 						'<div class="search-hit-thumbnail">' +
 							hitPicture +
@@ -55,7 +55,7 @@ $('.search-site-result.advanced, .search-icon').on('click', function(e){
 $('#cloud-search').bind('typeahead:select', function(ev, hit) {
 	$('.search-icon').removeClass('pi-search').addClass('pi-spin spin');
 
-	window.location.href = '/nodes/'+ hit.objectID + '/view?redir=1';
+	window.location.href = '/nodes/'+ hit.objectID + '/redir';
 });
 
 $('#cloud-search').bind('typeahead:active', function() {

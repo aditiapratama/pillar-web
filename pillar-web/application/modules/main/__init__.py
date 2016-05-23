@@ -1,26 +1,19 @@
 from pillarsdk import Node
-from pillarsdk import NodeType
 from pillarsdk import Project
-from pillarsdk.users import User
-from pillarsdk import File
-from pillarsdk.organizations import Organization
 from pillarsdk.exceptions import ResourceNotFound
 from flask import abort
 from flask import render_template
-from flask import session
 from flask import redirect
 from flask import request
-from flask import url_for
-from flask.ext.login import login_required
 from flask.ext.login import current_user
 from werkzeug.contrib.atom import AtomFeed
+
 from application import app
 from application import SystemUtility
 from application import cache
-from application.modules.nodes import view
+from application.modules.nodes import url_for_node
 from application.modules.nodes.custom.posts import posts_view
 from application.modules.nodes.custom.posts import posts_create
-from application.modules.users.model import UserProxy
 from application.helpers import attach_project_pictures
 from application.helpers import current_user_is_authenticated
 from application.helpers import get_file
@@ -40,7 +33,7 @@ def homepage():
     api = SystemUtility.attract_api()
     latest_posts = Node.all({
         'projection': {'name': 1, 'project': 1, 'user': 1, 'node_type': 1,
-                       'picture': 1, 'properties.status': 1},
+                       'picture': 1, 'properties.status': 1, 'properties.url': 1},
         'where': {'node_type': 'post', 'properties.status': 'published'},
         'embedded': {'user': 1, 'project': 1},
         'sort': '-_created',
@@ -233,8 +226,8 @@ def feeds_blogs():
     # Get latest blog posts
     api = SystemUtility.attract_api()
     latest_posts = Node.all({
-        'where': '{"node_type": "post", "properties.status": "published"}',
-        'embedded': '{"user": 1, "project":1}',
+        'where': {'node_type': 'post', 'properties.status': 'published'},
+        'embedded': {'user': 1},
         'sort': '-_created',
         'max_results': '15'
         }, api=api)
@@ -243,7 +236,7 @@ def feeds_blogs():
     for post in latest_posts._items:
         author = post.user.fullname
         updated = post._updated if post._updated else post._created
-        url = url_for('nodes.view', node_id=post._id, redir=1, _external=True)
+        url = url_for_node(node=post)
         content = post.properties.content[:500]
         content = u'<p>{0}... <a href="{1}">Read more</a></p>'.format(content, url)
         feed.add(post.name, unicode(content),
