@@ -82,7 +82,11 @@ def load_user(userid):
         token=userid
     )
 
-    user = User.me(api=api)
+    try:
+        user = User.me(api=api)
+    except sdk_exceptions.ForbiddenAccess:
+        return None
+
     if not user:
         return None
 
