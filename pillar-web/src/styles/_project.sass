@@ -717,8 +717,13 @@ section.node-row
 		width: 50%
 		float: left
 		clear: none
-
 		border-right: thin solid rgba($color-text-dark, .2)
+
+		&:nth-child(even), &:last-child
+			border-right: none
+
+		&:last-child
+			border-bottom: none
 
 	&.texture-info
 		padding: 10px 20px
