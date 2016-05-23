@@ -68,8 +68,10 @@ $(function () {
                 $(this).next().find('.form-upload-progress-bar').css(
                     {'width': progress + '%', 'display': 'block'}
                     ).removeClass('progress-error').addClass('progress-active');
+                $('body input.fileupload').addClass('notallowed');
             },
             done: function (e, data) {
+                $('body input.fileupload').removeClass('notallowed');
 
                 if (data.result.status !== 'ok') {
                     if (console)
