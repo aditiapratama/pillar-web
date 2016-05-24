@@ -1,5 +1,6 @@
 import requests
 import json
+import logging
 
 from flask.ext.oauthlib.client import OAuthException
 
@@ -37,6 +38,7 @@ from flask.ext.login import login_required
 
 # Name of the Blueprint
 users = Blueprint('users', __name__)
+log = logging.getLogger(__name__)
 
 
 def authenticate(username, password):
@@ -63,6 +65,12 @@ def user_roles_update(user_id):
     group_subscriber = Group.find_one({'where': "name=='subscriber'"}, api=api)
     external_subscriptions_server = app.config['EXTERNAL_SUBSCRIPTIONS_MANAGEMENT_SERVER']
     r = requests.get(external_subscriptions_server, params={'blenderid': user.email})
+    if r.status_code != 200:
+        log.warning("Error communicating with %s, code=%i, unable to check "
+                    "subscription status of user %s",
+                    external_subscriptions_server, r.status_code, user_id)
+        return
+
     store_user = r.json()
 
     if store_user['cloud_access'] == 1:
