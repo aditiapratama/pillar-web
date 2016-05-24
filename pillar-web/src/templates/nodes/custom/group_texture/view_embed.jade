@@ -1,26 +1,18 @@
 | {% block body %}
-#node-container
+#node-container.texture
 
-	section.node-preview.group
-		| {% if node.picture %}
-		img.backdrop(src="{{ node.picture.thumbnail('l', api=api) }}")
-		.overlay
-		| {% endif %}
-		.node-title#node-title
-			| {{node.name}}
+	.texture-title#node-title
+		| {{node.name}}
 
-		.node-details-meta.preview
-			ul.node-details-meta-list
-				li.node-details-meta-list-item.date(title="Created {{ node._created | pretty_date }}")
-					| {{ node._updated | pretty_date }}
+	| {% if node.picture %}
+	.texture-backdrop(
+		style="background-image: url({{ node.picture.thumbnail('m', api=api) }})")
+	| {% endif %}
 
-				li.node-details-meta-list-item.author
-					| {{ node.user.full_name }}
-
-				| {% if node.properties.status != 'published' %}
-				li.node-details-meta-list-item.status
-					| {{node.properties.status}}
-				| {% endif %}
+	| {% if children %}
+	section.node-row.texture-info
+		span.texture-info-files {{ children|length }} item{% if children|length != 1 %}s{% endif %}
+	| {% endif %}
 
 	section.node-children.group.texture
 
