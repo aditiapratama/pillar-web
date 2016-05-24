@@ -110,6 +110,10 @@
 			margin: 0
 			border-radius: 0
 
+			&:hover
+				.item-actions
+					visibility: visible
+
 			a.card-thumbnail
 				top: 0
 
@@ -130,3 +134,13 @@
 
 			.item-user
 				color: $color-text-dark-secondary
+				float: left
+
+			.item-actions
+				visibility: hidden
+				color: $color-danger
+				float: right
+				padding-right: 10px
+
+				span.user-remove
+					display: none

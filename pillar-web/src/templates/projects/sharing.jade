@@ -88,20 +88,36 @@
 
 							ul.sharing-users-list
 								| {% for user in users %}
-								li.sharing-users-item(user-id="{{ user['_id'] }}")
+								li.sharing-users-item(
+									user-id="{{ user['_id'] }}",
+									class="{% if current_user.objectid == user['_id'] %}self{% endif %}")
 									.sharing-users-avatar
 										img(src="{{ user['avatar'] }}")
 									.sharing-users-details
-										span.sharing-users-name {{user['full_name']}}
+										span.sharing-users-name
+											| {{user['full_name']}}
+											| {% if project.user == user['_id'] and current_user.objectid == user['_id'] %}
+											small (You, owner)
+											| {% elif project.user == user['_id'] %}
+											small (Owner)
+											| {% elif current_user.objectid == user['_id'] %}
+											small (You)
+											| {% endif %}
 										span.sharing-users-extra {{user['username']}}
 									.sharing-users-action
-										| {% if (project.user == current_user.objectid or current_user.has_role('admin')) %}
-										| {% if current_user.objectid != user['_id'] %}
+										| {# Only allow deletion if we are: admin, project owners, or current_user in the team #}
+										| {% if current_user.has_role('admin') or (project.user == current_user.objectid) or (current_user.objectid == user['_id']) %}
+
+										| {% if project.user == user['_id'] %}
+										span
+											i.pi-happy(title="Hi boss!")
+										| {% elif current_user.objectid == user['_id'] %}
+										button.user-remove(title="Leave this project") Leave
+										| {% else %}
 										button.user-remove(title="Remove this user from your project")
 											i.pi-trash
-										| {% else %}
-										span You
 										| {% endif %}
+
 										| {% endif %}
 								| {% endfor %}
 
@@ -178,12 +194,6 @@ script.
 		});
 
 
-		$('body').on('click', '.user-remove', function(e) {
-			var userId = $(this).parent().parent().attr('user-id');
-			removeUser(userId);
-		});
-
-
 		function addUser(userId){
 			if (userId && userId.length > 0) {
 				$.post("{{url_for('projects.sharing', project_url=project.url)}}",
@@ -219,6 +229,17 @@ script.
 		};
 
 
+
+	});
+
+| {% endif %}
+script.
+	$(document).ready(function() {
+		$('body').on('click', '.user-remove', function(e) {
+			var userId = $(this).parent().parent().attr('user-id');
+			removeUser(userId);
+		});
+
 		function removeUser(userId){
 			$.post("{{url_for('projects.sharing', project_url=project.url)}}",
 							{user_id: userId, action: 'remove'})
@@ -230,9 +251,6 @@ script.
 					statusBarSet('error', 'Could not remove user (' + data._status + ')', 'pi-warning');
 				});
 		}
-
 	});
-
-| {% endif %}
 
 | {% endblock %}

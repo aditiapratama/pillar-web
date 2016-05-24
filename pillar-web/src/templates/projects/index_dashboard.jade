@@ -53,9 +53,15 @@ meta(name="twitter:image", content="{{ url_for('static', filename='assets/img/ba
 			#node_index-collection-container
 				ul.nav.nav-tabs(role='tablist')
 					li.active(role='presentation')
-						a(href='#projects_user', aria-controls='projects_user', role='tab', data-toggle='tab') Own Projects
+						a(href='#projects_user',
+							aria-controls='projects_user',
+							role='tab',
+							data-toggle='tab') Own Projects ({{ projects_user|length }})
 					li(role='presentation')
-						a(href='#projects_shared', aria-controls='projects_shared', role='tab', data-toggle='tab') Shared with me
+						a(href='#projects_shared',
+							aria-controls='projects_shared',
+							role='tab',
+							data-toggle='tab') Shared with me ({{ projects_shared|length }})
 
 					| {% if (current_user.has_role('subscriber') or current_user.has_role('admin')) %}
 
@@ -135,6 +141,14 @@ meta(name="twitter:image", content="{{ url_for('static', filename='assets/img/ba
 									p.item-user
 										| By {{ project.user.full_name }}
 
+									p.item-actions
+										span.user-remove-prompt
+											| Leave Project
+										span.user-remove(
+											user-id="{{ current_user.objectid }}",
+											project-url="{{url_for('projects.sharing', project_url=project.url)}}")
+											| Are you sure?
+
 							| {% endfor %}
 							| {% else %}
 							.node_index-collection-card.empty
@@ -146,17 +160,43 @@ meta(name="twitter:image", content="{{ url_for('static', filename='assets/img/ba
 
 | {% block footer_scripts %}
 script.
-	$('.node_index-collection-card.project').on('click', function(e){
-		e.preventDefault();
-		window.location.href = $(this).data('url');
-	});
+	$(document).ready(function() {
+		$('.node_index-collection-card.project').on('click', function(e){
+			e.preventDefault();
+			window.location.href = $(this).data('url');
+		});
 
-	$('ul.nav.nav-tabs .create').on('click', function(e){
-		e.preventDefault();
+		$('ul.nav.nav-tabs .create').on('click', function(e){
+			e.preventDefault();
 
-		$('ul.nav.nav-tabs .create').addClass('disabled');
-		$('a', this).html('<i class="pi-spin spin"></i> Creating project...');
+			$('ul.nav.nav-tabs .create').addClass('disabled');
+			$('a', this).html('<i class="pi-spin spin"></i> Creating project...');
 
-		window.location.href = $(this).data('url');
+			window.location.href = $(this).data('url');
+		});
+
+		$('.node_index-collection-card.project .user-remove-prompt').on('click', function(e){
+			e.stopPropagation();
+			e.preventDefault();
+
+			$(this).next().show();
+			$(this).hide();
+		});
+
+		$('.node_index-collection-card.project .user-remove').on('click', function(e){
+			e.stopPropagation();
+			e.preventDefault();
+			var parent = $(this).parent().parent().parent();
+
+			function removeUser(userId, projectUrl){
+				$.post(projectUrl, {user_id: userId, action: 'remove'})
+					.done(function (data) {
+						$(parent).removeClass('project').addClass('empty').html("You're no longer part of this project");
+					});
+			}
+
+			removeUser($(this).attr('user-id'), $(this).attr('project-url'));
+		});
+
 	});
 | {% endblock %}

@@ -32,6 +32,15 @@ ul.sharing-users-list
 				.sharing-users-name, .sharing-users-extra
 					color: $color-success
 
+		&.self
+			.sharing-users-details
+				.sharing-users-name
+					color: $color-info
+			.sharing-users-action
+				visibility: visible
+			.sharing-users-avatar img
+				border: 2px solid $color-info
+
 		.sharing-users-avatar
 			width: 15%
 			max-width: 60px
@@ -58,11 +67,14 @@ ul.sharing-users-list
 				color: $color-text-dark
 				transition: color 350ms ease-in-out
 
+				small
+					color: $color-text-dark-hint
+
 			.sharing-users-extra
 				font:
 					size: .9em
 					weight: 300
-				color: $color-text-dark-secondary
+				color: $color-text-dark-primary
 				transition: color 350ms ease-in-out
 
 		.sharing-users-action
@@ -90,6 +102,9 @@ ul.sharing-users-list
 .sharing-users-info
 	padding-left: 15px
 	border-left: thin solid $color-text-dark-hint
+
+	+media-sm
+		margin-top: 25px
 
 	h4
 		padding-bottom: 10px
