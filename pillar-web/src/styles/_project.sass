@@ -751,6 +751,8 @@ section.node-row
 		float: left
 		clear: none
 		border-right: thin solid rgba($color-text-dark, .2)
+		background-color: white
+		position: relative
 
 		&:nth-child(even), &:last-child
 			border-right: none
@@ -2245,16 +2247,24 @@ section.node-children
 				text-transform: capitalize
 
 			&.error
+				color: $color-danger
+				background-color: $color-background-light
+				padding: 10px 15px
+				border: thin solid lighten($color-danger, 10%)
+				border-top: 2px solid $color-danger
+				border-bottom-left-radius: 3px
+				border-bottom-right-radius: 3px
 				label
 					color: $color-danger
-				padding: 10px 15px
-				border: 2px dashed $color-danger
+					font-weight: 500
 
 			&.file
 				background-color: $color-background-light
 				padding: 10px 15px
 				border: thin solid $color-background
 				border-top: 2px solid $color-info
+				border-bottom-left-radius: 3px
+				border-bottom-right-radius: 3px
 
 		.form-upload-progress
 			.form-upload-progress-bar

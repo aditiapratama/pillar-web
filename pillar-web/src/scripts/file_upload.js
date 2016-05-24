@@ -40,6 +40,12 @@ $(function () {
                 var token = this.fileInput.attr('data-token');
                 xhr.setRequestHeader('Authorization', 'basic ' + btoa(token + ':'));
                 statusBarSet('info', 'Uploading File...', 'pi-upload-cloud');
+
+                // Reset progress bar
+                $(this).next().find('.form-upload-progress-bar').css(
+                    {'width': '0%', 'display': 'none'}
+                    ).removeClass('progress-error, progress-active');
+
                 $('.button-save').addClass('disabled');
                 $('li.button-save a#item_save').html('<i class="pi-spin spin"></i> Uploading...');
             },
@@ -111,6 +117,11 @@ $(function () {
             fail: function (e, data) {
                 statusBarSet(data.textStatus, 'Upload error: ' + data.errorThrown, 'pi-attention', 8000);
                 $('.progress-active').addClass('progress-error').removeClass('progress-active');
+                $('body input.fileupload, #files-action-add').removeClass('notallowed');
+
+                $('.button-save').removeClass('disabled');
+                $('li.button-save a#item_save').html('<i class="pi-check"></i> Save Changes');
+                $('.fileupload').fileupload('destroy');
             }
         });
     });
