@@ -11,7 +11,7 @@ from flask.ext.login import current_user
 from application import SystemUtility
 from application.helpers import attach_project_pictures
 from application.helpers import get_file
-from application.modules.nodes import nodes, redirect_to_context
+from application.modules.nodes import nodes, url_for_node
 from application.modules.nodes.forms import get_node_form
 from application.modules.nodes.forms import process_node_form
 from application.modules.projects import project_update_nodes_list
@@ -115,7 +115,7 @@ def posts_create(project_id):
         # Only if the node is set as published, push it to the list
         if post.properties.status == 'published':
             project_update_nodes_list(post, project_id=project._id, list_name='blog')
-        return redirect_to_context(node=post)
+        return redirect(url_for_node(node=post))
     form.parent.data = blog._id
     return render_template('nodes/custom/post/create.html',
         node_type=node_type,
@@ -149,7 +149,7 @@ def posts_edit(post_id):
             # The the post is published, add it to the list
             if form.status.data == 'published':
                 project_update_nodes_list(post, project_id=project._id, list_name='blog')
-            return redirect_to_context(node=post)
+            return redirect(url_for_node(node=post))
     form.parent.data = post.parent
     form.name.data = post.name
     form.content.data = post.properties.content
