@@ -226,9 +226,13 @@ script.
 	.done(function(){
 
 		if (ProjectUtils.nodeType() === 'post'){
-			if (location.hash.length > 1) {
-				$('html,body').animate({scrollTop: $(String(location.hash)).offset().top }, 250, function() {
+			var postId = location.hash;
+
+			if (postId.length > 1) {
+				$('html,body').animate({scrollTop: $(postId).offset().top - 60 }, 250, function() {
 				});
+
+				$(postId).addClass('comment-linked');
 			}
 		}
 
