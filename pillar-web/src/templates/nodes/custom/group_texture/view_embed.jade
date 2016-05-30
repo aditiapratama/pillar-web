@@ -120,28 +120,39 @@ script.
 	$('a.list-node-children-container.texture.thumbnail').hover(
 		function(){
 
-			var src = $(this).find('.texture-thumbnail').attr('src');
-			var src_xl = $(this).find('.texture-preview').data('preview');
+			var thumbnail = $(this);
+
+			var src = thumbnail.find('.texture-thumbnail').attr('src');
+			var src_xl = thumbnail.find('.texture-preview').data('preview');
 
 			// Load the bigger preview
-			$(this).find('.texture-preview').attr('src', src_xl);
+			var preview_img = thumbnail.find('.texture-preview');
+			preview_img.attr('src', src_xl);
 
-			var preview = $(this).find('.list-node-children-item-preview');
 
-			// Positioning stuff
-			var offset = $(this).offset();
-			var offset_min_x = $('.node-children').width() - preview.width();
-			var offset_min_y = $('.node-children').height() - preview.height();
+			if (preview_img) {
 
-			if (offset.left > offset_min_x) {
-				$(preview).css({'right': 0});
-			};
+				preview_img.load(function() {
 
-			if (offset.top > (offset_min_y + 150)) {
-				$(preview).css({'top': (preview.height() * (-1))});
-			};
+					var preview = thumbnail.find('.list-node-children-item-preview');
 
-			$(preview).addClass('active');
+					// Positioning stuff
+					var offset = thumbnail.offset();
+					var offset_min_x = $('.node-children').width() - preview.width();
+					var offset_min_y = $('.node-children').height() - preview.height();
+
+					if (preview && offset.top > 300) {
+						$(preview).css({'top': (preview.height() * (-1))});
+					};
+
+					if (offset.left > offset_min_x) {
+						$(preview).css({'right': 0});
+					};
+
+					$(preview).addClass('active');
+				});
+			}
+
 
 		},
 		function(){
