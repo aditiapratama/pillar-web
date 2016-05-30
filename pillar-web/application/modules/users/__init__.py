@@ -87,7 +87,7 @@ def user_roles_update(user_id):
             roles.add(u'subscriber')
             groups.add(group_subscriber._id)
 
-        elif u'admin' not in user.roles:
+        elif u'admin' not in roles:
             roles.discard(u'subscriber')
             groups.discard(group_subscriber._id)
 
