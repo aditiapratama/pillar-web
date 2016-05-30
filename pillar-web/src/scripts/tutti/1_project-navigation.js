@@ -88,7 +88,7 @@ if(document.getElementById("project_container") !== null) {
 		var tag = e.target.tagName.toLowerCase();
 
 		/* Toggle when pressing [T] key */
-		if(e.which == 116 && tag != 'input' && tag != 'textarea') {
+		if(e.which == 116 && tag != 'input' && tag != 'textarea' && !e.ctrlKey && !e.metaKey && !e.altKey) {
 			projectNavToggle();
 		}
 	});
