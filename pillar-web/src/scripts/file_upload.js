@@ -44,7 +44,7 @@ $(function () {
                 // Reset progress bar
                 $(this).next().find('.form-upload-progress-bar').css(
                     {'width': '0%', 'display': 'none'}
-                    ).removeClass('progress-error, progress-active');
+                    ).removeClass('progress-error progress-active');
 
                 $('.button-save').addClass('disabled');
                 $('li.button-save a#item_save').html('<i class="pi-spin spin"></i> Uploading...');
