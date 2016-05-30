@@ -61,38 +61,57 @@ def authenticate(username, password):
 
 def user_roles_update(user_id):
     api = SystemUtility.attract_api()
-    user = User.find(user_id, api=api)
     group_subscriber = Group.find_one({'where': "name=='subscriber'"}, api=api)
+
     external_subscriptions_server = app.config['EXTERNAL_SUBSCRIPTIONS_MANAGEMENT_SERVER']
+
+    # Fetch the user once outside the loop, because we only need to get the
+    # subscription status once.
+    user = User.me(api=api)
+
     r = requests.get(external_subscriptions_server, params={'blenderid': user.email})
     if r.status_code != 200:
         log.warning("Error communicating with %s, code=%i, unable to check "
                     "subscription status of user %s",
                     external_subscriptions_server, r.status_code, user_id)
         return
-
     store_user = r.json()
 
-    if store_user['cloud_access'] == 1:
-        if user.roles and 'subscriber' not in user.roles:
-            user.roles.append('subscriber')
-        elif not user.roles:
-            user.roles = ['subscriber',]
+    max_retry = 5
+    for retry_count in range(max_retry):
+        # Update the user's role & groups for their subscription status.
+        roles = set(user.roles or [])
+        groups = set(user.groups or [])
 
-        if user.groups and group_subscriber._id not in user.groups:
-            user.groups.append(group_subscriber._id)
-        elif not user.groups:
-            user.groups = [group_subscriber._id]
-        user.update(api=api)
-        return
-    elif user.roles and 'admin' not in user.roles:
-        if user.roles and 'subscriber' in user.roles:
-            user.roles.remove('subscriber')
+        if store_user['cloud_access'] == 1:
+            roles.add(u'subscriber')
+            groups.add(group_subscriber._id)
 
-        if user.groups and group_subscriber._id in user.groups:
-            user.groups.remove(group_subscriber._id)
-        user.update(api=api)
-        return
+        elif u'admin' not in user.roles:
+            roles.discard(u'subscriber')
+            groups.discard(group_subscriber._id)
+
+        # Only send an API request when the user has actually changed
+        if set(user.roles or []) == roles and set(user.groups or []) == groups:
+            break
+
+        user.roles = list(roles)
+        user.groups = list(groups)
+
+        try:
+            user.update(api=api)
+        except sdk_exceptions.PreconditionFailed:
+            log.warning('User etag changed while updating roles, retrying.')
+        else:
+            # Successful update, so we can stop the loop.
+            break
+
+        # Fetch the user for the next iteration.
+        if retry_count < max_retry - 1:
+            user = User.me(api=api)
+    else:
+        log.warning('Tried %i times to update user %s, and failed each time. Giving up.',
+                    max_retry, user_id)
 
 
 @users.route('/logout')
