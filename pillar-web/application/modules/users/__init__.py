@@ -8,7 +8,7 @@ from pillarsdk.users import User
 from pillarsdk.nodes import Node
 from pillarsdk.nodes import NodeType
 from pillarsdk.groups import Group
-from pillarsdk.exceptions import ResourceInvalid
+from pillarsdk import exceptions as sdk_exceptions
 
 from flask import Blueprint
 from flask import render_template
@@ -193,7 +193,7 @@ def settings_profile():
             user.username = form.username.data
             user.update(api=api)
             flash("Profile updated", 'success')
-        except ResourceInvalid as e:
+        except sdk_exceptions.ResourceInvalid as e:
             message = json.loads(e.content)
             flash(message)
 
@@ -230,7 +230,7 @@ def settings_emails():
             user.settings.email_communications = form.email_communications.data
             user.update(api=api)
             flash("Profile updated", 'success')
-        except ResourceInvalid as e:
+        except sdk_exceptions.ResourceInvalid as e:
             message = json.loads(e.content)
             flash(message)
 
