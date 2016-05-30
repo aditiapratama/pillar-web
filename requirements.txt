@@ -13,7 +13,7 @@ idna==2.0
 jsmin==2.1.1
 MarkupSafe==0.23
 ndg-httpsclient==0.4.0
--e git+https://github.com/armadillica/pillar-python-sdk.git@b1c2b105afc719563d0e052dd7aebd0ec0f92603#egg=pillarsdk
+-e git+https://github.com/armadillica/pillar-python-sdk.git@4b028d85c9bb4da9135dcfcd37d2b0474dfa205f#egg=pillarsdk
 Pillow==2.8.1
 pycparser==2.14
 pyOpenSSL==0.15.1
