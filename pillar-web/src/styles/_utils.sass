@@ -304,8 +304,13 @@
 	strong, b
 		font-weight: 400
 
-	a
+	a:not([class])
+		color: $color-text-dark-primary
 		font-weight: 400
+		text-decoration: underline
+
+		&:hover
+			color: $color-primary
 
 	p
 		padding:
