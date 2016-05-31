@@ -659,7 +659,7 @@ def create():
         user=current_user.objectid,
         node_type=node_type['name'],
         properties={}
-        )
+    )
 
     if parent_id:
         node_props['parent'] = parent_id
@@ -690,7 +690,6 @@ def redirect_to_context(node_id):
 
     url = url_for_node(node_id)
     return redirect(url)
-
 
 
 def url_for_node(node_id=None, node=None):
