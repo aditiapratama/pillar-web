@@ -254,21 +254,21 @@ def handle_invalid_usage(error):
 
 @app.errorhandler(sdk_exceptions.ForbiddenAccess)
 def handle_sdk_forbidden(error):
-    from werkzeug.exceptions import Forbidden
-    log.info('Forwarding ForbiddenAccess exception to client: %s', error)
-    raise Forbidden()
+    from flask import render_template
+    log.info('Forwarding ForbiddenAccess exception to client: %s', error, exc_info=True)
+    return render_template('errors/403_embed.html'), 403
 
 
 @app.errorhandler(sdk_exceptions.ResourceNotFound)
 def handle_sdk_resource_not_found(error):
-    from werkzeug.exceptions import NotFound
-    log.info('Forwarding ResourceNotFound exception to client: %s', error)
-    raise NotFound()
+    from flask import render_template
+    log.info('Forwarding ResourceNotFound exception to client: %s', error, exc_info=True)
+    return render_template('errors/404.html'), 404
 
 
 @app.errorhandler(sdk_exceptions.ResourceInvalid)
 def handle_sdk_resource_invalid(error):
-    log.info('Forwarding ResourceInvalid exception to client: %s', error)
+    log.info('Forwarding ResourceInvalid exception to client: %s', error, exc_info=True)
 
     # Raising a Werkzeug 422 exception doens't work, as Flask turns it into a 500.
     return 'The submitted data could not be validated.', 422
