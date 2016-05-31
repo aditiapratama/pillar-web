@@ -34,7 +34,6 @@ from application.modules.nodes.custom.storage import StorageNode
 from application.modules.projects import view as project_view
 from application.modules.projects import project_update_nodes_list
 from application.helpers import get_file
-from application.helpers import _get_file_cached
 from application.helpers.caching import delete_redis_cache_template
 from application.helpers.jstree import jstree_build_children
 from application.helpers.jstree import jstree_build_from_node
@@ -84,15 +83,50 @@ def get_node_children(node_id, node_type_name, user_id):
     return children.to_dict()
 
 
+@nodes.route("/<node_id>/jstree")
+def jstree(node_id):
+    """JsTree view.
+
+    This return a lightweight version of the node, to be used by JsTree in the
+    frontend. We have two possible cases:
+    - https://pillar/<node_id>/jstree (construct the whole
+      expanded tree starting from the node_id. Use only once)
+    - https://pillar/<node_id>/jstree&children=1 (deliver the
+      children of a node - use in the navigation of the tree)
+    """
+
+    # Get node with basic embedded data
+    api = SystemUtility.attract_api()
+    node = Node.find(node_id, api=api)
+
+    if request.args.get('children') != '1':
+        return jsonify(items=jstree_build_from_node(node))
+
+    if node.node_type == 'storage':
+        storage = StorageNode(node)
+        # Check if we specify a path within the storage
+        path = request.args.get('path')
+        # Generate the storage listing
+        listing = storage.browse(path)
+        # Inject the current node id in the response, so that JsTree can
+        # expose the storage_node property and use it for further queries
+        listing['storage_node'] = node._id
+        if 'children' in listing:
+            for child in listing['children']:
+                child['storage_node'] = node._id
+        return jsonify(listing)
+
+    return jsonify(jstree_build_children(node))
+
+
 @nodes.route("/<node_id>/view")
 def view(node_id):
     api = SystemUtility.attract_api()
-    user_id = 'ANONYMOUS' if current_user.is_anonymous() else str(
-        current_user.objectid)
 
     # Get node with basic embedded data
+    # FIXME: it looks like the links on 'picture' aren't refreshed when it's fetched
+    # as embedded document.
     try:
-        # node = Node.find(node_id + '/?embedded={"project":1}', api=api)
         node = Node.find(node_id, api=api)
     except ResourceNotFound:
         return render_template('errors/404_embed.html')
@@ -105,303 +139,134 @@ def view(node_id):
         # Posts shouldn't be shown using this end point, redirect to the correct one.
         return redirect(url_for_node(node=node))
 
-    rewrite_url = None
-    embedded_node_id = None
-    if request.args.get('redir') and request.args.get('redir') == '1':
-        # Check the project property for the node. The only case when the prop
-        # is None is if the node is a project, which usually means we are at the
-        # second stage of redirection.
-        if node.project:
-            # Set node to embed in the session
-            # session['embedded_node'] = node.to_dict()
-            g.embedded_node = node.to_dict()
-            # Get the project
-            project = Project.find(node.project, api=api)
-            # Render the project node (which will get the redir arg)
-            return project_view(project.url)
-        # We double check that the node is indeed of type project
-        elif node_type_name == 'project':
-            # Build the user name, to be used when building the full url
-            if node.properties.organization:
-                user = Organization.find(node.properties.organization, api=api)
-                name = user.url
-            else:
-                name = node.user.url
-            # Handle special cases (will be mainly used for items that are part
-            # of the blog, or attract)
-            if g.get('embedded_node')['node_type']['name'] == 'post':
-                # Very special case of the post belonging to the main project,
-                # which is read from the configuration.
-                if node._id == app.config['MAIN_PROJECT_ID']:
-                    return redirect(url_for('main_blog',
-                                            url=g.get('embedded_node')[
-                                                'properties']['url']))
-                else:
-                    return redirect(url_for('project_blog',
-                                            project_url=node.properties.url,
-                                            url=g.get('embedded_node')[
-                                                'properties']['url']))
-            rewrite_url = "/p/{0}/#{1}".format(node.properties.url,
-                                               g.get('embedded_node')['_id'])
-            embedded_node_id = g.get('embedded_node')['_id']
-
-    # JsTree functionality.
-    # This return a lightweight version of the node, to be used by JsTree in the
-    # frontend. We have two possible cases:
-    # - https://pillar/<node_id>/view?format=jstree (construct the whole
-    #   expanded tree starting from the node_id. Use only once)
-    # - https://pillar/<node_id>/view?format=jstree&children=1 (deliver the
-    #   children of a node - use in the navigation of the tree)
-
-    if request.args.get('format') and request.args.get('format') == 'jstree':
-        if request.args.get('children') == '1':
-            if node_type_name == 'storage':
-                storage = StorageNode(node)
-                # Check if we specify a path within the storage
-                path = request.args.get('path')
-                # Generate the storage listing
-                listing = storage.browse(path)
-                # Inject the current node id in the response, so that JsTree can
-                # expose the storage_node property and use it for further queries
-                listing['storage_node'] = node._id
-                if 'children' in listing:
-                    for child in listing['children']:
-                        child['storage_node'] = node._id
-                return jsonify(listing)
-            else:
-                return jsonify(jstree_build_children(node))
-        else:
-            return jsonify(items=jstree_build_from_node(node))
-
-    # Continue to process the node (for HTML, HTML embedded and JSON responses)
-
-
-    def allow_link(node):
-        """Helper function to cross check if the user is authenticated, and it
-        is has the 'subscriber' role. Also, we check if the node has world GET
-        permissions, which means it's free.
-        """
-
-        allowed_roles = ['subscriber', 'demo', 'admin']
-
-        # Check if node permissions for the world exist (if node is free)
-        if node.permissions and node.permissions.world:
-            if 'GET' in node.permissions.world:
-                return True
-        else:
-            if current_user.is_authenticated() and current_user.roles:
-                for role in allowed_roles:
-                    if role in current_user.roles:
-                        return True
-                # If no role is found, just return
-                return False
-
-            else:
-                # The user is not authenticated and the node is not free
-                return False
-
     # Set the default name of the template path based on the node name
     template_path = os.path.join('nodes', 'custom', node_type_name)
     # Set the default action for a template. By default is view and we override
     # it only if we are working storage nodes, where an 'index' is also possible
     template_action = 'view'
 
-    # Embed the user
-    if current_user.is_authenticated():
-        node.user = User.find(node.user, api=api)
+    node_type_handlers = {
+        'asset': _view_handler_asset,
+        'storage': _view_handler_storage,
+        'texture': _view_handler_texture,
+    }
+    if node_type_name in node_type_handlers:
+        handler = node_type_handlers[node_type_name]
+        template_path, template_action = handler(node, template_path, template_action)
 
-    # print 'Process {0}'.format(node_type_name)
-    # start_t = time.time()
+    # Fetch linked resources.
+    node.picture = node.picture and pillarsdk.File.find(node.picture, api=api)
+    node.user = node.user and pillarsdk.User.find(node.user, api=api)
+    node.parent = node.parent and pillarsdk.Node.find(node.parent, api=api)
 
-    # XXX Code to detect a node of type asset, and aggregate file data
-    if node_type_name == 'asset':
-
-        node_file = get_file(node.properties.file)
-
-        # Check if the user and node status to determine if the file link should
-        # be added.
-        if not allow_link(node):
-            node_file.link = None
-        # node_file_children = node_file.children(api=api)
-        # Attach the file node to the asset node
-        setattr(node, 'file', node_file)
-
-        try:
-            asset_type = node_file.content_type.split('/')[0]
-        except AttributeError:
-            asset_type = None
-
-        if asset_type == 'video':
-            # Process video type and select video template
-            sources = []
-            if node_file and node_file.variations:
-                for f in node_file.variations:
-                    sources.append(dict(
-                        type=f.content_type,
-                        src=f.link))
-                    # Build a link that triggers download with proper filename
-                    if f.backend == 'cdnsun':
-                        f.link = "{0}&name={1}.{2}".format(f.link, node.name,
-                                                           f.format)
-            # If the user is allowed, attach video variations to the node data
-            # so that the player can function.
-            if allow_link(node):
-                file_variations = node_file.variations
-                video_sources = json.dumps(sources)
-            else:
-                file_variations = video_sources = None
-            setattr(node, 'video_sources', video_sources)
-            setattr(node, 'file_variations', file_variations)
-            template_path = os.path.join(template_path, asset_type)
-        elif asset_type == 'image':
-            template_path = os.path.join(template_path, asset_type)
-        else:
-            # Treat it as normal file (zip, blend, application, etc)
-            template_path = os.path.join(template_path, 'file')
-    # XXX The node is of type project
-    elif node_type_name == 'project':
-        if node.properties.picture_square:
-            picture_square = get_file(node.properties.picture_square)
-            node.properties.picture_square = picture_square
-        if node.properties.picture_header:
-            picture_header = get_file(node.properties.picture_header)
-            node.properties.picture_header = picture_header
-        if node.properties.nodes_latest:
-            list_latest = []
-            for node_id in node.properties.nodes_latest:
-                try:
-                    node_item = Node.find(node_id, {
-                        'projection': '{"name":1, "user":1, "node_type":1}',
-                        'embedded': '{"user":1, "node_type":1}',
-                    }, api=api)
-                    list_latest.append(node_item)
-                except ForbiddenAccess:
-                    list_latest.append(FakeNodeAsset())
-            node.properties.nodes_latest = list(reversed(list_latest))
-        if node.properties.nodes_featured:
-            list_featured = []
-            for node_id in node.properties.nodes_featured:
-                try:
-                    node_item = Node.find_one({
-                        'where': '{"_id": "%s"}' % node_id,
-                        'projection': '{"name":1, "user":1, "picture":1, "node_type":1}',
-                        'embedded': '{"user":1, "node_type":1}',
-                    }, api=api)
-                    if node_item.picture:
-                        picture = get_file(node_item.picture)
-                        node_item.picture = picture
-                    list_featured.append(node_item)
-                except ForbiddenAccess:
-                    list_featured.append(FakeNodeAsset())
-            node.properties.nodes_featured = list(reversed(list_featured))
-        if node.properties.nodes_blog:
-            list_blog = []
-            for node_id in node.properties.nodes_blog:
-                try:
-                    node_item = Node.find(node_id, {
-                        'projection': '{"name":1, "user":1, "node_type":1}',
-                        'embedded': '{"user":1, "node_type":1}',
-                    }, api=api)
-                    list_blog.append(node_item)
-                except ForbiddenAccess:
-                    list_blog.append(FakeNodeAsset())
-            node.properties.nodes_blog = list(reversed(list_blog))
-
-    elif node_type_name == 'storage':
-        storage = StorageNode(node)
-        path = request.args.get('path')
-        listing = storage.browse(path)
-        node.name = listing['name']
-        listing['storage_node'] = node._id
-        # If the item has children we are working with a group
-        if 'children' in listing:
-            for child in listing['children']:
-                child['storage_node'] = node._id
-                child['name'] = child['text']
-                child['content_type'] = os.path.dirname(child['type'])
-            node.children = listing['children']
-            template_action = 'index'
-        else:
-            node.status = 'published'
-            node.length = listing['size']
-            node.download_link = listing['signed_url']
-
-    elif node_type_name == 'texture':
-        for f in node.properties.files:
-            f.file = get_file(f.file)
-            if not allow_link(node):
-                f.file.link = None
-
-    # Get previews
-    node.picture = get_file(node.picture) if node.picture else None
-    # Get Parent
-    try:
-        parent = Node.find(node['parent'], api=api)
-    except KeyError:
-        parent = None
-    except ResourceNotFound:
-        parent = None
     # Get children
+    children_projection = {'project': 1, 'name': 1, 'picture': 1, 'parent': 1,
+                           'node_type': 1, 'properties.order': 1, 'properties.status': 1,
+                           'user': 1, 'properties.content_type': 1}
+    children_where = {'parent': node._id}
+
+    if node_type_name == 'group':
+        children_where['properties.status'] = 'published'
+        children_projection['permissions.world'] = 1
+    else:
+        children_projection['properties.files'] = 1
+        children_projection['properties.is_tileable'] = 1
+
     try:
-        if node_type_name == 'group':
-            published_status = ',"properties.status": "published"'
-            node_type_projection = ', "permissions.world": 1'
-        else:
-            published_status = ''
-            node_type_projection = ', "properties.files": 1, "properties.is_tileable": 1'
-
         children = Node.all({
-            'projection': '{"project":1, "name": 1, "picture": 1, "parent": 1, \
-                "node_type": 1, "properties.order": 1, "properties.status": 1, \
-                "user": 1, \
-                "properties.content_type": 1 %s}' % (node_type_projection),
-            'where': '{"parent": "%s" %s}' % (node._id, published_status),
-            'sort': 'properties.order'}, api=api)
-        children = children._items
-
+            'projection': children_projection,
+            'where': children_where,
+            'embedded': {'picture': 1},
+            'sort': [('properties.order', 1), ('name', 1)]}, api=api)
     except ForbiddenAccess:
-        return render_template('errors/403.html')
+        return render_template('errors/403_embed.html')
+    children = children._items
+
     for child in children:
-        child.picture = get_file(child.picture) if child.picture else None
+        child.picture = pillarsdk.File.new(child.picture)
 
     if request.args.get('format') == 'json':
         node = node.to_dict()
         node['url_edit'] = url_for('nodes.edit', node_id=node['_id']),
-        if parent:
-            parent = parent.to_dict()
-        return_content = jsonify({
+        return jsonify({
             'node': node,
             'children': children.to_dict(),
-            'parent': parent
+            'parent': node.parent.to_dict() if node.parent else {}
         })
+
+    # Check if template exists on the filesystem
+    template_path = '{0}/{1}_embed.html'.format(template_path, template_action)
+    template_path_full = os.path.join(app.config['TEMPLATES_PATH'], template_path)
+
+    if not os.path.exists(template_path_full):
+        raise NotFound("Missing template '{0}'".format(template_path))
+
+    return render_template(template_path,
+                           node_id=node._id,
+                           node=node,
+                           parent=node.parent,
+                           children=children,
+                           config=app.config,
+                           api=api)
+
+
+def _view_handler_asset(node, template_path, template_action):
+    # Attach the file document to the asset node
+    node_file = get_file(node.properties.file)
+    node.file = node_file
+
+    if node_file and node_file.content_type is not None:
+        asset_type = node_file.content_type.split('/')[0]
     else:
-        embed_string = ''
-        # Check if we want to embed the content via an AJAX call
-        if request.args.get('embed'):
-            if request.args.get('embed') == '1':
-                # Define the prefix for the embedded template
-                embed_string = '_embed'
+        asset_type = None
 
-        # Check if template exists on the filesystem
-        template_path = '{0}/{1}{2}.html'.format(template_path,
-                                                 template_action, embed_string)
-        template_path_full = os.path.join(app.config['TEMPLATES_PATH'],
-                                          template_path)
-        if not os.path.exists(template_path_full):
-            return "Missing template '{0}'".format(template_path)
+    if asset_type == 'video':
+        # Process video type and select video template
+        sources = []
+        if node_file and node_file.variations:
+            for f in node_file.variations:
+                sources.append({'type': f.content_type, 'src': f.link})
+                # Build a link that triggers download with proper filename
+                # TODO: move this to Pillar
+                if f.backend == 'cdnsun':
+                    f.link = "{0}&name={1}.{2}".format(f.link, node.name, f.format)
+        node.video_sources = json.dumps(sources)
+        node.file_variations = node_file.variations
+    elif asset_type != 'image':
+        # Treat it as normal file (zip, blend, application, etc)
+        asset_type = 'file'
 
-        return_content = render_template(template_path,
-                                         node_id=node._id,
-                                         user_string_id=user_id,
-                                         node=node,
-                                         rewrite_url=rewrite_url,
-                                         embedded_node_id=embedded_node_id,
-                                         parent=parent,
-                                         children=children,
-                                         config=app.config,
-                                         api=api)
+    template_path = os.path.join(template_path, asset_type)
 
-    return return_content
+    return template_path, template_action
+
+
+def _view_handler_storage(node, template_path, template_action):
+    storage = StorageNode(node)
+    path = request.args.get('path')
+    listing = storage.browse(path)
+    node.name = listing['name']
+    listing['storage_node'] = node._id
+    # If the item has children we are working with a group
+    if 'children' in listing:
+        for child in listing['children']:
+            child['storage_node'] = node._id
+            child['name'] = child['text']
+            child['content_type'] = os.path.dirname(child['type'])
+        node.children = listing['children']
+        template_action = 'index'
+    else:
+        node.status = 'published'
+        node.length = listing['size']
+        node.download_link = listing['signed_url']
+    return template_path, template_action
+
+
+def _view_handler_texture(node, template_path, template_action):
+    for f in node.properties.files:
+        f.file = get_file(f.file)
+
+    return template_path, template_action
 
 
 @nodes.route("/<node_id>/edit", methods=['GET', 'POST'])

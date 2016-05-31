@@ -134,7 +134,7 @@ script(type="text/javascript").
 	$('.search-input').hide();
 
 	function displayUser(userId) {
-		var url = '/nodes/' + userId + '/view?embed=1';
+		var url = '/nodes/' + userId + '/view';
 
 		$.get(url, function(dataHtml){
 			$('#search-hit-container').html(dataHtml);

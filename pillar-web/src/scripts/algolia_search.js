@@ -67,7 +67,7 @@ $(document).ready(function() {
     firstHit.find('#search-loading').addClass('active');
 
     var getNode = setTimeout(function(){
-      $.get('/nodes/' + firstHit.attr('data-hit-id') + '/view?embed=1', function(dataHtml){
+      $.get('/nodes/' + firstHit.attr('data-hit-id') + '/view', function(dataHtml){
         $('#search-hit-container').html(dataHtml);
       })
       .done(function(){

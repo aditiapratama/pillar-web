@@ -94,8 +94,8 @@ def view(project_url):
     if request.args.get('format') == 'jstree':
         return jsonify(items=jstree_get_children(None, project._id))
 
-    project.picture_square = get_file(project.picture_square)
-    project.picture_header = get_file(project.picture_header)
+    project.picture_square = project.picture_square and get_file(project.picture_square)
+    project.picture_header = project.picture_header and get_file(project.picture_header)
     embed_string = ''
 
     if request.args.get('embed'):

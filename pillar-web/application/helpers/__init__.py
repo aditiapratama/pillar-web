@@ -14,24 +14,13 @@ from application import SystemUtility
 from application.helpers.exceptions import ConfigError
 
 
-def _get_file_cached(file_id):
-    """Leverage caching and return a dictionary-formatted version of a file"""
-    api = SystemUtility.attract_api()
-    try:
-        file_item = File.find(file_id, api=api)
-        return file_item.to_dict()
-    except ResourceNotFound:
-        return None
-
-
 def get_file(file_id):
-    f = File()
-    cached_file = _get_file_cached(file_id)
-    if cached_file:
-        f.from_dict(cached_file)
-        return f
-    else:
+    # TODO: remove this function and just use the Pillar SDK directly.
+    if file_id is None:
         return None
+
+    api = SystemUtility.attract_api()
+    return File.find(file_id, api=api)
 
 
 class Pagination(object):

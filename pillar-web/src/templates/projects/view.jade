@@ -299,7 +299,7 @@ script.
 
 
 	function displayStorage(storageNodeId, path) {
-		var url = '/nodes/' + storageNodeId + '/view?embed=1&path=' + path;
+		var url = '/nodes/' + storageNodeId + '/view?path=' + path;
 		loadNodeContent(url);
 	}
 
@@ -309,7 +309,7 @@ script.
 		if (nodeId.substring(0, 2) == 'n_') {
 			nodeId = nodeId.substr(2);
 		}
-		var url = '/nodes/' + nodeId + '/view?embed=1';
+		var url = '/nodes/' + nodeId + '/view';
 		loadNodeContent(url, nodeId);
 
 		$("#project_context-container").scrollTop(0);
@@ -342,19 +342,14 @@ script.
 
 		// If the loaded URL has an asset id hashed, arrange the view accordingly
 		var nodeId = undefined;
-		{% if embedded_node_id %}
-			nodeId = '{{embedded_node_id}}';
-			window.history.pushState({},'', '{{rewrite_url}}');
+
+		if (location.hash) {
+			nodeId = location.hash.substring(1);
 			displayNode(nodeId);
-		{% else %}
-			if (location.hash) {
-				nodeId = location.hash.substring(1);
-				displayNode(nodeId);
-			} else {
-				nodeId = '{{project._id}}';
-				displayProject(nodeId);
-			}
-		{% endif %}
+		} else {
+			nodeId = '{{project._id}}';
+			displayProject(nodeId);
+		}
 
 		if ((typeof Ps !== 'undefined') && window.innerWidth > 768){
 			Ps.initialize(document.getElementById('project_context-container'));
@@ -367,7 +362,7 @@ script.
 									if (location.hash) {
 										// If we are loading a node
 										nodeId = location.hash.substring(1);
-										$.getJSON('/nodes/' + nodeId + '/view?format=jstree', function(jsonObject) {
+										$.getJSON('/nodes/' + nodeId + '/jstree', function(jsonObject) {
 												callback.call(this, jsonObject['items']);
 										});
 									} else {
@@ -379,13 +374,13 @@ script.
 								} else { //normal node
 										if (obj.original.type == 'group_storage') {
 											nodeId = obj.original.storage_node;
-											$.getJSON('/nodes/' + nodeId + '/view?format=jstree&children=1&path=' + obj.original.path, function(jsonObject) {
+											$.getJSON('/nodes/' + nodeId + '/jstree?children=1&path=' + obj.original.path, function(jsonObject) {
 												callback.call(this, jsonObject.children);
 											});
 										} else {
 											// Remove the 'n_' suffix from the id
 											nodeId = obj.id.substring(2);
-											$.getJSON('/nodes/' + nodeId + '/view?format=jstree&children=1', function(jsonObject) {
+											$.getJSON('/nodes/' + nodeId + '/jstree?children=1', function(jsonObject) {
 													callback.call(this, jsonObject.children);
 											});
 										}
