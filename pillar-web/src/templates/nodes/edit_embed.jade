@@ -348,9 +348,10 @@ script(type="text/javascript").
 	if (document.getElementById("files") !== null) {
 		$("#files-action-add").on('click', function () {
 			var lastRepeatingGroup = $('#files > li').last();
-			var cloned = lastRepeatingGroup.clone(true);
+			var cloned = lastRepeatingGroup.clone(false);
 			cloned.insertAfter(lastRepeatingGroup);
 			resetAttributeNames(cloned);
+			cloned.find('.fileupload').on('click', click_on_upload_button);
 		});
 	}
 	//- console.log($._data($(elementSelector)[0], "events"));

@@ -6,6 +6,126 @@ function deleteFile(fileField, newFileId) {
     }
 }
 
+/**
+ * Returns a jQuery object referring to the <div class='form-upload-file'>
+ *     that contains the given fileupload object.
+ */
+function fileupload_container(fileupload_obj) {
+    return $(fileupload_obj).parent().parent();
+}
+
+function progress_bar(fileupload_obj) {
+    return fileupload_container(fileupload_obj).find('div.form-upload-progress-bar');
+}
+
+function set_progress_bar(fileupload_obj, progress, html_class) {
+    var $progress_bar = progress_bar(fileupload_obj);
+    $progress_bar.css({
+        'width': progress + '%',
+        'display': progress == 0 ? 'none' : 'block'});
+
+    $progress_bar.removeClass('progress-error progress-uploading progress-processing');
+    if (!!html_class) $progress_bar.addClass(html_class);
+}
+
+
+function click_on_upload_button(e) {
+    var upload_element = e.target;
+
+    $(upload_element).fileupload({
+        dataType: 'json',
+        replaceFileInput: false,
+        dropZone: $(this),
+        formData: {},
+        beforeSend: function (xhr, data) {
+            var token = this.fileInput.attr('data-token');
+            xhr.setRequestHeader('Authorization', 'basic ' + btoa(token + ':'));
+            statusBarSet('info', 'Uploading File...', 'pi-upload-cloud');
+
+            // console.log('Uploading from', upload_element, upload_element.value);
+
+            // Clear thumbnail & progress bar.
+            fileupload_container(upload_element).find('.preview-thumbnail').hide();
+            set_progress_bar(upload_element, 0);
+
+            $('.button-save')
+                .addClass('disabled')
+                .find('a').html('<i class="pi-spin spin"></i> Uploading...');
+        },
+        add: function (e, data) {
+            var uploadErrors = [];
+            // Load regex if available (like /^image\/(gif|jpe?g|png)$/i;)
+            var acceptFileTypes = new RegExp($(this).data('file-format'));
+            if (data.originalFiles[0]['type'].length && !acceptFileTypes.test(data.originalFiles[0]['type'])) {
+                uploadErrors.push('Not an accepted file type');
+            }
+            // Limit upload size to 1GB
+            if (data.originalFiles[0]['size'] && data.originalFiles[0]['size'] > 1262485504) {
+                uploadErrors.push('Filesize is too big');
+            }
+            if (uploadErrors.length > 0) {
+                $(this).parent().parent().addClass('error');
+                $(this).after(uploadErrors.join("\n"));
+            } else {
+                $(this).parent().parent().removeClass('error');
+                data.submit();
+            }
+        },
+        progressall: function (e, data) {
+            // Update progressbar during upload
+            var progress = parseInt(data.loaded / data.total * 100, 10);
+            // console.log('Uploading', upload_element.value, ': ', progress, '%');
+
+            set_progress_bar(upload_element, Math.max(progress, 2),
+                progress > 99.9 ? 'progress-processing' : 'progress-uploading'
+            );
+        },
+        done: function (e, data) {
+            if (data.result.status !== 'ok') {
+                if (console)
+                    console.log('FIXME, do error handling for non-ok status', data.result);
+                return;
+            }
+
+            // Ensure the form refers to the correct Pillar file ID.
+            var pillar_file_id = data.result.file_id;
+            var $file_id_field = $('#' + $(this).attr('data-field-name'));
+            if ($file_id_field.val()) {
+                deleteFile($file_id_field, pillar_file_id);
+            }
+            $file_id_field.val(pillar_file_id);
+
+            // Ugly workaround: If the asset has the default name, name it as the file
+            if ($('.form-group.name .form-control').val() == 'New asset') {
+                var filename = data.files[0].name;
+                $('.form-group.name .form-control').val(filename);
+                $('.node-edit-title').html(filename);
+            }
+
+            statusBarSet('success', 'File Uploaded Successfully', 'pi-check');
+            set_progress_bar(upload_element, 100);
+
+            $('.button-save')
+                .removeClass('disabled')
+                .find('a').html('<i class="pi-check"></i> Save Changes');
+            $(upload_element).fileupload('destroy');
+        },
+        fail: function (e, data) {
+            if (console) {
+                console.log(data.textStatus, 'Upload error: ' + data.errorThrown);
+            }
+            statusBarSet(data.textStatus, 'Upload error: ' + data.errorThrown, 'pi-attention', 8000);
+
+            set_progress_bar(upload_element, 100, 'progress-error');
+
+            $('.button-save')
+                .removeClass('disabled')
+                .find('a').html('<i class="pi-check"></i> Save Changes');
+            $(upload_element).fileupload('destroy');
+        }
+    });
+}
+
 
 $(function () {
     // $('.file_delete').click(function(e){
@@ -27,102 +147,7 @@ $(function () {
         // console.log('The new element is', element);
     }
 
-    var fieldUpload = '';
     $('.fileupload')
         .each(inject_project_id_into_url)
-        .on('click', function(e) {
-        $('.fileupload').fileupload({
-            dataType: 'json',
-            replaceFileInput:false,
-            dropZone: $(this),
-            formData: {},
-            beforeSend: function(xhr, data) {
-                var token = this.fileInput.attr('data-token');
-                xhr.setRequestHeader('Authorization', 'basic ' + btoa(token + ':'));
-                statusBarSet('info', 'Uploading File...', 'pi-upload-cloud');
-
-                // Reset progress bar
-                $(this).next().find('.form-upload-progress-bar').css(
-                    {'width': '0%', 'display': 'none'}
-                    ).removeClass('progress-error progress-active');
-
-                $('.button-save').addClass('disabled');
-                $('li.button-save a#item_save').html('<i class="pi-spin spin"></i> Uploading...');
-            },
-            add: function(e, data) {
-                var uploadErrors = [];
-                // Load regex if available (like /^image\/(gif|jpe?g|png)$/i;)
-                var acceptFileTypes = new RegExp($(this).data('file-format'));
-                if(data.originalFiles[0]['type'].length && !acceptFileTypes.test(data.originalFiles[0]['type'])) {
-                    uploadErrors.push('Not an accepted file type');
-                }
-                // Limit upload size to 1GB
-                if(data.originalFiles[0]['size'] && data.originalFiles[0]['size'] > 1262485504) {
-                    uploadErrors.push('Filesize is too big');
-                }
-                if(uploadErrors.length > 0) {
-                    $(this).parent().parent().addClass('error');
-                    $(this).after(uploadErrors.join("\n"));
-                } else {
-                    $(this).parent().parent().removeClass('error');
-                    data.submit();
-                }
-            },
-            progressall: function (e, data) {
-                // Update progressbar during upload
-                var progress = parseInt(data.loaded / data.total * 100, 10);
-                $(this).next().find('.form-upload-progress-bar').css(
-                    {'width': progress + '%', 'display': 'block'}
-                    ).removeClass('progress-error').addClass('progress-active');
-                $('body input.fileupload, #files-action-add').addClass('notallowed');
-            },
-            done: function (e, data) {
-                $('body input.fileupload, #files-action-add').removeClass('notallowed');
-
-                if (data.result.status !== 'ok') {
-                    if (console)
-                        console.log('FIXME, do error handling for non-ok status', data.result);
-                    return;
-                }
-
-                // Ensure the form refers to the correct Pillar file ID.
-                var pillar_file_id = data.result.file_id;
-                var field_name = '#' + $(this).attr('data-field-name');
-
-                if ($(field_name).val()) {
-                    $('.node-preview-thumbnail').hide();
-                    deleteFile($(field_name), pillar_file_id);
-                }
-                $(field_name).val(pillar_file_id);
-
-                // var previewThumbnail = fieldUpload.prev().prev();
-                //
-                // $(previewThumbnail).attr('src', data.data.link);
-                // $('.node-preview-thumbnail').show();
-
-                // Ugly workaround: If the asset has the default name, name it as the file
-                if ($('.form-group.name .form-control').val() == 'New asset') {
-                    var filename = data.files[0].name;
-                    $('.form-group.name .form-control').val(filename);
-                    $('.node-edit-title').html(filename);
-                }
-
-                statusBarSet('success', 'File Uploaded Successfully', 'pi-check');
-
-                $('.button-save').removeClass('disabled');
-                $('li.button-save a#item_save').html('<i class="pi-check"></i> Save Changes');
-                $('.progress-active').removeClass('progress-active progress-error');
-                $('.fileupload').fileupload('destroy');
-            },
-            fail: function (e, data) {
-                statusBarSet(data.textStatus, 'Upload error: ' + data.errorThrown, 'pi-attention', 8000);
-                $('.progress-active').addClass('progress-error').removeClass('progress-active');
-                $('body input.fileupload, #files-action-add').removeClass('notallowed');
-
-                $('.button-save').removeClass('disabled');
-                $('li.button-save a#item_save').html('<i class="pi-check"></i> Save Changes');
-                $('.fileupload').fileupload('destroy');
-            }
-        });
-    });
+        .on('click', click_on_upload_button);
 });
