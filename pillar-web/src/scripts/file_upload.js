@@ -29,6 +29,31 @@ function set_progress_bar(fileupload_obj, progress, html_class) {
 }
 
 
+var current_file_uploads = 0;
+
+function on_file_upload_activated() {
+    if (current_file_uploads == 0) {
+        // Disable the save buttons.
+        $('.button-save')
+            .addClass('disabled')
+            .find('a').html('<i class="pi-spin spin"></i> Uploading...');
+    }
+
+    current_file_uploads++;
+}
+
+function on_file_upload_finished() {
+    current_file_uploads = Math.max(0, current_file_uploads-1);
+
+    if (current_file_uploads == 0) {
+        // Restore the save buttons.
+        $('.button-save')
+            .removeClass('disabled')
+            .find('a').html('<i class="pi-check"></i> Save Changes');
+    }
+}
+
+
 function click_on_upload_button(e) {
     var upload_element = e.target;
 
@@ -48,9 +73,7 @@ function click_on_upload_button(e) {
             fileupload_container(upload_element).find('.preview-thumbnail').hide();
             set_progress_bar(upload_element, 0);
 
-            $('.button-save')
-                .addClass('disabled')
-                .find('a').html('<i class="pi-spin spin"></i> Uploading...');
+            $('body').trigger('file-upload:activated');
         },
         add: function (e, data) {
             var uploadErrors = [];
@@ -105,9 +128,7 @@ function click_on_upload_button(e) {
             statusBarSet('success', 'File Uploaded Successfully', 'pi-check');
             set_progress_bar(upload_element, 100);
 
-            $('.button-save')
-                .removeClass('disabled')
-                .find('a').html('<i class="pi-check"></i> Save Changes');
+            $('body').trigger('file-upload:finished');
             $(upload_element).fileupload('destroy');
         },
         fail: function (e, data) {
@@ -118,9 +139,7 @@ function click_on_upload_button(e) {
 
             set_progress_bar(upload_element, 100, 'progress-error');
 
-            $('.button-save')
-                .removeClass('disabled')
-                .find('a').html('<i class="pi-check"></i> Save Changes');
+            $('body').trigger('file-upload:finished');
             $(upload_element).fileupload('destroy');
         }
     });
@@ -129,15 +148,18 @@ function click_on_upload_button(e) {
 
 $(function () {
     // $('.file_delete').click(function(e){
-    $('body').unbind('click');
-    $('body').on('click', '.file_delete', function(e) {
-        e.preventDefault();
-        var field_name = '#' + $(this).data('field-name');
-        var file_field = $(field_name);
-        deleteFile(file_field);
-        $(this).parent().parent().hide();
-        $(this).parent().parent().prev().hide();
-    });
+    $('body').unbind('click')
+        .on('click', '.file_delete', function(e) {
+            e.preventDefault();
+            var field_name = '#' + $(this).data('field-name');
+            var file_field = $(field_name);
+            deleteFile(file_field);
+            $(this).parent().parent().hide();
+            $(this).parent().parent().prev().hide();
+        })
+        .on('file-upload:activated', on_file_upload_activated)
+        .on('file-upload:finished', on_file_upload_finished)
+    ;
 
     function inject_project_id_into_url(index, element) {
         // console.log('Injecting ', ProjectUtils.projectId(), ' into ', element);
