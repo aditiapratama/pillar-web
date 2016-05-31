@@ -45,7 +45,7 @@ function setup_file_uploader(index, upload_element) {
         if (!!html_class) progress_bar.addClass(html_class);
     }
 
-    $(upload_element).fileupload({
+    $upload_element.fileupload({
         dataType: 'json',
         replaceFileInput: false,
         dropZone: container,
