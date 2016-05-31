@@ -4,8 +4,13 @@ ROOT="$(dirname "$(readlink -f "$0")")"
 ASSETS="$ROOT/pillar-web/application/static/assets/"
 TEMPLATES="$ROOT/pillar-web/application/templates/"
 
-echo "\n *** GULPA GULPA ***\n"
 cd $ROOT
+if [ $(git rev-parse --abbrev-ref HEAD) != "production" ]; then
+    echo "You are NOT on the production branch, refusing to rsync_ui." >&2
+    exit 1
+fi
+
+echo "\n *** GULPA GULPA ***\n"
 if [ -x ./node_modules/.bin/gulp ]; then
     ./node_modules/.bin/gulp
 else
