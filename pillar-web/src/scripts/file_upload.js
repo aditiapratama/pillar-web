@@ -6,29 +6,6 @@ function deleteFile(fileField, newFileId) {
     }
 }
 
-/**
- * Returns a jQuery object referring to the <div class='form-upload-file'>
- *     that contains the given fileupload object.
- */
-function fileupload_container(fileupload_obj) {
-    return $(fileupload_obj).parent().parent();
-}
-
-function progress_bar(fileupload_obj) {
-    return fileupload_container(fileupload_obj).find('div.form-upload-progress-bar');
-}
-
-function set_progress_bar(fileupload_obj, progress, html_class) {
-    var $progress_bar = progress_bar(fileupload_obj);
-    $progress_bar.css({
-        'width': progress + '%',
-        'display': progress == 0 ? 'none' : 'block'});
-
-    $progress_bar.removeClass('progress-error progress-uploading progress-processing');
-    if (!!html_class) $progress_bar.addClass(html_class);
-}
-
-
 var current_file_uploads = 0;
 
 function on_file_upload_activated() {
@@ -54,13 +31,24 @@ function on_file_upload_finished() {
 }
 
 
-function click_on_upload_button(e) {
-    var upload_element = e.target;
+function setup_file_uploader(index, upload_element) {
+    var $upload_element = $(upload_element);
+    var container = $upload_element.parent().parent();
+    var progress_bar = container.find('div.form-upload-progress-bar');
+
+    function set_progress_bar(progress, html_class) {
+        progress_bar.css({
+            'width': progress + '%',
+            'display': progress == 0 ? 'none' : 'block'});
+
+        progress_bar.removeClass('progress-error progress-uploading progress-processing');
+        if (!!html_class) progress_bar.addClass(html_class);
+    }
 
     $(upload_element).fileupload({
         dataType: 'json',
         replaceFileInput: false,
-        dropZone: $(this),
+        dropZone: container,
         formData: {},
         beforeSend: function (xhr, data) {
             var token = this.fileInput.attr('data-token');
@@ -70,8 +58,8 @@ function click_on_upload_button(e) {
             // console.log('Uploading from', upload_element, upload_element.value);
 
             // Clear thumbnail & progress bar.
-            fileupload_container(upload_element).find('.preview-thumbnail').hide();
-            set_progress_bar(upload_element, 0);
+            container.find('.preview-thumbnail').hide();
+            set_progress_bar(0);
 
             $('body').trigger('file-upload:activated');
         },
@@ -99,7 +87,7 @@ function click_on_upload_button(e) {
             var progress = parseInt(data.loaded / data.total * 100, 10);
             // console.log('Uploading', upload_element.value, ': ', progress, '%');
 
-            set_progress_bar(upload_element, Math.max(progress, 2),
+            set_progress_bar(Math.max(progress, 2),
                 progress > 99.9 ? 'progress-processing' : 'progress-uploading'
             );
         },
@@ -126,10 +114,9 @@ function click_on_upload_button(e) {
             }
 
             statusBarSet('success', 'File Uploaded Successfully', 'pi-check');
-            set_progress_bar(upload_element, 100);
+            set_progress_bar(100);
 
             $('body').trigger('file-upload:finished');
-            $(upload_element).fileupload('destroy');
         },
         fail: function (e, data) {
             if (console) {
@@ -137,10 +124,9 @@ function click_on_upload_button(e) {
             }
             statusBarSet(data.textStatus, 'Upload error: ' + data.errorThrown, 'pi-attention', 8000);
 
-            set_progress_bar(upload_element, 100, 'progress-error');
+            set_progress_bar(100, 'progress-error');
 
             $('body').trigger('file-upload:finished');
-            $(upload_element).fileupload('destroy');
         }
     });
 }
@@ -171,5 +157,6 @@ $(function () {
 
     $('.fileupload')
         .each(inject_project_id_into_url)
-        .on('click', click_on_upload_button);
+        .each(setup_file_uploader)
+    ;
 });
