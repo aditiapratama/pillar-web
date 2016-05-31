@@ -289,7 +289,7 @@ html(lang="en")
 								a(href="mailto:cloudsupport@blender.org"
 									title="Support Email")
 									li
-										i.pi-email-outline
+										i.pi-email
 
 						.col-md-2.col-xs-6
 							h4 Blender Cloud
@@ -302,6 +302,10 @@ html(lang="en")
 									title="Blender Cloud Blog")
 									li Blog
 
+								a(href="{{ url_for('services') }}",
+									title="Blender Cloud Services")
+									li Services
+
 								a(href="https://cloud.blender.org/blog/blender-cloud-v3",
 									title="About Blender Cloud")
 									li About
@@ -310,11 +314,11 @@ html(lang="en")
 							h4 Blender
 							ul.footer-links
 								a(href="https://www.blender.org",
-									title="Blender Official Website")
+									title="Blender official Website")
 									li Blender.org
 
 								a(href="https://www.blender.org/store",
-									title="The Official Blender Store")
+									title="The official Blender Store")
 									li Blender Store
 
 						.col-md-2.col-xs-6.special
@@ -324,20 +328,15 @@ html(lang="en")
 
 			| {% block footer %}
 			footer.container
-
-				//
-					ul.links
-						li
-							a(href="{# XXX {{url_for('terms_and_conditions')}} #}")
-								| Terms & Services, Cancellation
-						li
-							a(href="{# XXX {{url_for('privacy')}} #}")
-								| Privacy Policy
+				ul.links
+					li
+						a(href="{{ url_for('homepage') }}")
+							| Blender Cloud
 
 				span.credits
-					| Blender Cloud
 					a.hop(href="#hop")
 						i.pi-angle-up
+
 			| {% endblock %}
 		| {% endblock %}
 
