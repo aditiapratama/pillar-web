@@ -94,8 +94,8 @@ def view(project_url):
     if request.args.get('format') == 'jstree':
         return jsonify(items=jstree_get_children(None, project._id))
 
-    project.picture_square = project.picture_square and get_file(project.picture_square)
-    project.picture_header = project.picture_header and get_file(project.picture_header)
+    project.picture_square = project.picture_square and get_file(project.picture_square, api=api)
+    project.picture_header = project.picture_header and get_file(project.picture_header, api=api)
     embed_string = ''
 
     if request.args.get('embed'):
@@ -124,7 +124,7 @@ def view(project_url):
                         'embedded': '{"user":1}',
                         }, api=api)
                     if node_item.picture:
-                        picture = get_file(node_item.picture)
+                        picture = get_file(node_item.picture, api=api)
                         # picture = File.find(node_item.picture, api=api)
                         node_item.picture = picture
                     list_featured.append(node_item)

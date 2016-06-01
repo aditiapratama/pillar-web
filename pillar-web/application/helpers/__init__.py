@@ -18,12 +18,13 @@ from application.helpers.exceptions import ConfigError
 log = logging.getLogger(__name__)
 
 
-def get_file(file_id):
+def get_file(file_id, api=None):
     # TODO: remove this function and just use the Pillar SDK directly.
     if file_id is None:
         return None
 
-    api = SystemUtility.attract_api()
+    if api is None:
+        api = SystemUtility.attract_api()
 
     try:
         return File.find(file_id, api=api)
@@ -90,11 +91,11 @@ def attach_project_pictures(project, api):
     if project.picture_square:
         # Collect the picture square file object
         project.picture_square = get_file(
-            project.picture_square)
+            project.picture_square, api=api)
     if project.picture_header:
         # Collect the picture header file object
         project.picture_header = get_file(
-            project.picture_header)
+            project.picture_header, api=api)
 
 
 def gravatar(email, size=64):

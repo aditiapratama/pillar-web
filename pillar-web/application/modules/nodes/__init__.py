@@ -155,7 +155,7 @@ def view(node_id):
         template_path, template_action = handler(node, template_path, template_action)
 
     # Fetch linked resources.
-    node.picture = get_file(node.picture)
+    node.picture = get_file(node.picture, api=api)
     node.user = node.user and pillarsdk.User.find(node.user, api=api)
     node.parent = node.parent and pillarsdk.Node.find(node.parent, api=api)
 
@@ -182,7 +182,7 @@ def view(node_id):
     children = children._items
 
     for child in children:
-        child.picture = get_file(child.picture)
+        child.picture = get_file(child.picture, api=api)
 
     if request.args.get('format') == 'json':
         node = node.to_dict()
@@ -408,7 +408,7 @@ def edit(node_id):
     set_properties(dyn_schema, form_schema, node_properties, form)
 
     # Get previews
-    node.picture = get_file(node.picture) if node.picture else None
+    node.picture = get_file(node.picture, api=api) if node.picture else None
 
     # Get Parent
     try:

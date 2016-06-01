@@ -43,7 +43,7 @@ def homepage():
     # Append picture Files to last_posts
     for post in latest_posts._items:
         if post.picture:
-            post.picture = get_file(post.picture)
+            post.picture = get_file(post.picture, api=api)
 
     # Get latest assets added to any project
     latest_assets = Node.latest('assets', api=api)
@@ -51,7 +51,7 @@ def homepage():
     # Append picture Files to latest_assets
     for asset in latest_assets._items:
         if asset.picture:
-            asset.picture = get_file(asset.picture)
+            asset.picture = get_file(asset.picture, api=api)
 
     # Get latest comments to any node
     latest_comments = Node.latest('comments', api=api)
@@ -64,8 +64,8 @@ def homepage():
             comment.parent = comment.parent
 
     main_project = Project.find(app.config['MAIN_PROJECT_ID'], api=api)
-    main_project.picture_square = get_file(main_project.picture_square)
-    main_project.picture_header = get_file(main_project.picture_header)
+    main_project.picture_square = get_file(main_project.picture_square, api=api)
+    main_project.picture_header = get_file(main_project.picture_header, api=api)
 
     return render_template(
         'homepage.html',

@@ -36,7 +36,7 @@ def posts_view(project_id, url=None):
                 'embedded': '{"node_type": 1, "user": 1}',
                 }, api=api)
             if post.picture:
-                post.picture = get_file(post.picture)
+                post.picture = get_file(post.picture, api=api)
         except ResourceNotFound:
             return abort(404)
 
@@ -66,8 +66,7 @@ def posts_view(project_id, url=None):
             }, api=api)
 
         for post in posts._items:
-            if post.picture:
-                post.picture = get_file(post.picture)
+            post.picture = get_file(post.picture, api=api)
 
         return render_template(
             'nodes/custom/blog/index.html',
@@ -158,7 +157,7 @@ def posts_edit(post_id):
     if post.picture:
         form.picture.data = post.picture
         # Embed picture file
-        post.picture = File.find(post.picture, api=api)
+        post.picture = get_file(post.picture, api=api)
     if post.properties.picture_square:
         form.picture_square.data = post.properties.picture_square
     return render_template('nodes/custom/post/edit.html',
