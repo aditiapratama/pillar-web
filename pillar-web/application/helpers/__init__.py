@@ -1,5 +1,8 @@
 import hashlib
 import urllib
+import logging
+import traceback
+import sys
 
 from math import ceil
 from flask import url_for
@@ -8,10 +11,11 @@ from flask.ext.login import current_user
 from pillarsdk import File
 from pillarsdk import Project
 from pillarsdk.exceptions import ResourceNotFound
-from application import cache
 from application import app
 from application import SystemUtility
 from application.helpers.exceptions import ConfigError
+
+log = logging.getLogger(__name__)
 
 
 def get_file(file_id):
@@ -20,7 +24,15 @@ def get_file(file_id):
         return None
 
     api = SystemUtility.attract_api()
-    return File.find(file_id, api=api)
+
+    try:
+        return File.find(file_id, api=api)
+    except ResourceNotFound:
+        f = sys.exc_info()[2].tb_frame.f_back
+        tb = traceback.format_stack(f=f, limit=2)
+        log.warning('File %s not found, but requested from %s\n%s',
+                    file_id, request.url, ''.join(tb))
+        return None
 
 
 class Pagination(object):

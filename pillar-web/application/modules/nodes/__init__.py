@@ -155,7 +155,7 @@ def view(node_id):
         template_path, template_action = handler(node, template_path, template_action)
 
     # Fetch linked resources.
-    node.picture = node.picture and pillarsdk.File.find(node.picture, api=api)
+    node.picture = get_file(node.picture)
     node.user = node.user and pillarsdk.User.find(node.user, api=api)
     node.parent = node.parent and pillarsdk.Node.find(node.parent, api=api)
 
@@ -182,12 +182,7 @@ def view(node_id):
     children = children._items
 
     for child in children:
-        try:
-            child.picture = child.picture and pillarsdk.File.find(child.picture, api=api)
-        except pillarsdk.ResourceNotFound:
-            log.warning('Node %s refers to non-existing picture %s',
-                        child['_id'], child.picture)
-            child.picture = None
+        child.picture = get_file(child.picture)
 
     if request.args.get('format') == 'json':
         node = node.to_dict()
