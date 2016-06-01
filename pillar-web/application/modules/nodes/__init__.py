@@ -176,14 +176,18 @@ def view(node_id):
         children = Node.all({
             'projection': children_projection,
             'where': children_where,
-            'embedded': {'picture': 1},
             'sort': [('properties.order', 1), ('name', 1)]}, api=api)
     except ForbiddenAccess:
         return render_template('errors/403_embed.html')
     children = children._items
 
     for child in children:
-        child.picture = pillarsdk.File.new(child.picture)
+        try:
+            child.picture = child.picture and pillarsdk.File.find(child.picture, api=api)
+        except pillarsdk.ResourceNotFound:
+            log.warning('Node %s refers to non-existing picture %s',
+                        child['_id'], child.picture)
+            child.picture = None
 
     if request.args.get('format') == 'json':
         node = node.to_dict()
