@@ -123,9 +123,7 @@ def jstree(node_id):
 def view(node_id):
     api = system_util.pillar_api()
 
-    # Get node with basic embedded data
-    # FIXME: it looks like the links on 'picture' aren't refreshed when it's fetched
-    # as embedded document.
+    # Get node, we'll embed linked objects later.
     try:
         node = Node.find(node_id, api=api)
     except ResourceNotFound:
@@ -145,6 +143,24 @@ def view(node_id):
     # it only if we are working storage nodes, where an 'index' is also possible
     template_action = 'view'
 
+    def allow_link():
+        """Helper function to cross check if the user is authenticated, and it
+        is has the 'subscriber' role. Also, we check if the node has world GET
+        permissions, which means it's free.
+        """
+
+        # Check if node permissions for the world exist (if node is free)
+        if node.permissions and node.permissions.world:
+            return 'GET' in node.permissions.world
+
+        if current_user.is_authenticated():
+            allowed_roles = {u'subscriber', u'demo', u'admin'}
+            return bool(allowed_roles.intersection(current_user.roles))
+
+        return False
+
+    link_allowed = allow_link()
+
     node_type_handlers = {
         'asset': _view_handler_asset,
         'storage': _view_handler_storage,
@@ -152,7 +168,7 @@ def view(node_id):
     }
     if node_type_name in node_type_handlers:
         handler = node_type_handlers[node_type_name]
-        template_path, template_action = handler(node, template_path, template_action)
+        template_path, template_action = handler(node, template_path, template_action, link_allowed)
 
     # Fetch linked resources.
     node.picture = get_file(node.picture, api=api)
@@ -209,10 +225,14 @@ def view(node_id):
                            api=api)
 
 
-def _view_handler_asset(node, template_path, template_action):
+def _view_handler_asset(node, template_path, template_action, link_allowed):
     # Attach the file document to the asset node
     node_file = get_file(node.properties.file)
     node.file = node_file
+
+    # Remove the link to the file if it's not allowed.
+    if node_file and not link_allowed:
+        node.file.link = None
 
     if node_file and node_file.content_type is not None:
         asset_type = node_file.content_type.split('/')[0]
@@ -221,16 +241,20 @@ def _view_handler_asset(node, template_path, template_action):
 
     if asset_type == 'video':
         # Process video type and select video template
-        sources = []
-        if node_file and node_file.variations:
-            for f in node_file.variations:
-                sources.append({'type': f.content_type, 'src': f.link})
-                # Build a link that triggers download with proper filename
-                # TODO: move this to Pillar
-                if f.backend == 'cdnsun':
-                    f.link = "{0}&name={1}.{2}".format(f.link, node.name, f.format)
-        node.video_sources = json.dumps(sources)
-        node.file_variations = node_file.variations
+        if link_allowed:
+            sources = []
+            if node_file and node_file.variations:
+                for f in node_file.variations:
+                    sources.append({'type': f.content_type, 'src': f.link})
+                    # Build a link that triggers download with proper filename
+                    # TODO: move this to Pillar
+                    if f.backend == 'cdnsun':
+                        f.link = "{0}&name={1}.{2}".format(f.link, node.name, f.format)
+            node.video_sources = json.dumps(sources)
+            node.file_variations = node_file.variations
+        else:
+            node.video_sources = None
+            node.file_variations = None
     elif asset_type != 'image':
         # Treat it as normal file (zip, blend, application, etc)
         asset_type = 'file'

@@ -88,7 +88,6 @@ class AbstractPillarWebTest(unittest.TestCase):
         # Log the user in
         self.mock_pillar('POST', '/auth/make-token', json={'token': auth_token})
         self.mock_pillar('GET', '/users/me', json=TEST_USER)
-        self.expect_frontpage_queries()
         resp = self.client.post('/login/local', data={
             'username': 'testuser',
             'password': 'testpass',
