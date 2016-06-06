@@ -166,9 +166,13 @@ from modules.notifications import notifications
 from modules.main import homepage
 from helpers import gravatar
 from helpers import pretty_date
-from helpers import get_main_project
 
-get_main_project()
+
+@app.before_first_request
+def check_main_project():
+    from helpers import get_main_project
+
+    get_main_project()
 
 
 @app.template_filter('pretty_date')
