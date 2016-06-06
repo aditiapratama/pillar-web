@@ -155,7 +155,7 @@ def view(node_id):
 
         if current_user.is_authenticated():
             allowed_roles = {u'subscriber', u'demo', u'admin'}
-            return bool(allowed_roles.intersection(current_user.roles))
+            return bool(allowed_roles.intersection(current_user.roles or ()))
 
         return False
 
