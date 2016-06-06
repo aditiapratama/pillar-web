@@ -264,7 +264,7 @@ def _view_handler_asset(node, template_path, template_action, link_allowed):
     return template_path, template_action
 
 
-def _view_handler_storage(node, template_path, template_action):
+def _view_handler_storage(node, template_path, template_action, link_allowed):
     storage = StorageNode(node)
     path = request.args.get('path')
     listing = storage.browse(path)
@@ -285,9 +285,13 @@ def _view_handler_storage(node, template_path, template_action):
     return template_path, template_action
 
 
-def _view_handler_texture(node, template_path, template_action):
+def _view_handler_texture(node, template_path, template_action, link_allowed):
     for f in node.properties.files:
         f.file = get_file(f.file)
+
+        # Remove the link to the file if it's not allowed.
+        if f.file and not link_allowed:
+            f.file.link = None
 
     return template_path, template_action
 
