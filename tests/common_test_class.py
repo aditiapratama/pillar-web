@@ -19,6 +19,18 @@ logging.basicConfig(
     level=logging.DEBUG,
     format='%(asctime)-15s %(levelname)8s %(name)s %(message)s')
 
+TEST_USER = {'username': 'testuser',
+             '_updated': 'Mon, 06 Jun 2016 10:54:50 GMT',
+             'groups': ['57305b76c379cf0b3d00a1be', '572d1e7ac379cf0b3d00951e',
+                        '573ee671c379cf134ec9ccdb'],
+             'roles': ['subscriber'],
+             'settings': {'email_communications': 1},
+             'email': 'testuser@example.com',
+             'full_name': u'Dr. Üser',
+             '_created': 'Thu, 01 Jan 1970 00:00:00 GMT',
+             '_id': 'aaaeeeb1c379cf10c4aaceee',
+             '_etag': '0182e6e80699376ed9564b4ceaaa000f36b72317'}
+
 
 class AbstractPillarWebTest(unittest.TestCase):
     def __init__(self, *args, **kwargs):
@@ -71,3 +83,20 @@ class AbstractPillarWebTest(unittest.TestCase):
                            stream=stream,
                            content_type=content_type,
                            json=json)
+
+    def login(self, auth_token):
+        # Log the user in
+        self.mock_pillar('POST', '/auth/make-token', json={'token': auth_token})
+        self.mock_pillar('GET', '/users/me', json=TEST_USER)
+        self.expect_frontpage_queries()
+        resp = self.client.post('/login/local', data={
+            'username': 'testuser',
+            'password': 'testpass',
+        })
+        self.assertIn(resp.status_code, {200, 302})  # render template or redirect, both fine.
+
+    def expect_frontpage_queries(self):
+        self.mock_pillar('GET', '/nodes', json={'_items': []})
+        self.mock_pillar('GET', '/latest/assets', json={'_items': []})
+        self.mock_pillar('GET', '/latest/comments', json={'_items': []})
+        self.mock_pillar('GET', '/projects/abcdef0123456789abcdefff', json={})
