@@ -4,7 +4,7 @@ from pillarsdk import Node
 from pillarsdk import NodeType
 from pillarsdk.users import User
 from pillarsdk.organizations import Organization
-from application import SystemUtility
+from application import system_util
 from application.helpers import gravatar
 from application.helpers import attach_project_pictures
 
@@ -15,7 +15,7 @@ class UserProxy(object):
     Note that this is not proper proxy, but the name makes sense currently."""
 
     def __init__(self, name):
-        self.api = SystemUtility.attract_api()
+        self.api = system_util.pillar_api()
         # Check if organization exists
         user = Organization.find_first({
             'where': '{"url" : "%s"}' % (name),

@@ -1,6 +1,6 @@
 import requests
 import os
-from application import SystemUtility
+from application import system_util
 from application import cache
 
 
@@ -12,7 +12,7 @@ class StorageNode(object):
 
     @property
     def entrypoint(self):
-        return os.path.join(SystemUtility.attract_server_endpoint(),
+        return os.path.join(system_util.pillar_server_endpoint(),
             self.path,
             self.storage_node.properties.backend,
             self.storage_node.properties.project,

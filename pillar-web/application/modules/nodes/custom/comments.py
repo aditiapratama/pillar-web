@@ -9,7 +9,7 @@ from pillarsdk import Project
 from application.modules.nodes import nodes
 from application.helpers import gravatar
 from application.helpers import pretty_date
-from application import SystemUtility
+from application import system_util
 
 
 @nodes.route('/comments/create', methods=['POST'])
@@ -17,7 +17,7 @@ from application import SystemUtility
 def comments_create():
     content = request.form['content']
     parent_id = request.form.get('parent_id')
-    api = SystemUtility.attract_api()
+    api = system_util.pillar_api()
     parent_node = Node.find(parent_id, api=api)
 
     node_asset_props = dict(
@@ -92,7 +92,7 @@ def format_comment(comment, is_reply=False, is_team=False, replies=None):
 def comments_index():
     parent_id = request.args.get('parent_id')
     # Get data only if we format it
-    api = SystemUtility.attract_api()
+    api = system_util.pillar_api()
     if request.args.get('format'):
         nodes = Node.all({
             'where': '{"node_type" : "comment", "parent": "%s"}' % (parent_id),
@@ -137,7 +137,7 @@ def comments_rate(comment_id):
     """
     rating_is_positive = request.form['is_positive'] != 'false'
 
-    api = SystemUtility.attract_api()
+    api = system_util.pillar_api()
     comment = Node.find(comment_id, api=api)
 
     # Check if comment has been rated

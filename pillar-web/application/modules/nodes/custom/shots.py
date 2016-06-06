@@ -12,7 +12,7 @@ from flask.ext.login import login_required
 from flask.ext.login import current_user
 
 from application import app
-from application import SystemUtility
+from application import system_util
 from application.modules.nodes import nodes
 
 # Custom nodes view for DataTables
@@ -21,7 +21,7 @@ from application.modules.nodes import nodes
 def shots_index():
     max_results = 100
 
-    api = SystemUtility.attract_api()
+    api = system_util.pillar_api()
     node_type_name = "shot"
     node_type_list = NodeType.all({
         'where': '{"name" : "%s"}' % node_type_name,
@@ -137,7 +137,7 @@ def shot_edit():
     - cut out
     - picture (optional)
     """
-    api = SystemUtility.attract_api()
+    api = system_util.pillar_api()
     shot_id = request.form['shot_id']
 
     shot = Node.find(shot_id, api=api)

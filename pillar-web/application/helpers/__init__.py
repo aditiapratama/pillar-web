@@ -12,7 +12,7 @@ from pillarsdk import File
 from pillarsdk import Project
 from pillarsdk.exceptions import ResourceNotFound
 from application import app
-from application import SystemUtility
+from application import system_util
 from application.helpers.exceptions import ConfigError
 
 log = logging.getLogger(__name__)
@@ -24,7 +24,7 @@ def get_file(file_id, api=None):
         return None
 
     if api is None:
-        api = SystemUtility.attract_api()
+        api = system_util.pillar_api()
 
     try:
         return File.find(file_id, api=api)
@@ -169,7 +169,7 @@ def current_user_is_authenticated():
 
 
 def get_main_project():
-    api = SystemUtility.attract_api()
+    api = system_util.pillar_api()
     try:
         main_project = Project.find(app.config['MAIN_PROJECT_ID'], api=api)
     except ResourceNotFound:

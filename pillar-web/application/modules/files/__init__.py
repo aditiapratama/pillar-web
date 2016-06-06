@@ -23,7 +23,7 @@ from flask.ext.login import login_required
 from pillarsdk import File
 from pillarsdk.exceptions import ResourceNotFound
 from application import app
-from application import SystemUtility
+from application import system_util
 
 # Name of the Blueprint
 files = Blueprint('files', __name__)
@@ -277,7 +277,7 @@ def process_and_create_file(project_id, name, length, mime_type):
 
     shutil.move(src_file_path, dst_file_path)
 
-    api = SystemUtility.attract_api()
+    api = system_util.pillar_api()
     file_item = File({
         'name': link[3:],
         'filename': name,
@@ -304,7 +304,7 @@ def create():
     field_name = request.form['field_name']
     project_id = request.form['project_id']
     file_item = process_and_create_file(project_id, name, size, content_type)
-    api = SystemUtility.attract_api()
+    api = system_util.pillar_api()
     f = File.find(file_item['_id'], api=api)
     thumbnail_link = f.thumbnail('s', api=api)
 
@@ -317,7 +317,7 @@ def item_delete(item_id):
     """We run this when updating a preview picture (after succesfully uploading
     a new one).
     """
-    api = SystemUtility.attract_api()
+    api = system_util.pillar_api()
     try:
         file_item = File.find(item_id, api=api)
         file_item.delete(api=api)

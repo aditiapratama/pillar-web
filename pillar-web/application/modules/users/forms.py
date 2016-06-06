@@ -10,7 +10,7 @@ from wtforms.validators import DataRequired
 from wtforms.validators import Length
 from wtforms.validators import NoneOf
 from wtforms.validators import Regexp
-from application import SystemUtility
+from application import system_util
 
 
 class UserLoginForm(Form):
@@ -37,7 +37,7 @@ class UserProfileForm(Form):
         if not rv:
             return False
 
-        api = SystemUtility.attract_api()
+        api = system_util.pillar_api()
         user = User.find(current_user.objectid, api=api)
         if user.username != self.username.data:
             username = User.find_first({'where': '{"username": "%s"}' % (self.username.data)},

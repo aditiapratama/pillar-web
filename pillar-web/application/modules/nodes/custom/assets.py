@@ -10,7 +10,7 @@ from flask.ext.login import current_user
 from pillarsdk import Node
 from pillarsdk import File
 from application import app
-from application import SystemUtility
+from application import system_util
 from application.modules.nodes import nodes
 from application.modules.files import process_and_create_file
 
@@ -32,7 +32,7 @@ def assets_create():
     else:
         filetype = 'file'
 
-    api = SystemUtility.attract_api()
+    api = system_util.pillar_api()
     # We will create the Node object later on, after creating the file object
     node_asset_props = dict(
         name=name,

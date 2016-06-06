@@ -24,7 +24,7 @@ from application.modules.users.forms import UserProfileForm
 from application.modules.users.forms import UserSettingsEmailsForm
 from application.modules.users.forms import UserEditForm
 
-from application import SystemUtility
+from application import system_util
 from application import UserClass
 from application import load_user
 from application import app
@@ -50,7 +50,7 @@ def authenticate(username, password):
         hostname=socket.gethostname())
     try:
         r = requests.post("{0}/u/identify".format(
-            SystemUtility.blender_id_endpoint()), data=payload)
+            system_util.blender_id_endpoint()), data=payload)
     except requests.exceptions.ConnectionError as e:
         raise e
 
@@ -60,7 +60,7 @@ def authenticate(username, password):
 
 
 def user_roles_update(user_id):
-    api = SystemUtility.attract_api()
+    api = system_util.pillar_api()
     group_subscriber = Group.find_one({'where': "name=='subscriber'"}, api=api)
 
     external_subscriptions_server = app.config['EXTERNAL_SUBSCRIPTIONS_MANAGEMENT_SERVER']
@@ -152,7 +152,7 @@ def login_local():
             'password': form.password.data
             }
         r = requests.post("{0}/auth/make-token".format(
-            SystemUtility.attract_server_endpoint()), data=payload)
+            system_util.pillar_server_endpoint()), data=payload)
         if r.status_code != 200:
             return abort(r.status_code)
         res = r.json()
@@ -199,7 +199,7 @@ def settings_profile():
     """
     if current_user.has_role('protected'):
         return abort(404)  # TODO: make this 403, handle template properly
-    api = SystemUtility.attract_api()
+    api = system_util.pillar_api()
     user = User.find(current_user.objectid, api=api)
 
     form = UserProfileForm(
@@ -226,7 +226,7 @@ def settings_emails():
     """
     if current_user.has_role('protected'):
         return abort(404)  # TODO: make this 403, handle template properly
-    api = SystemUtility.attract_api()
+    api = system_util.pillar_api()
     user = User.find(current_user.objectid, api=api)
 
     # Force creation of settings for the user (safely remove this code once
@@ -263,7 +263,7 @@ def settings_billing():
     """
     if current_user.has_role('protected'):
         return abort(404)  # TODO: make this 403, handle template properly
-    api = SystemUtility.attract_api()
+    api = system_util.pillar_api()
     user = User.find(current_user.objectid, api=api)
     groups = []
     if user.groups:
@@ -278,7 +278,7 @@ def settings_billing():
 
 
 def type_names():
-    api = SystemUtility.attract_api()
+    api = system_util.pillar_api()
 
     types = NodeType.all(api=api)["_items"]
     type_names = []
@@ -295,7 +295,7 @@ def tasks():
     page = request.args.get('page', 1)
     max_results = 50
 
-    api = SystemUtility.attract_api()
+    api = system_util.pillar_api()
     node_type_list = NodeType.all({'where': "name=='task'"}, api=api)
 
     if len(node_type_list['_items']) == 0:
@@ -360,7 +360,7 @@ def users_index():
 def users_edit(user_id):
     if not current_user.has_role('admin'):
         return abort(403)
-    api = SystemUtility.attract_api()
+    api = system_util.pillar_api()
     user = User.find(user_id, api=api)
     form = UserEditForm()
     if form.validate_on_submit():

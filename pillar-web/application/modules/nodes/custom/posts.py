@@ -8,7 +8,7 @@ from flask import redirect
 from flask import url_for
 from flask.ext.login import login_required
 from flask.ext.login import current_user
-from application import SystemUtility
+from application import system_util
 from application.helpers import attach_project_pictures
 from application.helpers import get_file
 from application.modules.nodes import nodes, url_for_node
@@ -19,7 +19,7 @@ from application.modules.projects import project_update_nodes_list
 
 def posts_view(project_id, url=None):
     """View individual blogpost"""
-    api = SystemUtility.attract_api()
+    api = system_util.pillar_api()
     # Fetch project (for backgroud images and links generation)
     project = Project.find(project_id, api=api)
     attach_project_pictures(project, api)
@@ -80,7 +80,7 @@ def posts_view(project_id, url=None):
 @nodes.route("/posts/<project_id>/create", methods=['GET', 'POST'])
 @login_required
 def posts_create(project_id):
-    api = SystemUtility.attract_api()
+    api = system_util.pillar_api()
     try:
         project = Project.find(project_id, api=api)
     except ResourceNotFound:
@@ -126,7 +126,7 @@ def posts_create(project_id):
 @nodes.route("/posts/<post_id>/edit", methods=['GET', 'POST'])
 @login_required
 def posts_edit(post_id):
-    api = SystemUtility.attract_api()
+    api = system_util.pillar_api()
 
     try:
         post = Node.find(post_id, {

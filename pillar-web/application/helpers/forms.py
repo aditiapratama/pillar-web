@@ -21,7 +21,7 @@ from wtforms.widgets import HiddenInput
 from wtforms.widgets import HTMLString
 from wtforms.fields import FormField
 from pillarsdk.exceptions import ResourceNotFound
-from application import SystemUtility
+from application import system_util
 
 
 class CustomFileSelectWidget(HiddenInput):
@@ -40,7 +40,7 @@ class CustomFileSelectWidget(HiddenInput):
         button = [u'<div class="form-upload-file">']
 
         if field.data:
-            api = SystemUtility.attract_api()
+            api = system_util.pillar_api()
             try:
                 # Load the existing file attached to the field
                 file_item = File.find(field.data, api=api)

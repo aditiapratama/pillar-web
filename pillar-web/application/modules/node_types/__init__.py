@@ -4,7 +4,7 @@ from flask import redirect
 from flask import url_for
 from flask.ext.login import login_required
 from pillarsdk import NodeType
-from application import SystemUtility
+from application import system_util
 
 # Name of the Blueprint
 node_types = Blueprint('node_types', __name__)
@@ -15,7 +15,7 @@ node_types = Blueprint('node_types', __name__)
 def index():
     """Display the node types
     """
-    api = SystemUtility.attract_api()
+    api = system_util.pillar_api()
     node_types = NodeType.all(api=api)
     node_types = node_types['_items']
     return render_template('node_types/index.html',

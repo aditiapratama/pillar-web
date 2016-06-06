@@ -11,7 +11,7 @@ from pillarsdk.nodes import Node
 from pillarsdk.projects import Project
 from pillarsdk.activities import Notification
 from pillarsdk.activities import ActivitySubscription
-from application import SystemUtility
+from application import system_util
 from application.helpers import pretty_date
 
 # Name of the Blueprint
@@ -53,7 +53,7 @@ def index():
     - limit: limits the number of notifications
     """
     limit = request.args.get('limit', 25)
-    api = SystemUtility.attract_api()
+    api = system_util.pillar_api()
     user_notifications = Notification.all({
         'where': {'user': current_user.objectid},
         'sort': '-_created',
@@ -69,7 +69,7 @@ def index():
 @notifications.route('/<notification_id>/read-toggle')
 @login_required
 def action_read_toggle(notification_id):
-    api = SystemUtility.attract_api()
+    api = system_util.pillar_api()
     notification = Notification.find(notification_id, api=api)
     if notification.user == current_user.objectid:
         notification.is_read = not notification.is_read
@@ -89,7 +89,7 @@ def action_read_toggle(notification_id):
 @login_required
 def action_read_all():
     """Mark all notifications as read"""
-    api = SystemUtility.attract_api()
+    api = system_util.pillar_api()
     notifications = Notification.all({
         'where': '{"user": "%s"}' % (current_user.objectid),
         'sort': '-_created'}, api=api)
@@ -110,7 +110,7 @@ def action_subscription_toggle(notification_id):
     """Given a notification id, get the ActivitySubscription and update it by
     toggling the notifications status for the web key.
     """
-    api = SystemUtility.attract_api()
+    api = system_util.pillar_api()
     # Get the notification
     notification = notification_parse(
         Notification.find(notification_id, {'parse':'1'}, api=api))

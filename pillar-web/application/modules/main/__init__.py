@@ -9,7 +9,7 @@ from flask.ext.login import current_user
 from werkzeug.contrib.atom import AtomFeed
 
 from application import app
-from application import SystemUtility
+from application import system_util
 from application import cache
 from application.modules.nodes import url_for_node
 from application.modules.nodes.custom.posts import posts_view
@@ -30,7 +30,7 @@ def homepage():
             title="join")
 
     # Get latest blog posts
-    api = SystemUtility.attract_api()
+    api = system_util.pillar_api()
     latest_posts = Node.all({
         'projection': {'name': 1, 'project': 1, 'user': 1, 'node_type': 1,
                        'picture': 1, 'properties.status': 1, 'properties.url': 1},
@@ -133,7 +133,7 @@ def main_posts_create():
 @cache.memoize(timeout=3600, unless=current_user_is_authenticated)
 def project_blog(project_url, url=None):
     """View project blog"""
-    api = SystemUtility.attract_api()
+    api = system_util.pillar_api()
     try:
         project = Project.find_one({
             'where': '{"url" : "%s"}' % (project_url)}, api=api)
@@ -146,7 +146,7 @@ def get_projects(category):
     """Utility to get projects based on category. Should be moved on the API
     and improved with more extensive filtering capabilities.
     """
-    api = SystemUtility.attract_api()
+    api = system_util.pillar_api()
     projects = Project.all({
         'where': {
             'category': category,
@@ -166,7 +166,7 @@ def open_projects():
         'projects/index_collection.html',
         title='open-projects',
         projects=projects._items,
-        api=SystemUtility.attract_api())
+        api=system_util.pillar_api())
 
 
 @app.route("/training")
@@ -177,7 +177,7 @@ def training():
         'projects/index_collection.html',
         title='training',
         projects=projects._items,
-        api=SystemUtility.attract_api())
+        api=system_util.pillar_api())
 
 
 @app.route("/gallery")
@@ -224,7 +224,7 @@ def feeds_blogs():
     feed = AtomFeed('Blender Cloud - Latest updates',
                     feed_url=request.url, url=request.url_root)
     # Get latest blog posts
-    api = SystemUtility.attract_api()
+    api = system_util.pillar_api()
     latest_posts = Node.all({
         'where': {'node_type': 'post', 'properties.status': 'published'},
         'embedded': {'user': 1},

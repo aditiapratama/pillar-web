@@ -15,7 +15,7 @@ from wtforms import TextAreaField
 from wtforms import DateTimeField
 from wtforms import SelectMultipleField
 from wtforms.validators import DataRequired
-from application import SystemUtility
+from application import system_util
 from application import app
 from application.helpers.forms import FileSelectField
 from application.helpers.forms import ProceduralFileSelectForm
@@ -149,7 +149,7 @@ def process_node_form(form, node_id=None, node_type=None, user=None):
         log.warning('process_node_form(node_id=%s) called while user not logged in', node_id)
         return False
 
-    api = SystemUtility.attract_api()
+    api = system_util.pillar_api()
     node_schema = node_type['dyn_schema'].to_dict()
     form_schema = node_type['form_schema'].to_dict()
 

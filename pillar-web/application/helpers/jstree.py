@@ -4,7 +4,7 @@ from pillarsdk.exceptions import ResourceNotFound
 from flask.ext.login import current_user
 
 
-from application import SystemUtility
+from application import system_util
 def jstree_parse_node(node, children=None):
     """Generate JStree node from node object"""
     node_type = node.node_type
@@ -24,7 +24,7 @@ def jstree_parse_node(node, children=None):
 
 
 def jstree_get_children(node_id, project_id=None):
-    api = SystemUtility.attract_api()
+    api = system_util.pillar_api()
     children_list = []
     lookup = {
         'projection': {
@@ -70,7 +70,7 @@ def jstree_build_from_node(node):
 
     :param node: the base node, where tree building starts
     """
-    api = SystemUtility.attract_api()
+    api = system_util.pillar_api()
     # Parse the node and mark it as selected
     child_node = jstree_parse_node(node)
     child_node['state'] = dict(selected=True)

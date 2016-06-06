@@ -12,7 +12,7 @@ from flask import request
 from flask import url_for
 
 from application.helpers import Pagination
-from application import SystemUtility
+from application import system_util
 
 organizations = Blueprint('organizations', __name__)
 
@@ -25,7 +25,7 @@ def index():
     page = request.args.get('page', 1)
     max_results = 50
 
-    api = SystemUtility.attract_api()
+    api = system_util.pillar_api()
 
     organizations = Organization.all({
         'max_results': max_results,

@@ -12,14 +12,14 @@ from flask.ext.login import login_required
 from flask.ext.login import current_user
 
 from application import app
-from application import SystemUtility
+from application import system_util
 from application.modules.nodes import nodes
 
 # XXX Hack to create a task with a single click
 @nodes.route("/tasks/add", methods=['POST'])
 @login_required
 def task_add():
-    api = SystemUtility.attract_api()
+    api = system_util.pillar_api()
     shot_id = request.form['shot_id']
     task_name = request.form['task_name']
 
@@ -62,7 +62,7 @@ def task_edit():
     - description
     - picture (optional)
     """
-    api = SystemUtility.attract_api()
+    api = system_util.pillar_api()
     task_id = request.form['task_id']
 
     task = Node.find(task_id, api=api)

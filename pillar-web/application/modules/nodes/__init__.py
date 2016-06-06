@@ -61,7 +61,7 @@ class FakeNodeAsset(Node):
 
 @cache.memoize(timeout=3600 * 23)
 def get_node(node_id, user_id):
-    api = SystemUtility.attract_api()
+    api = system_util.pillar_api()
     node = Node.find(node_id + '/?embedded={"node_type":1}', api=api)
     return node.to_dict()
 
@@ -71,7 +71,7 @@ def get_node_children(node_id, node_type_name, user_id):
     """This function is currently unused since it does not give significant
     performance improvements.
     """
-    api = SystemUtility.attract_api()
+    api = system_util.pillar_api()
     if node_type_name == 'group':
         published_status = ',"properties.status": "published"'
     else:
@@ -96,7 +96,7 @@ def jstree(node_id):
     """
 
     # Get node with basic embedded data
-    api = SystemUtility.attract_api()
+    api = system_util.pillar_api()
     node = Node.find(node_id, api=api)
 
     if request.args.get('children') != '1':
@@ -121,7 +121,7 @@ def jstree(node_id):
 
 @nodes.route("/<node_id>/view")
 def view(node_id):
-    api = SystemUtility.attract_api()
+    api = system_util.pillar_api()
 
     # Get node with basic embedded data
     # FIXME: it looks like the links on 'picture' aren't refreshed when it's fetched
@@ -362,7 +362,7 @@ def edit(node_id):
                         attachment_form.size = ''
                         form[prop_name].append_entry(attachment_form)
 
-    api = SystemUtility.attract_api()
+    api = system_util.pillar_api()
     node = Node.find(node_id, api=api)
     project = Project.find(node.project, api=api)
     node_type = project.get_node_type(node.node_type)
@@ -455,7 +455,7 @@ def edit(node_id):
 def delete(node_id):
     """Generic node deletion
     """
-    api = SystemUtility.attract_api()
+    api = system_util.pillar_api()
     node = Node.find(node_id, api=api)
     name = node.name
     node_type = NodeType.find(node.node_type, api=api)
@@ -506,7 +506,7 @@ def create():
     parent_id = request.form.get('parent_id')
     node_type_name = request.form['node_type_name']
 
-    api = SystemUtility.attract_api()
+    api = system_util.pillar_api()
     # Fetch the Project or 404
     try:
         project = Project.find(project_id, api=api)
@@ -560,7 +560,7 @@ def url_for_node(node_id=None, node=None):
     assert isinstance(node_id, (basestring, type(None)))
     # assert isinstance(node, (Node, type(None))), 'wrong type for node: %r' % type(node)
 
-    api = SystemUtility.attract_api()
+    api = system_util.pillar_api()
 
     # Find node by its ID, or the ID by the node, depending on what was passed as parameters.
     if node is None:

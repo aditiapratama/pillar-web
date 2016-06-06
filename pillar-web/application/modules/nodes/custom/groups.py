@@ -4,7 +4,7 @@ from flask import session
 from flask.ext.login import login_required
 from flask.ext.login import current_user
 from pillarsdk import Node
-from application import SystemUtility
+from application import system_util
 from application.modules.nodes import nodes
 
 
@@ -16,7 +16,7 @@ def groups_create():
     project_id = request.form['project_id']
     parent_id = request.form.get('parent_id')
 
-    api = SystemUtility.attract_api()
+    api = system_util.pillar_api()
     # We will create the Node object later on, after creating the file object
     node_asset_props = dict(
         name=name,

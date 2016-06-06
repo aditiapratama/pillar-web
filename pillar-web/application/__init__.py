@@ -4,12 +4,10 @@ import logging.config
 import bugsnag
 import redis
 from bugsnag.flask import handle_exceptions
-from pillarsdk import Api
 from pillarsdk.users import User
 from pillarsdk import exceptions as sdk_exceptions
 
 from flask import Flask
-from flask import session
 from flask import redirect
 from flask import url_for
 from flask_oauthlib.client import OAuth
@@ -71,12 +69,9 @@ login_manager.login_message = u''
 
 @login_manager.user_loader
 def load_user(userid):
-    api = Api(
-        endpoint=SystemUtility.attract_server_endpoint(),
-        username=None,
-        password=None,
-        token=userid
-    )
+    from application import system_util
+
+    api = system_util.pillar_api(token=userid)
 
     try:
         user = User.me(api=api)
@@ -143,54 +138,6 @@ class AnonymousUserMixin(flask_login.AnonymousUserMixin):
 
 
 login_manager.anonymous_user = AnonymousUserMixin
-
-
-class SystemUtility():
-    def __new__(cls, *args, **kwargs):
-        raise TypeError("Base class may not be instantiated")
-
-    @staticmethod
-    def blender_id_endpoint():
-        """Gets the endpoint for the authentication API. If the env variable
-        is defined, it's possible to override the (default) production address.
-        """
-        return os.environ.get(
-            'BLENDER_ID_ENDPOINT', "https://www.blender.org/id").rstrip('/')
-
-    @staticmethod
-    def attract_server_endpoint():
-        """Gets the endpoint for the authentication API. If the env variable
-        is defined, we will use the one from the config object.
-        """
-        return os.environ.get(
-            'PILLAR_SERVER_ENDPOINT', app.config['PILLAR_SERVER_ENDPOINT'])
-
-    @staticmethod
-    def attract_server_endpoint_static():
-        """Endpoint to retrieve static files (previews, videos, etc)"""
-        return "{0}/file_server/file/".format(SystemUtility.attract_server_endpoint())
-
-    @staticmethod
-    def attract_api():
-        token = None
-        # Check if current_user is initialized (in order to support manage.py
-        # scripts and non authenticated server requests).
-        if current_user and current_user.is_authenticated():
-            token = current_user.id
-        api = Api(
-            endpoint=SystemUtility.attract_server_endpoint(),
-            username=None,
-            password=None,
-            token=token
-        )
-        return api
-
-    @staticmethod
-    def session_item(item):
-        if item in session:
-            return session[item]
-        else:
-            return None
 
 # Initialize the available extensions
 cache = Cache(app)

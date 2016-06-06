@@ -11,7 +11,7 @@ from wtforms.validators import DataRequired
 from wtforms.validators import Length
 from wtforms.validators import NoneOf
 from wtforms.validators import Regexp
-from application import SystemUtility
+from application import system_util
 from application.helpers.forms import FileSelectField
 
 
@@ -38,7 +38,7 @@ class ProjectForm(Form):
         if not rv:
             return False
 
-        api = SystemUtility.attract_api()
+        api = system_util.pillar_api()
         project = Project.find(self.project_id.data, api=api)
         if project.url != self.url.data:
             project_url = Project.find_one({'where': '{"url": "%s"}' % (self.url.data)},

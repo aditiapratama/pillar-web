@@ -15,7 +15,7 @@ from flask import url_for
 from flask.ext.login import login_required
 from flask.ext.login import current_user
 from application import app
-from application import SystemUtility
+from application import system_util
 from application.modules.projects.forms import ProjectForm
 from application.modules.projects.forms import NodeTypeForm
 from application.helpers import get_file
@@ -30,7 +30,7 @@ projects = Blueprint('projects', __name__)
 @projects.route('/')
 @login_required
 def index():
-    api = SystemUtility.attract_api()
+    api = system_util.pillar_api()
     projects_user = Project.all({
         'where': {'user': current_user.objectid},
         'sort': '-_created'
@@ -57,13 +57,13 @@ def index():
         title='dashboard',
         projects_user=projects_user['_items'],
         projects_shared=projects_shared['_items'],
-        api=SystemUtility.attract_api())
+        api=system_util.pillar_api())
 
 
 @projects.route('/<project_url>/')
 def view(project_url):
     """Entry point to view a project"""
-    api = SystemUtility.attract_api()
+    api = system_util.pillar_api()
     # Fetch the Node or 404
     try:
         project = Project.find_one({'where': {"url": project_url}}, api=api)
@@ -156,7 +156,7 @@ def view(project_url):
 @projects.route('/<project_url>/edit', methods=['GET', 'POST'])
 @login_required
 def edit(project_url):
-    api = SystemUtility.attract_api()
+    api = system_util.pillar_api()
     # Fetch the Node or 404
     try:
         project = Project.find_one({'where': {'url': project_url}}, api=api)
@@ -220,7 +220,7 @@ def edit(project_url):
 @projects.route('/<project_url>/edit/node-type')
 @login_required
 def edit_node_types(project_url):
-    api = SystemUtility.attract_api()
+    api = system_util.pillar_api()
     # Fetch the project or 404
     try:
         project = Project.find_one({
@@ -239,7 +239,7 @@ def edit_node_types(project_url):
 @projects.route('/<project_url>/e/node-type/<node_type_name>', methods=['GET', 'POST'])
 @login_required
 def edit_node_type(project_url, node_type_name):
-    api = SystemUtility.attract_api()
+    api = system_util.pillar_api()
     # Fetch the Node or 404
     try:
         project = Project.find_one({
@@ -285,7 +285,7 @@ def edit_node_type(project_url, node_type_name):
 @projects.route('/<project_url>/edit/sharing', methods=['GET', 'POST'])
 @login_required
 def sharing(project_url):
-    api = SystemUtility.attract_api()
+    api = system_util.pillar_api()
     # Fetch the project or 404
     try:
         project = Project.find_one({
@@ -324,7 +324,7 @@ def add_featured_node():
     """Feature a node in a project. This method belongs here, because it affects
     the project node itself, not the asset.
     """
-    api = SystemUtility.attract_api()
+    api = system_util.pillar_api()
     node = Node.find(request.form['node_id'], api=api)
     action = project_update_nodes_list(node, list_name='featured')
     return jsonify(status='success', data=dict(action=action))
@@ -338,7 +338,7 @@ def move_node():
     node_id = request.form['node_id']
     dest_parent_node_id = request.form.get('dest_parent_node_id')
 
-    api = SystemUtility.attract_api()
+    api = system_util.pillar_api()
     node = Node.find(node_id, api=api)
     # Get original parent id for clearing template fragment on success
     previous_parent_id = node.parent
@@ -359,7 +359,7 @@ def move_node():
 @login_required
 def delete_node():
     """Delete a node"""
-    api = SystemUtility.attract_api()
+    api = system_util.pillar_api()
     node = Node.find(request.form['node_id'], api=api)
     if not node.has_method('DELETE'):
         return abort(403)
@@ -375,7 +375,7 @@ def toggle_node_public():
     """Give a node GET permissions for the world. Later on this can turn into
     a more powerful permission management function.
     """
-    api = SystemUtility.attract_api()
+    api = system_util.pillar_api()
     node = Node.find(request.form['node_id'], api=api)
     if node.has_method('PUT'):
         if node.permissions and 'world' in node.permissions.to_dict():
@@ -405,7 +405,7 @@ def project_update_nodes_list(node, project_id=None, list_name='latest'):
         project_id = node.project
         if type(project_id) is not unicode:
             project_id = node.project._id
-        api = SystemUtility.attract_api()
+        api = system_util.pillar_api()
         project = Project.find(project_id, api=api)
         if list_name == 'latest':
             nodes_list = project.nodes_latest
@@ -442,7 +442,7 @@ def create():
     - initialize basic permissions
     - create and connect storage space
     """
-    api = SystemUtility.attract_api()
+    api = system_util.pillar_api()
     project_properties = dict(
         name='My project',
         user=current_user.objectid,
@@ -460,7 +460,7 @@ def create():
 @login_required
 def delete():
     """Unapologetically deletes a project"""
-    api = SystemUtility.attract_api()
+    api = system_util.pillar_api()
     project_id = request.form['project_id']
     project = Project.find(project_id, api=api)
     project.delete(api=api)

@@ -4,7 +4,7 @@ from pillarsdk import NodeType
 from flask import Blueprint
 from flask import render_template
 
-from application import SystemUtility
+from application import system_util
 from application.helpers import percentage
 
 from flask.ext.login import login_required
@@ -18,7 +18,7 @@ stats = Blueprint('stats', __name__)
 # def index():
 #     """Custom production stats entry point
 #     """
-#     api = SystemUtility.attract_api()
+#     api = system_util.attract_api()
 #     node_type_list = NodeType.all(
 #         {'where': '{"name": "%s"}' % ('shot')}, api=api)
 
